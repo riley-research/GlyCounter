@@ -1,0 +1,42 @@
+name: Build and Publish .NET
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET directory
+        run: |
+          sudo mkdir -p /usr/share/dotnet
+          sudo chmod 777 /usr/share/dotnet
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x" # Specify the .NET version you are using
+
+      - name: Restore dependencies
+        run: dotnet restore GlyCounter/GlyCounter.csproj # Update path if necessary
+
+      - name: Build
+        run: dotnet build GlyCounter/GlyCounter.csproj --configuration Release --output ./build # Update path if necessary
+
+      - name: Publish
+        run: dotnet publish GlyCounter/GlyCounter.csproj --configuration Release --output ./publish # Update path if necessary
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: GlyCounter
+          path: ./publish # Update path if necessary
