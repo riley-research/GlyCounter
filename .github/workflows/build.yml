@@ -38,7 +38,7 @@ jobs:
         run: zip -r GlyCounter.zip ./publish/*
 
       - name: Commit and push build artifacts
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/vishnu/create-github-actions-workflow-for-build'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
