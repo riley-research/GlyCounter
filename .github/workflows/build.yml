@@ -6,11 +6,6 @@ on:
       - master
     paths-ignore:
       - "Builds/**"
-  pull_request:
-    branches:
-      - master
-    paths-ignore:
-      - "Builds/**"
 
 jobs:
   build:
