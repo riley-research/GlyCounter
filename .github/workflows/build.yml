@@ -40,16 +40,16 @@ jobs:
         run: zip -r GlyCounter.zip ./publish/*
 
       - name: Commit and push build artifacts
-        # if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/vishnu/create-github-actions-workflow-for-build'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin vishnu/create-github-actions-workflow-for-build:vishnu/create-github-actions-workflow-for-build
           git checkout vishnu/create-github-actions-workflow-for-build
-          git pull origin vishnu/create-github-actions-workflow-for-build
-          mkdir -p Builds
+          if [ ! -d "Builds" ]; then
+            mkdir Builds
+          fi
           mv GlyCounter.zip Builds/
           git add Builds/
           git commit -m "Add build artifacts [skip ci]"
