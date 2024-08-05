@@ -44,13 +44,14 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout master
-          git pull origin master
+          git pull
+          git checkout vishnu/create-github-actions-workflow-for-build
+          git pull origin vishnu/create-github-actions-workflow-for-build
           mkdir -p Builds
           mv GlyCounter.zip Builds/
           git add Builds/
           git commit -m "Add build artifacts [skip ci]"
-          git push origin master
+          git push origin vishnu/create-github-actions-workflow-for-build
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
