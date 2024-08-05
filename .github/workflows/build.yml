@@ -38,7 +38,7 @@ jobs:
         run: dotnet build GlyCounter/GlyCounter/GlyCounter.csproj --configuration Release --output ./build
 
       - name: Publish
-        run: dotnet publish GlyCounter/GlyCounter/GlyCounter.csproj --configuration Release --output ./publish
+        run: dotnet publish GlyCounter/GlyCounter/GlyCounter.csproj --configuration Release --output ./publish --self-contained --runtime win-x64
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
