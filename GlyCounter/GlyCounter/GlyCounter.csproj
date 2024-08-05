@@ -4,6 +4,15 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
+  <!-- use the PublishSingleFile property to bundle all dependencies into a single executable file   -->
+  <PropertyGroup>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier> <!-- Adjust for your target platform -->
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile> <!-- Optional: Compress the single file -->
+  </PropertyGroup>
+
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
