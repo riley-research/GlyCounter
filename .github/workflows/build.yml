@@ -3,10 +3,10 @@ name: Build and Publish .NET
 on:
   push:
     branches:
-      - main
+      - vishnu/create-github-actions-workflow-for-build
   pull_request:
     branches:
-      - main
+      - vishnu/create-github-actions-workflow-for-build
 
 jobs:
   build:
