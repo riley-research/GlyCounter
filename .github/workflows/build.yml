@@ -4,11 +4,13 @@ on:
   push:
     branches:
       - master
+      - vishnu/create-github-actions-workflow-for-build
     paths-ignore:
       - "Builds/**"
   pull_request:
     branches:
       - master
+      - vishnu/create-github-actions-workflow-for-build
     paths-ignore:
       - "Builds/**"
 
@@ -44,7 +46,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull
+          git fetch origin vishnu/create-github-actions-workflow-for-build:vishnu/create-github-actions-workflow-for-build
           git checkout vishnu/create-github-actions-workflow-for-build
           git pull origin vishnu/create-github-actions-workflow-for-build
           mkdir -p Builds
