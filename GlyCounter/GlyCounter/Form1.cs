@@ -2311,17 +2311,14 @@ namespace GlyCounter
         public static SimpleMzMLReader.Peak GetPeak_mzml(SimpleMzMLReader.SimpleSpectrum spectrum, double mz, bool usingda, double tolerance)
         {
             //Create start and end m/z values
-            double startOxonium = new double();
-            double endOxonium = new double();
+            DoubleRange rangeOxonium = new DoubleRange();
             if (usingda)
             {
-                startOxonium = mz - tolerance;
-                endOxonium = mz + tolerance;
+                rangeOxonium = DoubleRange.FromDa(mz, tolerance);
             }
             else
             {
-                startOxonium = -1 * (tolerance / Math.Pow(10, 6)) * mz + mz;
-                endOxonium = (tolerance / Math.Pow(10, 6)) * mz + mz;
+                rangeOxonium = DoubleRange.FromPPM(mz, tolerance);
             }
 
             var peaks = spectrum.Peaks;
@@ -2329,7 +2326,8 @@ namespace GlyCounter
             //ordering by intensity instead of S/N here  
             foreach (SimpleMzMLReader.Peak peak in peaks)
             {
-                if (peak.Mz > startOxonium && peak.Mz < endOxonium)
+                DoubleRange rangeExp = DoubleRange.FromPPM(peak.Mz, 0);
+                if (rangeExp.IsSubRange(rangeOxonium))
                 {
                     peakList.Add(peak);
                 }
