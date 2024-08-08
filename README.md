@@ -1,7 +1,13 @@
 # GlyCounter
-## Pre-ID
-Accepts one or more .raw or .mzML file(s) and extracts information about the oxonium ions in your spectra. A csv file with additional ions to be considered (with headers "Mass" and "Description") can be uploaded as well.
-Scan settings are customizable per dissociation method (for example: usually ETD will have less intense/fewer oxonium ions than other dissociation methods so the defaults are lower).
+## Download Instructions
+Need to fill in
+## GlyCounter Basics
+The Pre-ID tab is heart of GlyCounter. Here you can pick common oxonium ions seen in glycopeptide MS/MS spectra, and GlyCounter will find them in your raw data. You can also upload csv file with additional or custom ions to be considered, and scan settings are customizable per dissociation method (see below for more details).  This allows you to understand what your glycoproteomics data is telling you before you ever have to decided what search algorithm to use. GlyCounter can be useful for many steps in a glycoproteomics experiment, including quick evaluations of sample prep or instrument conditions,  what glycan database you might want to use for searching your data, or how to better understand what identifications your search algorithm produces. GlyCounter is designed to provide flexibility, so there are several settings you can control as the user to best understand your data. 
+
+### Selecting Files
+GlyCounter accepts .raw or .mzML files. The top browse box allows you to navigate to folders that contain your data. Start by selecting one file. GlyCounter can process single files individually, or you can check the "All .raw and .mzML files in folder" box to perform batch processing on all raw data files in that folder location. GlyCounter will generate output files (see below) individually for each file regardless of choosing batch processing or not. Note, if you select the check box for all files in the folder, GlyCounter will process all .raw AND .mzML files, so be sure to move any files you would not want processed in batch. Each time GlyCounter is run for a give file, previous output files stored in that same location are overwritten, so be sure to remove or rename files if you want to keep outputs from different settings/iterations of GlyCounter.
+
+one or more .raw or .mzML file(s) and extracts information about the oxonium ions in your spectra. 
 ### Variables
 **ppm Tolerance**: tolerance for determining if the oxonium ion is present
 
@@ -29,6 +35,10 @@ These defaults are halved for ETD spectra. The Check Common Ions button checks 1
 A spectrum is considered likely to be a glycopeptide if it meets the requirements set by the user before the run. This is based on the Oxonium Count Requirement (minimum amount of oxonium ions needed to be observed in the N most intense peaks set by the Peak Depth option) and the chosen TIC fraction (minimum percentage of TIC that needs to be oxonium ions).
 If the HexNAc (204.0867 m/z) oxonium ion is selected, it must show up in the set peak depth for a spectrum to be considered LikelyGlyco.
 If the settings are not changed by the user or an unrecognizable input is entered, the default values will be used.
+
+### Output Files
+#### description here
+description here
 
 ## Ynaught
 Calculates and extracts Y-ions and/or glycan neutral losses from database searched data. Accepts a formatted .txt PSMs file with the headers "Spectrum Number", "Charge State", "Peptide Sequence", and "Modifications"; a glycan masses .txt with headers "Glycan" and "Mass"; and a .raw file. Ynaught currently does not support .mzML files. 
