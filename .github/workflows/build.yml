@@ -1,0 +1,60 @@
+name: Build and Publish .NET
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "Builds/**"
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - "Builds/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore GlyCounter/GlyCounter/GlyCounter.csproj
+
+      - name: Build
+        run: dotnet build GlyCounter/GlyCounter/GlyCounter.csproj --configuration Release --output ./build
+
+      - name: Publish
+        run: dotnet publish GlyCounter/GlyCounter/GlyCounter.csproj --configuration Release --output ./publish --self-contained --runtime win-x64
+
+      - name: Zip the build artifacts
+        run: zip -r GlyCounter.zip ./publish/*
+
+      - name: Commit and push build artifacts
+        if: github.ref == 'refs/heads/master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout master
+          if [ ! -d "Builds" ]; then
+            mkdir Builds
+          fi
+          mv GlyCounter.zip Builds/
+          git add Builds/
+          git commit -m "Add build artifacts [skip ci]"
+          git push origin master
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: GlyCounter
+          path: ./publish

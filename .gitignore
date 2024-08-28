@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Contains DOCKER_USERNAME and DOCKER_PASSWORD to mock GitHub Actions build workflow
+.secrets
