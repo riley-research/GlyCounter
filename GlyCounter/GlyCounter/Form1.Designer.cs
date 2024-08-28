@@ -82,6 +82,7 @@
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
+            ipsaCheckBox = new CheckBox();
             DaltonCheckBox = new CheckBox();
             OxoCountThreshold_uvpd_label = new Label();
             uvpdTICfraction_Label = new Label();
@@ -146,7 +147,6 @@
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
             timer2 = new System.Windows.Forms.Timer(components);
-            ipsaCheckBox = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
@@ -754,6 +754,17 @@
             GlyCounter_Tab.TabIndex = 0;
             GlyCounter_Tab.Text = "Pre-ID";
             GlyCounter_Tab.UseVisualStyleBackColor = true;
+            // 
+            // ipsaCheckBox
+            // 
+            ipsaCheckBox.AutoSize = true;
+            ipsaCheckBox.Location = new Point(1038, 638);
+            ipsaCheckBox.Name = "ipsaCheckBox";
+            ipsaCheckBox.Size = new Size(159, 19);
+            ipsaCheckBox.TabIndex = 68;
+            ipsaCheckBox.Text = "Output IPSA Annotations";
+            ipsaCheckBox.UseVisualStyleBackColor = true;
+            ipsaCheckBox.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // DaltonCheckBox
             // 
@@ -1407,19 +1418,8 @@
             LoadInGlycoPepIDs_TextBox.Name = "LoadInGlycoPepIDs_TextBox";
             LoadInGlycoPepIDs_TextBox.Size = new Size(1074, 23);
             LoadInGlycoPepIDs_TextBox.TabIndex = 0;
-            LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum Number\", \"Charge State\", \"Peptide Sequence\", and \"Modifications\"";
+            LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Assigned Modifications\", \"Charge\", \"Total Glycan Composition\", and \"Observed M/Z\"";
             LoadInGlycoPepIDs_TextBox.TextChanged += LoadInGlycoPepIDs_TextBox_TextChanged;
-            // 
-            // ipsaCheckBox
-            // 
-            ipsaCheckBox.AutoSize = true;
-            ipsaCheckBox.Location = new Point(1038, 638);
-            ipsaCheckBox.Name = "ipsaCheckBox";
-            ipsaCheckBox.Size = new Size(159, 19);
-            ipsaCheckBox.TabIndex = 68;
-            ipsaCheckBox.Text = "Output IPSA Annotations";
-            ipsaCheckBox.UseVisualStyleBackColor = true;
-            ipsaCheckBox.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // Form1
             // 

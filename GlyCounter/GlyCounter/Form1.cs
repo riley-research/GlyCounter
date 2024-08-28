@@ -3345,60 +3345,27 @@ namespace GlyCounter
                             string[] modsArray1 = modsToBeParsed.Split(',');
                             for (int i = 0; i < modsArray1.Length; i++)
                             {
+                                string mod = modsArray1[i].Replace(" ", "");
                                 //this is for the first entry in the line, which has no extra space
-                                if (i == 0)
+                                string[] modsArray2 = mod.Split('(');
+
+                                //get the mass of the mod
+                                string[] modsArray3 = modsArray2[1].Split(')');
+                                double modMass = Convert.ToDouble(modsArray3[0]);
+
+                                Modification modToAdd = new Modification(modMass, modsArray3[0]);
+                                int modPosition = 0;
+                                if (modsArray2[0].Equals("N-term"))
                                 {
-                                    string mod = modsArray1[0];
-                                    string[] modsArray2 = mod.Split('(');
-
-                                    //get the mass of the mod
-                                    string[] modsArray3 = modsArray2[1].Split(')');
-                                    double modMass = Convert.ToDouble(modsArray3[0]);
-
-                                    Modification modToAdd = new Modification(modMass, modsArray3[0]);
-                                    int modPosition = 0;
-                                    if (modsArray2[0].Equals("N-term"))
-                                    {
-                                        peptide.AddModification(modToAdd, Terminus.N);
-                                    }
-                                    else
-                                    {
-                                        //get the residue of the mod
-                                        string modResidue = modsArray2[0].Substring(modsArray2[0].Length - 1);
-
-                                        //get postion of the mod
-                                        modPosition = Convert.ToInt32(modsArray2[0].Substring(0, modsArray2[0].Length - 1));
-
-                                        peptide.AddModification(modToAdd, modPosition);
-                                    }
-
-
+                                    peptide.AddModification(modToAdd, Terminus.N);
                                 }
                                 else
                                 {
-                                    string mod = modsArray1[i].Substring(1); //this gets rid of the space after the comma
-                                    string[] modsArray2 = mod.Split('(');
+                                    //get the residue of the mod
+                                    string modResidue = modsArray2[0].Substring(modsArray2[0].Length - 1);
 
-                                    //get the mass of the mod
-                                    string[] modsArray3 = modsArray2[1].Split(')');
-                                    double modMass = Convert.ToDouble(modsArray3[0]);
-                                    Modification modToAdd = new Modification(modMass, modsArray3[0]);
-                                    int modPosition = 0;
-                                    if (modsArray2[0].Equals("N-term"))
-                                    {
-
-                                        peptide.AddModification(modToAdd, Terminus.N);
-                                    }
-                                    else
-                                    {
-                                        //get the residue of the mod
-                                        string modResidue = modsArray2[0].Substring(modsArray2[0].Length - 1);
-
-                                        //get postion of the mod
-                                        modPosition = Convert.ToInt32(modsArray2[0].Substring(0, modsArray2[0].Length - 1));
-
-                                        peptide.AddModification(modToAdd, modPosition);
-                                    }
+                                    //get postion of the mod
+                                    modPosition = Convert.ToInt32(modsArray2[0].Substring(0, modsArray2[0].Length - 1));
 
                                     if (modPosition > 0)
                                     {
