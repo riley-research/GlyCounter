@@ -41,7 +41,7 @@ If the settings are not changed by the user or an unrecognizable input is entere
 description here
 
 ## Ynaught
-Calculates and extracts Y-ions and/or glycan neutral losses from database searched data. Accepts a formatted .txt PSMs file with the headers "Spectrum Number", "Charge State", "Peptide Sequence", and "Modifications"; a glycan masses .txt with headers "Glycan" and "Mass"; and a .raw file. Ynaught currently does not support .mzML files. 
+Calculates and extracts Y-ions and/or glycan neutral losses from database searched data. Accepts a formatted .txt PSMs file with the headers "Spectrum", "Charge", "Peptide", "Total Glycan Composition", "Observed M/Z", and "Assigned Modifications"; a glycan masses .txt with headers "Glycan" and "Mass"; and a .raw file. Ynaught currently does not support .mzML files. 
 Additional csv files can be uploaded with custom Y-ions or neutral losses (Headers "Mass" and "Description").
 
 ### Variables
@@ -56,4 +56,5 @@ For example: if the precursor charge is 4 and I want to consider anything with a
 
 ## Example Files
 **Glycounter_Custom_Ion_Upload.csv**: Oxonium ions taken from the supplementary table of *Experimentally Determined Diagnostic Ions for Identification of Peptide Glycotopes* published by DeBono, Moh, and Packer in JPR (2024).
+**Human or Mouse glycan masses text file**: YNaught glycan masses upload
 
