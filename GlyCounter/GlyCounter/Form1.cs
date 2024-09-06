@@ -1375,7 +1375,12 @@ namespace GlyCounter
                             if (rawFile.GetTIC(i) > 0)
                             {
                                 //spectrum = rawFile.GetLabeledSpectrum(i);
-                                ThermoSpectrum spectrum = IT ? rawFile.GetSpectrum(i) : rawFile.GetLabeledSpectrum(i);
+                                ThermoSpectrum spectrum = null;
+                                if (IT)
+                                    //In order to make this work I had to change GetSpectrum to only get unlabeled data
+                                    spectrum = rawFile.GetSpectrum(i);
+                                else
+                                    spectrum = rawFile.GetLabeledSpectrum(i);
 
                                 Dictionary<double, int> sortedPeakDepths = new Dictionary<double, int>();
 

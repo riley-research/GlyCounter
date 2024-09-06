@@ -277,7 +277,7 @@ namespace CSMSL.IO.Thermo
                 var scanStats = _rawConnection.GetScanStatsForScanNumber(spectrumNumber);
                 useProfile = !scanStats.IsCentroidScan; // Will set useProfile to true if scan is profile. Else scan is pre-centroided and won't have profile data (I think)
             }
-            return new ThermoSpectrum(GetLabeledData(spectrumNumber, useProfile) ?? GetUnlabeledData(spectrumNumber, useProfile));
+            return new ThermoSpectrum(GetUnlabeledData(spectrumNumber, useProfile));
         }
 
         public MZSpectrum GetAveragedSpectrum(int firstSpectrumNumber, int lastSpectrumNumber, string scanFilter = "", IntensityCutoffType type = IntensityCutoffType.None, int intensityCutoff = 0)

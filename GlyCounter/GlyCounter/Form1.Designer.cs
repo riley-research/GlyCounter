@@ -878,7 +878,7 @@
             VersionNumber_Label.Name = "VersionNumber_Label";
             VersionNumber_Label.Size = new Size(63, 15);
             VersionNumber_Label.TabIndex = 54;
-            VersionNumber_Label.Text = "version 0.4";
+            VersionNumber_Label.Text = "version 0.5";
             // 
             // YnaughtTab
             // 
