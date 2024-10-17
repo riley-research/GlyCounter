@@ -409,7 +409,7 @@ namespace GlyCounter
                                 numberOfETDscans++;
                                 etdTrue = true;
                             }
-                            if (rawFile.GetDissociationType(i).ToString().Equals("CI"))
+                            if (rawFile.GetDissociationType(i).ToString().Equals("CI") || rawFile.GetDissociationType(i).ToString().Equals("UVPD"))
                             {
                                 numberOfUVPDscans++;
                                 uvpdTrue = true;
@@ -1355,7 +1355,7 @@ namespace GlyCounter
                                 numberOfETDscans++;
                                 etdTrue = true;
                             }
-                            if (rawFile.GetDissociationType(i).ToString().Equals("CI"))
+                            if (rawFile.GetDissociationType(i).ToString().Equals("CI") || rawFile.GetDissociationType(i).ToString().Equals("UVPD"))
                             {
                                 numberOfUVPDscans++;
                                 uvpdTrue = true;
