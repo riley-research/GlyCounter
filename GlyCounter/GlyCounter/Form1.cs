@@ -417,7 +417,7 @@ namespace GlyCounter
 
                             string oxoIonHeader = "";
                             //Debug.WriteLine("scan " + i + ", " + rawFile.GetMzAnalyzer(i));
-                            if (rawFile.GetTIC(i) > 0)
+                            if (rawFile.GetTIC(i) > 0 && rawFile.GetSpectrum(i).GetBasePeakIntensity() > 0)
                             {
                                 //Labeled spectrum only exists for non-IT scans
                                 ThermoSpectrum spectrum = IT ? rawFile.GetSpectrum(i) : rawFile.GetLabeledSpectrum(i);
@@ -1327,6 +1327,7 @@ namespace GlyCounter
 
                     for (int i = rawFile.FirstSpectrumNumber; i < rawFile.LastSpectrumNumber; i++)
                     {
+                        Debug.WriteLine(i);
                         bool IT = rawFile.GetMzAnalyzer(i).ToString().Contains("IonTrap");
 
                         if (rawFile.GetMsnOrder(i) == 2)
@@ -1372,7 +1373,7 @@ namespace GlyCounter
                             Debug.WriteLine(rawFile.GetMzAnalyzer(i));
                             Debug.WriteLine(testPeaks.Count);
                             */
-                            if (rawFile.GetTIC(i) > 0)
+                            if (rawFile.GetTIC(i) > 0 && rawFile.GetSpectrum(i).GetBasePeakIntensity() > 0)
                             {
                                 //spectrum = rawFile.GetLabeledSpectrum(i);
                                 ThermoSpectrum spectrum = null;
@@ -1380,6 +1381,7 @@ namespace GlyCounter
                                     //In order to make this work I had to change GetSpectrum to only get unlabeled data
                                     spectrum = rawFile.GetSpectrum(i);
                                 else
+                                    Console.WriteLine(i);
                                     spectrum = rawFile.GetLabeledSpectrum(i);
 
                                 Dictionary<double, int> sortedPeakDepths = new Dictionary<double, int>();
