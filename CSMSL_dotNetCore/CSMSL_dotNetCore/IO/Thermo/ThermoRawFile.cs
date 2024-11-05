@@ -177,7 +177,9 @@ namespace CSMSL.IO.Thermo
             if (GetMsnOrder(spectrumNumber) == 1)
                 return 0;
 
-            object parentScanNumber = GetExtraValue(spectrumNumber, "Master Scan Number:");
+            object parentScanNumber = 0;
+            parentScanNumber = GetExtraValue(spectrumNumber, "Master Scan Number:");
+            
             int scanNumber = Convert.ToInt32(parentScanNumber);
 
             if (scanNumber == 0)
@@ -226,6 +228,7 @@ namespace CSMSL.IO.Thermo
 
             GetAllTrailingHeaderData(spectrumNumber, out returnLabels, out returnValues);
             var returnObject = returnValues[returnLabels.FindIndex(a => a.Contains(filterText))];
+            
             return returnObject;
         }
 
