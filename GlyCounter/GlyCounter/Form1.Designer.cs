@@ -823,7 +823,7 @@
             uvpdTICfraction.Name = "uvpdTICfraction";
             uvpdTICfraction.Size = new Size(61, 23);
             uvpdTICfraction.TabIndex = 60;
-            uvpdTICfraction.Text = "0.05";
+            uvpdTICfraction.Text = "0.20";
             // 
             // PeakDepth_Box_UVPD
             // 
