@@ -698,6 +698,7 @@ namespace GlyCounter
                     double percentage4ox = (double)numberOfMS2scansWithOxo_4 / (double)numberOfMS2scans * 100;
                     double percentage5plusox = (double)numberOfMS2scansWithOxo_5plus / (double)numberOfMS2scans * 100;
                     double percentageSum = percentage1ox + percentage2ox + percentage3ox + percentage4ox + percentage5plusox;
+                    double numberofMS2scansWithOxo_double = (double)percentageSum / 100 * numberOfMS2scans;
 
                     double percentage1ox_hcd = (double)numberOfMS2scansWithOxo_1_hcd / (double)numberOfHCDscans * 100;
                     double percentage2ox_hcd = (double)numberOfMS2scansWithOxo_2_hcd / (double)numberOfHCDscans * 100;
@@ -705,6 +706,7 @@ namespace GlyCounter
                     double percentage4ox_hcd = (double)numberOfMS2scansWithOxo_4_hcd / (double)numberOfHCDscans * 100;
                     double percentage5plusox_hcd = (double)numberOfMS2scansWithOxo_5plus_hcd / (double)numberOfHCDscans * 100;
                     double percentageSum_hcd = percentage1ox_hcd + percentage2ox_hcd + percentage3ox_hcd + percentage4ox_hcd + percentage5plusox_hcd;
+                    double numberofHCDscansWithOxo_double = percentageSum_hcd / 100 * numberOfHCDscans;
 
                     double percentage1ox_etd = (double)numberOfMS2scansWithOxo_1_etd / (double)numberOfETDscans * 100;
                     double percentage2ox_etd = (double)numberOfMS2scansWithOxo_2_etd / (double)numberOfETDscans * 100;
@@ -712,6 +714,7 @@ namespace GlyCounter
                     double percentage4ox_etd = (double)numberOfMS2scansWithOxo_4_etd / (double)numberOfETDscans * 100;
                     double percentage5plusox_etd = (double)numberOfMS2scansWithOxo_5plus_etd / (double)numberOfETDscans * 100;
                     double percentageSum_etd = percentage1ox_etd + percentage2ox_etd + percentage3ox_etd + percentage4ox_etd + percentage5plusox_etd;
+                    double numberofETDscansWithOxo_double = percentageSum_etd / 100 * numberOfETDscans;
 
                     double percentage1ox_uvpd = (double)numberOfMS2scansWithOxo_1_uvpd / (double)numberOfUVPDscans * 100;
                     double percentage2ox_uvpd = (double)numberOfMS2scansWithOxo_2_uvpd / (double)numberOfUVPDscans * 100;
@@ -719,6 +722,7 @@ namespace GlyCounter
                     double percentage4ox_uvpd = (double)numberOfMS2scansWithOxo_4_uvpd / (double)numberOfUVPDscans * 100;
                     double percentage5plusox_uvpd = (double)numberOfMS2scansWithOxo_5plus_uvpd / (double)numberOfUVPDscans * 100;
                     double percentageSum_uvpd = percentage1ox_uvpd + percentage2ox_uvpd + percentage3ox_uvpd + percentage4ox_uvpd + percentage5plusox_uvpd;
+                    double numberofUVPDscansWithOxo_double = percentageSum_uvpd / 100 * numberOfUVPDscans;
 
                     numberScansCountedLikelyGlyco_total = numberScansCountedLikelyGlyco_hcd + numberScansCountedLikelyGlyco_etd + numberScansCountedLikelyGlyco_uvpd;
                     double percentageLikelyGlyco_total = (double)numberScansCountedLikelyGlyco_total / (double)numberOfMS2scans * 100;
@@ -726,8 +730,19 @@ namespace GlyCounter
                     double percentageLikelyGlyco_etd = (double)numberScansCountedLikelyGlyco_etd / (double)numberOfETDscans * 100;
                     double percentageLikelyGlyco_uvpd = (double)numberScansCountedLikelyGlyco_uvpd / (double)numberOfUVPDscans * 100;
 
+                    double percentageHCD = (double)numberOfHCDscans / numberOfMS2scans;
+                    double percentageETD = (double)numberOfETDscans / numberOfMS2scans;
+                    double percentageUVPD = (double)numberOfUVPDscans / numberOfMS2scans;
+
+                    int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
+                    int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
+                    int numberofETDscansWithOxo = (int)Math.Round(numberofETDscansWithOxo_double);
+                    int numberofUVPDscansWithOxo = (int)Math.Round(numberofUVPDscansWithOxo_double);
+
                     outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
-                    outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
+                    outputSummary.WriteLine("MS/MS Scans\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
+                        + "\t" + 100 + "\t" + percentageHCD + "\t" + percentageETD + "\t" + percentageUVPD);
+                    outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + numberofMS2scansWithOxo + "\t" + numberofHCDscansWithOxo + "\t" + numberofETDscansWithOxo + "\t" + numberofUVPDscansWithOxo
                         + "\t" + percentageSum + "\t" + percentageSum_hcd + "\t" + percentageSum_etd + "\t" + percentageSum_uvpd);
                     outputSummary.WriteLine("Likely Glyco\t" + numberScansCountedLikelyGlyco_total + "\t" + numberScansCountedLikelyGlyco_hcd + "\t" + numberScansCountedLikelyGlyco_etd + "\t" + numberScansCountedLikelyGlyco_uvpd
                         + "\t" + percentageLikelyGlyco_total + "\t" + percentageLikelyGlyco_hcd + "\t" + percentageLikelyGlyco_etd + "\t" + percentageLikelyGlyco_uvpd);
@@ -1179,6 +1194,7 @@ namespace GlyCounter
                     double percentage4ox = (double)numberOfMS2scansWithOxo_4 / (double)numberOfMS2scans * 100;
                     double percentage5plusox = (double)numberOfMS2scansWithOxo_5plus / (double)numberOfMS2scans * 100;
                     double percentageSum = percentage1ox + percentage2ox + percentage3ox + percentage4ox + percentage5plusox;
+                    double numberofMS2scansWithOxo_double = (double)percentageSum / 100 * numberOfMS2scans;
 
                     double percentage1ox_hcd = (double)numberOfMS2scansWithOxo_1_hcd / (double)numberOfHCDscans * 100;
                     double percentage2ox_hcd = (double)numberOfMS2scansWithOxo_2_hcd / (double)numberOfHCDscans * 100;
@@ -1186,6 +1202,7 @@ namespace GlyCounter
                     double percentage4ox_hcd = (double)numberOfMS2scansWithOxo_4_hcd / (double)numberOfHCDscans * 100;
                     double percentage5plusox_hcd = (double)numberOfMS2scansWithOxo_5plus_hcd / (double)numberOfHCDscans * 100;
                     double percentageSum_hcd = percentage1ox_hcd + percentage2ox_hcd + percentage3ox_hcd + percentage4ox_hcd + percentage5plusox_hcd;
+                    double numberofHCDscansWithOxo_double = percentageSum_hcd / 100 * numberOfHCDscans;
 
                     double percentage1ox_etd = (double)numberOfMS2scansWithOxo_1_etd / (double)numberOfETDscans * 100;
                     double percentage2ox_etd = (double)numberOfMS2scansWithOxo_2_etd / (double)numberOfETDscans * 100;
@@ -1193,6 +1210,7 @@ namespace GlyCounter
                     double percentage4ox_etd = (double)numberOfMS2scansWithOxo_4_etd / (double)numberOfETDscans * 100;
                     double percentage5plusox_etd = (double)numberOfMS2scansWithOxo_5plus_etd / (double)numberOfETDscans * 100;
                     double percentageSum_etd = percentage1ox_etd + percentage2ox_etd + percentage3ox_etd + percentage4ox_etd + percentage5plusox_etd;
+                    double numberofETDscansWithOxo_double = percentageSum_etd / 100 * numberOfETDscans;
 
                     double percentage1ox_uvpd = (double)numberOfMS2scansWithOxo_1_uvpd / (double)numberOfUVPDscans * 100;
                     double percentage2ox_uvpd = (double)numberOfMS2scansWithOxo_2_uvpd / (double)numberOfUVPDscans * 100;
@@ -1200,6 +1218,7 @@ namespace GlyCounter
                     double percentage4ox_uvpd = (double)numberOfMS2scansWithOxo_4_uvpd / (double)numberOfUVPDscans * 100;
                     double percentage5plusox_uvpd = (double)numberOfMS2scansWithOxo_5plus_uvpd / (double)numberOfUVPDscans * 100;
                     double percentageSum_uvpd = percentage1ox_uvpd + percentage2ox_uvpd + percentage3ox_uvpd + percentage4ox_uvpd + percentage5plusox_uvpd;
+                    double numberofUVPDscansWithOxo_double = percentageSum_uvpd / 100 * numberOfUVPDscans;
 
                     numberScansCountedLikelyGlyco_total = numberScansCountedLikelyGlyco_hcd + numberScansCountedLikelyGlyco_etd + numberScansCountedLikelyGlyco_uvpd;
                     double percentageLikelyGlyco_total = (double)numberScansCountedLikelyGlyco_total / (double)numberOfMS2scans * 100;
@@ -1207,8 +1226,19 @@ namespace GlyCounter
                     double percentageLikelyGlyco_etd = (double)numberScansCountedLikelyGlyco_etd / (double)numberOfETDscans * 100;
                     double percentageLikelyGlyco_uvpd = (double)numberScansCountedLikelyGlyco_uvpd / (double)numberOfUVPDscans * 100;
 
+                    double percentageHCD = (double)numberOfHCDscans / numberOfMS2scans;
+                    double percentageETD = (double)numberOfETDscans / numberOfMS2scans;
+                    double percentageUVPD = (double)numberOfUVPDscans / numberOfMS2scans;
+
+                    int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
+                    int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
+                    int numberofETDscansWithOxo = (int)Math.Round(numberofETDscansWithOxo_double);
+                    int numberofUVPDscansWithOxo = (int)Math.Round(numberofUVPDscansWithOxo_double);
+
                     outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
-                    outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
+                    outputSummary.WriteLine("MS/MS Scans\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
+                        + "\t" + 100 + "\t" + percentageHCD + "\t" + percentageETD + "\t" + percentageUVPD);
+                    outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + numberofMS2scansWithOxo + "\t" + numberofHCDscansWithOxo + "\t" + numberofETDscansWithOxo + "\t" + numberofUVPDscansWithOxo
                         + "\t" + percentageSum + "\t" + percentageSum_hcd + "\t" + percentageSum_etd + "\t" + percentageSum_uvpd);
                     outputSummary.WriteLine("Likely Glyco\t" + numberScansCountedLikelyGlyco_total + "\t" + numberScansCountedLikelyGlyco_hcd + "\t" + numberScansCountedLikelyGlyco_etd + "\t" + numberScansCountedLikelyGlyco_uvpd
                         + "\t" + percentageLikelyGlyco_total + "\t" + percentageLikelyGlyco_hcd + "\t" + percentageLikelyGlyco_etd + "\t" + percentageLikelyGlyco_uvpd);
@@ -1381,7 +1411,6 @@ namespace GlyCounter
                                     //In order to make this work I had to change GetSpectrum to only get unlabeled data
                                     spectrum = rawFile.GetSpectrum(i);
                                 else
-                                    Console.WriteLine(i);
                                     spectrum = rawFile.GetLabeledSpectrum(i);
 
                                 Dictionary<double, int> sortedPeakDepths = new Dictionary<double, int>();
@@ -1665,6 +1694,7 @@ namespace GlyCounter
                     double percentage4ox = (double)numberOfMS2scansWithOxo_4 / (double)numberOfMS2scans * 100;
                     double percentage5plusox = (double)numberOfMS2scansWithOxo_5plus / (double)numberOfMS2scans * 100;
                     double percentageSum = percentage1ox + percentage2ox + percentage3ox + percentage4ox + percentage5plusox;
+                    double numberofMS2scansWithOxo_double = (double)percentageSum / 100 * numberOfMS2scans;
 
                     double percentage1ox_hcd = (double)numberOfMS2scansWithOxo_1_hcd / (double)numberOfHCDscans * 100;
                     double percentage2ox_hcd = (double)numberOfMS2scansWithOxo_2_hcd / (double)numberOfHCDscans * 100;
@@ -1672,6 +1702,7 @@ namespace GlyCounter
                     double percentage4ox_hcd = (double)numberOfMS2scansWithOxo_4_hcd / (double)numberOfHCDscans * 100;
                     double percentage5plusox_hcd = (double)numberOfMS2scansWithOxo_5plus_hcd / (double)numberOfHCDscans * 100;
                     double percentageSum_hcd = percentage1ox_hcd + percentage2ox_hcd + percentage3ox_hcd + percentage4ox_hcd + percentage5plusox_hcd;
+                    double numberofHCDscansWithOxo_double = percentageSum_hcd / 100 * numberOfHCDscans;
 
                     double percentage1ox_etd = (double)numberOfMS2scansWithOxo_1_etd / (double)numberOfETDscans * 100;
                     double percentage2ox_etd = (double)numberOfMS2scansWithOxo_2_etd / (double)numberOfETDscans * 100;
@@ -1679,6 +1710,7 @@ namespace GlyCounter
                     double percentage4ox_etd = (double)numberOfMS2scansWithOxo_4_etd / (double)numberOfETDscans * 100;
                     double percentage5plusox_etd = (double)numberOfMS2scansWithOxo_5plus_etd / (double)numberOfETDscans * 100;
                     double percentageSum_etd = percentage1ox_etd + percentage2ox_etd + percentage3ox_etd + percentage4ox_etd + percentage5plusox_etd;
+                    double numberofETDscansWithOxo_double = percentageSum_etd / 100 * numberOfETDscans;
 
                     double percentage1ox_uvpd = (double)numberOfMS2scansWithOxo_1_uvpd / (double)numberOfUVPDscans * 100;
                     double percentage2ox_uvpd = (double)numberOfMS2scansWithOxo_2_uvpd / (double)numberOfUVPDscans * 100;
@@ -1686,6 +1718,7 @@ namespace GlyCounter
                     double percentage4ox_uvpd = (double)numberOfMS2scansWithOxo_4_uvpd / (double)numberOfUVPDscans * 100;
                     double percentage5plusox_uvpd = (double)numberOfMS2scansWithOxo_5plus_uvpd / (double)numberOfUVPDscans * 100;
                     double percentageSum_uvpd = percentage1ox_uvpd + percentage2ox_uvpd + percentage3ox_uvpd + percentage4ox_uvpd + percentage5plusox_uvpd;
+                    double numberofUVPDscansWithOxo_double = percentageSum_uvpd / 100 * numberOfUVPDscans;
 
                     numberScansCountedLikelyGlyco_total = numberScansCountedLikelyGlyco_hcd + numberScansCountedLikelyGlyco_etd + numberScansCountedLikelyGlyco_uvpd;
                     double percentageLikelyGlyco_total = (double)numberScansCountedLikelyGlyco_total / (double)numberOfMS2scans * 100;
@@ -1693,18 +1726,19 @@ namespace GlyCounter
                     double percentageLikelyGlyco_etd = (double)numberScansCountedLikelyGlyco_etd / (double)numberOfETDscans * 100;
                     double percentageLikelyGlyco_uvpd = (double)numberScansCountedLikelyGlyco_uvpd / (double)numberOfUVPDscans * 100;
 
-                    /*
-                    outputSummary.WriteLine("OxCount\tNumOfScans\tPercentage");
-                    outputSummary.WriteLine(1 + "\t" + numberOfMS2scansWithOxo_1 + "\t" + percentage1ox);
-                    outputSummary.WriteLine(2 + "\t" + numberOfMS2scansWithOxo_2 + "\t" + percentage2ox);
-                    outputSummary.WriteLine(3 + "\t" + numberOfMS2scansWithOxo_3 + "\t" + percentage3ox);
-                    outputSummary.WriteLine(4 + "\t" + numberOfMS2scansWithOxo_4 + "\t" + percentage4ox);
-                    outputSummary.WriteLine("5+\t" + numberOfMS2scansWithOxo_5plus + "\t" + percentage5plusox);
-                    outputSummary.WriteLine("TotalScans\t" + numberOfMS2scans + "\t" + percentageSum);
-                    */
+                    double percentageHCD = (double)numberOfHCDscans / numberOfMS2scans;
+                    double percentageETD = (double)numberOfETDscans / numberOfMS2scans;
+                    double percentageUVPD = (double)numberOfUVPDscans / numberOfMS2scans;
+
+                    int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
+                    int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
+                    int numberofETDscansWithOxo = (int)Math.Round(numberofETDscansWithOxo_double);
+                    int numberofUVPDscansWithOxo = (int)Math.Round(numberofUVPDscansWithOxo_double);
 
                     outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
-                    outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
+                    outputSummary.WriteLine("MS/MS Scans\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
+                        + "\t" + 100 + "\t" + percentageHCD + "\t" + percentageETD + "\t" + percentageUVPD);
+                    outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + numberofMS2scansWithOxo + "\t" + numberofHCDscansWithOxo + "\t" + numberofETDscansWithOxo + "\t" + numberofUVPDscansWithOxo
                         + "\t" + percentageSum + "\t" + percentageSum_hcd + "\t" + percentageSum_etd + "\t" + percentageSum_uvpd);
                     outputSummary.WriteLine("Likely Glyco\t" + numberScansCountedLikelyGlyco_total + "\t" + numberScansCountedLikelyGlyco_hcd + "\t" + numberScansCountedLikelyGlyco_etd + "\t" + numberScansCountedLikelyGlyco_uvpd
                         + "\t" + percentageLikelyGlyco_total + "\t" + percentageLikelyGlyco_hcd + "\t" + percentageLikelyGlyco_etd + "\t" + percentageLikelyGlyco_uvpd);
@@ -2174,6 +2208,7 @@ namespace GlyCounter
                     double percentage4ox = (double)numberOfMS2scansWithOxo_4 / (double)numberOfMS2scans * 100;
                     double percentage5plusox = (double)numberOfMS2scansWithOxo_5plus / (double)numberOfMS2scans * 100;
                     double percentageSum = percentage1ox + percentage2ox + percentage3ox + percentage4ox + percentage5plusox;
+                    double numberofMS2scansWithOxo_double = (double)percentageSum / 100 * numberOfMS2scans;
 
                     double percentage1ox_hcd = (double)numberOfMS2scansWithOxo_1_hcd / (double)numberOfHCDscans * 100;
                     double percentage2ox_hcd = (double)numberOfMS2scansWithOxo_2_hcd / (double)numberOfHCDscans * 100;
@@ -2181,6 +2216,7 @@ namespace GlyCounter
                     double percentage4ox_hcd = (double)numberOfMS2scansWithOxo_4_hcd / (double)numberOfHCDscans * 100;
                     double percentage5plusox_hcd = (double)numberOfMS2scansWithOxo_5plus_hcd / (double)numberOfHCDscans * 100;
                     double percentageSum_hcd = percentage1ox_hcd + percentage2ox_hcd + percentage3ox_hcd + percentage4ox_hcd + percentage5plusox_hcd;
+                    double numberofHCDscansWithOxo_double = percentageSum_hcd / 100 * numberOfHCDscans;
 
                     double percentage1ox_etd = (double)numberOfMS2scansWithOxo_1_etd / (double)numberOfETDscans * 100;
                     double percentage2ox_etd = (double)numberOfMS2scansWithOxo_2_etd / (double)numberOfETDscans * 100;
@@ -2188,6 +2224,7 @@ namespace GlyCounter
                     double percentage4ox_etd = (double)numberOfMS2scansWithOxo_4_etd / (double)numberOfETDscans * 100;
                     double percentage5plusox_etd = (double)numberOfMS2scansWithOxo_5plus_etd / (double)numberOfETDscans * 100;
                     double percentageSum_etd = percentage1ox_etd + percentage2ox_etd + percentage3ox_etd + percentage4ox_etd + percentage5plusox_etd;
+                    double numberofETDscansWithOxo_double = percentageSum_etd / 100 * numberOfETDscans;
 
                     double percentage1ox_uvpd = (double)numberOfMS2scansWithOxo_1_uvpd / (double)numberOfUVPDscans * 100;
                     double percentage2ox_uvpd = (double)numberOfMS2scansWithOxo_2_uvpd / (double)numberOfUVPDscans * 100;
@@ -2195,6 +2232,7 @@ namespace GlyCounter
                     double percentage4ox_uvpd = (double)numberOfMS2scansWithOxo_4_uvpd / (double)numberOfUVPDscans * 100;
                     double percentage5plusox_uvpd = (double)numberOfMS2scansWithOxo_5plus_uvpd / (double)numberOfUVPDscans * 100;
                     double percentageSum_uvpd = percentage1ox_uvpd + percentage2ox_uvpd + percentage3ox_uvpd + percentage4ox_uvpd + percentage5plusox_uvpd;
+                    double numberofUVPDscansWithOxo_double = percentageSum_uvpd / 100 * numberOfUVPDscans;
 
                     numberScansCountedLikelyGlyco_total = numberScansCountedLikelyGlyco_hcd + numberScansCountedLikelyGlyco_etd + numberScansCountedLikelyGlyco_uvpd;
                     double percentageLikelyGlyco_total = (double)numberScansCountedLikelyGlyco_total / (double)numberOfMS2scans * 100;
@@ -2202,18 +2240,19 @@ namespace GlyCounter
                     double percentageLikelyGlyco_etd = (double)numberScansCountedLikelyGlyco_etd / (double)numberOfETDscans * 100;
                     double percentageLikelyGlyco_uvpd = (double)numberScansCountedLikelyGlyco_uvpd / (double)numberOfUVPDscans * 100;
 
-                    /*
-                    outputSummary.WriteLine("OxCount\tNumOfScans\tPercentage");
-                    outputSummary.WriteLine(1 + "\t" + numberOfMS2scansWithOxo_1 + "\t" + percentage1ox);
-                    outputSummary.WriteLine(2 + "\t" + numberOfMS2scansWithOxo_2 + "\t" + percentage2ox);
-                    outputSummary.WriteLine(3 + "\t" + numberOfMS2scansWithOxo_3 + "\t" + percentage3ox);
-                    outputSummary.WriteLine(4 + "\t" + numberOfMS2scansWithOxo_4 + "\t" + percentage4ox);
-                    outputSummary.WriteLine("5+\t" + numberOfMS2scansWithOxo_5plus + "\t" + percentage5plusox);
-                    outputSummary.WriteLine("TotalScans\t" + numberOfMS2scans + "\t" + percentageSum);
-                    */
+                    double percentageHCD = (double)numberOfHCDscans / numberOfMS2scans;
+                    double percentageETD = (double)numberOfETDscans / numberOfMS2scans;
+                    double percentageUVPD = (double)numberOfUVPDscans / numberOfMS2scans;
+
+                    int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
+                    int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
+                    int numberofETDscansWithOxo = (int)Math.Round(numberofETDscansWithOxo_double);
+                    int numberofUVPDscansWithOxo = (int)Math.Round(numberofUVPDscansWithOxo_double);
 
                     outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
-                    outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
+                    outputSummary.WriteLine("MS/MS Scans\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
+                        + "\t" + 100 + "\t" + percentageHCD + "\t" + percentageETD + "\t" + percentageUVPD);
+                    outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + numberofMS2scansWithOxo + "\t" + numberofHCDscansWithOxo + "\t" + numberofETDscansWithOxo + "\t" + numberofUVPDscansWithOxo
                         + "\t" + percentageSum + "\t" + percentageSum_hcd + "\t" + percentageSum_etd + "\t" + percentageSum_uvpd);
                     outputSummary.WriteLine("Likely Glyco\t" + numberScansCountedLikelyGlyco_total + "\t" + numberScansCountedLikelyGlyco_hcd + "\t" + numberScansCountedLikelyGlyco_etd + "\t" + numberScansCountedLikelyGlyco_uvpd
                         + "\t" + percentageLikelyGlyco_total + "\t" + percentageLikelyGlyco_hcd + "\t" + percentageLikelyGlyco_etd + "\t" + percentageLikelyGlyco_uvpd);
