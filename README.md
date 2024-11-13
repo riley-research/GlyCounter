@@ -75,3 +75,5 @@ For example: if the precursor charge is 4 and I want to consider anything with a
 
 **Human or Mouse glycan masses text file**: YNaught glycan masses upload
 
+**Sample_Ynaught_GlycopeptideIDs.txt**: YNaught Glycopeptide IDs sample file upload
+
