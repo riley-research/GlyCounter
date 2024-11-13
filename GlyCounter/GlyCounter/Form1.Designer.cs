@@ -182,9 +182,9 @@
             AllRawFilesCheckBox.Location = new Point(16, 59);
             AllRawFilesCheckBox.Margin = new Padding(4, 3, 4, 3);
             AllRawFilesCheckBox.Name = "AllRawFilesCheckBox";
-            AllRawFilesCheckBox.Size = new Size(136, 19);
+            AllRawFilesCheckBox.Size = new Size(222, 19);
             AllRawFilesCheckBox.TabIndex = 5;
-            AllRawFilesCheckBox.Text = "All .raw files in folder";
+            AllRawFilesCheckBox.Text = "All .raw files and .mzML files in folder";
             AllRawFilesCheckBox.UseVisualStyleBackColor = true;
             // 
             // HexNAcCheckedListBox
