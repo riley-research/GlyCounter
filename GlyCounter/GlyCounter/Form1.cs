@@ -254,9 +254,9 @@ namespace GlyCounter
                 while (csv.ReadNextRecord())
                 {
                     OxoniumIon oxoIon = new OxoniumIon();
-                    oxoIon.theoMZ = double.Parse(csv["Mass"]);
+                    oxoIon.theoMZ = double.Parse(csv["m/z"]);
                     string userDescription = csv["Description"];
-                    oxoIon.description = double.Parse(csv["Mass"]) + ", " + userDescription;
+                    oxoIon.description = double.Parse(csv["m/z"]) + ", " + userDescription;
                     oxoIon.glycanSource = "Custom";
                     oxoIon.hcdCount = 0;
                     oxoIon.etdCount = 0;

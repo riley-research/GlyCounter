@@ -618,7 +618,7 @@
             uploadCustomTextBox.Name = "uploadCustomTextBox";
             uploadCustomTextBox.Size = new Size(1085, 25);
             uploadCustomTextBox.TabIndex = 48;
-            uploadCustomTextBox.Text = "Upload custom ions here - csv with headers \"Mass\" and \"Description\"";
+            uploadCustomTextBox.Text = "Upload custom ions here - csv with headers \"m/z\" and \"Description\"";
             uploadCustomTextBox.TextChanged += uploadCustomTextBox_TextChanged_1;
             // 
             // UploadCustomBrowseButton
