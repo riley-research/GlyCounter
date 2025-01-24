@@ -89,7 +89,7 @@ namespace GlyCounter
         private void StartButton_Click(object sender, EventArgs e)
         {
             bool usingda = false;
-
+            bool using204 = false;
 
             timer1.Interval = 1000;
             timer1.Tick += new EventHandler(OnTimerTick);
