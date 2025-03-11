@@ -77,5 +77,5 @@ For example: if the precursor charge is 4 and I want to consider anything with a
 
 **Sample_Ynaught_GlycopeptideIDs.txt**: YNaught Glycopeptide IDs sample file upload
 
-**Phospho.R**: R file used to create a figure using GlyCounter data
+**Phospho.txt**: R file used to create a figure using GlyCounter data
 
