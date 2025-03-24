@@ -35,63 +35,18 @@ namespace GlyCounter
         {
             try
             {
-                // Squirrel parameters may vary by version, so using the correct overload
+                // Most basic event handling - just show a welcome message on first run
                 Squirrel.SquirrelAwareApp.HandleEvents(
-                    onInitialInstall: OnAppInstall,
-                    onAppUninstall: OnAppUninstall,
-                    onFirstRun: OnFirstRun
+                    onFirstRun: () => MessageBox.Show("Thank you for installing GlyCounter!", 
+                                                    "Installation Complete", 
+                                                    MessageBoxButtons.OK, 
+                                                    MessageBoxIcon.Information)
                 );
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error setting up Squirrel events: {ex.Message}");
             }
-        }
-
-        private static void OnAppInstall(Version version)
-        {
-            try
-            {
-                using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
-                {
-                    // Create shortcuts - we need to manually specify the method
-                    var shortcutMgr = new Squirrel.ShortcutManager();
-                    shortcutMgr.CreateShortcutsForExecutable(
-                        Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location),
-                        Squirrel.ShortcutLocation.StartMenu | Squirrel.ShortcutLocation.Desktop,
-                        false);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error during installation: {ex.Message}");
-            }
-        }
-
-        private static void OnAppUninstall(Version version)
-        {
-            try
-            {
-                using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
-                {
-                    // Remove shortcuts - we need to manually specify the method
-                    var shortcutMgr = new Squirrel.ShortcutManager();
-                    shortcutMgr.RemoveShortcutsForExecutable(
-                        Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location),
-                        Squirrel.ShortcutLocation.StartMenu | Squirrel.ShortcutLocation.Desktop);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error during uninstallation: {ex.Message}");
-            }
-        }
-
-        private static void OnFirstRun()
-        {
-            // This method is called on the first run after installation
-            MessageBox.Show("Thank you for installing GlyCounter!", "Installation Complete", 
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         /// <summary>
@@ -244,9 +199,20 @@ namespace GlyCounter
         /// </summary>
         public static void RestartApp()
         {
-            var currentExecutablePath = Application.ExecutablePath;
-            Process.Start(currentExecutablePath);
-            Application.Exit();
+            try
+            {
+                var currentExecutablePath = Application.ExecutablePath;
+                Process.Start(currentExecutablePath);
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error restarting application: {ex.Message}");
+                MessageBox.Show("Please restart the application manually to complete the update.",
+                    "Update Complete",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
         }
     }
 }
