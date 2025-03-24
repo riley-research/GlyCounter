@@ -41,8 +41,20 @@ jobs:
         $isTagPush = $env:GITHUB_REF.StartsWith('refs/tags/v')
         if ($isTagPush) {
           $tagVersion = $env:GITHUB_REF.Replace('refs/tags/v', '')
-          $versionString = $tagVersion
-          $fullVersion = $tagVersion
+          # Ensure version format is major.minor.build
+          if ($tagVersion -match '-') {
+            # For prerelease tags like v1.0.0-test, convert to 1.0.0.0
+            $versionString = $tagVersion.Split('-')[0]
+            if ($versionString.Split('.').Length -lt 3) {
+              $versionString = "$versionString.0"
+            }
+          } else {
+            $versionString = $tagVersion
+            if ($versionString.Split('.').Length -lt 3) {
+              $versionString = "$versionString.0"
+            }
+          }
+          $fullVersion = $versionString
         }
         
         echo "VERSION=$versionString" >> $env:GITHUB_OUTPUT

@@ -1,8 +1,9 @@
-using Squirrel;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Squirrel;
+using NuGet;
 
 namespace GlyCounter
 {
@@ -10,7 +11,7 @@ namespace GlyCounter
     {
         private const string GitHubRepoUrl = "https://github.com/Glyco/GlyCounter";
         private static UpdateManager? _instance;
-        private Squirrel.UpdateManager? _updateManager;
+        private Squirrel.UpdateManager? _squirrelManager;
         
         public static UpdateManager Instance
         {
@@ -49,25 +50,25 @@ namespace GlyCounter
             }
         }
 
-        private static void OnAppInstall(SemanticVersion version)
+        private static void OnAppInstall(Version version)
         {
-            using (var mgr = new Squirrel.UpdateManager(null, GitHubRepoUrl))
+            using (var mgr = new Squirrel.UpdateManager(GitHubRepoUrl))
             {
                 // Create desktop and start menu shortcuts
                 mgr.CreateShortcutForThisExe();
             }
         }
 
-        private static void OnAppUninstall(SemanticVersion version)
+        private static void OnAppUninstall(Version version)
         {
-            using (var mgr = new Squirrel.UpdateManager(null, GitHubRepoUrl))
+            using (var mgr = new Squirrel.UpdateManager(GitHubRepoUrl))
             {
                 // Remove desktop and start menu shortcuts
                 mgr.RemoveShortcutForThisExe();
             }
         }
 
-        private static void OnAppRun(SemanticVersion version, bool firstRun)
+        private static void OnAppRun(Version version, bool firstRun)
         {
             // This method is called on every application run
         }
@@ -84,17 +85,17 @@ namespace GlyCounter
         /// </summary>
         /// <param name="showNoUpdatesMessage">Whether to show a message when no updates are available</param>
         /// <returns>UpdateInfo if an update is available, null otherwise</returns>
-        public async Task<UpdateInfo?> CheckForUpdatesAsync(bool showNoUpdatesMessage = false)
+        public async Task<ReleaseEntry?> CheckForUpdatesAsync(bool showNoUpdatesMessage = false)
         {
             try
             {
-                using (_updateManager = new Squirrel.UpdateManager(GitHubRepoUrl))
+                using (_squirrelManager = new Squirrel.UpdateManager(GitHubRepoUrl))
                 {
-                    var updateInfo = await _updateManager.CheckForUpdate();
+                    var updateInfo = await _squirrelManager.CheckForUpdate();
                     
                     if (updateInfo.ReleasesToApply.Count > 0)
                     {
-                        return updateInfo;
+                        return updateInfo.FutureReleaseEntry;
                     }
                     else if (showNoUpdatesMessage)
                     {
@@ -120,17 +121,18 @@ namespace GlyCounter
         /// <summary>
         /// Apply updates if available
         /// </summary>
-        /// <param name="updateInfo">UpdateInfo from CheckForUpdatesAsync</param>
+        /// <param name="releaseEntry">ReleaseEntry from CheckForUpdatesAsync</param>
         /// <returns>True if update was successful, false otherwise</returns>
-        public async Task<bool> UpdateApplication(UpdateInfo updateInfo)
+        public async Task<bool> UpdateApplication(ReleaseEntry releaseEntry)
         {
             try
             {
-                using (_updateManager = new Squirrel.UpdateManager(GitHubRepoUrl))
+                using (_squirrelManager = new Squirrel.UpdateManager(GitHubRepoUrl))
                 {
-                    await _updateManager.DownloadReleases(updateInfo.ReleasesToApply);
-                    await _updateManager.ApplyReleases(updateInfo);
-                    await _updateManager.CreateUninstallerRegistryEntry();
+                    var updateInfo = await _squirrelManager.CheckForUpdate();
+                    await _squirrelManager.DownloadReleases(updateInfo.ReleasesToApply);
+                    await _squirrelManager.ApplyReleases(updateInfo);
+                    await _squirrelManager.CreateUninstallerRegistryEntry();
                     
                     return true;
                 }
@@ -149,12 +151,12 @@ namespace GlyCounter
         /// </summary>
         public async Task CheckAndPromptForUpdate(bool silent = false)
         {
-            var updateInfo = await CheckForUpdatesAsync(showNoUpdatesMessage: !silent);
+            var releaseEntry = await CheckForUpdatesAsync(showNoUpdatesMessage: !silent);
             
-            if (updateInfo != null)
+            if (releaseEntry != null)
             {
                 var result = MessageBox.Show(
-                    $"A new version of GlyCounter is available (v{updateInfo.FutureReleaseEntry.Version}).\n\nWould you like to download and install it now?",
+                    $"A new version of GlyCounter is available (v{releaseEntry.Version}).\n\nWould you like to download and install it now?",
                     "Update Available",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Information);
@@ -186,7 +188,7 @@ namespace GlyCounter
                     updateForm.Show();
                     
                     // Apply the update
-                    bool success = await UpdateApplication(updateInfo);
+                    bool success = await UpdateApplication(releaseEntry);
                     
                     updateForm.Close();
                     
