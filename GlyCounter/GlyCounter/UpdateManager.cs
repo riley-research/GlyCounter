@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace GlyCounter
 {
@@ -9,7 +10,6 @@ namespace GlyCounter
     {
         private const string GitHubRepoUrl = "https://github.com/Glyco/GlyCounter";
         private static UpdateManager? _instance;
-        private Squirrel.UpdateManager? _squirrelManager;
         
         public static UpdateManager Instance
         {
@@ -35,10 +35,10 @@ namespace GlyCounter
         {
             try
             {
+                // Squirrel parameters may vary by version, so using the correct overload
                 Squirrel.SquirrelAwareApp.HandleEvents(
                     onInitialInstall: OnAppInstall,
                     onAppUninstall: OnAppUninstall,
-                    onEveryRun: OnAppRun,
                     onFirstRun: OnFirstRun
                 );
             }
@@ -52,10 +52,14 @@ namespace GlyCounter
         {
             try
             {
-                using (var mgr = new Squirrel.UpdateManager(GitHubRepoUrl))
+                using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
                 {
-                    // Create desktop and start menu shortcuts
-                    mgr.CreateShortcutForThisExe();
+                    // Create shortcuts - we need to manually specify the method
+                    var shortcutMgr = new Squirrel.ShortcutManager();
+                    shortcutMgr.CreateShortcutsForExecutable(
+                        Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location),
+                        Squirrel.ShortcutLocation.StartMenu | Squirrel.ShortcutLocation.Desktop,
+                        false);
                 }
             }
             catch (Exception ex)
@@ -68,21 +72,19 @@ namespace GlyCounter
         {
             try
             {
-                using (var mgr = new Squirrel.UpdateManager(GitHubRepoUrl))
+                using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
                 {
-                    // Remove desktop and start menu shortcuts
-                    mgr.RemoveShortcutForThisExe();
+                    // Remove shortcuts - we need to manually specify the method
+                    var shortcutMgr = new Squirrel.ShortcutManager();
+                    shortcutMgr.RemoveShortcutsForExecutable(
+                        Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().Location),
+                        Squirrel.ShortcutLocation.StartMenu | Squirrel.ShortcutLocation.Desktop);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error during uninstallation: {ex.Message}");
             }
-        }
-
-        private static void OnAppRun(Version version, bool firstRun)
-        {
-            // This method is called on every application run
         }
 
         private static void OnFirstRun()
@@ -101,9 +103,9 @@ namespace GlyCounter
         {
             try
             {
-                using (_squirrelManager = new Squirrel.UpdateManager(GitHubRepoUrl))
+                using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
                 {
-                    var updateInfo = await _squirrelManager.CheckForUpdate();
+                    var updateInfo = await manager.CheckForUpdate();
                     bool updatesAvailable = updateInfo.ReleasesToApply.Count > 0;
                     
                     if (!updatesAvailable && showNoUpdatesMessage)
@@ -135,13 +137,15 @@ namespace GlyCounter
         {
             try
             {
-                using (_squirrelManager = new Squirrel.UpdateManager(GitHubRepoUrl))
+                using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
                 {
-                    var updateInfo = await _squirrelManager.CheckForUpdate();
+                    var updateInfo = await manager.CheckForUpdate();
                     
                     if (updateInfo.ReleasesToApply.Count > 0)
                     {
-                        await _squirrelManager.UpdateApp();
+                        // Download and apply releases
+                        await manager.DownloadReleases(updateInfo.ReleasesToApply);
+                        await manager.ApplyReleases(updateInfo);
                         return true;
                     }
                     
@@ -169,9 +173,9 @@ namespace GlyCounter
                 string updateVersion = "new version";
                 try 
                 {
-                    using (_squirrelManager = new Squirrel.UpdateManager(GitHubRepoUrl))
+                    using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
                     {
-                        var updateInfo = await _squirrelManager.CheckForUpdate();
+                        var updateInfo = await manager.CheckForUpdate();
                         if (updateInfo.FutureReleaseEntry != null)
                         {
                             updateVersion = updateInfo.FutureReleaseEntry.Version.ToString();
