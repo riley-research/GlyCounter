@@ -106,66 +106,11 @@ jobs:
             Get-ChildItem -Path "./nuget" -Filter "*.nupkg" | ForEach-Object { Write-Host $_.FullName }
         }
 
-    - name: Create Squirrel Release
+    - name: Create Releases Directory
       run: |
         mkdir -p ./Releases
-        
-        # Create a correctly formatted nuspec file for GlyCounter
-        $nuspecContent = @"
-<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-  <metadata>
-    <id>GlyCounter</id>
-    <version>${{ steps.version.outputs.VERSION }}</version>
-    <title>GlyCounter</title>
-    <authors>Glyco</authors>
-    <description>GlyCounter: A tool for glycan analysis</description>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-  </metadata>
-  <files>
-    <file src="publish\**\*.*" target="lib\net45" />
-  </files>
-</package>
-"@
-        $nuspecContent | Out-File -FilePath "./GlyCounter.nuspec" -Encoding utf8
-        
-        # Install specific version of Squirrel.Windows
-        nuget install squirrel.windows -Version 1.9.0 -OutputDirectory ./packages
-        
-        # Create a NuGet package from our custom nuspec
-        nuget pack ./GlyCounter.nuspec -OutputDirectory ./squirrel-package
-        
-        # Find the Squirrel executable
-        $squirrelPath = Get-ChildItem -Path ./packages -Recurse -Filter Squirrel.exe | Select-Object -First 1 -ExpandProperty FullName
-        Write-Host "Found Squirrel.exe at: $squirrelPath"
-        
-        if (-not $squirrelPath) {
-            Write-Error "Could not find Squirrel.exe in packages directory"
-            Get-ChildItem -Path ./packages -Recurse
-            exit 1
-        }
-        
-        # Find our custom NuGet package
-        $nupkgPath = Get-ChildItem -Path ./squirrel-package -Filter *.nupkg | Select-Object -First 1 -ExpandProperty FullName
-        if (-not $nupkgPath) {
-            Write-Error "Could not find nuget package in squirrel-package directory"
-            exit 1
-        }
-        Write-Host "Using NuGet package: $nupkgPath"
-        
-        # Run Squirrel with detailed output
-        Write-Host "Running Squirrel to create installation package..."
-        & $squirrelPath --releasify $nupkgPath --releaseDir=./Releases --no-msi
-        
-        # Check if Setup.exe was created
-        $setupPath = Join-Path -Path "./Releases" -ChildPath "Setup.exe" 
-        if (Test-Path $setupPath) {
-            Write-Host "Setup.exe created successfully at: $setupPath"
-        } else {
-            Write-Error "Failed to create Setup.exe"
-            Get-ChildItem -Path "./Releases" -Recurse | ForEach-Object { Write-Host $_.FullName }
-            exit 1
-        }
+        Copy-Item -Path "./publish/GlyCounter.exe" -Destination "./Releases/GlyCounter-${{ steps.version.outputs.VERSION }}.exe"
+        Write-Host "Copied executable to ./Releases/GlyCounter-${{ steps.version.outputs.VERSION }}.exe"
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -189,6 +134,6 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          ./publish/GlyCounter.exe
+          ./Releases/GlyCounter-${{ steps.version.outputs.VERSION }}.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
