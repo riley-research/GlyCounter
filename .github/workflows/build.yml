@@ -91,14 +91,36 @@ jobs:
     - name: Create Squirrel Release
       run: |
         mkdir -p ./Releases
-        nuget install squirrel.windows -OutputDirectory ./packages
         
-        # Find the actual .nupkg file (format may vary with dotnet pack)
+        # Install specific version of Squirrel.Windows
+        nuget install squirrel.windows -Version 1.9.0 -OutputDirectory ./packages
+        
+        # Get our package name that was created by dotnet pack
         $nupkgPath = Get-ChildItem -Path ./nuget -Filter *.nupkg | Select-Object -First 1 -ExpandProperty FullName
-        Write-Host "Using NuGet package: $nupkgPath"
+        Write-Host "Found NuGet package: $nupkgPath"
         
+        # Find the Squirrel executable
         $squirrelPath = Get-ChildItem -Path ./packages -Recurse -Filter Squirrel.exe | Select-Object -First 1 -ExpandProperty FullName
-        & $squirrelPath --releasify $nupkgPath --releaseDir=./Releases 
+        Write-Host "Found Squirrel.exe at: $squirrelPath"
+        
+        if (-not $squirrelPath) {
+            Write-Error "Could not find Squirrel.exe in packages directory"
+            exit 1
+        }
+        
+        # Run Squirrel with detailed output
+        Write-Host "Running Squirrel to create installation package..."
+        & $squirrelPath --releasify $nupkgPath --releaseDir=./Releases --no-msi
+        
+        # Check if Setup.exe was created
+        $setupPath = Join-Path -Path "./Releases" -ChildPath "Setup.exe" 
+        if (Test-Path $setupPath) {
+            Write-Host "Setup.exe created successfully at: $setupPath"
+        } else {
+            Write-Error "Failed to create Setup.exe"
+            Get-ChildItem -Path "./Releases" -Recurse | ForEach-Object { Write-Host $_.FullName }
+            exit 1
+        }
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -107,6 +129,11 @@ jobs:
         path: |
           ./publish/**/*
           ./Releases/**/*
+          
+    - name: List files in Releases directory
+      run: |
+        Write-Host "Contents of Releases directory:"
+        Get-ChildItem -Path "./Releases" -Recurse | ForEach-Object { Write-Host $_.FullName }
 
     # Only create a release if this is a tag push
     - name: Create Release
@@ -117,8 +144,8 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          ./Releases/Setup.exe
-          ./Releases/RELEASES
-          ./Releases/*.nupkg
+          ./Releases/**/*
+          ./nuget/*.nupkg
+          ./publish/GlyCounter.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
