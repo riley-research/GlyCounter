@@ -8,7 +8,8 @@ namespace GlyCounter
 {
     public class UpdateManager
     {
-        private const string GitHubRepoUrl = "https://github.com/Glyco/GlyCounter";
+        // Fix the repository URL to point to the correct GitHub organization/repo
+        private const string GitHubRepoUrl = "https://github.com/riley-research/GlyCounter";
         private static UpdateManager? _instance;
         
         public static UpdateManager Instance
@@ -58,10 +59,20 @@ namespace GlyCounter
         {
             try
             {
+                // Make sure we're using the GitHub releases URL format
+                string releasesUrl = $"{GitHubRepoUrl}/releases/latest/download";
+                Debug.WriteLine($"Checking for updates at: {releasesUrl}");
+                
                 using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
                 {
                     var updateInfo = await manager.CheckForUpdate();
                     bool updatesAvailable = updateInfo.ReleasesToApply.Count > 0;
+                    
+                    Debug.WriteLine($"Update check result: {updatesAvailable}");
+                    if (updatesAvailable)
+                    {
+                        Debug.WriteLine($"New version available: {updateInfo.FutureReleaseEntry?.Version}");
+                    }
                     
                     if (!updatesAvailable && showNoUpdatesMessage)
                     {
@@ -74,7 +85,9 @@ namespace GlyCounter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error checking for updates: {ex.Message}");
+                string errorDetails = $"Error checking for updates: {ex.Message}\nStack trace: {ex.StackTrace}";
+                Debug.WriteLine(errorDetails);
+                
                 if (showNoUpdatesMessage)
                 {
                     MessageBox.Show($"Error checking for updates: {ex.Message}", "Update Error",
