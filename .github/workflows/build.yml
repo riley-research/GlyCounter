@@ -86,14 +86,19 @@ jobs:
 
     - name: Create NuGet Package
       run: |
-        nuget pack GlyCounter/GlyCounter/GlyCounter.csproj -Properties Configuration=$env:Configuration -Version ${{ steps.version.outputs.VERSION }} -OutputDirectory ./nuget
+        dotnet pack GlyCounter/GlyCounter/GlyCounter.csproj --configuration $env:Configuration /p:Version=${{ steps.version.outputs.VERSION }} --output ./nuget
 
     - name: Create Squirrel Release
       run: |
         mkdir -p ./Releases
         nuget install squirrel.windows -OutputDirectory ./packages
+        
+        # Find the actual .nupkg file (format may vary with dotnet pack)
+        $nupkgPath = Get-ChildItem -Path ./nuget -Filter *.nupkg | Select-Object -First 1 -ExpandProperty FullName
+        Write-Host "Using NuGet package: $nupkgPath"
+        
         $squirrelPath = Get-ChildItem -Path ./packages -Recurse -Filter Squirrel.exe | Select-Object -First 1 -ExpandProperty FullName
-        & $squirrelPath --releasify ./nuget/GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg --releaseDir=./Releases 
+        & $squirrelPath --releasify $nupkgPath --releaseDir=./Releases 
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4

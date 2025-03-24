@@ -27,7 +27,19 @@
     <Authors>Glyco</Authors>
     <Description>GlyCounter: A tool for glycan analysis</Description>
     <ApplicationIcon>RRG Logo Icon.ico</ApplicationIcon>
+    <!-- Additional NuGet package metadata -->
+    <PackageId>GlyCounter</PackageId>
+    <Title>GlyCounter</Title>
+    <Product>GlyCounter</Product>
+    <Copyright>Copyright © 2025</Copyright>
+    <PackageProjectUrl>https://github.com/Glyco/GlyCounter</PackageProjectUrl>
+    <PackageIcon>RRG Logo Icon.ico</PackageIcon>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="RRG Logo Icon.ico" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LumenWorks.Framework.IO" Version="3.8.0" />
