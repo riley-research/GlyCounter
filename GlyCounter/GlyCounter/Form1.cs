@@ -64,7 +64,7 @@ namespace GlyCounter
             _updateManager = UpdateManager.Instance;
             
             // Set window title to include version
-            Version version = Assembly.GetEntryAssembly().GetName().Version;
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
             this.Text = $"GlyCounter v{version.Major}.{version.Minor}.{version.Build}";
             
             // Check for updates on startup (silently)

@@ -2,8 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Squirrel;
-using NuGet;
 
 namespace GlyCounter
 {
@@ -37,11 +35,11 @@ namespace GlyCounter
         {
             try
             {
-                SquirrelAwareApp.HandleEvents(
-                    onInitialInstall: v => OnAppInstall(v),
-                    onAppUninstall: v => OnAppUninstall(v),
-                    onEveryRun: (v, d) => OnAppRun(v, d),
-                    onFirstRun: () => OnFirstRun()
+                Squirrel.SquirrelAwareApp.HandleEvents(
+                    onInitialInstall: OnAppInstall,
+                    onAppUninstall: OnAppUninstall,
+                    onEveryRun: OnAppRun,
+                    onFirstRun: OnFirstRun
                 );
             }
             catch (Exception ex)
@@ -52,19 +50,33 @@ namespace GlyCounter
 
         private static void OnAppInstall(Version version)
         {
-            using (var mgr = new Squirrel.UpdateManager(GitHubRepoUrl))
+            try
             {
-                // Create desktop and start menu shortcuts
-                mgr.CreateShortcutForThisExe();
+                using (var mgr = new Squirrel.UpdateManager(GitHubRepoUrl))
+                {
+                    // Create desktop and start menu shortcuts
+                    mgr.CreateShortcutForThisExe();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error during installation: {ex.Message}");
             }
         }
 
         private static void OnAppUninstall(Version version)
         {
-            using (var mgr = new Squirrel.UpdateManager(GitHubRepoUrl))
+            try
             {
-                // Remove desktop and start menu shortcuts
-                mgr.RemoveShortcutForThisExe();
+                using (var mgr = new Squirrel.UpdateManager(GitHubRepoUrl))
+                {
+                    // Remove desktop and start menu shortcuts
+                    mgr.RemoveShortcutForThisExe();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error during uninstallation: {ex.Message}");
             }
         }
 
@@ -84,26 +96,23 @@ namespace GlyCounter
         /// Check for updates asynchronously
         /// </summary>
         /// <param name="showNoUpdatesMessage">Whether to show a message when no updates are available</param>
-        /// <returns>UpdateInfo if an update is available, null otherwise</returns>
-        public async Task<ReleaseEntry?> CheckForUpdatesAsync(bool showNoUpdatesMessage = false)
+        /// <returns>True if updates are available, false otherwise</returns>
+        public async Task<bool> CheckForUpdatesAsync(bool showNoUpdatesMessage = false)
         {
             try
             {
                 using (_squirrelManager = new Squirrel.UpdateManager(GitHubRepoUrl))
                 {
                     var updateInfo = await _squirrelManager.CheckForUpdate();
+                    bool updatesAvailable = updateInfo.ReleasesToApply.Count > 0;
                     
-                    if (updateInfo.ReleasesToApply.Count > 0)
-                    {
-                        return updateInfo.FutureReleaseEntry;
-                    }
-                    else if (showNoUpdatesMessage)
+                    if (!updatesAvailable && showNoUpdatesMessage)
                     {
                         MessageBox.Show("You have the latest version.", "No Updates Available",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     
-                    return null;
+                    return updatesAvailable;
                 }
             }
             catch (Exception ex)
@@ -114,27 +123,29 @@ namespace GlyCounter
                     MessageBox.Show($"Error checking for updates: {ex.Message}", "Update Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                return null;
+                return false;
             }
         }
 
         /// <summary>
         /// Apply updates if available
         /// </summary>
-        /// <param name="releaseEntry">ReleaseEntry from CheckForUpdatesAsync</param>
         /// <returns>True if update was successful, false otherwise</returns>
-        public async Task<bool> UpdateApplication(ReleaseEntry releaseEntry)
+        public async Task<bool> UpdateApplication()
         {
             try
             {
                 using (_squirrelManager = new Squirrel.UpdateManager(GitHubRepoUrl))
                 {
                     var updateInfo = await _squirrelManager.CheckForUpdate();
-                    await _squirrelManager.DownloadReleases(updateInfo.ReleasesToApply);
-                    await _squirrelManager.ApplyReleases(updateInfo);
-                    await _squirrelManager.CreateUninstallerRegistryEntry();
                     
-                    return true;
+                    if (updateInfo.ReleasesToApply.Count > 0)
+                    {
+                        await _squirrelManager.UpdateApp();
+                        return true;
+                    }
+                    
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -151,12 +162,29 @@ namespace GlyCounter
         /// </summary>
         public async Task CheckAndPromptForUpdate(bool silent = false)
         {
-            var releaseEntry = await CheckForUpdatesAsync(showNoUpdatesMessage: !silent);
+            bool updatesAvailable = await CheckForUpdatesAsync(showNoUpdatesMessage: !silent);
             
-            if (releaseEntry != null)
+            if (updatesAvailable)
             {
+                string updateVersion = "new version";
+                try 
+                {
+                    using (_squirrelManager = new Squirrel.UpdateManager(GitHubRepoUrl))
+                    {
+                        var updateInfo = await _squirrelManager.CheckForUpdate();
+                        if (updateInfo.FutureReleaseEntry != null)
+                        {
+                            updateVersion = updateInfo.FutureReleaseEntry.Version.ToString();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error getting update version: {ex.Message}");
+                }
+                
                 var result = MessageBox.Show(
-                    $"A new version of GlyCounter is available (v{releaseEntry.Version}).\n\nWould you like to download and install it now?",
+                    $"A new version of GlyCounter is available (v{updateVersion}).\n\nWould you like to download and install it now?",
                     "Update Available",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Information);
@@ -188,7 +216,7 @@ namespace GlyCounter
                     updateForm.Show();
                     
                     // Apply the update
-                    bool success = await UpdateApplication(releaseEntry);
+                    bool success = await UpdateApplication();
                     
                     updateForm.Close();
                     
