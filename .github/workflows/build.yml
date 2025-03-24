@@ -80,6 +80,15 @@ jobs:
     - name: Publish
       run: |
         dotnet publish GlyCounter/GlyCounter/GlyCounter.csproj --configuration $env:Configuration --output ./publish /p:PublishSingleFile=true /p:SelfContained=true /p:RuntimeIdentifier=win-x64 /p:EnableCompressionInSingleFile=true /p:Version=${{ steps.version.outputs.VERSION }}
+        
+        # Verify the executable was created
+        if (Test-Path "./publish/GlyCounter.exe") {
+            Write-Host "GlyCounter.exe was successfully created"
+        } else {
+            Write-Host "ERROR: GlyCounter.exe was not found. Contents of publish directory:"
+            Get-ChildItem -Path "./publish" -Recurse | ForEach-Object { Write-Host $_.FullName }
+            exit 1
+        }
 
     - name: Install NuGet
       uses: NuGet/setup-nuget@v1
@@ -180,8 +189,6 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          ./Releases/**/*
-          ./nuget/*.nupkg
           ./publish/GlyCounter.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
