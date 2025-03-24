@@ -58,7 +58,7 @@ namespace GlyCounter
             InitializeComponent();
             
             // Initialize the menu items
-            InitializeMenus();
+            // InitializeMenus(); // Uncomment later
             
             // Initialize the update manager
             _updateManager = UpdateManager.Instance;
@@ -99,7 +99,7 @@ namespace GlyCounter
         
         private void AboutMenuItem_Click(object sender, EventArgs e)
         {
-            Version version = Assembly.GetEntryAssembly().GetName().Version;
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
             
             MessageBox.Show(
                 $"GlyCounter v{version.Major}.{version.Minor}.{version.Build}\n\n" +
