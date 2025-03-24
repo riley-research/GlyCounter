@@ -1,6 +1,24 @@
 # GlyCounter
 ## Download Instructions
 Each time a commit is pushed to master, the Builds folder will update with the new GlyCounter.exe package. The GlyCounter solution can also be cloned to Visual Studio and run.
+
+## Releases and Updates
+GlyCounter now features automatic updates through GitHub releases. When a new version is available, GlyCounter will automatically detect it and prompt you to download and install the update.
+
+### How to Get Updates
+- **Automatic Check**: GlyCounter checks for updates when it starts
+- **Manual Check**: You can also check for updates manually through the Help menu
+- **GitHub Releases**: All releases are available on the [GitHub Releases page](https://github.com/Glyco/GlyCounter/releases)
+
+### How to Create a Release
+To create a new release:
+1. Tag the commit with a version number: `git tag v1.0.1`
+2. Push the tag to GitHub: `git push origin v1.0.1`
+3. The GitHub Actions workflow will automatically build and publish a release
+
+The release will include:
+- The main application executable
+- Squirrel.Windows update packages for automatic updates
 ## GlyCounter Basics
 The Pre-ID tab is heart of GlyCounter. Here you can pick common oxonium ions seen in glycopeptide MS/MS spectra, and GlyCounter will find them in your raw data. You can also upload csv file with additional or custom ions to be considered, and scan settings are customizable per dissociation method (see below for more details).  This allows you to understand what your glycoproteomics data is telling you before you ever have to decided what search algorithm to use. GlyCounter can be useful for many steps in a glycoproteomics experiment, including quick evaluations of sample prep or instrument conditions,  what glycan database you might want to use for searching your data, or how to better understand what identifications your search algorithm produces. GlyCounter is designed to provide flexibility, so there are several settings you can control as the user to best understand your data. 
 
