@@ -33,13 +33,10 @@
     <Product>GlyCounter</Product>
     <Copyright>Copyright © 2025</Copyright>
     <PackageProjectUrl>https://github.com/Glyco/GlyCounter</PackageProjectUrl>
-    <PackageIcon>RRG Logo Icon.ico</PackageIcon>
+    <!-- NuGet requires .png, .jpg, or .jpeg for package icons -->
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
   
-  <ItemGroup>
-    <None Include="RRG Logo Icon.ico" Pack="true" PackagePath="\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LumenWorks.Framework.IO" Version="3.8.0" />
