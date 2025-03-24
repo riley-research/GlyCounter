@@ -78,13 +78,7 @@ namespace GlyCounter
             this.MainMenuStrip = mainMenu;
             this.Controls.Add(mainMenu);
             
-            // File menu
-            ToolStripMenuItem fileMenu = new ToolStripMenuItem("File");
-            ToolStripMenuItem exitMenuItem = new ToolStripMenuItem("Exit", null, new EventHandler(ExitMenuItem_Click));
-            fileMenu.DropDownItems.Add(exitMenuItem);
-            mainMenu.Items.Add(fileMenu);
-            
-            // Help menu
+            // Help menu only (removed File menu)
             ToolStripMenuItem helpMenu = new ToolStripMenuItem("Help");
             ToolStripMenuItem checkUpdatesMenuItem = new ToolStripMenuItem("Check for Updates", null, new EventHandler(CheckUpdatesMenuItem_Click));
             ToolStripMenuItem aboutMenuItem = new ToolStripMenuItem("About", null, new EventHandler(AboutMenuItem_Click));
@@ -96,11 +90,6 @@ namespace GlyCounter
         private async void CheckForUpdatesAsync(bool silent = false)
         {
             await _updateManager.CheckAndPromptForUpdate(silent);
-        }
-        
-        private void ExitMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
         
         private void CheckUpdatesMenuItem_Click(object sender, EventArgs e)
