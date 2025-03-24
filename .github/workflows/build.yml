@@ -90,21 +90,7 @@ jobs:
             exit 1
         }
 
-    - name: Install NuGet
-      uses: NuGet/setup-nuget@v1
-
-    - name: Create NuGet Package
-      run: |
-        dotnet pack GlyCounter/GlyCounter/GlyCounter.csproj --configuration $env:Configuration /p:Version=${{ steps.version.outputs.VERSION }} /p:PackageId=GlyCounter --output ./nuget
-        
-        # Verify the package was created with the correct name
-        $expectedPackage = "./nuget/GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg"
-        if (Test-Path $expectedPackage) {
-            Write-Host "NuGet package created successfully: $expectedPackage"
-        } else {
-            Write-Host "Warning: Expected package not found. Listing all packages:"
-            Get-ChildItem -Path "./nuget" -Filter "*.nupkg" | ForEach-Object { Write-Host $_.FullName }
-        }
+    # We're not using NuGet packages anymore since we're distributing the executable directly
 
     - name: Create Releases Directory
       run: |
