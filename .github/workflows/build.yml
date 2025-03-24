@@ -86,18 +86,45 @@ jobs:
 
     - name: Create NuGet Package
       run: |
-        dotnet pack GlyCounter/GlyCounter/GlyCounter.csproj --configuration $env:Configuration /p:Version=${{ steps.version.outputs.VERSION }} --output ./nuget
+        dotnet pack GlyCounter/GlyCounter/GlyCounter.csproj --configuration $env:Configuration /p:Version=${{ steps.version.outputs.VERSION }} /p:PackageId=GlyCounter --output ./nuget
+        
+        # Verify the package was created with the correct name
+        $expectedPackage = "./nuget/GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg"
+        if (Test-Path $expectedPackage) {
+            Write-Host "NuGet package created successfully: $expectedPackage"
+        } else {
+            Write-Host "Warning: Expected package not found. Listing all packages:"
+            Get-ChildItem -Path "./nuget" -Filter "*.nupkg" | ForEach-Object { Write-Host $_.FullName }
+        }
 
     - name: Create Squirrel Release
       run: |
         mkdir -p ./Releases
         
+        # Create a correctly formatted nuspec file for GlyCounter
+        $nuspecContent = @"
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>GlyCounter</id>
+    <version>${{ steps.version.outputs.VERSION }}</version>
+    <title>GlyCounter</title>
+    <authors>Glyco</authors>
+    <description>GlyCounter: A tool for glycan analysis</description>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  </metadata>
+  <files>
+    <file src="publish\**\*.*" target="lib\net45" />
+  </files>
+</package>
+"@
+        $nuspecContent | Out-File -FilePath "./GlyCounter.nuspec" -Encoding utf8
+        
         # Install specific version of Squirrel.Windows
         nuget install squirrel.windows -Version 1.9.0 -OutputDirectory ./packages
         
-        # Get our package name that was created by dotnet pack
-        $nupkgPath = Get-ChildItem -Path ./nuget -Filter *.nupkg | Select-Object -First 1 -ExpandProperty FullName
-        Write-Host "Found NuGet package: $nupkgPath"
+        # Create a NuGet package from our custom nuspec
+        nuget pack ./GlyCounter.nuspec -OutputDirectory ./squirrel-package
         
         # Find the Squirrel executable
         $squirrelPath = Get-ChildItem -Path ./packages -Recurse -Filter Squirrel.exe | Select-Object -First 1 -ExpandProperty FullName
@@ -105,8 +132,17 @@ jobs:
         
         if (-not $squirrelPath) {
             Write-Error "Could not find Squirrel.exe in packages directory"
+            Get-ChildItem -Path ./packages -Recurse
             exit 1
         }
+        
+        # Find our custom NuGet package
+        $nupkgPath = Get-ChildItem -Path ./squirrel-package -Filter *.nupkg | Select-Object -First 1 -ExpandProperty FullName
+        if (-not $nupkgPath) {
+            Write-Error "Could not find nuget package in squirrel-package directory"
+            exit 1
+        }
+        Write-Host "Using NuGet package: $nupkgPath"
         
         # Run Squirrel with detailed output
         Write-Host "Running Squirrel to create installation package..."

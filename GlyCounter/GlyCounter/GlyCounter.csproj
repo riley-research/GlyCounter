@@ -35,6 +35,9 @@
     <PackageProjectUrl>https://github.com/Glyco/GlyCounter</PackageProjectUrl>
     <!-- NuGet requires .png, .jpg, or .jpeg for package icons -->
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <!-- Force package ID to be GlyCounter -->
+    <AssemblyName>GlyCounter</AssemblyName>
+    <RootNamespace>GlyCounter</RootNamespace>
   </PropertyGroup>
   
 
