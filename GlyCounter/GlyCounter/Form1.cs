@@ -7,6 +7,7 @@ using MathNet.Numerics.Statistics;
 using PSI_Interface.MSData;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 
 
 namespace GlyCounter
@@ -49,9 +50,75 @@ namespace GlyCounter
         string Ynaught_csvCustomAdditions = "empty";
         string Ynaught_csvCustomSubtractions = "empty";
 
+        // For application updates
+        private UpdateManager _updateManager;
+
         public Form1()
         {
             InitializeComponent();
+            
+            // Initialize the menu items
+            InitializeMenus();
+            
+            // Initialize the update manager
+            _updateManager = UpdateManager.Instance;
+            
+            // Set window title to include version
+            Version version = Assembly.GetEntryAssembly().GetName().Version;
+            this.Text = $"GlyCounter v{version.Major}.{version.Minor}.{version.Build}";
+            
+            // Check for updates on startup (silently)
+            CheckForUpdatesAsync(true);
+        }
+        
+        private void InitializeMenus()
+        {
+            // Create main menu
+            MenuStrip mainMenu = new MenuStrip();
+            this.MainMenuStrip = mainMenu;
+            this.Controls.Add(mainMenu);
+            
+            // File menu
+            ToolStripMenuItem fileMenu = new ToolStripMenuItem("File");
+            ToolStripMenuItem exitMenuItem = new ToolStripMenuItem("Exit", null, new EventHandler(ExitMenuItem_Click));
+            fileMenu.DropDownItems.Add(exitMenuItem);
+            mainMenu.Items.Add(fileMenu);
+            
+            // Help menu
+            ToolStripMenuItem helpMenu = new ToolStripMenuItem("Help");
+            ToolStripMenuItem checkUpdatesMenuItem = new ToolStripMenuItem("Check for Updates", null, new EventHandler(CheckUpdatesMenuItem_Click));
+            ToolStripMenuItem aboutMenuItem = new ToolStripMenuItem("About", null, new EventHandler(AboutMenuItem_Click));
+            helpMenu.DropDownItems.Add(checkUpdatesMenuItem);
+            helpMenu.DropDownItems.Add(aboutMenuItem);
+            mainMenu.Items.Add(helpMenu);
+        }
+        
+        private async void CheckForUpdatesAsync(bool silent = false)
+        {
+            await _updateManager.CheckAndPromptForUpdate(silent);
+        }
+        
+        private void ExitMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        
+        private void CheckUpdatesMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckForUpdatesAsync(false);
+        }
+        
+        private void AboutMenuItem_Click(object sender, EventArgs e)
+        {
+            Version version = Assembly.GetEntryAssembly().GetName().Version;
+            
+            MessageBox.Show(
+                $"GlyCounter v{version.Major}.{version.Minor}.{version.Build}\n\n" +
+                "A tool for glycan analysis.\n\n" +
+                "© 2025 Glyco Labs",
+                "About GlyCounter",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         private void button1_Click(object sender, EventArgs e)
