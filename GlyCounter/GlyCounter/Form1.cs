@@ -1357,7 +1357,6 @@ namespace GlyCounter
 
                     for (int i = rawFile.FirstSpectrumNumber; i < rawFile.LastSpectrumNumber; i++)
                     {
-                        Debug.WriteLine(i);
                         bool IT = rawFile.GetMzAnalyzer(i).ToString().Contains("IonTrap");
 
                         if (rawFile.GetMsnOrder(i) == 2)
