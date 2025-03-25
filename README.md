@@ -1,6 +1,6 @@
 # GlyCounter
 ## Download Instructions
-Each time a commit is pushed to master, the Builds folder will update with the new GlyCounter.exe package. The GlyCounter solution can also be cloned to Visual Studio and run.
+A stand-alone GlyCounter executable is available in the Releases section of this repository. The GlyCounter solution can also be cloned to Visual Studio and run.
 ## GlyCounter Basics
 The Pre-ID tab is heart of GlyCounter. Here you can pick common oxonium ions seen in glycopeptide MS/MS spectra, and GlyCounter will find them in your raw data. You can also upload csv file with additional or custom ions to be considered, and scan settings are customizable per dissociation method (see below for more details).  This allows you to understand what your glycoproteomics data is telling you before you ever have to decided what search algorithm to use. GlyCounter can be useful for many steps in a glycoproteomics experiment, including quick evaluations of sample prep or instrument conditions,  what glycan database you might want to use for searching your data, or how to better understand what identifications your search algorithm produces. GlyCounter is designed to provide flexibility, so there are several settings you can control as the user to best understand your data. 
 
