@@ -4,43 +4,44 @@ on:
   push:
     branches: [master]
     tags:
-      - "v*"
+      - "v*" # Trigger on version tags like v1.0.0
   pull_request:
     branches: [master]
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-latest # Velopack requires Windows to pack for Windows
 
     env:
       Solution_Name: GlyCounter/GlyCounter.sln
       Configuration: Release
       Project_Path: GlyCounter/GlyCounter/GlyCounter.csproj
-      Package_Directory: ./package # Not used for packing anymore, but kept for consistency if needed elsewhere
-      Release_Directory: ./Releases
-      App_Package_ID: GlyCounter
+      Release_Directory: ./Releases # Output directory for Velopack artifacts
+      App_Package_ID: GlyCounter # Your application's identifier for Velopack
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Needed for version calculation if not using tag
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 9.0.x # Use .NET 9 SDK as it might be needed by vpk tool
 
       - name: Calculate version
         id: version
         shell: pwsh
         run: |
+          # This script calculates version based on commit count or Git tag
+          # Ensure it produces a SemVer compliant version (e.g., 1.0.1, 0.0.99)
           $commitCount = git rev-list --count HEAD
           $shortSha = git rev-parse --short HEAD
-          $baseVersion = "0.0" 
+          $baseVersion = "0.0" # Adjust your base version
           $versionString = "$baseVersion.$commitCount"
-          $fullVersion = "$versionString+$shortSha"
+          $fullVersion = "$versionString+$shortSha" # Informational
           $isTagPush = $env:GITHUB_REF.StartsWith('refs/tags/v')
           if ($isTagPush) {
             $tagVersion = $env:GITHUB_REF.Replace('refs/tags/v', '')
@@ -51,13 +52,18 @@ jobs:
             $versionString = $versionParts -join '.'
             $fullVersion = $versionString
           }
+          # Validate it's a good SemVer for Velopack/NuGet
+          if (-not ($versionString -match '^\d+\.\d+\.\d+$')) {
+            Write-Error "Calculated version '$versionString' is not valid SemVer (Major.Minor.Patch)"
+            exit 1
+          }
           echo "VERSION=$versionString" >> $env:GITHUB_OUTPUT
           echo "FULL_VERSION=$fullVersion" >> $env:GITHUB_OUTPUT
+          # Update csproj (make sure Velopack package reference is in csproj)
           $csprojPath = $env:Project_Path
           if (Test-Path $csprojPath) {
             $csproj = Get-Content $csprojPath -Raw
-            $assemblyFileVersion = $versionString
-            if ($assemblyFileVersion.Split('.').Length -lt 3) { $assemblyFileVersion = "$assemblyFileVersion.0" }
+            $assemblyFileVersion = "$versionString.0" # Often needs 4 parts
             $csproj = $csproj -replace '<Version>.*?</Version>', "<Version>$versionString</Version>"
             $csproj = $csproj -replace '<AssemblyVersion>.*?</AssemblyVersion>', "<AssemblyVersion>$assemblyFileVersion</AssemblyVersion>"
             $csproj = $csproj -replace '<FileVersion>.*?</FileVersion>', "<FileVersion>$assemblyFileVersion</FileVersion>"
@@ -74,55 +80,26 @@ jobs:
         run: dotnet test $env:Solution_Name --configuration $env:Configuration --no-build --verbosity normal
 
       - name: Publish Application Executable
+        # Publish the application in a format Velopack can package
         run: |
-          dotnet publish $env:Project_Path --configuration $env:Configuration --output ./publish --no-build /p:PublishSingleFile=true /p:SelfContained=true /p:RuntimeIdentifier=win-x64 /p:IncludeNativeLibrariesForSelfExtract=true /p:EnableCompressionInSingleFile=true
+          dotnet publish $env:Project_Path --configuration $env:Configuration --output ./publish --no-build --self-contained true -r win-x64 /p:PublishSingleFile=false /p:IncludeNativeLibrariesForSelfExtract=false 
+          # IMPORTANT: Velopack generally works better with non-single-file publishes
           if (-not (Test-Path "./publish/GlyCounter.exe")) { Write-Host "ERROR: GlyCounter.exe not found after publish."; exit 1 }
         shell: pwsh
 
-      - name: Setup NuGet CLI
-        uses: nuget/setup-nuget@v2
+      - name: Install Velopack Tool (vpk)
+        run: dotnet tool install -g vpk --ignore-failed-sources
+        # Installs the vpk command line tool
 
-      - name: Install Squirrel.Windows package locally
-        run: nuget install squirrel.windows -Version 2.0.1 -OutputDirectory ./external_packages -ExcludeVersion -NonInteractive
-
-      - name: Verify Squirrel.exe exists
-        shell: pwsh
-        run: |
-          $squirrelPath = "./external_packages/squirrel.windows/tools/Squirrel.exe"
-          if (-not (Test-Path $squirrelPath)) { 
-              Write-Host "Listing contents of ./external_packages/squirrel.windows/tools/:"
-              Get-ChildItem -Path "./external_packages/squirrel.windows/tools/" -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName }
-              Write-Error "Squirrel.exe not found at expected path: $squirrelPath. Check extraction path."
-              exit 1
-          }
-          Write-Host "Found Squirrel.exe at $squirrelPath"
-
-      - name: Run Squirrel Releasify
-        run: ./external_packages/squirrel.windows/tools/squirrel.exe `
-          --releasify `
-          --packId ${{ env.App_Package_ID }} `
-          --packVersion ${{ steps.version.outputs.VERSION }} `
-          --packDirectory ./publish `
-          --releaseDir ${{ env.Release_Directory }} `
-          --no-delta
+      - name: Run Velopack Pack
+        run: vpk pack --packId ${{ env.App_Package_ID }} -v ${{ steps.version.outputs.VERSION }} -p ./publish -o ${{ env.Release_Directory }} --target win-x64
+        # Flags: -v (version), -p (pack directory), -o (output directory)
+        # --target win-x64 might be inferred but good to be explicit
         shell: pwsh
 
-      - name: Rename Setup.exe (Optional but usually not recommended)
+      - name: List files in Releases directory after Velopack
         run: |
-          # Rename Setup.exe to GlyCounter-Setup.exe (recommended) or GlyCounter.exe (NOT recommended)
-          $setupExePath = Join-Path ${{ env.Release_Directory }} "Setup.exe"
-          if (Test-Path $setupExePath) {
-            Rename-Item -Path $setupExePath -NewName "GlyCounter-Setup.exe" # RECOMMENDED name
-            # OR: Rename-Item -Path $setupExePath -NewName "GlyCounter.exe" # NOT RECOMMENDED
-            Write-Host "Renamed Setup.exe to GlyCounter-Setup.exe"
-          } else {
-            Write-Warning "Setup.exe not found.  Rename step skipped."
-          }
-        shell: pwsh # PowerShell (or cmd /c ren or mv on bash)
-
-      - name: List files in Releases directory after Squirrel
-        run: |
-          Write-Host "Contents of Releases directory ($($env:Release_Directory)) after Squirrel:"
+          Write-Host "Contents of Releases directory ($($env:Release_Directory)) after Velopack:"
           Get-ChildItem -Path $env:Release_Directory -Recurse | ForEach-Object { Write-Host $_.FullName }
         shell: pwsh
 
@@ -135,6 +112,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ${{ env.Release_Directory }}/*
+            ${{ env.Release_Directory }}/* # This should now include Setup.exe, RELEASES.json/RELEASES, and Velopack nupkgs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
