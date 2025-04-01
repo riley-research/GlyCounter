@@ -29,7 +29,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 9.0.x # Using .NET 9 as previously decided, adjust if needed
+          dotnet-version: 9.0.x # Using .NET 9 as decided previously
 
       - name: Calculate version
         id: version
@@ -76,6 +76,7 @@ jobs:
         run: |
           dotnet publish $env:Project_Path --configuration $env:Configuration --output ./publish --no-build /p:PublishSingleFile=true /p:SelfContained=true /p:RuntimeIdentifier=win-x64 /p:IncludeNativeLibrariesForSelfExtract=true /p:EnableCompressionInSingleFile=true
           if (-not (Test-Path "./publish/GlyCounter.exe")) { Write-Host "ERROR: GlyCounter.exe not found after publish."; exit 1 }
+        shell: pwsh
 
       - name: Pack into NuPkg for Squirrel
         run: dotnet pack $env:Project_Path --configuration $env:Configuration --output $env:Package_Directory --no-build /p:Version=${{ steps.version.outputs.VERSION }} /p:PackageId=GlyCounter
@@ -87,24 +88,28 @@ jobs:
           if (-not (Test-Path $nupkgPath)) { Write-Host "ERROR: NuGet package not found at $nupkgPath"; exit 1 }
           Write-Host "Successfully created NuGet package: $nupkgPath"
 
-      - name: Create Tools Directory
-        run: mkdir ./tools
-        shell: pwsh
+      - name: Setup NuGet CLI
+        uses: nuget/setup-nuget@v2
 
-      - name: Download squirrel.exe
-        run: |
-          # *** IMPORTANT: Replace this URL with the correct one from Squirrel.Windows releases! ***
-          $url = "https://github.com/Squirrel/Squirrel.Windows/releases/download/2.0.1/Squirrel.exe" 
-          $outputFile = "./tools/squirrel.exe"
-          Write-Host "Downloading $url to $outputFile"
-          try { Invoke-WebRequest -Uri $url -OutFile $outputFile -UseBasicParsing } 
-          catch { Write-Error "Failed to download Squirrel.exe: $_"; exit 1 }
-          if (-not (Test-Path $outputFile)) { throw "File not found after download!" }
+      - name: Install Squirrel.Windows package locally
+        run: nuget install squirrel.windows -Version 2.0.1 -OutputDirectory ./external_packages -ExcludeVersion -NonInteractive
+        # This downloads and extracts the package to ./external_packages/squirrel.windows/
+
+      - name: Verify Squirrel.exe exists
         shell: pwsh
+        run: |
+          $squirrelPath = "./external_packages/squirrel.windows/tools/Squirrel.exe"
+          if (-not (Test-Path $squirrelPath)) { 
+              Write-Host "Listing contents of ./external_packages/squirrel.windows/tools/:"
+              Get-ChildItem -Path "./external_packages/squirrel.windows/tools/" -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName }
+              Write-Error "Squirrel.exe not found at expected path: $squirrelPath. Check extraction path."
+              exit 1
+          }
+          Write-Host "Found Squirrel.exe at $squirrelPath"
 
       - name: Run Squirrel Releasify
-        run: ./tools/squirrel --releasify ${{ env.Package_Directory }}/GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg --releaseDir ${{ env.Release_Directory }}
-        shell: pwsh # Using pwsh as it works well with ./ path execution on windows runners
+        run: ./external_packages/squirrel.windows/tools/squirrel.exe --releasify ${{ env.Package_Directory }}/GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg --releaseDir ${{ env.Release_Directory }}
+        shell: pwsh
 
       - name: List files in Releases directory after Squirrel
         run: |
