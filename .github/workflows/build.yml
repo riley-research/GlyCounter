@@ -1,60 +1,125 @@
-name: Build and Publish .NET
+name: Build and Release
 
 on:
   push:
-    branches:
-      - master
-    paths-ignore:
-      - "Builds/**"
+    branches: [ master ]
+    tags:
+      - 'v*'
   pull_request:
-    branches:
-      - master
-    paths-ignore:
-      - "Builds/**"
+    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: windows-latest
+    
+    env:
+      Solution_Name: GlyCounter/GlyCounter.sln
+      Configuration: Release
+      
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Fetch all history for version calculation
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: "8.0.x"
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore GlyCounter/GlyCounter/GlyCounter.csproj
+    - name: Calculate version
+      id: version
+      shell: pwsh
+      run: |
+        $commitCount = git rev-list --count HEAD
+        $shortSha = git rev-parse --short HEAD
+        $baseVersion = "1.0"
+        $versionString = "$baseVersion.$commitCount"
+        $fullVersion = "$versionString+$shortSha"
+        
+        # Check if this is a tag push
+        $isTagPush = $env:GITHUB_REF.StartsWith('refs/tags/v')
+        if ($isTagPush) {
+          $tagVersion = $env:GITHUB_REF.Replace('refs/tags/v', '')
+          # Ensure version format is major.minor.build
+          if ($tagVersion -match '-') {
+            # For prerelease tags like v1.0.0-test, convert to 1.0.0.0
+            $versionString = $tagVersion.Split('-')[0]
+            if ($versionString.Split('.').Length -lt 3) {
+              $versionString = "$versionString.0"
+            }
+          } else {
+            $versionString = $tagVersion
+            if ($versionString.Split('.').Length -lt 3) {
+              $versionString = "$versionString.0"
+            }
+          }
+          $fullVersion = $versionString
+        }
+        
+        echo "VERSION=$versionString" >> $env:GITHUB_OUTPUT
+        echo "FULL_VERSION=$fullVersion" >> $env:GITHUB_OUTPUT
+        
+        # Update csproj with version
+        $csprojPath = "GlyCounter/GlyCounter/GlyCounter.csproj"
+        $csproj = Get-Content $csprojPath -Raw
+        $csproj = $csproj -replace '<Version>.*?</Version>', "<Version>$versionString</Version>"
+        $csproj = $csproj -replace '<AssemblyVersion>.*?</AssemblyVersion>', "<AssemblyVersion>$versionString.0</AssemblyVersion>"
+        $csproj = $csproj -replace '<FileVersion>.*?</FileVersion>', "<FileVersion>$versionString.0</FileVersion>"
+        Set-Content $csprojPath $csproj
 
-      - name: Build
-        run: dotnet build GlyCounter/GlyCounter/GlyCounter.csproj --configuration Release --output ./build
+    - name: Restore dependencies
+      run: dotnet restore $env:Solution_Name
 
-      - name: Publish
-        run: dotnet publish GlyCounter/GlyCounter/GlyCounter.csproj --configuration Release --output ./publish --self-contained --runtime win-x64
+    - name: Build
+      run: dotnet build $env:Solution_Name --configuration $env:Configuration --no-restore -p:Version=${{ steps.version.outputs.VERSION }}
 
-      - name: Zip the build artifacts
-        run: zip -r GlyCounter.zip ./publish/*
+    - name: Test
+      run: dotnet test $env:Solution_Name --configuration $env:Configuration --no-build --verbosity normal
 
-      - name: Commit and push build artifacts
-        if: github.ref == 'refs/heads/master'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout master
-          if [ ! -d "Builds" ]; then
-            mkdir Builds
-          fi
-          mv GlyCounter.zip Builds/
-          git add Builds/
-          git commit -m "Add build artifacts [skip ci]"
-          git push origin master
+    - name: Publish
+      run: |
+        dotnet publish GlyCounter/GlyCounter/GlyCounter.csproj --configuration $env:Configuration --output ./publish /p:PublishSingleFile=true /p:SelfContained=true /p:RuntimeIdentifier=win-x64 /p:EnableCompressionInSingleFile=true /p:Version=${{ steps.version.outputs.VERSION }}
+        
+        # Verify the executable was created
+        if (Test-Path "./publish/GlyCounter.exe") {
+            Write-Host "GlyCounter.exe was successfully created"
+        } else {
+            Write-Host "ERROR: GlyCounter.exe was not found. Contents of publish directory:"
+            Get-ChildItem -Path "./publish" -Recurse | ForEach-Object { Write-Host $_.FullName }
+            exit 1
+        }
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: GlyCounter
-          path: ./publish
+    # We're not using NuGet packages anymore since we're distributing the executable directly
+
+    - name: Create Releases Directory
+      run: |
+        mkdir -p ./Releases
+        Copy-Item -Path "./publish/GlyCounter.exe" -Destination "./Releases/GlyCounter-${{ steps.version.outputs.VERSION }}.exe"
+        Write-Host "Copied executable to ./Releases/GlyCounter-${{ steps.version.outputs.VERSION }}.exe"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: GlyCounter-${{ steps.version.outputs.VERSION }}
+        path: |
+          ./publish/**/*
+          ./Releases/**/*
+          
+    - name: List files in Releases directory
+      run: |
+        Write-Host "Contents of Releases directory:"
+        Get-ChildItem -Path "./Releases" -Recurse | ForEach-Object { Write-Host $_.FullName }
+
+    # Only create a release if this is a tag push
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        name: GlyCounter ${{ steps.version.outputs.VERSION }}
+        draft: false
+        prerelease: false
+        files: |
+          ./Releases/GlyCounter-${{ steps.version.outputs.VERSION }}.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
