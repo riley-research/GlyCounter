@@ -130,7 +130,7 @@ jobs:
           }
 
       - name: Install Squirrel Tool
-        run: dotnet tool install --global squirrel.windows --version 3.*
+        run: dotnet tool install --global squirrel.windows
 
       - name: Run Squirrel Releasify
         run: squirrel --releasify ${{ env.Package_Directory }}/GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg --releaseDir ${{ env.Release_Directory }}
