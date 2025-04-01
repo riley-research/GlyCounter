@@ -17,8 +17,9 @@ jobs:
       Solution_Name: GlyCounter/GlyCounter.sln
       Configuration: Release
       Project_Path: GlyCounter/GlyCounter/GlyCounter.csproj
-      Package_Directory: ./package
+      Package_Directory: ./package # Not used for packing anymore, but kept for consistency if needed elsewhere
       Release_Directory: ./Releases
+      App_Package_ID: GlyCounter
 
     steps:
       - name: Checkout code
@@ -29,7 +30,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 9.0.x # Using .NET 9 as decided previously
+          dotnet-version: 9.0.x
 
       - name: Calculate version
         id: version
@@ -78,22 +79,11 @@ jobs:
           if (-not (Test-Path "./publish/GlyCounter.exe")) { Write-Host "ERROR: GlyCounter.exe not found after publish."; exit 1 }
         shell: pwsh
 
-      - name: Pack into NuPkg for Squirrel
-        run: dotnet pack $env:Project_Path --configuration $env:Configuration --output $env:Package_Directory --no-build /p:Version=${{ steps.version.outputs.VERSION }} /p:PackageId=GlyCounter
-
-      - name: Verify NuPkg Creation
-        shell: pwsh
-        run: |
-          $nupkgPath = Join-Path $env:Package_Directory "GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg"
-          if (-not (Test-Path $nupkgPath)) { Write-Host "ERROR: NuGet package not found at $nupkgPath"; exit 1 }
-          Write-Host "Successfully created NuGet package: $nupkgPath"
-
       - name: Setup NuGet CLI
         uses: nuget/setup-nuget@v2
 
       - name: Install Squirrel.Windows package locally
         run: nuget install squirrel.windows -Version 2.0.1 -OutputDirectory ./external_packages -ExcludeVersion -NonInteractive
-        # This downloads and extracts the package to ./external_packages/squirrel.windows/
 
       - name: Verify Squirrel.exe exists
         shell: pwsh
@@ -108,7 +98,12 @@ jobs:
           Write-Host "Found Squirrel.exe at $squirrelPath"
 
       - name: Run Squirrel Releasify
-        run: ./external_packages/squirrel.windows/tools/squirrel.exe --releasify ${{ env.Package_Directory }}/GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg --releaseDir ${{ env.Release_Directory }}
+        run: ./external_packages/squirrel.windows/tools/squirrel.exe `
+          --releasify --packId ${{ env.App_Package_ID }} `
+          --packVersion ${{ steps.version.outputs.VERSION }} `
+          --packDirectory ./publish `
+          --releaseDir ${{ env.Release_Directory }} `
+          --no-delta
         shell: pwsh
 
       - name: List files in Releases directory after Squirrel
