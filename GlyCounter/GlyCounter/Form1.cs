@@ -353,6 +353,7 @@ namespace GlyCounter
                     int numberScansCountedLikelyGlyco_uvpd = 0;
                     bool firstSpectrumInFile = true;
                     bool likelyGlycoSpectrum = false;
+                    double nce = 0.0;
 
                     double halfTotalList = (double)oxoniumIonHashSet.Count / 2.0;
 
@@ -365,8 +366,8 @@ namespace GlyCounter
                     }
                     StreamWriter outputSummary = new StreamWriter(fileName + "_GlyCounter_Summary.txt");
 
-                    outputOxo.Write("ScanNumber\tRetentionTime\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
-                    outputPeakDepth.Write("ScanNumber\tRetentionTime\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
+                    outputOxo.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
+                    outputPeakDepth.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
                     if (outputIPSA != null)
                         outputIPSA.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
 
@@ -426,7 +427,12 @@ namespace GlyCounter
 
                                 RankOrderPeaks(sortedPeakDepths, spectrum);
 
-                                
+                                string scanFilter = rawFile.GetScanFilter(i).ToString();
+
+                                string[] hcdHeader = scanFilter.Split('@');
+                                string[] splitHCDheader = hcdHeader[1].Split('d');
+                                string[] collisionEnergyArray = splitHCDheader[1].Split('.');
+                                nce = Convert.ToDouble(collisionEnergyArray[0]);
 
                                 foreach (OxoniumIon oxoIon in oxoniumIonHashSet)
                                 {
@@ -579,6 +585,7 @@ namespace GlyCounter
                                 string fragmentationType = rawFile.GetDissociationType(i).ToString();
                                 //double parentScan = rawFile.GetParentSpectrumNumber(i);
                                 double retentionTime = rawFile.GetRetentionTime(i);
+                                double precursormz = rawFile.GetPrecursorMz(i);
 
                                 List<double> oxoRanks = new List<double>();
 
@@ -594,7 +601,7 @@ namespace GlyCounter
                                     errorString = errorString + error.ToString("F6") + "; ";
                                 }
 
-                                outputOxo.Write(i + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
+                                outputOxo.Write(i + "\t" + retentionTime + "\t" + precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
                                 outputPeakDepth.Write(i + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
                                 if (outputIPSA != null)
                                     outputIPSA.WriteLine(i + "\t" + peakString + "\t" + errorString + "\t");
@@ -842,8 +849,8 @@ namespace GlyCounter
                     }
                     StreamWriter outputSummary = new StreamWriter(fileName + "_GlyCounter_Summary.txt");
 
-                    outputOxo.Write("ScanNumber\tRetentionTime\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
-                    outputPeakDepth.Write("ScanNumber\tRetentionTime\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
+                    outputOxo.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
+                    outputPeakDepth.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
                     if (outputIPSA != null)
                         outputIPSA.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
                     /*
@@ -890,6 +897,8 @@ namespace GlyCounter
 
                             List<double> oxoniumIonFoundPeaks = new List<double>();
                             List<double> oxoniumIonFoundMassErrors = new List<double>();
+
+                            double nce = 0.0;
 
                             switch (precursor.ActivationMethod.ToString())
                             {
@@ -1073,6 +1082,9 @@ namespace GlyCounter
 
                                 double retentionTime = spec.ScanStartTime;
 
+                                //TODO figure out how to get nce and precursor mz
+                                double precursormz = 0;
+                                
                                 List<double> oxoRanks = new List<double>();
 
                                 string peakString = new string("");
@@ -1087,8 +1099,8 @@ namespace GlyCounter
                                     errorString = errorString + error.ToString("F6") + "; ";
                                 }
 
-                                outputOxo.Write(specCount + 1 + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
-                                outputPeakDepth.Write(specCount + 1 + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
+                                outputOxo.Write(specCount + 1 + "\t" + retentionTime + "\t" + precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
+                                outputPeakDepth.Write(specCount + 1 + "\t" + retentionTime + "\t" + scanTIC + "\t" + precursormz + "\t" + nce + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
                                 if (outputIPSA != null)
                                     outputIPSA.WriteLine(specCount + 1 + "\t" + peakString + "\t" + errorString + "\t");
 
@@ -1328,6 +1340,7 @@ namespace GlyCounter
                     int numberScansCountedLikelyGlyco_uvpd = 0;
                     bool firstSpectrumInFile = true;
                     bool likelyGlycoSpectrum = false;
+                    double nce = 0.0;
 
                     double halfTotalList = (double)oxoniumIonHashSet.Count / 2.0;
 
@@ -1341,8 +1354,8 @@ namespace GlyCounter
                         
                     StreamWriter outputSummary = new StreamWriter(filePath + "_GlyCounter_Summary.txt");
 
-                    outputOxo.Write("ScanNumber\tRetentionTime\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
-                    outputPeakDepth.Write("ScanNumber\tRetentionTime\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
+                    outputOxo.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
+                    outputPeakDepth.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
                     if (outputIPSA != null)
                         outputIPSA.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
                     /*
@@ -1415,6 +1428,13 @@ namespace GlyCounter
                                 Dictionary<double, int> sortedPeakDepths = new Dictionary<double, int>();
 
                                 RankOrderPeaks(sortedPeakDepths, spectrum);
+
+                                string scanFilter = rawFile.GetScanFilter(i).ToString();
+
+                                string[] hcdHeader = scanFilter.Split('@');
+                                string[] splitHCDheader = hcdHeader[1].Split('d');
+                                string[] collisionEnergyArray = splitHCDheader[1].Split('.');
+                                nce = Convert.ToDouble(collisionEnergyArray[0]);
 
                                 foreach (OxoniumIon oxoIon in oxoniumIonHashSet)
                                 {
@@ -1570,7 +1590,7 @@ namespace GlyCounter
                                 string fragmenationType = rawFile.GetDissociationType(i).ToString();
                                 //double parentScan = rawFile.GetParentSpectrumNumber(i);
                                 double retentionTime = rawFile.GetRetentionTime(i);
-
+                                double precursormz = rawFile.GetPrecursorMz(i);
 
                                 List<double> oxoRanks = new List<double>();
 
@@ -1586,8 +1606,8 @@ namespace GlyCounter
                                     errorString = errorString + error.ToString("F6") + "; ";
                                 }
 
-                                outputOxo.Write(i + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmenationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
-                                outputPeakDepth.Write(i + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmenationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
+                                outputOxo.Write(i + "\t" + retentionTime + "\t" + precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmenationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
+                                outputPeakDepth.Write(i + "\t" + retentionTime + "\t" + precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmenationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
                                 if (outputIPSA != null)
                                     outputIPSA.WriteLine(i + "\t" + peakString + "\t" + errorString + "\t");
 
@@ -1834,8 +1854,8 @@ namespace GlyCounter
                     }
                     StreamWriter outputSummary = new StreamWriter(filePath + "_GlyCounter_Summary.txt");
 
-                    outputOxo.Write("ScanNumber\tRetentionTime\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
-                    outputPeakDepth.Write("ScanNumber\tRetentionTime\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
+                    outputOxo.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
+                    outputPeakDepth.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
                     if (outputIPSA != null)
                         outputIPSA.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
                     /*
@@ -2076,6 +2096,10 @@ namespace GlyCounter
 
                                         double retentionTime = spec.ScanStartTime;
 
+                                        //TODO figure out precursor mz and nce
+                                        double precursormz = 0.0;
+                                        double nce = 0.0;
+
                                         List<double> oxoRanks = new List<double>();
 
                                         string peakString = new string("");
@@ -2090,8 +2114,8 @@ namespace GlyCounter
                                             errorString = errorString + error.ToString("F6") + "; ";
                                         }
 
-                                        outputOxo.Write(specCount + 1 + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
-                                        outputPeakDepth.Write(specCount + 1 + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
+                                        outputOxo.Write(specCount + 1 + "\t" + retentionTime + "\t" + precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
+                                        outputPeakDepth.Write(specCount + 1 + "\t" + retentionTime + "\t" + precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
                                         if (outputIPSA != null)
                                             outputIPSA.WriteLine(specCount + 1 + "\t" + peakString + "\t" + errorString + "\t");
 
