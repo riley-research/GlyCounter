@@ -99,12 +99,26 @@ jobs:
 
       - name: Run Squirrel Releasify
         run: ./external_packages/squirrel.windows/tools/squirrel.exe `
-          --releasify --packId ${{ env.App_Package_ID }} `
+          --releasify `
+          --packId ${{ env.App_Package_ID }} `
           --packVersion ${{ steps.version.outputs.VERSION }} `
           --packDirectory ./publish `
           --releaseDir ${{ env.Release_Directory }} `
           --no-delta
         shell: pwsh
+
+      - name: Rename Setup.exe (Optional but usually not recommended)
+        run: |
+          # Rename Setup.exe to GlyCounter-Setup.exe (recommended) or GlyCounter.exe (NOT recommended)
+          $setupExePath = Join-Path ${{ env.Release_Directory }} "Setup.exe"
+          if (Test-Path $setupExePath) {
+            Rename-Item -Path $setupExePath -NewName "GlyCounter-Setup.exe" # RECOMMENDED name
+            # OR: Rename-Item -Path $setupExePath -NewName "GlyCounter.exe" # NOT RECOMMENDED
+            Write-Host "Renamed Setup.exe to GlyCounter-Setup.exe"
+          } else {
+            Write-Warning "Setup.exe not found.  Rename step skipped."
+          }
+        shell: pwsh # PowerShell (or cmd /c ren or mv on bash)
 
       - name: List files in Releases directory after Squirrel
         run: |
