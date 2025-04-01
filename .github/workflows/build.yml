@@ -2,124 +2,154 @@ name: Build and Release
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
     tags:
-      - 'v*'
+      - "v*"
   pull_request:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
-    
+
     env:
       Solution_Name: GlyCounter/GlyCounter.sln
       Configuration: Release
-      
+      # Define the project path for easier reference
+      Project_Path: GlyCounter/GlyCounter/GlyCounter.csproj
+      # Define the package output directory
+      Package_Directory: ./package
+      # Define the Squirrel release output directory
+      Release_Directory: ./Releases
+
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0 # Fetch all history for version calculation
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for version calculation
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
 
-    - name: Calculate version
-      id: version
-      shell: pwsh
-      run: |
-        $commitCount = git rev-list --count HEAD
-        $shortSha = git rev-parse --short HEAD
-        $baseVersion = "1.0"
-        $versionString = "$baseVersion.$commitCount"
-        $fullVersion = "$versionString+$shortSha"
-        
-        # Check if this is a tag push
-        $isTagPush = $env:GITHUB_REF.StartsWith('refs/tags/v')
-        if ($isTagPush) {
-          $tagVersion = $env:GITHUB_REF.Replace('refs/tags/v', '')
-          # Ensure version format is major.minor.build
-          if ($tagVersion -match '-') {
-            # For prerelease tags like v1.0.0-test, convert to 1.0.0.0
-            $versionString = $tagVersion.Split('-')[0]
-            if ($versionString.Split('.').Length -lt 3) {
-              $versionString = "$versionString.0"
+      - name: Calculate version
+        id: version
+        shell: pwsh
+        run: |
+          $commitCount = git rev-list --count HEAD
+          $shortSha = git rev-parse --short HEAD
+          # Use a base version relevant to your project, e.g., 0.0 or 1.0
+          $baseVersion = "0.0" 
+          $versionString = "$baseVersion.$commitCount"
+          $fullVersion = "$versionString+$shortSha" # Informational version
+
+          # Check if this is a tag push
+          $isTagPush = $env:GITHUB_REF.StartsWith('refs/tags/v')
+          if ($isTagPush) {
+            $tagVersion = $env:GITHUB_REF.Replace('refs/tags/v', '')
+            # Ensure version format is major.minor.build
+            if ($tagVersion -match '-') {
+              # For prerelease tags like v1.0.0-test, just use the base part
+              $versionString = $tagVersion.Split('-')[0]
+            } else {
+              $versionString = $tagVersion
             }
-          } else {
-            $versionString = $tagVersion
-            if ($versionString.Split('.').Length -lt 3) {
-              $versionString = "$versionString.0"
+            # Pad with .0 if needed for SemVer compatibility (major.minor.build)
+            $versionParts = $versionString.Split('.')
+            while ($versionParts.Length -lt 3) {
+              $versionParts += "0"
             }
+            $versionString = $versionParts -join '.'
+            $fullVersion = $versionString # Use clean tag version for release
           }
-          $fullVersion = $versionString
-        }
-        
-        echo "VERSION=$versionString" >> $env:GITHUB_OUTPUT
-        echo "FULL_VERSION=$fullVersion" >> $env:GITHUB_OUTPUT
-        
-        # Update csproj with version
-        $csprojPath = "GlyCounter/GlyCounter/GlyCounter.csproj"
-        $csproj = Get-Content $csprojPath -Raw
-        $csproj = $csproj -replace '<Version>.*?</Version>', "<Version>$versionString</Version>"
-        $csproj = $csproj -replace '<AssemblyVersion>.*?</AssemblyVersion>', "<AssemblyVersion>$versionString.0</AssemblyVersion>"
-        $csproj = $csproj -replace '<FileVersion>.*?</FileVersion>', "<FileVersion>$versionString.0</FileVersion>"
-        Set-Content $csprojPath $csproj
 
-    - name: Restore dependencies
-      run: dotnet restore $env:Solution_Name
+          echo "VERSION=$versionString" >> $env:GITHUB_OUTPUT
+          echo "FULL_VERSION=$fullVersion" >> $env:GITHUB_OUTPUT
 
-    - name: Build
-      run: dotnet build $env:Solution_Name --configuration $env:Configuration --no-restore -p:Version=${{ steps.version.outputs.VERSION }}
-
-    - name: Test
-      run: dotnet test $env:Solution_Name --configuration $env:Configuration --no-build --verbosity normal
-
-    - name: Publish
-      run: |
-        dotnet publish GlyCounter/GlyCounter/GlyCounter.csproj --configuration $env:Configuration --output ./publish /p:PublishSingleFile=true /p:SelfContained=true /p:RuntimeIdentifier=win-x64 /p:EnableCompressionInSingleFile=true /p:Version=${{ steps.version.outputs.VERSION }}
-        
-        # Verify the executable was created
-        if (Test-Path "./publish/GlyCounter.exe") {
-            Write-Host "GlyCounter.exe was successfully created"
-        } else {
-            Write-Host "ERROR: GlyCounter.exe was not found. Contents of publish directory:"
-            Get-ChildItem -Path "./publish" -Recurse | ForEach-Object { Write-Host $_.FullName }
+          # Update csproj with calculated/tag version
+          $csprojPath = $env:Project_Path
+          if (Test-Path $csprojPath) {
+            $csproj = Get-Content $csprojPath -Raw
+            # Ensure we have major.minor.build for Assembly/File Version
+            $assemblyFileVersion = $versionString
+            if ($assemblyFileVersion.Split('.').Length -lt 3) {
+               $assemblyFileVersion = "$assemblyFileVersion.0"
+            }
+            # Update versions in csproj
+            $csproj = $csproj -replace '<Version>.*?</Version>', "<Version>$versionString</Version>"
+            $csproj = $csproj -replace '<AssemblyVersion>.*?</AssemblyVersion>', "<AssemblyVersion>$assemblyFileVersion</AssemblyVersion>"
+            $csproj = $csproj -replace '<FileVersion>.*?</FileVersion>', "<FileVersion>$assemblyFileVersion</FileVersion>"
+            # Set informational version only if needed, often derived automatically
+            # $csproj = $csproj -replace '<InformationalVersion>.*?</InformationalVersion>', "<InformationalVersion>$fullVersion</InformationalVersion>"
+            Set-Content $csprojPath $csproj
+            Write-Host "Updated $csprojPath with version $versionString"
+          } else {
+            Write-Error "Could not find csproj at $csprojPath"
             exit 1
-        }
+          }
 
-    # We're not using NuGet packages anymore since we're distributing the executable directly
+      - name: Restore dependencies
+        run: dotnet restore $env:Solution_Name
 
-    - name: Create Releases Directory
-      run: |
-        mkdir -p ./Releases
-        Copy-Item -Path "./publish/GlyCounter.exe" -Destination "./Releases/GlyCounter-${{ steps.version.outputs.VERSION }}.exe"
-        Write-Host "Copied executable to ./Releases/GlyCounter-${{ steps.version.outputs.VERSION }}.exe"
+      - name: Build
+        run: dotnet build $env:Solution_Name --configuration $env:Configuration --no-restore
+        # Version is now set in the csproj file
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: GlyCounter-${{ steps.version.outputs.VERSION }}
-        path: |
-          ./publish/**/*
-          ./Releases/**/*
-          
-    - name: List files in Releases directory
-      run: |
-        Write-Host "Contents of Releases directory:"
-        Get-ChildItem -Path "./Releases" -Recurse | ForEach-Object { Write-Host $_.FullName }
+      - name: Test
+        run: dotnet test $env:Solution_Name --configuration $env:Configuration --no-build --verbosity normal
 
-    # Only create a release if this is a tag push
-    - name: Create Release
-      if: startsWith(github.ref, 'refs/tags/v')
-      uses: softprops/action-gh-release@v1
-      with:
-        name: GlyCounter ${{ steps.version.outputs.VERSION }}
-        draft: false
-        prerelease: false
-        files: |
-          ./Releases/GlyCounter-${{ steps.version.outputs.VERSION }}.exe
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish Application Executable
+        # This step creates the raw executable needed for packing, NOT for direct release asset.
+        run: |
+          dotnet publish $env:Project_Path --configuration $env:Configuration --output ./publish --no-build /p:PublishSingleFile=true /p:SelfContained=true /p:RuntimeIdentifier=win-x64 /p:IncludeNativeLibrariesForSelfExtract=true /p:EnableCompressionInSingleFile=true
+          # Verify the executable was created
+          if (Test-Path "./publish/GlyCounter.exe") {
+              Write-Host "GlyCounter.exe was successfully created in ./publish"
+          } else {
+              Write-Host "ERROR: GlyCounter.exe was not found after publish. Contents of publish directory:"
+              Get-ChildItem -Path "./publish" -Recurse | ForEach-Object { Write-Host $_.FullName }
+              exit 1
+          }
+
+      - name: Pack into NuPkg for Squirrel
+        run: dotnet pack $env:Project_Path --configuration $env:Configuration --output $env:Package_Directory --no-build /p:Version=${{ steps.version.outputs.VERSION }} /p:PackageId=GlyCounter # Ensure PackageId is set if not in csproj
+
+      - name: Verify NuPkg Creation
+        shell: pwsh
+        run: |
+          $nupkgPath = Join-Path $env:Package_Directory "GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg"
+          if (Test-Path $nupkgPath) {
+              Write-Host "Successfully created NuGet package: $nupkgPath"
+          } else {
+              Write-Host "ERROR: NuGet package not found at expected path: $nupkgPath"
+              Write-Host "Contents of package directory ($($env:Package_Directory)):"
+              Get-ChildItem -Path $env:Package_Directory -Recurse | ForEach-Object { Write-Host $_.FullName }
+              exit 1
+          }
+
+      - name: Install Squirrel Tool
+        run: dotnet tool install --global squirrel.windows --version 3.*
+
+      - name: Run Squirrel Releasify
+        run: squirrel --releasify ${{ env.Package_Directory }}/GlyCounter.${{ steps.version.outputs.VERSION }}.nupkg --releaseDir ${{ env.Release_Directory }}
+
+      - name: List files in Releases directory after Squirrel
+        run: |
+          Write-Host "Contents of Releases directory ($($env:Release_Directory)) after Squirrel:"
+          Get-ChildItem -Path $env:Release_Directory -Recurse | ForEach-Object { Write-Host $_.FullName }
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          name: GlyCounter ${{ steps.version.outputs.VERSION }}
+          tag_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+          # Upload ALL files generated by Squirrel --releasify
+          files: |
+            ${{ env.Release_Directory }}/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
