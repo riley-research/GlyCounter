@@ -3,7 +3,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Velopack;
-using Velopack.Sources; // Required for GithubSource
+using Velopack.Sources;
+using Velopack.Logging; 
 
 namespace GlyCounter
 {
