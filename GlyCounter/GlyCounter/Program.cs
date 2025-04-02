@@ -4,16 +4,20 @@ namespace GlyCounter
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
-        static void Main()
-        {   
-            VelopackApp.Build().Run();
-            
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+        static void Main(string[] args)
+        {
+            try
+            {
+                VelopackApp.Build()
+                    .Run(args);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Velopack startup error: {ex.Message}\n\nApplication will still attempt to run.",
+                                "Startup Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
         }

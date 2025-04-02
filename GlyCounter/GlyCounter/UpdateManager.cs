@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Velopack;
-using Velopack.Sources;
 
 namespace GlyCounter
 {
@@ -13,51 +12,66 @@ namespace GlyCounter
         public static UpdateManager Instance => _instance ??= new UpdateManager();
 
         private readonly Velopack.UpdateManager _updateManager;
+        private readonly IUpdateSource? _updateSource;
 
         private UpdateManager()
         {
             try
             {
-                var githubSource = new GithubSource(
-                    "https://github.com/riley-research/GlyCounter", // repo URL
+                _updateSource = new GithubSource(
+                    "https://github.com/riley-research/GlyCounter",
                     null,
-                    false, 
-                    null 
+                    false,
+                    null
                 );
 
-                _updateManager = new Velopack.UpdateManager(githubSource);
+                _updateManager = new Velopack.UpdateManager(_updateSource);
+
+                if (!_updateManager.IsInstalled)
+                {
+                    Debug.WriteLine("Velopack UpdateManager reports: Not an installed application.");
+                }
+
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to initialize Velopack: {ex}");
-                _updateManager = new Velopack.UpdateManager(null, true);
+                Debug.WriteLine($"Failed to initialize Velopack UpdateManager: {ex}");
+                _updateSource = null; 
+                _updateManager = new Velopack.UpdateManager(null);
             }
         }
 
         public async Task CheckForUpdatesAsync(bool silent = false)
         {
-            if (_updateManager.IsDisabled)
+            if (_updateSource == null || !_updateManager.IsInstalled)
             {
-                if (!silent)
+                string message = _updateSource == null
+                    ? "Update manager failed to initialize properly."
+                    : "Not an installed build—skipping update check.";
+                Debug.WriteLine(message);
+
+                if (!silent && _updateSource != null) 
                 {
-                    MessageBox.Show("UpdateManager is disabled, no updates available.",
+                    MessageBox.Show(message,
+                        "Update Check Skipped", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (!silent && _updateSource == null)
+                {
+                     MessageBox.Show(message,
                         "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 return;
             }
 
+
             try
             {
-                if (!_updateManager.IsInstalled)
-                {
-                    Debug.WriteLine("Not an installed build—skipping update check.");
-                    return;
-                }
-
-                Debug.WriteLine("Checking for updates on GitHub...");
+                Debug.WriteLine($"Checking for updates using source: {_updateSource.GetType().Name}");
                 var updateInfo = await _updateManager.CheckForUpdatesAsync();
-                if (updateInfo == null)
+
+                if (updateInfo?.TargetFullRelease == null)
                 {
+                    Debug.WriteLine("No updates found or update check failed.");
                     if (!silent)
                     {
                         MessageBox.Show("You are up to date!", "No Updates Found",
@@ -66,21 +80,37 @@ namespace GlyCounter
                     return;
                 }
 
-                var newVersion = updateInfo.Version; 
+                var newVersion = updateInfo.TargetFullRelease.Version;
+                Debug.WriteLine($"Update found: v{newVersion}");
+
                 var result = MessageBox.Show(
                     $"A new version (v{newVersion}) is available. Download & install now?",
                     "Update Available",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question
                 );
+
                 if (result == DialogResult.Yes)
                 {
-                    // Download
-                    Debug.WriteLine($"Downloading update v{newVersion}...");
-                    await _updateManager.DownloadUpdatesAsync(updateInfo);
-                    // Apply
-                    Debug.WriteLine($"Applying and restarting into v{newVersion}...");
-                    _updateManager.ApplyUpdatesAndRestart(updateInfo);
+                    try
+                    {
+                        // Download
+                        Debug.WriteLine($"Downloading update v{newVersion}...");
+                        await _updateManager.DownloadUpdatesAsync(updateInfo);
+
+                        // Apply
+                        Debug.WriteLine($"Applying and restarting into v{newVersion}...");
+                        _updateManager.ApplyUpdatesAndRestart(updateInfo);
+                    }
+                    catch (Exception downloadApplyEx)
+                    {
+                        Debug.WriteLine($"Error downloading/applying updates: {downloadApplyEx}");
+                        if (!silent)
+                        {
+                            MessageBox.Show($"Error downloading or applying updates:\n{downloadApplyEx.Message}",
+                                "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
                 }
                 else
                 {
@@ -89,10 +119,10 @@ namespace GlyCounter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error checking/applying updates: {ex}");
+                Debug.WriteLine($"Error checking for updates: {ex}");
                 if (!silent)
                 {
-                    MessageBox.Show($"Error checking or applying updates:\n{ex.Message}",
+                    MessageBox.Show($"Error checking for updates:\n{ex.Message}",
                         "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

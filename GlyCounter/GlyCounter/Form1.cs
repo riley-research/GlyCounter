@@ -64,11 +64,11 @@ namespace GlyCounter
             _updateManager = UpdateManager.Instance;
             
             // Set window title to include version
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            this.Text = $"GlyCounter v{version.Major}.{version.Minor}.{version.Build}";
-            
+            Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+            string versionString = version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "?.?.?";
+            this.Text = $"GlyCounter v{versionString}";            
             // Check for updates on startup (silently)
-            CheckForUpdatesAsync(true);
+            Task.Run(() => CheckForUpdatesAsync(true));
         }
         
         private void InitializeMenus()
@@ -89,7 +89,21 @@ namespace GlyCounter
         
         private async void CheckForUpdatesAsync(bool silent = false)
         {
-            await _updateManager.CheckAndPromptForUpdate(silent);
+            try
+            {
+                // Call the method in your GlyCounter.UpdateManager class
+                await _updateManager.CheckForUpdatesAsync(silent);
+            }
+            catch (Exception ex)
+            {
+                // Optional: Log or show error if the check itself fails unexpectedly
+                Debug.WriteLine($"Error during update check process: {ex}");
+                if (!silent)
+                {
+                    MessageBox.Show($"Failed to initiate update check: {ex.Message}",
+                                    "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
         
         private void CheckUpdatesMenuItem_Click(object sender, EventArgs e)
@@ -99,12 +113,14 @@ namespace GlyCounter
         
         private void AboutMenuItem_Click(object sender, EventArgs e)
         {
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            
+            Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+            string versionString = version != null ? $"v{version.Major}.{version.Minor}.{version.Build}" : "vUnknown";
+            string copyrightYear = DateTime.Now.Year.ToString();
+
             MessageBox.Show(
-                $"GlyCounter v{version.Major}.{version.Minor}.{version.Build}\n\n" +
+                $"GlyCounter {versionString}\n\n" +
                 "A tool for glycan analysis.\n\n" +
-                "© 2025 Glyco Labs",
+                $"Copyright © {copyrightYear} Riley Research Group",
                 "About GlyCounter",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
