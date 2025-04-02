@@ -18,7 +18,7 @@ jobs:
 
     env:
       Solution_Name: GlyCounter/GlyCounter.sln
-      Project_Path: GlyCounter/GlyCounter.csproj
+      Project_Path: GlyCounter/GlyCounter/GlyCounter.csproj
       Configuration: Release
 
       Release_Directory: ./Releases
