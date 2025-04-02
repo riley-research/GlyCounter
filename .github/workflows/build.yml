@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
     tags:
-      - 'v*'
+      - "v*"
   pull_request:
     branches: [master]
   workflow_dispatch:
@@ -39,8 +39,69 @@ jobs:
         run: dotnet workload install windowsdesktop
 
       - name: Calculate version
-        # (Your versioning script steps here, same as before)
-        ...
+        id: version
+        shell: pwsh
+        run: |
+          # Grab total commits for fallback versioning
+          $commitCount = git rev-list --count HEAD
+          $shortSha = git rev-parse --short HEAD
+
+          # We'll start with "0.0" as base, then commitCount as patch
+          $baseVersion = "0.0"
+          $versionString = "$baseVersion.$commitCount"
+          $fullVersion = "$versionString+$shortSha"
+
+          # Detect if this run was triggered by a tag "vX.Y.Z"
+          $isTagPush = $env:GITHUB_REF.StartsWith('refs/tags/v')
+          if ($isTagPush) {
+            # Extract just the numeric part from the tag, e.g. "v1.2.3" -> "1.2.3"
+            $tagVersion = $env:GITHUB_REF.Replace('refs/tags/v', '')
+
+            # If there's a dash (e.g., "1.2.3-beta"), take only the part before dash
+            if ($tagVersion -match '-') {
+              $versionString = $tagVersion.Split('-')[0]
+            } else {
+              $versionString = $tagVersion
+            }
+
+            # Ensure we have at least 3 parts (Major.Minor.Patch)
+            $versionParts = $versionString.Split('.')
+            while ($versionParts.Length -lt 3) {
+              $versionParts += "0"
+            }
+            $versionString = $versionParts -join '.'
+            $fullVersion = $versionString
+          }
+
+          # Validate we have a SemVer (e.g. 1.2.3)
+          if (-not ($versionString -match '^\d+\.\d+\.\d+$')) {
+            Write-Error "Calculated version '$versionString' is not valid SemVer."
+            exit 1
+          }
+
+          Write-Host "Calculated version = $versionString"
+
+          # Expose these as outputs for subsequent steps
+          echo "VERSION=$versionString" >> $env:GITHUB_OUTPUT
+          echo "FULL_VERSION=$fullVersion" >> $env:GITHUB_OUTPUT
+
+          # Update the .csproj with these version numbers
+          $csprojPath = "$($env:Project_Path)"
+          if (Test-Path $csprojPath) {
+            $csproj = Get-Content $csprojPath -Raw
+            # Typically AssemblyVersion/FileVersion want 4 parts, e.g. "1.2.3.0"
+            $assemblyFileVersion = "$versionString.0"
+
+            $csproj = $csproj -replace '<Version>.*?</Version>', "<Version>$versionString</Version>"
+            $csproj = $csproj -replace '<AssemblyVersion>.*?</AssemblyVersion>', "<AssemblyVersion>$assemblyFileVersion</AssemblyVersion>"
+            $csproj = $csproj -replace '<FileVersion>.*?</FileVersion>', "<FileVersion>$assemblyFileVersion</FileVersion>"
+
+            Set-Content $csprojPath $csproj
+          }
+          else {
+            Write-Error "Could not find csproj at $csprojPath"
+            exit 1
+          }
 
       - name: Restore dependencies
         run: dotnet restore $env:Solution_Name
