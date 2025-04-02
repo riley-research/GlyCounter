@@ -30,7 +30,7 @@ namespace GlyCounter
                     false,          // bool prerelease
                     null            // IFileDownloader? 
                 );
-:
+                
                 _updateManager = new Velopack.UpdateManager(
                     source,
                     false  // not disabled
