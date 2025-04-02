@@ -115,7 +115,6 @@ jobs:
           dotnet publish $env:Project_Path `
             --configuration $env:Configuration `
             --output ./publish `
-            --no-build `
             --self-contained true `
             -r win-x64 `
             /p:PublishSingleFile=false `
