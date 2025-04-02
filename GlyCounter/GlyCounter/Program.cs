@@ -10,7 +10,7 @@ namespace GlyCounter
             try
             {
                 VelopackApp.Build()
-                    .Run(args);
+                    .Run();
             }
             catch (Exception ex)
             {

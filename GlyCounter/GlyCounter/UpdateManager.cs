@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Velopack;
+using Velopack.Sources; // Keep this for GithubSource and the cast
 
 namespace GlyCounter
 {
@@ -11,67 +12,69 @@ namespace GlyCounter
         private static UpdateManager? _instance;
         public static UpdateManager Instance => _instance ??= new UpdateManager();
 
+        // Make readonly as it's initialized only once
         private readonly Velopack.UpdateManager _updateManager;
-        private readonly IUpdateSource? _updateSource;
 
         private UpdateManager()
         {
             try
             {
-                _updateSource = new GithubSource(
-                    "https://github.com/riley-research/GlyCounter",
-                    null,
-                    false,
-                    null
+                // Define the source directly
+                var githubSource = new GithubSource(
+                    "https://github.com/riley-research/GlyCounter", // Correct repo URL if this is it
+                    null, // No prerelease tag filter
+                    false, // Not fetching prereleases
+                    null // No custom access token needed for public repo
                 );
 
-                _updateManager = new Velopack.UpdateManager(_updateSource);
+                // Initialize the manager with the source
+                _updateManager = new Velopack.UpdateManager(githubSource);
 
+                // Basic check if the manager thinks it's installed.
                 if (!_updateManager.IsInstalled)
                 {
                     Debug.WriteLine("Velopack UpdateManager reports: Not an installed application.");
                 }
-
             }
             catch (Exception ex)
             {
+                // Log the failure and create a disabled manager
                 Debug.WriteLine($"Failed to initialize Velopack UpdateManager: {ex}");
-                _updateSource = null; 
-                _updateManager = new Velopack.UpdateManager(null);
+                // Create a disabled manager by explicitly casting null to the IUpdateSource interface
+                _updateManager = new Velopack.UpdateManager((Velopack.Sources.IUpdateSource?)null);
             }
         }
 
+        // This is the method you call from Form1
         public async Task CheckForUpdatesAsync(bool silent = false)
         {
-            if (_updateSource == null || !_updateManager.IsInstalled)
+            // The primary check is whether the app is installed via Velopack.
+            // If initialization failed in the constructor, the manager was created with a null source.
+            // Calling CheckForUpdatesAsync on such a manager should fail gracefully or return null below.
+            if (!_updateManager.IsInstalled)
             {
-                string message = _updateSource == null
-                    ? "Update manager failed to initialize properly."
-                    : "Not an installed build—skipping update check.";
+                string message = "Not an installed build—skipping update check.";
                 Debug.WriteLine(message);
 
-                if (!silent && _updateSource != null) 
+                if (!silent)
                 {
                     MessageBox.Show(message,
                         "Update Check Skipped", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else if (!silent && _updateSource == null)
-                {
-                     MessageBox.Show(message,
-                        "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
                 return;
             }
 
-
+            // Proceed with the update check attempt.
             try
             {
-                Debug.WriteLine($"Checking for updates using source: {_updateSource.GetType().Name}");
+                // Removed the check/use of the inaccessible 'Source' property here
+                Debug.WriteLine($"Checking for updates...");
                 var updateInfo = await _updateManager.CheckForUpdatesAsync();
 
+                // Check if updateInfo or the TargetFullRelease is null
                 if (updateInfo?.TargetFullRelease == null)
                 {
-                    Debug.WriteLine("No updates found or update check failed.");
+                    Debug.WriteLine("No updates found or update check failed (potentially due to initialization issue).");
                     if (!silent)
                     {
                         MessageBox.Show("You are up to date!", "No Updates Found",
@@ -80,9 +83,11 @@ namespace GlyCounter
                     return;
                 }
 
+                // Correctly access the version from TargetFullRelease
                 var newVersion = updateInfo.TargetFullRelease.Version;
                 Debug.WriteLine($"Update found: v{newVersion}");
 
+                // Prompt the user (only if not silent)
                 var result = MessageBox.Show(
                     $"A new version (v{newVersion}) is available. Download & install now?",
                     "Update Available",
@@ -119,11 +124,22 @@ namespace GlyCounter
             }
             catch (Exception ex)
             {
+                // Catch errors during the check process itself
+                // This will also catch issues if the manager wasn't initialized properly (e.g., null source)
                 Debug.WriteLine($"Error checking for updates: {ex}");
+
+                string errorMessage = $"Error checking for updates:\n{ex.Message}";
+                string errorTitle = "Update Error";
+
+                // Simple heuristic: If the message mentions "source", it *might* be the initialization issue.
+                if (ex.Message.ToLowerInvariant().Contains("source")) {
+                   errorMessage = $"Update manager may not have initialized correctly or failed to check source.\nError: {ex.Message}";
+                   errorTitle = "Update Initialization/Check Error";
+                }
+
                 if (!silent)
                 {
-                    MessageBox.Show($"Error checking for updates:\n{ex.Message}",
-                        "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(errorMessage, errorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
