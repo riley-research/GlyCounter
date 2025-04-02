@@ -166,7 +166,6 @@ jobs:
           tag_name: ${{ github.ref }}
           draft: false
           prerelease: false
-          files: |
-            ${{ env:Release_Directory }}/*
+          files: ${{ env.Release_Directory }}/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
