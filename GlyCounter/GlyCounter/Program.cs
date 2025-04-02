@@ -1,3 +1,5 @@
+using Velopack;
+
 namespace GlyCounter
 {
     internal static class Program
@@ -8,6 +10,8 @@ namespace GlyCounter
         [STAThread]
         static void Main()
         {   
+            VelopackApp.Build().Run();
+            
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
