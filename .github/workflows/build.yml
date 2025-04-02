@@ -1,108 +1,163 @@
 name: Build and Release
 
 on:
+  # Trigger when pushing to 'master' or pushing any tag that starts with "v"
   push:
     branches: [master]
     tags:
-      - "v*" # Trigger on version tags like v1.0.0
+      - "v*"
   pull_request:
     branches: [master]
   workflow_dispatch:
 
+permissions:
+  contents: write # Needed to create GitHub releases
+
 jobs:
   build:
-    runs-on: windows-latest # Velopack requires Windows to pack for Windows
+    runs-on: windows-latest
 
     env:
       Solution_Name: GlyCounter/GlyCounter.sln
       Configuration: Release
       Project_Path: GlyCounter/GlyCounter/GlyCounter.csproj
-      Release_Directory: ./Releases # Output directory for Velopack artifacts
-      App_Package_ID: GlyCounter # Your application's identifier for Velopack
+      Release_Directory: ./Releases
+      App_Package_ID: GlyCounter
 
     steps:
+      # 1) Check out repo
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Needed for version calculation if not using tag
+          fetch-depth: 0 # So we can read tags/commits if needed
 
+      # 2) Setup .NET
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.x # Use .NET 9 SDK as it might be needed by vpk tool
+          dotnet-version: 8.0.x
 
+      # 3) Calculate and update version in csproj from tag or commit count
       - name: Calculate version
         id: version
         shell: pwsh
         run: |
-          # This script calculates version based on commit count or Git tag
-          # Ensure it produces a SemVer compliant version (e.g., 1.0.1, 0.0.99)
+          # Grab total commits for fallback versioning
           $commitCount = git rev-list --count HEAD
           $shortSha = git rev-parse --short HEAD
-          $baseVersion = "0.0" # Adjust your base version
+
+          # We'll start with "0.0" as base, then commitCount as patch
+          $baseVersion = "0.0"
           $versionString = "$baseVersion.$commitCount"
-          $fullVersion = "$versionString+$shortSha" # Informational
+          $fullVersion = "$versionString+$shortSha"
+
+          # Detect if this run was triggered by a tag "vX.Y.Z"
           $isTagPush = $env:GITHUB_REF.StartsWith('refs/tags/v')
           if ($isTagPush) {
+            # Extract just the numeric part from the tag, e.g. "v1.2.3" -> "1.2.3"
             $tagVersion = $env:GITHUB_REF.Replace('refs/tags/v', '')
-            if ($tagVersion -match '-') { $versionString = $tagVersion.Split('-')[0] } 
-            else { $versionString = $tagVersion }
+
+            # If there's a dash (e.g., "1.2.3-beta"), take only the part before dash
+            if ($tagVersion -match '-') {
+              $versionString = $tagVersion.Split('-')[0]
+            } else {
+              $versionString = $tagVersion
+            }
+
+            # Ensure we have at least 3 parts (Major.Minor.Patch)
             $versionParts = $versionString.Split('.')
-            while ($versionParts.Length -lt 3) { $versionParts += "0" }
+            while ($versionParts.Length -lt 3) {
+              $versionParts += "0"
+            }
             $versionString = $versionParts -join '.'
             $fullVersion = $versionString
           }
-          # Validate it's a good SemVer for Velopack/NuGet
+
+          # Validate we have a SemVer (e.g. 1.2.3)
           if (-not ($versionString -match '^\d+\.\d+\.\d+$')) {
-            Write-Error "Calculated version '$versionString' is not valid SemVer (Major.Minor.Patch)"
+            Write-Error "Calculated version '$versionString' is not valid SemVer."
             exit 1
           }
+
+          Write-Host "Calculated version = $versionString"
+
+          # Expose these as outputs for subsequent steps
           echo "VERSION=$versionString" >> $env:GITHUB_OUTPUT
           echo "FULL_VERSION=$fullVersion" >> $env:GITHUB_OUTPUT
-          # Update csproj (make sure Velopack package reference is in csproj)
-          $csprojPath = $env:Project_Path
+
+          # Update the .csproj with these version numbers
+          $csprojPath = "$($env:Project_Path)"
           if (Test-Path $csprojPath) {
             $csproj = Get-Content $csprojPath -Raw
-            $assemblyFileVersion = "$versionString.0" # Often needs 4 parts
+            # Typically AssemblyVersion/FileVersion want 4 parts, e.g. "1.2.3.0"
+            $assemblyFileVersion = "$versionString.0"
+
             $csproj = $csproj -replace '<Version>.*?</Version>', "<Version>$versionString</Version>"
             $csproj = $csproj -replace '<AssemblyVersion>.*?</AssemblyVersion>', "<AssemblyVersion>$assemblyFileVersion</AssemblyVersion>"
             $csproj = $csproj -replace '<FileVersion>.*?</FileVersion>', "<FileVersion>$assemblyFileVersion</FileVersion>"
-            Set-Content $csprojPath $csproj
-          } else { Write-Error "Could not find csproj at $csprojPath"; exit 1 }
 
+            Set-Content $csprojPath $csproj
+          }
+          else {
+            Write-Error "Could not find csproj at $csprojPath"
+            exit 1
+          }
+
+      # 4) Restore dependencies
       - name: Restore dependencies
         run: dotnet restore $env:Solution_Name
 
+      # 5) Build solution
       - name: Build
         run: dotnet build $env:Solution_Name --configuration $env:Configuration --no-restore
 
       - name: Test
         run: dotnet test $env:Solution_Name --configuration $env:Configuration --no-build --verbosity normal
 
+      # 6) Publish EXE into "publish/" folder
       - name: Publish Application Executable
-        # Publish the application in a format Velopack can package
-        run: |
-          dotnet publish $env:Project_Path --configuration $env:Configuration --output ./publish --no-build --self-contained true -r win-x64 /p:PublishSingleFile=false /p:IncludeNativeLibrariesForSelfExtract=false 
-          # IMPORTANT: Velopack generally works better with non-single-file publishes
-          if (-not (Test-Path "./publish/GlyCounter.exe")) { Write-Host "ERROR: GlyCounter.exe not found after publish."; exit 1 }
         shell: pwsh
+        run: |
+          dotnet publish $env:Project_Path `
+            --configuration $env:Configuration `
+            --output ./publish `
+            --no-build `
+            --self-contained true `
+            -r win-x64 `
+            /p:PublishSingleFile=false `
+            /p:IncludeNativeLibrariesForSelfExtract=false
 
+          if (-not (Test-Path "./publish/GlyCounter.exe")) {
+            Write-Host "ERROR: GlyCounter.exe not found after publish."
+            exit 1
+          }
+
+      # 7) Install VeloPack CLI
       - name: Install Velopack Tool (vpk)
         run: dotnet tool install -g vpk --ignore-failed-sources
-        # Installs the vpk command line tool
 
+      # 8) Pack with VeloPack
       - name: Run Velopack Pack
-        run: vpk pack --packId ${{ env.App_Package_ID }} -v ${{ steps.version.outputs.VERSION }} -p ./publish -o ${{ env.Release_Directory }} --target win-x64
-        # Flags: -v (version), -p (pack directory), -o (output directory)
-        # --target win-x64 might be inferred but good to be explicit
         shell: pwsh
+        run: |
+          vpk pack `
+            --packId $env:App_Package_ID `
+            --packVersion ${{ steps.version.outputs.VERSION }} `
+            --packDir ./publish `
+            -o $env:Release_Directory `
+            --target win-x64
+          # ^ Generates .nupkg, releases.win.json, Setup.exe, etc. in ./Releases
 
+      # 9) List Release files (for debugging)
       - name: List files in Releases directory after Velopack
+        shell: pwsh
         run: |
           Write-Host "Contents of Releases directory ($($env:Release_Directory)) after Velopack:"
-          Get-ChildItem -Path $env:Release_Directory -Recurse | ForEach-Object { Write-Host $_.FullName }
-        shell: pwsh
+          Get-ChildItem -Path $env:Release_Directory -Recurse | ForEach-Object {
+            Write-Host $_.FullName
+          }
 
+      # 10) Create or Update GitHub Release (only if we pushed a version tag)
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v1
@@ -112,6 +167,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ${{ env.Release_Directory }}/* # This should now include Setup.exe, RELEASES.json/RELEASES, and Velopack nupkgs
+            ${{ env:Release_Directory }}/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
