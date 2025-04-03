@@ -135,8 +135,7 @@ jobs:
             --packId $env:App_Package_ID `
             --packVersion ${{ steps.version.outputs.VERSION }} `
             --packDir ./publish `
-            -o $env:Release_Directory `
-            --target win-x64
+            -o $env:Release_Directory 
           # This creates Setup.exe, releases.win.json, .nupkg, etc. in ./Releases
 
       - name: List files in Releases directory after Velopack
