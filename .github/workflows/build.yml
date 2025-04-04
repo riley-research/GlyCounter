@@ -156,5 +156,5 @@ jobs:
             --repoUrl "https://github.com/riley-research/GlyCounter" `
             --publish `
             --releaseName "GlyCounter ${{ steps.version.outputs.VERSION }}" `
-            --tag ${{ github.ref }}
+            --tag ${{ github.ref }} `
             --token ${{ secrets.GITHUB_TOKEN }}
