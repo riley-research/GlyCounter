@@ -157,3 +157,4 @@ jobs:
             --publish `
             --releaseName "GlyCounter ${{ steps.version.outputs.VERSION }}" `
             --tag ${{ github.ref }}
+            --token ${{ secrets.GITHUB_TOKEN }}
