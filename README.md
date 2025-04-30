@@ -118,6 +118,8 @@ For example: if the precursor charge is 4 and I want to consider anything with a
 
 **Phospho.txt**: R file used to create a figure using GlyCounter data
 
+**ListofGivenOxoIons.txt**: List of ions and m/z values provided by default in GlyCounter
+
 ## Release Process
 
 To create a new release of GlyCounter:
