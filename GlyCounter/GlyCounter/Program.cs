@@ -1,18 +1,23 @@
+using Velopack;
+
 namespace GlyCounter
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            // Set up Squirrel.Windows events for installation, updates, and uninstallation
-            UpdateManager.SetupEvents();
-            
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            try
+            {
+                VelopackApp.Build()
+                    .Run();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Velopack startup error: {ex.Message}\n\nApplication will still attempt to run.",
+                                "Startup Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
         }

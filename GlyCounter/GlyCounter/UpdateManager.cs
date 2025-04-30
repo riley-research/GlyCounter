@@ -2,229 +2,145 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
+using Velopack;
+using Velopack.Sources; // Keep this for GithubSource and the cast
 
 namespace GlyCounter
 {
-    public class UpdateManager
+    public sealed class UpdateManager
     {
-        // Fix the repository URL to point to the correct GitHub organization/repo
-        private const string GitHubRepoUrl = "https://github.com/riley-research/GlyCounter";
         private static UpdateManager? _instance;
-        
-        public static UpdateManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new UpdateManager();
-                }
-                return _instance;
-            }
-        }
+        public static UpdateManager Instance => _instance ??= new UpdateManager();
+
+        // Make readonly as it's initialized only once
+        private readonly Velopack.UpdateManager _updateManager;
 
         private UpdateManager()
         {
-            // Private constructor for singleton pattern
-        }
-
-        /// <summary>
-        /// Sets up Squirrel.Windows events for install, uninstall, and update
-        /// </summary>
-        public static void SetupEvents()
-        {
             try
             {
-                // Most basic event handling - just show a welcome message on first run
-                Squirrel.SquirrelAwareApp.HandleEvents(
-                    onFirstRun: () => MessageBox.Show("Thank you for installing GlyCounter!", 
-                                                    "Installation Complete", 
-                                                    MessageBoxButtons.OK, 
-                                                    MessageBoxIcon.Information)
+                // Define the source directly
+                var githubSource = new GithubSource(
+                    "https://github.com/riley-research/GlyCounter", // Correct repo URL if this is it
+                    null, // No prerelease tag filter
+                    false, // Not fetching prereleases
+                    null // No custom access token needed for public repo
                 );
+
+                // Initialize the manager with the source
+                _updateManager = new Velopack.UpdateManager(githubSource);
+
+                // Basic check if the manager thinks it's installed.
+                if (!_updateManager.IsInstalled)
+                {
+                    Debug.WriteLine("Velopack UpdateManager reports: Not an installed application.");
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error setting up Squirrel events: {ex.Message}");
+                // Log the failure and create a disabled manager
+                Debug.WriteLine($"Failed to initialize Velopack UpdateManager: {ex}");
+                // Create a disabled manager by explicitly casting null to the IUpdateSource interface
+                _updateManager = new Velopack.UpdateManager((Velopack.Sources.IUpdateSource?)null);
             }
         }
 
-        /// <summary>
-        /// Check for updates asynchronously
-        /// </summary>
-        /// <param name="showNoUpdatesMessage">Whether to show a message when no updates are available</param>
-        /// <returns>True if updates are available, false otherwise</returns>
-        public async Task<bool> CheckForUpdatesAsync(bool showNoUpdatesMessage = false)
+        // This is the method you call from Form1
+        public async Task CheckForUpdatesAsync(bool silent = false)
         {
+            // The primary check is whether the app is installed via Velopack.
+            // If initialization failed in the constructor, the manager was created with a null source.
+            // Calling CheckForUpdatesAsync on such a manager should fail gracefully or return null below.
+            if (!_updateManager.IsInstalled)
+            {
+                string message = "Not an installed build—skipping update check.";
+                Debug.WriteLine(message);
+
+                if (!silent)
+                {
+                    MessageBox.Show(message,
+                        "Update Check Skipped", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                return;
+            }
+
+            // Proceed with the update check attempt.
             try
             {
-                // Make sure we're using the GitHub releases URL format
-                string releasesUrl = $"{GitHubRepoUrl}/releases/latest/download";
-                Debug.WriteLine($"Checking for updates at: {releasesUrl}");
-                
-                using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
+                // Removed the check/use of the inaccessible 'Source' property here
+                Debug.WriteLine($"Checking for updates...");
+                var updateInfo = await _updateManager.CheckForUpdatesAsync();
+
+                // Check if updateInfo or the TargetFullRelease is null
+                if (updateInfo?.TargetFullRelease == null)
                 {
-                    var updateInfo = await manager.CheckForUpdate();
-                    bool updatesAvailable = updateInfo.ReleasesToApply.Count > 0;
-                    
-                    Debug.WriteLine($"Update check result: {updatesAvailable}");
-                    if (updatesAvailable)
+                    Debug.WriteLine("No updates found or update check failed (potentially due to initialization issue).");
+                    if (!silent)
                     {
-                        Debug.WriteLine($"New version available: {updateInfo.FutureReleaseEntry?.Version}");
-                    }
-                    
-                    if (!updatesAvailable && showNoUpdatesMessage)
-                    {
-                        MessageBox.Show("You have the latest version.", "No Updates Available",
+                        MessageBox.Show("You are up to date!", "No Updates Found",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    
-                    return updatesAvailable;
+                    return;
                 }
-            }
-            catch (Exception ex)
-            {
-                string errorDetails = $"Error checking for updates: {ex.Message}\nStack trace: {ex.StackTrace}";
-                Debug.WriteLine(errorDetails);
-                
-                if (showNoUpdatesMessage)
-                {
-                    MessageBox.Show($"Error checking for updates: {ex.Message}", "Update Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                return false;
-            }
-        }
 
-        /// <summary>
-        /// Apply updates if available
-        /// </summary>
-        /// <returns>True if update was successful, false otherwise</returns>
-        public async Task<bool> UpdateApplication()
-        {
-            try
-            {
-                using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
+                // Correctly access the version from TargetFullRelease
+                var newVersion = updateInfo.TargetFullRelease.Version;
+                Debug.WriteLine($"Update found: v{newVersion}");
+
+                // Prompt the user (only if not silent)
+                var result = MessageBox.Show(
+                    $"A new version (v{newVersion}) is available. Download & install now?",
+                    "Update Available",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.Yes)
                 {
-                    var updateInfo = await manager.CheckForUpdate();
-                    
-                    if (updateInfo.ReleasesToApply.Count > 0)
+                    try
                     {
-                        // Download and apply releases
-                        await manager.DownloadReleases(updateInfo.ReleasesToApply);
-                        await manager.ApplyReleases(updateInfo);
-                        return true;
+                        // Download
+                        Debug.WriteLine($"Downloading update v{newVersion}...");
+                        await _updateManager.DownloadUpdatesAsync(updateInfo);
+
+                        // Apply
+                        Debug.WriteLine($"Applying and restarting into v{newVersion}...");
+                        _updateManager.ApplyUpdatesAndRestart(updateInfo);
                     }
-                    
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error updating application: {ex.Message}");
-                MessageBox.Show($"Error updating application: {ex.Message}", "Update Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Check for updates and prompt user to install if available
-        /// </summary>
-        public async Task CheckAndPromptForUpdate(bool silent = false)
-        {
-            bool updatesAvailable = await CheckForUpdatesAsync(showNoUpdatesMessage: !silent);
-            
-            if (updatesAvailable)
-            {
-                string updateVersion = "new version";
-                try 
-                {
-                    using (var manager = new Squirrel.UpdateManager(GitHubRepoUrl))
+                    catch (Exception downloadApplyEx)
                     {
-                        var updateInfo = await manager.CheckForUpdate();
-                        if (updateInfo.FutureReleaseEntry != null)
+                        Debug.WriteLine($"Error downloading/applying updates: {downloadApplyEx}");
+                        if (!silent)
                         {
-                            updateVersion = updateInfo.FutureReleaseEntry.Version.ToString();
+                            MessageBox.Show($"Error downloading or applying updates:\n{downloadApplyEx.Message}",
+                                "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Debug.WriteLine($"Error getting update version: {ex.Message}");
+                    Debug.WriteLine("User declined the update.");
                 }
-                
-                var result = MessageBox.Show(
-                    $"A new version of GlyCounter is available (v{updateVersion}).\n\nWould you like to download and install it now?",
-                    "Update Available",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Information);
-                
-                if (result == DialogResult.Yes)
-                {
-                    // Show an updating message
-                    var updateForm = new Form
-                    {
-                        Text = "Updating",
-                        Width = 300,
-                        Height = 100,
-                        FormBorderStyle = FormBorderStyle.FixedDialog,
-                        StartPosition = FormStartPosition.CenterScreen,
-                        MaximizeBox = false,
-                        MinimizeBox = false,
-                        ControlBox = false
-                    };
-                    
-                    var label = new Label
-                    {
-                        Text = "Downloading and installing update...",
-                        Width = 280,
-                        Height = 50,
-                        TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-                    };
-                    
-                    updateForm.Controls.Add(label);
-                    updateForm.Show();
-                    
-                    // Apply the update
-                    bool success = await UpdateApplication();
-                    
-                    updateForm.Close();
-                    
-                    if (success)
-                    {
-                        MessageBox.Show(
-                            "Update has been installed successfully. The application will now restart.",
-                            "Update Complete",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
-                        
-                        // Restart the application
-                        UpdateManager.RestartApp();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Restart the application after update
-        /// </summary>
-        public static void RestartApp()
-        {
-            try
-            {
-                var currentExecutablePath = Application.ExecutablePath;
-                Process.Start(currentExecutablePath);
-                Application.Exit();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error restarting application: {ex.Message}");
-                MessageBox.Show("Please restart the application manually to complete the update.",
-                    "Update Complete",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                // Catch errors during the check process itself
+                // This will also catch issues if the manager wasn't initialized properly (e.g., null source)
+                Debug.WriteLine($"Error checking for updates: {ex}");
+
+                string errorMessage = $"Error checking for updates:\n{ex.Message}";
+                string errorTitle = "Update Error";
+
+                // Simple heuristic: If the message mentions "source", it *might* be the initialization issue.
+                if (ex.Message.ToLowerInvariant().Contains("source")) {
+                   errorMessage = $"Update manager may not have initialized correctly or failed to check source.\nError: {ex.Message}";
+                   errorTitle = "Update Initialization/Check Error";
+                }
+
+                if (!silent)
+                {
+                    MessageBox.Show(errorMessage, errorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

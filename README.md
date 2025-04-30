@@ -1,8 +1,28 @@
 # GlyCounter
 
+[![Build and Release](https://github.com/riley-research/GlyCounter/actions/workflows/build.yml/badge.svg)](https://github.com/riley-research/GlyCounter/actions/workflows/build.yml)
+[![Latest Release](https://img.shields.io/github/v/release/riley-research/GlyCounter)](https://github.com/riley-research/GlyCounter/releases/latest)
+[![Issues](https://img.shields.io/github/issues/riley-research/GlyCounter)](https://github.com/riley-research/GlyCounter/issues)
+
+## Table of Contents
+
+- [Download Instructions](#download-instructions)
+- [GlyCounter Basics](#glycounter-basics)
+  - [Selecting Files](#selecting-files)
+  - [Variables](#variables)
+  - [LikelyGlycoSpectrum](#likelyglycopectrum)
+  - [Output Files](#output-files)
+- [Ynaught](#ynaught)
+  - [Output Files](#output-files-1)
+  - [Variables](#variables-1)
+- [Example Files](#example-files)
+- [Release Process](#release-process)
+
 ## Download Instructions
 
-A stand-alone GlyCounter executable is available in the Releases section of this repository. The GlyCounter solution can also be cloned to Visual Studio and run.
+A stand-alone GlyCounter executable is available in the [Releases](https://github.com/riley-research/GlyCounter/releases) section of this repository. Download the latest `GlyCounter-win-Setup.exe` to install GlyCounter on your Windows system. When there's an update available, users will be automatically prompted to update.
+
+The GlyCounter solution can also be cloned to Visual Studio and run.
 
 ## GlyCounter Basics
 
@@ -97,3 +117,21 @@ For example: if the precursor charge is 4 and I want to consider anything with a
 **Sample_Ynaught_GlycopeptideIDs.txt**: YNaught Glycopeptide IDs sample file upload
 
 **Phospho.txt**: R file used to create a figure using GlyCounter data
+
+**ListofGivenOxoIons.txt**: List of ions and m/z values provided by default in GlyCounter
+
+## Release Process
+
+To create a new release of GlyCounter:
+
+1. From the master branch, create a Git tag with a version number higher than the last release:
+   ```bash
+   git tag v0.0.19
+   ```
+2. Push the tag to GitHub:
+
+   ```bash
+   git push origin v0.0.19
+   ```
+
+3. The GitHub Actions workflow will automatically build and publish the release artifacts.

@@ -4,38 +4,24 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
-  <!-- use the PublishSingleFile property to bundle all dependencies into a single executable file   -->
-  <PropertyGroup>
-    <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier> <!-- Adjust for your target platform -->
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile> <!-- Optional: Compress the single file -->
-  </PropertyGroup>
-
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <TargetFramework>net8.0-windows</TargetFramework> <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <!-- Version information -->
-    <Version>1.0.0</Version>
+    <Version>0.0.15</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <!-- Package metadata -->
     <Authors>Riley Research Group</Authors>
     <Description>GlyCounter: A tool for glycan analysis</Description>
     <ApplicationIcon>RRG Logo Icon.ico</ApplicationIcon>
-    <!-- Additional NuGet package metadata -->
     <PackageId>GlyCounter</PackageId>
     <Title>GlyCounter</Title>
     <Product>GlyCounter</Product>
     <Copyright>Copyright © 2025</Copyright>
     <PackageProjectUrl>https://github.com/Glyco/GlyCounter</PackageProjectUrl>
-    <!-- NuGet requires .png, .jpg, or .jpeg for package icons -->
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <!-- Force package ID to be GlyCounter -->
     <AssemblyName>GlyCounter</AssemblyName>
     <RootNamespace>GlyCounter</RootNamespace>
   </PropertyGroup>
@@ -45,12 +31,17 @@
     <PackageReference Include="LumenWorks.Framework.IO" Version="3.8.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="PSI_Interface" Version="2.6.4" />
-    <PackageReference Include="NuGet.Core" Version="2.14.0" />
+    
+    <PackageReference Include="NuGet.Core" Version="2.14.0" /> 
     <PackageReference Include="NuGet.CommandLine" Version="6.7.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
+
+    <PackageReference Include="Velopack" Version="0.0.761" /> 
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\CSMSL_dotNetCore\CSMSL_dotNetCore\CSMSL.csproj" />
