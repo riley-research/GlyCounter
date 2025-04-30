@@ -1,0 +1,60 @@
+m/z	Description	
+84.0444	 HexNAc - C2H8O4	
+126.055	 HexNAc - C2H6O3	
+138.055	 HexNAc - CH6O3	
+144.0655	 HexNAc - C2H4O2	
+168.0655	 HexNAc - 2H2O	
+186.0761	 HexNAc - H2O	
+204.0867	 HexNAc	
+		
+85.0284	 Hex - C2H6O3	
+97.0284	 Hex - CH6O3	
+127.039	 Hex - 2H2O	
+145.0495	 Hex - H2O	
+163.0601	 Hex	
+		
+243.0264	 Man-P	
+405.0798	 Man2-P	
+		
+274.0921	NeuAc - H2O	
+292.1027	 NeuAc	
+316.103	 NeuAc[Ac] - H2O	
+334.113	 NeuAc[Ac]	 }
+290.087	 NeuGc - H2O	
+308.0976	 NeuGc	
+290.087	 NeuGc[Ac] - H2O	
+308.0976	 NeuGc[Ac]	
+		
+350.1446	 HexNAc-dHex	
+512.1974	 LeX/A	
+674.2502	 HexNAc-Hex2-dHex	
+803.2928	 sLeX/A	
+819.2908	 HexNAc-Hex-dHex-NeuGc	
+877.3296	 diLacNAc-Fuc	
+		
+325.1129	 Hex2	
+366.1395	 HexNAc-Hex	
+407.166	 HexNAc2	
+454.1555	 Hex-NeuAc	
+470.1503	 Hex-NeuGc	
+495.1821	 HexNAc-NeuAc	
+511.1769	 HexNAc-NeuGc	
+528.1923	 HexNAc-Hex2	
+537.1927	 HexNAc-NeuAc[Ac]	
+553.1875	 HexNAc-NeuGc[Ac]	
+569.2188	 HexNAc2-Hex	
+657.2349	 HexNAc-Hex-NeuAc	
+673.2297	 HexNAc-Hex-NeuGc	
+690.2451	 HexNAc-Hex3	
+731.2717	 diLacNAc	
+819.2877	 HexNAc-Hex2-NeuAc	
+835.2825	 HexNAc-Hex2-NeuGc	
+860.3143	 HexNAc2-Hex-NeuAc	
+876.3091	 HexNAc2-Hex-NeuGc	
+893.3245	 HexNAc2-Hex3	
+948.3303	 HexNAc-Hex-NeuAc2	
+964.3251	 HexNAc-Hex-NeuGc2	
+1022.3671	 HexNAc2-Hex2-NeuAc	
+1038.3619	 HexNAc2-Hex2-NeuGc	
+948.3303	 HexNAc2-Hex2-NeuAc2	
+948.3303	 HexNAc2-Hex2-NeuGc2	
