@@ -3570,13 +3570,13 @@ namespace GlyCounter
                     double glycopeptide_secondIsoMass = psm.peptide.MonoisotopicMass + (2 * Constants.C13C12Difference);
 
                     //look for each Y-ion
+                    List<Yion> finalYionList = new List<Yion>(); //creating this to store charge and isotopes separately
                     foreach (Yion yIon in yIonHashSet)
                     {
                         //just to be safe, set all variable specific to this spectrum to zero before going to find them
                         //this is in case these didn't get cleared from the previous processing
                         yIon.intensity = 0;
                         yIon.peakDepth = arbitraryPeakDepthIfNotFound;
-                        yIonHeader = yIonHeader + yIon.description + "\t";
 
                         bool countYion = false;
 
@@ -3624,6 +3624,9 @@ namespace GlyCounter
 
                                     yIon.intensity = peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
                                     yIon.peakDepth = sortedPeakDepths[peak.Intensity];
+                                    yIon.chargeState = i;
+                                    yIonHeader = yIonHeader + yIon.description + "_" + yIon.chargeState + "/t";
+                                    finalYionList.Add(yIon);
                                     numberOfYions++;
                                     totalYionSignal = totalYionSignal + peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
 
@@ -3662,6 +3665,9 @@ namespace GlyCounter
 
                                     yIon.intensity = peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
                                     yIon.peakDepth = sortedPeakDepths[peak.Intensity];
+                                    yIon.chargeState = i;
+                                    yIonHeader = yIonHeader + yIon.description + "_" + yIon.chargeState + "/t";
+                                    finalYionList.Add(yIon);
                                     numberOfYions++;
                                     totalYionSignal = totalYionSignal + peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
 
@@ -3737,7 +3743,7 @@ namespace GlyCounter
                         scanInjTime + "\t" + fragmenationType + "\t" + parentScan + "\t" + numberOfYions + "\t" + scanTIC + "\t" + totalYionSignal + "\t" + yIonTICfraction + "\t");
 
                     //write out peak depth and intensity info for each found Y-ion
-                    foreach (Yion yIon in yIonHashSet)
+                    foreach (Yion yIon in finalYionList)
                     {
                         outputYion.Write(yIon.intensity + "\t");
 
