@@ -96,6 +96,15 @@
             intensityThresholdTextBox = new TextBox();
             VersionNumber_Label = new Label();
             YnaughtTab = new TabPage();
+            ChargeExplanationLabel = new Label();
+            UpperBoundLabel = new Label();
+            LowerBoundLabel = new Label();
+            dashLabel = new Label();
+            UpperBoundTextBox = new TextBox();
+            LowerBoundTextBox = new TextBox();
+            panel1 = new Panel();
+            SeparateChargeStates = new RadioButton();
+            GroupChargeStates = new RadioButton();
             Ynaught_DaCheckBox = new CheckBox();
             BrowseGlycans_Button = new Button();
             LoadInGlycanMasses_TextBox = new TextBox();
@@ -104,8 +113,6 @@
             Ynaught_startTimeLabel = new Label();
             Ynaught_StartButton = new Button();
             NeutralLosses_Label = new Label();
-            Ynaught_ChargeStatesLabel3 = new Label();
-            Ynaught_ChargeStatesLabel2 = new Label();
             ClearAllSelections_Button = new Button();
             Ynaught_SNlabel = new Label();
             Ynaught_SNthresholdTextBox = new TextBox();
@@ -118,14 +125,7 @@
             CheckAllNglyco_Button = new Button();
             Ynaught_ppmTolLabel = new Label();
             Ynaught_ppmTolTextBox = new TextBox();
-            Ynaught_ChargeStatesLabel7 = new Label();
             Yions_CheckAllButton = new Button();
-            Ynaught_ChargeStatesLabel5 = new Label();
-            Ynaught_LowerChargeStateTextBox_Y = new TextBox();
-            Ynaught_HigherChargeStateTextBox_X = new TextBox();
-            Ynaught_ChargeStatesLabel6 = new Label();
-            Ynaught_ChargeStatesLabel4 = new Label();
-            Ynaught_ChargeStatesLabel1 = new Label();
             Ynaught_ChargeStatesHeader = new Label();
             SecondIsotopeCheckBox = new CheckBox();
             MonoisotopeLabel2 = new Label();
@@ -151,6 +151,7 @@
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
             YnaughtTab.SuspendLayout();
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)Ynaught_GlyCounterLogo).BeginInit();
             SuspendLayout();
             // 
@@ -195,7 +196,7 @@
             HexNAcCheckedListBox.Location = new Point(18, 183);
             HexNAcCheckedListBox.Margin = new Padding(5, 4, 5, 4);
             HexNAcCheckedListBox.Name = "HexNAcCheckedListBox";
-            HexNAcCheckedListBox.Size = new Size(315, 202);
+            HexNAcCheckedListBox.Size = new Size(315, 180);
             HexNAcCheckedListBox.TabIndex = 1;
             HexNAcCheckedListBox.SelectedIndexChanged += HexNAcCheckedListBox_SelectedIndexChanged;
             // 
@@ -207,7 +208,7 @@
             HexCheckedListBox.Location = new Point(18, 483);
             HexCheckedListBox.Margin = new Padding(5, 4, 5, 4);
             HexCheckedListBox.Name = "HexCheckedListBox";
-            HexCheckedListBox.Size = new Size(315, 158);
+            HexCheckedListBox.Size = new Size(315, 136);
             HexCheckedListBox.TabIndex = 4;
             HexCheckedListBox.SelectedIndexChanged += HexCheckedListBox_SelectedIndexChanged;
             // 
@@ -219,7 +220,7 @@
             SialicAcidCheckedListBox.Location = new Point(360, 183);
             SialicAcidCheckedListBox.Margin = new Padding(5, 4, 5, 4);
             SialicAcidCheckedListBox.Name = "SialicAcidCheckedListBox";
-            SialicAcidCheckedListBox.Size = new Size(317, 202);
+            SialicAcidCheckedListBox.Size = new Size(317, 180);
             SialicAcidCheckedListBox.TabIndex = 2;
             SialicAcidCheckedListBox.SelectedIndexChanged += SialicAcidCheckedListBox_SelectedIndexChanged;
             // 
@@ -231,7 +232,7 @@
             OligosaccharideCheckedListBox.Location = new Point(707, 183);
             OligosaccharideCheckedListBox.Margin = new Padding(5, 4, 5, 4);
             OligosaccharideCheckedListBox.Name = "OligosaccharideCheckedListBox";
-            OligosaccharideCheckedListBox.Size = new Size(317, 642);
+            OligosaccharideCheckedListBox.Size = new Size(317, 620);
             OligosaccharideCheckedListBox.TabIndex = 3;
             OligosaccharideCheckedListBox.SelectedIndexChanged += OligosaccharideCheckedListBox_SelectedIndexChanged;
             // 
@@ -287,7 +288,7 @@
             M6PCheckedListBox.Location = new Point(18, 735);
             M6PCheckedListBox.Margin = new Padding(5, 4, 5, 4);
             M6PCheckedListBox.Name = "M6PCheckedListBox";
-            M6PCheckedListBox.Size = new Size(315, 92);
+            M6PCheckedListBox.Size = new Size(315, 70);
             M6PCheckedListBox.TabIndex = 5;
             M6PCheckedListBox.SelectedIndexChanged += M6PCheckedListBox_SelectedIndexChanged;
             // 
@@ -546,7 +547,7 @@
             FucoseCheckedListBox.Location = new Point(359, 483);
             FucoseCheckedListBox.Margin = new Padding(5, 4, 5, 4);
             FucoseCheckedListBox.Name = "FucoseCheckedListBox";
-            FucoseCheckedListBox.Size = new Size(317, 158);
+            FucoseCheckedListBox.Size = new Size(317, 136);
             FucoseCheckedListBox.TabIndex = 41;
             FucoseCheckedListBox.SelectedIndexChanged += FucoseCheckedListBox_SelectedIndexChanged;
             // 
@@ -768,7 +769,7 @@
             ipsaCheckBox.TabIndex = 68;
             ipsaCheckBox.Text = "Output IPSA Annotations";
             ipsaCheckBox.UseVisualStyleBackColor = true;
-            ipsaCheckBox.CheckedChanged += checkBox1_CheckedChanged;
+            ipsaCheckBox.CheckedChanged += ipsaCheckBox_CheckedChanged;
             // 
             // DaltonCheckBox
             // 
@@ -888,6 +889,13 @@
             // 
             // YnaughtTab
             // 
+            YnaughtTab.Controls.Add(ChargeExplanationLabel);
+            YnaughtTab.Controls.Add(UpperBoundLabel);
+            YnaughtTab.Controls.Add(LowerBoundLabel);
+            YnaughtTab.Controls.Add(dashLabel);
+            YnaughtTab.Controls.Add(UpperBoundTextBox);
+            YnaughtTab.Controls.Add(LowerBoundTextBox);
+            YnaughtTab.Controls.Add(panel1);
             YnaughtTab.Controls.Add(Ynaught_DaCheckBox);
             YnaughtTab.Controls.Add(BrowseGlycans_Button);
             YnaughtTab.Controls.Add(LoadInGlycanMasses_TextBox);
@@ -896,8 +904,6 @@
             YnaughtTab.Controls.Add(Ynaught_startTimeLabel);
             YnaughtTab.Controls.Add(Ynaught_StartButton);
             YnaughtTab.Controls.Add(NeutralLosses_Label);
-            YnaughtTab.Controls.Add(Ynaught_ChargeStatesLabel3);
-            YnaughtTab.Controls.Add(Ynaught_ChargeStatesLabel2);
             YnaughtTab.Controls.Add(ClearAllSelections_Button);
             YnaughtTab.Controls.Add(Ynaught_SNlabel);
             YnaughtTab.Controls.Add(Ynaught_SNthresholdTextBox);
@@ -910,14 +916,7 @@
             YnaughtTab.Controls.Add(CheckAllNglyco_Button);
             YnaughtTab.Controls.Add(Ynaught_ppmTolLabel);
             YnaughtTab.Controls.Add(Ynaught_ppmTolTextBox);
-            YnaughtTab.Controls.Add(Ynaught_ChargeStatesLabel7);
             YnaughtTab.Controls.Add(Yions_CheckAllButton);
-            YnaughtTab.Controls.Add(Ynaught_ChargeStatesLabel5);
-            YnaughtTab.Controls.Add(Ynaught_LowerChargeStateTextBox_Y);
-            YnaughtTab.Controls.Add(Ynaught_HigherChargeStateTextBox_X);
-            YnaughtTab.Controls.Add(Ynaught_ChargeStatesLabel6);
-            YnaughtTab.Controls.Add(Ynaught_ChargeStatesLabel4);
-            YnaughtTab.Controls.Add(Ynaught_ChargeStatesLabel1);
             YnaughtTab.Controls.Add(Ynaught_ChargeStatesHeader);
             YnaughtTab.Controls.Add(SecondIsotopeCheckBox);
             YnaughtTab.Controls.Add(MonoisotopeLabel2);
@@ -946,6 +945,99 @@
             YnaughtTab.TabIndex = 1;
             YnaughtTab.Text = "Ynaught";
             YnaughtTab.UseVisualStyleBackColor = true;
+            // 
+            // ChargeExplanationLabel
+            // 
+            ChargeExplanationLabel.AutoSize = true;
+            ChargeExplanationLabel.Location = new Point(1077, 648);
+            ChargeExplanationLabel.Name = "ChargeExplanationLabel";
+            ChargeExplanationLabel.Size = new Size(293, 60);
+            ChargeExplanationLabel.TabIndex = 77;
+            ChargeExplanationLabel.Text = "Use \"P\" to specify precursor charge. \r\nEx: 1 to P-1 would search from charge 1 to \r\nthe precursor charge minus 1";
+            ChargeExplanationLabel.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // UpperBoundLabel
+            // 
+            UpperBoundLabel.AutoSize = true;
+            UpperBoundLabel.ForeColor = SystemColors.ControlDarkDark;
+            UpperBoundLabel.Location = new Point(1248, 708);
+            UpperBoundLabel.Name = "UpperBoundLabel";
+            UpperBoundLabel.Size = new Size(97, 20);
+            UpperBoundLabel.TabIndex = 76;
+            UpperBoundLabel.Text = "Upper Bound";
+            // 
+            // LowerBoundLabel
+            // 
+            LowerBoundLabel.AutoSize = true;
+            LowerBoundLabel.ForeColor = SystemColors.ControlDarkDark;
+            LowerBoundLabel.Location = new Point(1126, 708);
+            LowerBoundLabel.Name = "LowerBoundLabel";
+            LowerBoundLabel.Size = new Size(96, 20);
+            LowerBoundLabel.TabIndex = 75;
+            LowerBoundLabel.Text = "Lower Bound";
+            // 
+            // dashLabel
+            // 
+            dashLabel.AutoSize = true;
+            dashLabel.Font = new Font("Segoe UI", 9F);
+            dashLabel.Location = new Point(1221, 736);
+            dashLabel.Name = "dashLabel";
+            dashLabel.Size = new Size(23, 20);
+            dashLabel.TabIndex = 74;
+            dashLabel.Text = "to";
+            // 
+            // UpperBoundTextBox
+            // 
+            UpperBoundTextBox.Location = new Point(1248, 732);
+            UpperBoundTextBox.Margin = new Padding(3, 4, 3, 4);
+            UpperBoundTextBox.Name = "UpperBoundTextBox";
+            UpperBoundTextBox.Size = new Size(90, 27);
+            UpperBoundTextBox.TabIndex = 73;
+            UpperBoundTextBox.Text = "P";
+            // 
+            // LowerBoundTextBox
+            // 
+            LowerBoundTextBox.Location = new Point(1123, 732);
+            LowerBoundTextBox.Margin = new Padding(3, 4, 3, 4);
+            LowerBoundTextBox.Name = "LowerBoundTextBox";
+            LowerBoundTextBox.Size = new Size(90, 27);
+            LowerBoundTextBox.TabIndex = 72;
+            LowerBoundTextBox.Text = "1";
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(SeparateChargeStates);
+            panel1.Controls.Add(GroupChargeStates);
+            panel1.Location = new Point(1070, 767);
+            panel1.Margin = new Padding(3, 4, 3, 4);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(308, 67);
+            panel1.TabIndex = 71;
+            // 
+            // SeparateChargeStates
+            // 
+            SeparateChargeStates.AutoSize = true;
+            SeparateChargeStates.Location = new Point(7, 38);
+            SeparateChargeStates.Margin = new Padding(3, 4, 3, 4);
+            SeparateChargeStates.Name = "SeparateChargeStates";
+            SeparateChargeStates.Size = new Size(291, 24);
+            SeparateChargeStates.TabIndex = 70;
+            SeparateChargeStates.Text = "Separate columns for each charge state";
+            SeparateChargeStates.UseVisualStyleBackColor = true;
+            // 
+            // GroupChargeStates
+            // 
+            GroupChargeStates.AutoSize = true;
+            GroupChargeStates.Checked = true;
+            GroupChargeStates.Location = new Point(7, 11);
+            GroupChargeStates.Margin = new Padding(3, 4, 3, 4);
+            GroupChargeStates.Name = "GroupChargeStates";
+            GroupChargeStates.Size = new Size(298, 24);
+            GroupChargeStates.TabIndex = 69;
+            GroupChargeStates.TabStop = true;
+            GroupChargeStates.Text = "Group charge state info into one column";
+            GroupChargeStates.UseVisualStyleBackColor = true;
+            GroupChargeStates.CheckedChanged += GroupChargeStates_CheckedChanged;
             // 
             // Ynaught_DaCheckBox
             // 
@@ -1031,24 +1123,6 @@
             NeutralLosses_Label.Size = new Size(163, 20);
             NeutralLosses_Label.TabIndex = 42;
             NeutralLosses_Label.Text = "Glycan Neutral Losses";
-            // 
-            // Ynaught_ChargeStatesLabel3
-            // 
-            Ynaught_ChargeStatesLabel3.AutoSize = true;
-            Ynaught_ChargeStatesLabel3.Location = new Point(1109, 688);
-            Ynaught_ChargeStatesLabel3.Name = "Ynaught_ChargeStatesLabel3";
-            Ynaught_ChargeStatesLabel3.Size = new Size(254, 20);
-            Ynaught_ChargeStatesLabel3.TabIndex = 41;
-            Ynaught_ChargeStatesLabel3.Text = "z-Y = lowest charge state to consider";
-            // 
-            // Ynaught_ChargeStatesLabel2
-            // 
-            Ynaught_ChargeStatesLabel2.AutoSize = true;
-            Ynaught_ChargeStatesLabel2.Location = new Point(1109, 663);
-            Ynaught_ChargeStatesLabel2.Name = "Ynaught_ChargeStatesLabel2";
-            Ynaught_ChargeStatesLabel2.Size = new Size(260, 20);
-            Ynaught_ChargeStatesLabel2.TabIndex = 40;
-            Ynaught_ChargeStatesLabel2.Text = "z-X = highest charge state to consider";
             // 
             // ClearAllSelections_Button
             // 
@@ -1172,15 +1246,6 @@
             Ynaught_ppmTolTextBox.TabIndex = 28;
             Ynaught_ppmTolTextBox.Text = "15";
             // 
-            // Ynaught_ChargeStatesLabel7
-            // 
-            Ynaught_ChargeStatesLabel7.AutoSize = true;
-            Ynaught_ChargeStatesLabel7.Location = new Point(1078, 809);
-            Ynaught_ChargeStatesLabel7.Name = "Ynaught_ChargeStatesLabel7";
-            Ynaught_ChargeStatesLabel7.Size = new Size(293, 20);
-            Ynaught_ChargeStatesLabel7.TabIndex = 27;
-            Ynaught_ChargeStatesLabel7.Text = "precursor ion charge state (z) is considered";
-            // 
             // Yions_CheckAllButton
             // 
             Yions_CheckAllButton.Location = new Point(1086, 151);
@@ -1191,60 +1256,6 @@
             Yions_CheckAllButton.Text = "Check All Ions";
             Yions_CheckAllButton.UseVisualStyleBackColor = true;
             Yions_CheckAllButton.Click += Yions_CheckAllButton_Click;
-            // 
-            // Ynaught_ChargeStatesLabel5
-            // 
-            Ynaught_ChargeStatesLabel5.AutoSize = true;
-            Ynaught_ChargeStatesLabel5.Location = new Point(1120, 759);
-            Ynaught_ChargeStatesLabel5.Name = "Ynaught_ChargeStatesLabel5";
-            Ynaught_ChargeStatesLabel5.Size = new Size(103, 20);
-            Ynaught_ChargeStatesLabel5.TabIndex = 25;
-            Ynaught_ChargeStatesLabel5.Text = "Enter Y for z-Y";
-            // 
-            // Ynaught_LowerChargeStateTextBox_Y
-            // 
-            Ynaught_LowerChargeStateTextBox_Y.Location = new Point(1234, 756);
-            Ynaught_LowerChargeStateTextBox_Y.Margin = new Padding(3, 4, 3, 4);
-            Ynaught_LowerChargeStateTextBox_Y.Name = "Ynaught_LowerChargeStateTextBox_Y";
-            Ynaught_LowerChargeStateTextBox_Y.Size = new Size(75, 27);
-            Ynaught_LowerChargeStateTextBox_Y.TabIndex = 24;
-            Ynaught_LowerChargeStateTextBox_Y.Text = "1";
-            // 
-            // Ynaught_HigherChargeStateTextBox_X
-            // 
-            Ynaught_HigherChargeStateTextBox_X.Location = new Point(1233, 718);
-            Ynaught_HigherChargeStateTextBox_X.Margin = new Padding(3, 4, 3, 4);
-            Ynaught_HigherChargeStateTextBox_X.Name = "Ynaught_HigherChargeStateTextBox_X";
-            Ynaught_HigherChargeStateTextBox_X.Size = new Size(75, 27);
-            Ynaught_HigherChargeStateTextBox_X.TabIndex = 23;
-            Ynaught_HigherChargeStateTextBox_X.Text = "0";
-            // 
-            // Ynaught_ChargeStatesLabel6
-            // 
-            Ynaught_ChargeStatesLabel6.AutoSize = true;
-            Ynaught_ChargeStatesLabel6.Location = new Point(1109, 789);
-            Ynaught_ChargeStatesLabel6.Name = "Ynaught_ChargeStatesLabel6";
-            Ynaught_ChargeStatesLabel6.Size = new Size(233, 20);
-            Ynaught_ChargeStatesLabel6.TabIndex = 22;
-            Ynaught_ChargeStatesLabel6.Text = "Entering X=0 and Y=0 means only";
-            // 
-            // Ynaught_ChargeStatesLabel4
-            // 
-            Ynaught_ChargeStatesLabel4.AutoSize = true;
-            Ynaught_ChargeStatesLabel4.Location = new Point(1122, 721);
-            Ynaught_ChargeStatesLabel4.Name = "Ynaught_ChargeStatesLabel4";
-            Ynaught_ChargeStatesLabel4.Size = new Size(105, 20);
-            Ynaught_ChargeStatesLabel4.TabIndex = 21;
-            Ynaught_ChargeStatesLabel4.Text = "Enter X for z-X";
-            // 
-            // Ynaught_ChargeStatesLabel1
-            // 
-            Ynaught_ChargeStatesLabel1.AutoSize = true;
-            Ynaught_ChargeStatesLabel1.Location = new Point(1122, 639);
-            Ynaught_ChargeStatesLabel1.Name = "Ynaught_ChargeStatesLabel1";
-            Ynaught_ChargeStatesLabel1.Size = new Size(206, 20);
-            Ynaught_ChargeStatesLabel1.TabIndex = 20;
-            Ynaught_ChargeStatesLabel1.Text = "z = precursor ion charge state";
             // 
             // Ynaught_ChargeStatesHeader
             // 
@@ -1281,7 +1292,7 @@
             // 
             MonoisotopeLabel1.AutoSize = true;
             MonoisotopeLabel1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            MonoisotopeLabel1.Location = new Point(1076, 512);
+            MonoisotopeLabel1.Location = new Point(1077, 512);
             MonoisotopeLabel1.Name = "MonoisotopeLabel1";
             MonoisotopeLabel1.Size = new Size(293, 20);
             MonoisotopeLabel1.TabIndex = 16;
@@ -1399,7 +1410,7 @@
             Yions_LossFromPepChecklistBox.CheckOnClick = true;
             Yions_LossFromPepChecklistBox.FormattingEnabled = true;
             Yions_LossFromPepChecklistBox.Items.AddRange(new object[] { "GlycoPep (Intact Mass), 0", "GlycoPep-[Hex], 162.0528", "GlycoPep-[Hex2], 324.1057", "GlycoPep-[Hex3], 486.1585", "GlycoPep-[Hex4], 648.2113", "GlycoPep-[Hex5], 810.2641", "GlycoPep-[Hex6], 972.3169", "GlycoPep-[NeuAc], 291.0954", "GlycoPep-[NeuAc-Hex], 453.1482", "GlycoPep-[NeuAc-Hex-HexNAc], 656.2276", "GlycoPep-[NeuAc2], 582.1903", "GlycoPep-[NeuAc2-Hex2], 906.2965", "GlycoPep-[NeuAc2-Hex2-HexNAc2], 1312.4552", "GlycoPep-[NeuGc], 307.1903", "GlycoPep-[NeuGc-Hex], 469.1431", "GlycoPep-[NeuGc-Hex-HexNAc], 672.2225", "GlycoPep-[NeuGc2], 614.1806", "GlycoPep-[NeuGc2-Hex2], 938.2862", "GlycoPep-[NeuGc2-Hex2-HexNAc2], 1344.4450", "GlycoPep-[NeuAc-Hex-HexNAc-dHex], 802.2855", "GlycoPep-[Hex-HexNAc-dHex], 511.1901" });
-            Yions_LossFromPepChecklistBox.Location = new Point(721, 200);
+            Yions_LossFromPepChecklistBox.Location = new Point(720, 200);
             Yions_LossFromPepChecklistBox.Margin = new Padding(3, 4, 3, 4);
             Yions_LossFromPepChecklistBox.Name = "Yions_LossFromPepChecklistBox";
             Yions_LossFromPepChecklistBox.Size = new Size(348, 620);
@@ -1413,7 +1424,7 @@
             Yions_FucoseNlinkedCheckedBox.Location = new Point(366, 200);
             Yions_FucoseNlinkedCheckedBox.Margin = new Padding(3, 4, 3, 4);
             Yions_FucoseNlinkedCheckedBox.Name = "Yions_FucoseNlinkedCheckedBox";
-            Yions_FucoseNlinkedCheckedBox.Size = new Size(348, 290);
+            Yions_FucoseNlinkedCheckedBox.Size = new Size(348, 268);
             Yions_FucoseNlinkedCheckedBox.TabIndex = 4;
             // 
             // Yions_NlinkedCheckBox
@@ -1424,7 +1435,7 @@
             Yions_NlinkedCheckBox.Location = new Point(17, 200);
             Yions_NlinkedCheckBox.Margin = new Padding(3, 4, 3, 4);
             Yions_NlinkedCheckBox.Name = "Yions_NlinkedCheckBox";
-            Yions_NlinkedCheckBox.Size = new Size(341, 290);
+            Yions_NlinkedCheckBox.Size = new Size(341, 268);
             Yions_NlinkedCheckBox.TabIndex = 3;
             Yions_NlinkedCheckBox.SelectedIndexChanged += Yions_NlinkedCheckBox_SelectedIndexChanged;
             // 
@@ -1476,8 +1487,22 @@
             GlyCounter_Tab.PerformLayout();
             YnaughtTab.ResumeLayout(false);
             YnaughtTab.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)Ynaught_GlyCounterLogo).EndInit();
             ResumeLayout(false);
+        }
+
+        private void ipsaCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void DaltonCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void Ynaught_DaCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
         }
 
         #endregion
@@ -1553,16 +1578,9 @@
         private Button Yions_CheckNglycoSialylButton;
         private Label MonoisotopeLabel2;
         private Label MonoisotopeLabel1;
-        private TextBox Ynaught_LowerChargeStateTextBox_Y;
-        private TextBox Ynaught_HigherChargeStateTextBox_X;
-        private Label Ynaught_ChargeStatesLabel6;
-        private Label Ynaught_ChargeStatesLabel4;
-        private Label Ynaught_ChargeStatesLabel1;
         private Label Ynaught_ChargeStatesHeader;
         private CheckBox SecondIsotopeCheckBox;
-        private Label Ynaught_ChargeStatesLabel5;
         private Button Yions_CheckAllButton;
-        private Label Ynaught_ChargeStatesLabel7;
         private Label Ynaught_ppmTolLabel;
         private TextBox Ynaught_ppmTolTextBox;
         private Label CommonNglycoLabel;
@@ -1575,8 +1593,6 @@
         private Button ClearAllSelections_Button;
         private Label Ynaught_SNlabel;
         private TextBox Ynaught_SNthresholdTextBox;
-        private Label Ynaught_ChargeStatesLabel3;
-        private Label Ynaught_ChargeStatesLabel2;
         private Label NeutralLosses_Label;
         private Label Ynaught_FinishTimeLabel;
         private Label Ynaught_startTimeLabel;
@@ -1599,5 +1615,14 @@
         private CheckBox DaltonCheckBox;
         private CheckBox Ynaught_DaCheckBox;
         private CheckBox ipsaCheckBox;
+        private RadioButton SeparateChargeStates;
+        private RadioButton GroupChargeStates;
+        private Panel panel1;
+        private Label dashLabel;
+        private TextBox UpperBoundTextBox;
+        private TextBox LowerBoundTextBox;
+        private Label LowerBoundLabel;
+        private Label ChargeExplanationLabel;
+        private Label UpperBoundLabel;
     }
 }

@@ -8,6 +8,7 @@ using PSI_Interface.MSData;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 
 
 namespace GlyCounter
@@ -45,10 +46,11 @@ namespace GlyCounter
         double Ynaught_ppmTolerance = 15;
         double Ynaught_tol = new double();
         double Ynaught_SNthreshold = 3;
-        int Ynaught_chargeStateMod_X = 0;
-        int Ynaught_chargeStateMod_Y = 1;
+        string Ynaught_chargeLB = "1";
+        string Ynaught_chargeUB = "P";
         string Ynaught_csvCustomAdditions = "empty";
         string Ynaught_csvCustomSubtractions = "empty";
+        bool Ynaught_condenseChargeStates = true;
 
         // For application updates
         private UpdateManager _updateManager;
@@ -56,28 +58,28 @@ namespace GlyCounter
         public Form1()
         {
             InitializeComponent();
-            
+
             // Initialize the menu items
             // InitializeMenus(); // Uncomment later
-            
+
             // Initialize the update manager
             _updateManager = UpdateManager.Instance;
-            
+
             // Set window title to include version
             Version? version = Assembly.GetExecutingAssembly().GetName().Version;
             string versionString = version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "?.?.?";
-            this.Text = $"GlyCounter v{versionString}";            
+            this.Text = $"GlyCounter v{versionString}";
             // Check for updates on startup (silently)
             Task.Run(() => CheckForUpdatesAsync(true));
         }
-        
+
         private void InitializeMenus()
         {
             // Create main menu
             MenuStrip mainMenu = new MenuStrip();
             this.MainMenuStrip = mainMenu;
             this.Controls.Add(mainMenu);
-            
+
             // Help menu only (removed File menu)
             ToolStripMenuItem helpMenu = new ToolStripMenuItem("Help");
             ToolStripMenuItem checkUpdatesMenuItem = new ToolStripMenuItem("Check for Updates", null, new EventHandler(CheckUpdatesMenuItem_Click));
@@ -86,7 +88,7 @@ namespace GlyCounter
             helpMenu.DropDownItems.Add(aboutMenuItem);
             mainMenu.Items.Add(helpMenu);
         }
-        
+
         private async void CheckForUpdatesAsync(bool silent = false)
         {
             try
@@ -105,12 +107,12 @@ namespace GlyCounter
                 }
             }
         }
-        
+
         private void CheckUpdatesMenuItem_Click(object sender, EventArgs e)
         {
             CheckForUpdatesAsync(false);
         }
-        
+
         private void AboutMenuItem_Click(object sender, EventArgs e)
         {
             Version? version = Assembly.GetExecutingAssembly().GetName().Version;
@@ -677,7 +679,7 @@ namespace GlyCounter
                                 outputPeakDepth.Write(i + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
                                 if (outputIPSA != null)
                                     outputIPSA.WriteLine(i + "\t" + peakString + "\t" + errorString + "\t");
-                                
+
 
                                 foreach (OxoniumIon oxoIon in oxoniumIonHashSet)
                                 {
@@ -1156,7 +1158,7 @@ namespace GlyCounter
 
                                 //TODO figure out how to get nce and precursor mz
                                 double precursormz = 0;
-                                
+
                                 List<double> oxoRanks = new List<double>();
 
                                 string peakString = new string("");
@@ -1423,7 +1425,7 @@ namespace GlyCounter
                     {
                         outputIPSA = new StreamWriter(filePath + "_Glycounter_IPSA.txt");
                     }
-                        
+
                     StreamWriter outputSummary = new StreamWriter(filePath + "_GlyCounter_Summary.txt");
 
                     outputOxo.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tParentScan\tNumOxonium\tTotalOxoSignal\t");
@@ -2813,7 +2815,7 @@ namespace GlyCounter
             {
                 fdlg.InitialDirectory = @"c:\"; // Default directory if no previous directory is found
             }
-            fdlg.Filter = "*.txt|*.txt";
+            fdlg.Filter = "*.txt|*.txt|*.tsv|*.tsv";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
@@ -3189,6 +3191,29 @@ namespace GlyCounter
             Yions_NlinkedCheckBox.ClearSelected();
         }
 
+
+        //set up charge states
+        private void GroupChargeStates_CheckedChanged(object sender, EventArgs e)
+        {
+            Ynaught_condenseChargeStates = true;
+        }
+
+        private void SeparateChargeStates_CheckedChanged(object sender, EventArgs e)
+        {
+            Ynaught_condenseChargeStates = false;
+        }
+
+        private void LowerBoundTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Ynaught_chargeLB = LowerBoundTextBox.Text; //these are stored as strings until later
+        }
+
+        private void UpperBoundTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Ynaught_chargeUB = UpperBoundTextBox.Text;
+        }
+
+
         //start the Y-ion processing
         private void Ynaught_StartButton_Click(object sender, EventArgs e)
         {
@@ -3200,17 +3225,8 @@ namespace GlyCounter
             Ynaught_startTimeLabel.Text = "Start Time: " + DateTime.Now.ToString("HH:mm:ss");
             Ynaught_startTimeLabel.Refresh();
 
-            //clear out Y-ions
-            foreach (Yion yIon in yIonHashSet)
-            {
-                yIon.intensity = 0;
-                yIon.peakDepth = arbitraryPeakDepthIfNotFound;
-                yIon.hcdCount = 0;
-                yIon.etdCount = 0;
-                yIon.theoMass = 0;
-                yIon.description = "";
-                yIon.glycanSource = "";
-            }
+            //clear out Y-ions ///test
+            yIonHashSet = new HashSet<Yion>();
 
             //either take in custom values or use defaults
             if (Ynaught_DaCheckBox.Checked)
@@ -3233,12 +3249,6 @@ namespace GlyCounter
             if (CanConvertDouble(Ynaught_SNthresholdTextBox.Text, SNthreshold))
                 Ynaught_SNthreshold = Convert.ToDouble(Ynaught_SNthresholdTextBox.Text);
 
-            if (CanConvertInt(Ynaught_HigherChargeStateTextBox_X.Text, Ynaught_chargeStateMod_X))
-                Ynaught_chargeStateMod_X = Convert.ToInt32(Ynaught_HigherChargeStateTextBox_X.Text);
-
-            if (CanConvertInt(Ynaught_LowerChargeStateTextBox_Y.Text, Ynaught_chargeStateMod_Y))
-                Ynaught_chargeStateMod_Y = Convert.ToInt32(Ynaught_LowerChargeStateTextBox_Y.Text);
-
             //add checked items to yIonHashSet to use for creating ions to look for
             //note that subtraction is its own "Source"
             foreach (var item in Yions_NlinkedCheckBox.CheckedItems)
@@ -3250,9 +3260,9 @@ namespace GlyCounter
                 yIon.glycanSource = "Nglycan";
                 yIon.hcdCount = 0;
                 yIon.etdCount = 0;
-                yIon.peakDepth = arbitraryPeakDepthIfNotFound;
                 if (item.ToString().Contains("Y0"))
                 {
+                    //stops Y0 from being added to the hashset multiple times
                     bool hashSetContainsY0 = false;
                     foreach (Yion entry in yIonHashSet)
                     {
@@ -3280,7 +3290,6 @@ namespace GlyCounter
                 yIon.glycanSource = "Nglycan_Fucose";
                 yIon.hcdCount = 0;
                 yIon.etdCount = 0;
-                yIon.peakDepth = arbitraryPeakDepthIfNotFound;
                 if (item.ToString().Contains("Y0"))
                 {
                     bool hashSetContainsY0 = false;
@@ -3309,7 +3318,6 @@ namespace GlyCounter
                 yIon.glycanSource = "Oglycan";
                 yIon.hcdCount = 0;
                 yIon.etdCount = 0;
-                yIon.peakDepth = arbitraryPeakDepthIfNotFound;
                 if (item.ToString().Contains("Y0"))
                 {
                     bool hashSetContainsY0 = false;
@@ -3338,7 +3346,6 @@ namespace GlyCounter
                 yIon.glycanSource = "Subtraction";
                 yIon.hcdCount = 0;
                 yIon.etdCount = 0;
-                yIon.peakDepth = arbitraryPeakDepthIfNotFound;
                 yIonHashSet.Add(yIon);
             }
 
@@ -3358,7 +3365,6 @@ namespace GlyCounter
                         yIon.glycanSource = "CustomAddition";
                         yIon.hcdCount = 0;
                         yIon.etdCount = 0;
-                        yIon.peakDepth = arbitraryPeakDepthIfNotFound;
                         yIonHashSet.Add(yIon);
                     }
                 }
@@ -3380,7 +3386,6 @@ namespace GlyCounter
                         yIon.glycanSource = "CustomSubtraction";
                         yIon.hcdCount = 0;
                         yIon.etdCount = 0;
-                        yIon.peakDepth = arbitraryPeakDepthIfNotFound;
                         yIonHashSet.Add(yIon);
                     }
                 }
@@ -3425,23 +3430,14 @@ namespace GlyCounter
 
             //set up each output stream
             StreamWriter outputYion = new StreamWriter(Ynaught_rawFilePath + "_GlyCounter_YionSignal.txt");
-            StreamWriter outputPeakDepth = new StreamWriter(Ynaught_rawFilePath + "_GlyCounter_YionPeakDepth.txt");
             StreamWriter outputSummary = new StreamWriter(Ynaught_rawFilePath + "_GlyCounter_YionSummary.txt");
-
-            //print first lines of each output
-            outputYion.Write("ScanNumber\tPeptideNoGlycan\tPeptideWithGlycan\tTotalGlycanComposition\tPrecursorMZ\tChargeState\tRetentionTime\t#ChargeStatesConsidered\tScanInjTime\tDissociationType\tParentScan\tNumYions\tScanTIC\tTotalYionSignal\tYionTICfraction\t");
-            outputPeakDepth.Write("ScanNumber\tPeptideNoGlycan\tPeptideWithGlycan\tTotalGlycanComposition\tPrecursorMZ\tChargeState\tRetentionTime\t#ChargeStatesConsidered\tScanInjTime\tDissociationType\tParentScan\tNumYions\tScanTIC\tTotalYionSignal\tYionTICfraction\t");
-            /*
-            outputSummary.WriteLine("Settings\tppmTol:\t" + ppmTolerance + "\tSNthreshold:\t" + SNthreshold + "\tHCDPeakDepthThreshold:\t" + peakDepthThreshold_hcd
-                + "\tETDPeakDepthThreshold:\t" + peakDepthThreshold_etd + "\tHCD TIC fraction:\t" + oxoTICfractionThreshold_hcd + "\tETD TIC fraction:\t" + oxoTICfractionThreshold_etd);
-            */
 
             string toleranceString = "ppmTol= ";
             if (Ynaught_usingda)
                 toleranceString = "daTol= ";
 
             outputSummary.WriteLine("Settings:\t" + toleranceString + Ynaught_tol + ", SNthreshold= " + Ynaught_SNthreshold
-                + ", X setting for z-X=" + Ynaught_chargeStateMod_X + ", Y setting for z-Y=" + Ynaught_chargeStateMod_Y + ", First isotope checked: "
+                + "Charge states checked: " + Ynaught_chargeLB + " to " + Ynaught_chargeUB + ", First isotope checked: "
                 + FirstIsotopeCheckBox.Checked + ", Second isotope checked: " + SecondIsotopeCheckBox.Checked);
             outputSummary.WriteLine(VersionNumber_Label.Text + ", " + Ynaught_startTimeLabel.Text);
             outputSummary.WriteLine();
@@ -3539,6 +3535,97 @@ namespace GlyCounter
                 }
             }
 
+            // Build a list of all Y-ion/charge state combinations to use for header and data
+            var yIonHeaderColumns = new List<string>();
+            var yIonChargeStatePairs = new List<(Yion yIon, int charge)>();
+
+            // Determine the global charge state bounds for all PSMs
+            int globalChargeLowerBound = 1;
+            int globalChargeUpperBound = 1;
+            foreach (var psm in psmList)
+            {
+                int precursorCharge = psm.charge;
+                int chargeLowerBound = 1;
+                int chargeUpperBound = precursorCharge;
+                //use the user input to determine what charge states to look for. Set the minimum charge state to 1
+                if (Ynaught_chargeLB.Contains('P'))
+                {
+                    if (Ynaught_chargeLB.Contains('-'))
+                    {
+                        //user entered 'P-X' so X is the subtracted value
+                        var subtractedValue = int.Parse(Ynaught_chargeLB.Split('-')[1]);
+                        chargeLowerBound = precursorCharge - subtractedValue;
+                    }
+                    //user entered 'P'
+                    else chargeLowerBound = precursorCharge;
+                }
+                else
+                {
+                    try
+                    {
+                        //user entered a number
+                        var num = int.Parse(Ynaught_chargeLB);
+                        chargeLowerBound = num;
+                    }
+                    catch (Exception exception) { } //catch the error but don't do anything. The default value should be used.
+                }
+                if (Ynaught_chargeUB.Contains('P'))
+                {
+                    if (Ynaught_chargeUB.Contains('-'))
+                    {
+                        //user entered 'P-X' so X is the subtracted value
+                        var subtractedValue = int.Parse(Ynaught_chargeUB.Split('-')[1]);
+                        chargeUpperBound = precursorCharge - subtractedValue;
+                    }
+                    //user entered 'P'
+                    else chargeUpperBound = precursorCharge;
+                }
+                else
+                {
+                    try
+                    {
+                        //user entered a number
+                        var num = int.Parse(Ynaught_chargeUB);
+                        chargeUpperBound = num;
+                    }
+                    catch (Exception exception) { } //catch the error but don't do anything. The default value should be used.
+                }
+
+                //handle weird integer inputs, set back to defaults
+                if (chargeLowerBound > chargeUpperBound)
+                {
+                    chargeUpperBound = precursorCharge;
+                    chargeLowerBound = 1;
+                }
+                if (chargeUpperBound < chargeLowerBound)
+                {
+                    chargeUpperBound = precursorCharge;
+                    chargeLowerBound = 1;
+                }
+                if (chargeLowerBound < globalChargeLowerBound) globalChargeLowerBound = chargeLowerBound;
+                if (chargeUpperBound > globalChargeUpperBound) globalChargeUpperBound = chargeUpperBound;
+            }
+
+            // Build header columns
+            if (Ynaught_condenseChargeStates)
+            {
+                foreach (var yIon in yIonHashSet)
+                {
+                    yIonHeaderColumns.Add(yIon.description);
+                    yIonChargeStatePairs.Add((yIon, 0)); // 0 means condensed
+                }
+            }
+            else
+            {
+                foreach (var yIon in yIonHashSet)
+                {
+                    for (int charge = globalChargeLowerBound; charge <= globalChargeUpperBound; charge++)
+                    {
+                        yIonHeaderColumns.Add($"{yIon.description}_z{charge}");
+                        yIonChargeStatePairs.Add((yIon, charge));
+                    }
+                }
+            }
 
             foreach (PSM psm in psmList)
             {
@@ -3566,8 +3653,6 @@ namespace GlyCounter
                         etdTrue = true;
                     }
 
-                    string yIonHeader = "";
-
                     ThermoSpectrum spectrum = rawFile.GetLabeledSpectrum(psm.spectrumNumber);
 
                     Dictionary<double, int> sortedPeakDepths = new Dictionary<double, int>();
@@ -3585,23 +3670,77 @@ namespace GlyCounter
                     double glycopeptide_firstIsoMass = psm.peptide.MonoisotopicMass + (1 * Constants.C13C12Difference);
                     double glycopeptide_secondIsoMass = psm.peptide.MonoisotopicMass + (2 * Constants.C13C12Difference);
 
+                    string yIonHeader = "";
+
                     //look for each Y-ion
-                    List<Yion> finalYionList = new List<Yion>(); //creating this to store charge and isotopes separately
+                    List<Yion> finalYionList = new List<Yion>(); //creating this to store charge separately
                     foreach (Yion yIon in yIonHashSet)
                     {
                         //just to be safe, set all variable specific to this spectrum to zero before going to find them
                         //this is in case these didn't get cleared from the previous processing
-                        yIon.intensity = 0;
-                        yIon.peakDepth = arbitraryPeakDepthIfNotFound;
+                        yIon.intensities = [];
 
                         bool countYion = false;
 
+                        //use the user input to determine what charge states to look for. Set the minimum charge state to 1
+                        int precursorCharge = psm.charge;
+                        int chargeLowerBound = 1;
+                        if (Ynaught_chargeLB.Contains('P'))
+                        {
+                            if (Ynaught_chargeLB.Contains('-'))
+                            {
+                                //user entered 'P-X' so X is the subtracted value
+                                var subtractedValue = int.Parse(Ynaught_chargeLB.Split('-')[1]);
+                                chargeLowerBound = precursorCharge - subtractedValue;
+                            }
+                            //user entered 'P'
+                            else chargeLowerBound = precursorCharge;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                //user entered a number
+                                var num = int.Parse(Ynaught_chargeLB);
+                                chargeLowerBound = num;
+                            }
+                            catch (Exception exception) { } //catch the error but don't do anything. The default value should be used.
+                        }
 
-                        //use the user input to deteremine what charge states to look for. Set the minimum charge state to 1
-                        int chargeUpperBound = psm.charge - Ynaught_chargeStateMod_X;
-                        int chargeLowerBound = psm.charge - Ynaught_chargeStateMod_Y;
-                        if (chargeLowerBound < 1)
+                        int chargeUpperBound = precursorCharge;
+                        if (Ynaught_chargeUB.Contains('P'))
+                        {
+                            if (Ynaught_chargeUB.Contains('-'))
+                            {
+                                //user entered 'P-X' so X is the subtracted value
+                                var subtractedValue = int.Parse(Ynaught_chargeUB.Split('-')[1]);
+                                chargeUpperBound = precursorCharge - subtractedValue;
+                            }
+                            //user entered 'P'
+                            else chargeUpperBound = precursorCharge;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                //user entered a number
+                                var num = int.Parse(Ynaught_chargeUB);
+                                chargeUpperBound = num;
+                            }
+                            catch (Exception exception) { } //catch the error but don't do anything. The default value should be used.
+                        }
+
+                        //handle weird integer inputs, set back to defaults
+                        if (chargeLowerBound > chargeUpperBound)
+                        {
+                            chargeUpperBound = precursorCharge;
                             chargeLowerBound = 1;
+                        }
+                        if (chargeUpperBound < chargeLowerBound)
+                        {
+                            chargeUpperBound = precursorCharge;
+                            chargeLowerBound = 1;
+                        }
 
                         //how many charge states are we looking for?
                         numberOfChargeStatesConsidered = chargeUpperBound - chargeLowerBound + 1;
@@ -3621,6 +3760,7 @@ namespace GlyCounter
                                     if (yIon.description.Contains("Y0"))
                                         Y0_found = true;
 
+                                    //look for isotopes if user selected option
                                     double firstIsotopeIntensity = 0;
                                     double secondIsotopeIntensity = 0;
                                     if (FirstIsotopeCheckBox.Checked)
@@ -3638,10 +3778,9 @@ namespace GlyCounter
                                             secondIsotopeIntensity = secondIsotopePeak.Intensity;
                                     }
 
-                                    yIon.intensity = peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
-                                    yIon.peakDepth = sortedPeakDepths[peak.Intensity];
-                                    yIon.chargeState = i;
-                                    yIonHeader = yIonHeader + yIon.description + "_" + yIon.chargeState + "/t";
+                                    //store info in yIon object
+                                    yIon.intensities.Add(peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity);
+                                    yIon.chargeStates.Add(i);
                                     finalYionList.Add(yIon);
                                     numberOfYions++;
                                     totalYionSignal = totalYionSignal + peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
@@ -3679,10 +3818,8 @@ namespace GlyCounter
                                             secondIsotopeIntensity = secondIsotopePeak.Intensity;
                                     }
 
-                                    yIon.intensity = peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
-                                    yIon.peakDepth = sortedPeakDepths[peak.Intensity];
-                                    yIon.chargeState = i;
-                                    yIonHeader = yIonHeader + yIon.description + "_" + yIon.chargeState + "/t";
+                                    yIon.intensities.Add(peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity);
+                                    yIon.chargeStates.Add(i);
                                     finalYionList.Add(yIon);
                                     numberOfYions++;
                                     totalYionSignal = totalYionSignal + peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
@@ -3690,6 +3827,7 @@ namespace GlyCounter
 
                                 }
                             }
+                           
                         }
 
                         if (countYion)
@@ -3722,8 +3860,8 @@ namespace GlyCounter
                     //print out the headers for each Y-ion searched for, with the last column being a ratio of total TIC we will calculate
                     if (firstSpectrumInFile)
                     {
-                        outputYion.WriteLine(yIonHeader);
-                        outputPeakDepth.WriteLine(yIonHeader);
+                        outputYion.Write("ScanNumber\tPeptideNoGlycan\tPeptideWithGlycan\tTotalGlycanComposition\tPrecursorMZ\tPrecursorCharge\tRetentionTime\t#ChargeStatesConsidered\tChargeStatesFound\tScanInjTime\tDissociationType\tParentScan\tNumYions\tScanTIC\tTotalYionSignal\tYionTICfraction\t");
+                        outputYion.WriteLine(string.Join("\t", yIonHeaderColumns));
                         firstSpectrumInFile = false;
                     }
 
@@ -3733,18 +3871,15 @@ namespace GlyCounter
                     {
                         parentScan = rawFile.GetParentSpectrumNumber(psm.spectrumNumber);
                     }
-                    catch (Exception ex)
-                    {
+                    catch (Exception ex){}
 
-                    }
                     double scanTIC = rawFile.GetTIC(psm.spectrumNumber);
                     double scanInjTime = rawFile.GetInjectionTime(psm.spectrumNumber);
                     string fragmenationType = rawFile.GetDissociationType(psm.spectrumNumber).ToString();
-                    //double parentScan = rawFile.GetParentSpectrumNumber(psm.spectrumNumber);
                     double retentionTime = rawFile.GetRetentionTime(psm.spectrumNumber);
 
                     //used this for peak depth calculations in GlyCounter, don't actually use here
-                    List<double> yIonRanks = new List<double>();
+                    //List<double> yIonRanks = new List<double>();
 
                     //calculate fraction of TIC
                     double yIonTICfraction = totalYionSignal / scanTIC;
@@ -3752,29 +3887,34 @@ namespace GlyCounter
 
                     //print out information for this scan that is not Y-ions
                     outputYion.Write(psm.spectrumNumber + "\t" + psm.peptideNoGlycanMods.SequenceWithModifications + "\t" + psm.peptide.SequenceWithModifications + "\t" +
-                        psm.totalGlycanComposition + "\t" + psm.precursorMZ + "\t" + psm.charge + "\t" + retentionTime + "\t" + numberOfChargeStatesConsidered + "\t" +
-                        scanInjTime + "\t" + fragmenationType + "\t" + parentScan + "\t" + numberOfYions + "\t" + scanTIC + "\t" + totalYionSignal + "\t" + yIonTICfraction + "\t");
-                    outputPeakDepth.Write(psm.spectrumNumber + "\t" + psm.peptideNoGlycanMods.SequenceWithModifications + "\t" + psm.peptide.SequenceWithModifications + "\t" +
-                        psm.totalGlycanComposition + "\t" + psm.precursorMZ + "\t" + psm.charge + "\t" + retentionTime + "\t" + numberOfChargeStatesConsidered + "\t" +
+                        psm.totalGlycanComposition + "\t" + psm.precursorMZ + "\t" + psm.charge + "\t" + retentionTime + "\t" + numberOfChargeStatesConsidered +"\t" + "\t" +
                         scanInjTime + "\t" + fragmenationType + "\t" + parentScan + "\t" + numberOfYions + "\t" + scanTIC + "\t" + totalYionSignal + "\t" + yIonTICfraction + "\t");
 
                     //write out peak depth and intensity info for each found Y-ion
-                    foreach (Yion yIon in finalYionList)
+                    foreach (var (yIon, charge) in yIonChargeStatePairs)
                     {
-                        outputYion.Write(yIon.intensity + "\t");
-
-                        if (yIon.peakDepth == arbitraryPeakDepthIfNotFound)
+                        if (Ynaught_condenseChargeStates)
                         {
-                            outputPeakDepth.Write("NotFound\t");
-
+                            // Sum all intensities for this Y-ion in this scan
+                            var foundYion = finalYionList.FirstOrDefault(y => y.description == yIon.description);
+                            outputYion.Write((foundYion != null ? foundYion.intensities.Sum().ToString() : "0") + "\t");
                         }
                         else
                         {
-                            outputPeakDepth.Write(yIon.peakDepth + "\t");
-                            yIonRanks.Add(yIon.peakDepth); //we currently don't actually use this
+                            // Find the intensity for this Y-ion and charge state
+                            var foundYion = finalYionList.FirstOrDefault(y => y.description == yIon.description && y.chargeStates.Contains(charge));
+                            if (foundYion != null)
+                            {
+                                int idx = foundYion.chargeStates.IndexOf(charge);
+                                outputYion.Write((idx >= 0 ? foundYion.intensities[idx].ToString() : "0") + "\t");
+                            }
+                            else
+                            {
+                                outputYion.Write("0\t");
+                            }
                         }
-
                     }
+                    outputYion.WriteLine();
 
                     if (numberOfYions > 0)
                     {
@@ -3784,9 +3924,6 @@ namespace GlyCounter
                         if (etdTrue)
                             numberOfMS2scansWithYions_etd++;
                     }
-
-                    outputYion.WriteLine();
-                    outputPeakDepth.WriteLine();
 
                 }
 
@@ -3846,33 +3983,12 @@ namespace GlyCounter
 
             outputSummary.Close();
             outputYion.Close();
-            outputPeakDepth.Close();
             rawFile.Dispose();
 
             timer1.Stop();
             Ynaught_FinishTimeLabel.Text = "Finished at: " + DateTime.Now.ToString("HH:mm:ss");
             MessageBox.Show("Finished.");
             yIonHashSet.Clear();
-        }
-
-        private void ppmTol_label_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void DaltonCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Ynaught_DaCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
+        } 
     }
 }
