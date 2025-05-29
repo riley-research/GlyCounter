@@ -147,6 +147,7 @@
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
             timer2 = new System.Windows.Forms.Timer(components);
+            YNaught_IPSAcheckbox = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
@@ -889,6 +890,7 @@
             // 
             // YnaughtTab
             // 
+            YnaughtTab.Controls.Add(YNaught_IPSAcheckbox);
             YnaughtTab.Controls.Add(ChargeExplanationLabel);
             YnaughtTab.Controls.Add(UpperBoundLabel);
             YnaughtTab.Controls.Add(LowerBoundLabel);
@@ -1471,6 +1473,17 @@
             LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Assigned Modifications\", \"Charge\", \"Total Glycan Composition\", and \"Observed M/Z\"";
             LoadInGlycoPepIDs_TextBox.TextChanged += LoadInGlycoPepIDs_TextBox_TextChanged;
             // 
+            // YNaught_IPSAcheckbox
+            // 
+            YNaught_IPSAcheckbox.AutoSize = true;
+            YNaught_IPSAcheckbox.Location = new Point(368, 834);
+            YNaught_IPSAcheckbox.Margin = new Padding(3, 4, 3, 4);
+            YNaught_IPSAcheckbox.Name = "YNaught_IPSAcheckbox";
+            YNaught_IPSAcheckbox.Size = new Size(195, 24);
+            YNaught_IPSAcheckbox.TabIndex = 78;
+            YNaught_IPSAcheckbox.Text = "Output IPSA Annotations";
+            YNaught_IPSAcheckbox.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -1624,5 +1637,6 @@
         private Label LowerBoundLabel;
         private Label ChargeExplanationLabel;
         private Label UpperBoundLabel;
+        private CheckBox YNaught_IPSAcheckbox;
     }
 }

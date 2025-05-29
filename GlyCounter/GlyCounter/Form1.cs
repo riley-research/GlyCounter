@@ -51,6 +51,7 @@ namespace GlyCounter
         string Ynaught_csvCustomAdditions = "empty";
         string Ynaught_csvCustomSubtractions = "empty";
         bool Ynaught_condenseChargeStates = true;
+        bool Ynaught_ipsa = false;
 
         // For application updates
         private UpdateManager _updateManager;
@@ -3249,6 +3250,8 @@ namespace GlyCounter
             if (CanConvertDouble(Ynaught_SNthresholdTextBox.Text, SNthreshold))
                 Ynaught_SNthreshold = Convert.ToDouble(Ynaught_SNthresholdTextBox.Text);
 
+            if (YNaught_IPSAcheckbox.Checked) Ynaught_ipsa = true;
+
             //add checked items to yIonHashSet to use for creating ions to look for
             //note that subtraction is its own "Source"
             foreach (var item in Yions_NlinkedCheckBox.CheckedItems)
@@ -3374,7 +3377,7 @@ namespace GlyCounter
             //this will only execute if the user uploaded a file and changed the text from being empty
             if (!Ynaught_csvCustomSubtractions.Equals("empty"))
             {
-                StreamReader csvFile = new StreamReader(Ynaught_csvCustomAdditions);
+                StreamReader csvFile = new StreamReader(Ynaught_csvCustomSubtractions);
                 using (var csv = new CsvReader(csvFile, true))
                 {
                     while (csv.ReadNextRecord())
@@ -3431,6 +3434,13 @@ namespace GlyCounter
             //set up each output stream
             StreamWriter outputYion = new StreamWriter(Ynaught_rawFilePath + "_GlyCounter_YionSignal.txt");
             StreamWriter outputSummary = new StreamWriter(Ynaught_rawFilePath + "_GlyCounter_YionSummary.txt");
+            StreamWriter outputIPSA = null;
+            if (Ynaught_ipsa)
+            {
+                outputIPSA = new StreamWriter(Ynaught_rawFilePath + "_Glycounter_YionIPSA.txt");
+
+                outputIPSA.WriteLine("ScanNumber" + '\t' + "Yion" + '\t' + "m/z" + '\t' + "MassError");
+            }
 
             string toleranceString = "ppmTol= ";
             if (Ynaught_usingda)
@@ -3670,15 +3680,17 @@ namespace GlyCounter
                     double glycopeptide_firstIsoMass = psm.peptide.MonoisotopicMass + (1 * Constants.C13C12Difference);
                     double glycopeptide_secondIsoMass = psm.peptide.MonoisotopicMass + (2 * Constants.C13C12Difference);
 
-                    string yIonHeader = "";
-
                     //look for each Y-ion
                     List<Yion> finalYionList = new List<Yion>(); //creating this to store charge separately
                     foreach (Yion yIon in yIonHashSet)
                     {
-                        //just to be safe, set all variable specific to this spectrum to zero before going to find them
-                        //this is in case these didn't get cleared from the previous processing
-                        yIon.intensities = [];
+                        Yion foundYion = new Yion();
+                        foundYion.description = yIon.description;
+                        foundYion.theoMass = yIon.theoMass;
+                        //I think these are not necessary to update but just in case
+                        foundYion.glycanSource = yIon.glycanSource;
+                        foundYion.hcdCount = yIon.hcdCount;
+                        foundYion.etdCount = yIon.etdCount;
 
                         bool countYion = false;
 
@@ -3736,11 +3748,6 @@ namespace GlyCounter
                             chargeUpperBound = precursorCharge;
                             chargeLowerBound = 1;
                         }
-                        if (chargeUpperBound < chargeLowerBound)
-                        {
-                            chargeUpperBound = precursorCharge;
-                            chargeLowerBound = 1;
-                        }
 
                         //how many charge states are we looking for?
                         numberOfChargeStatesConsidered = chargeUpperBound - chargeLowerBound + 1;
@@ -3779,11 +3786,12 @@ namespace GlyCounter
                                     }
 
                                     //store info in yIon object
-                                    yIon.intensities.Add(peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity);
-                                    yIon.chargeStates.Add(i);
-                                    finalYionList.Add(yIon);
+                                    foundYion.intensities.Add(peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity);
+                                    foundYion.mz.Add(peak.MZ);
+                                    foundYion.chargeStates.Add(i);
+                                    finalYionList.Add(foundYion);
                                     numberOfYions++;
-                                    totalYionSignal = totalYionSignal + peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
+                                    totalYionSignal += peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
 
 
                                 }
@@ -3818,9 +3826,10 @@ namespace GlyCounter
                                             secondIsotopeIntensity = secondIsotopePeak.Intensity;
                                     }
 
-                                    yIon.intensities.Add(peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity);
-                                    yIon.chargeStates.Add(i);
-                                    finalYionList.Add(yIon);
+                                    foundYion.intensities.Add(peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity);
+                                    foundYion.mz.Add(peak.MZ);
+                                    foundYion.chargeStates.Add(i);
+                                    finalYionList.Add(foundYion);
                                     numberOfYions++;
                                     totalYionSignal = totalYionSignal + peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
 
@@ -3829,9 +3838,6 @@ namespace GlyCounter
                             }
                            
                         }
-
-                        if (countYion)
-                            numberOfYions++;
                         if (hcdTrue && countYion)
                             yIon.hcdCount++;
                         if (etdTrue && countYion)
@@ -3890,30 +3896,67 @@ namespace GlyCounter
                         psm.totalGlycanComposition + "\t" + psm.precursorMZ + "\t" + psm.charge + "\t" + retentionTime + "\t" + numberOfChargeStatesConsidered +"\t" + "\t" +
                         scanInjTime + "\t" + fragmenationType + "\t" + parentScan + "\t" + numberOfYions + "\t" + scanTIC + "\t" + totalYionSignal + "\t" + yIonTICfraction + "\t");
 
+                    var yIonIntensityDict = new Dictionary<(string, int), double>();
+                    foreach (var yion in finalYionList)
+                    {
+                        for (int i = 0; i < yion.chargeStates.Count; i++)
+                        {
+                            var key = (yion.description, yion.chargeStates[i]);
+                            yIonIntensityDict[key] = yion.intensities[i];
+                        }
+                    }
+
                     //write out peak depth and intensity info for each found Y-ion
                     foreach (var (yIon, charge) in yIonChargeStatePairs)
                     {
+                        double intensity = 0;
                         if (Ynaught_condenseChargeStates)
                         {
-                            // Sum all intensities for this Y-ion in this scan
-                            var foundYion = finalYionList.FirstOrDefault(y => y.description == yIon.description);
-                            outputYion.Write((foundYion != null ? foundYion.intensities.Sum().ToString() : "0") + "\t");
+                            intensity = finalYionList
+                                .Where(y => y.description == yIon.description)
+                                .SelectMany(y => y.intensities)
+                                .Sum();
                         }
                         else
                         {
-                            // Find the intensity for this Y-ion and charge state
-                            var foundYion = finalYionList.FirstOrDefault(y => y.description == yIon.description && y.chargeStates.Contains(charge));
-                            if (foundYion != null)
+                            yIonIntensityDict.TryGetValue((yIon.description, charge), out intensity);
+                        }
+                        outputYion.Write($"{intensity}\t");
+                    }
+
+                    //ipsa output stuff
+                    if (outputIPSA != null)
+                    {
+                        var seen = new HashSet<string>();
+                        foreach (Yion yion in finalYionList)
+                        {
+                            for (int i = 0; i < yion.intensities.Count; i++)
                             {
-                                int idx = foundYion.chargeStates.IndexOf(charge);
-                                outputYion.Write((idx >= 0 ? foundYion.intensities[idx].ToString() : "0") + "\t");
-                            }
-                            else
-                            {
-                                outputYion.Write("0\t");
+                                int chargestate = yion.chargeStates[i];
+                                double mz = yion.mz[i];
+                                string yionName = yion.description + "+" + chargestate;
+                                double massDiff = 0;
+                                if (yion.glycanSource.Contains("Subtraction"))
+                                {
+                                    double theomass = (psm.precursorMZ * psm.charge) - (psm.charge * Constants.Proton) - yion.theoMass;
+                                    massDiff = theomass - ((mz * chargestate) - (chargestate * Constants.Proton));
+                                }
+                                else
+                                {
+                                    double mass = psm.peptideNoGlycanMods.MonoisotopicMass + yion.theoMass;
+                                    massDiff = mass - ((mz * chargestate) - (chargestate * Constants.Proton));
+                                }
+
+                                // Use a string key for uniqueness (you can use a tuple if you prefer)
+                                string key = $"{psm.spectrumNumber}|{yionName}|{mz:F6}|{massDiff:F6}";
+                                if (seen.Add(key))
+                                {
+                                    outputIPSA.WriteLine($"{psm.spectrumNumber}\t{yionName}\t{mz}\t{massDiff}");
+                                }
                             }
                         }
                     }
+
                     outputYion.WriteLine();
 
                     if (numberOfYions > 0)
@@ -3932,16 +3975,28 @@ namespace GlyCounter
             }
 
             double percentageYions = (double)numberOfMS2scansWithYions / (double)numberOfMS2scans * 100;
-            double percentageYions_hcd = (double)numberOfMS2scansWithYions_hcd / (double)numberOfHCDscans * 100;
-            double percentageYions_etd = (double)numberOfMS2scansWithYions_etd / (double)numberOfETDscans * 100;
-
             double percentageY0 = (double)numberOfMS2scansWithY0 / (double)numberOfMS2scans * 100;
-            double percentageY0_hcd = (double)numberOfMS2scansWithY0_hcd / (double)numberOfHCDscans * 100;
-            double percentageY0_etd = (double)numberOfMS2scansWithY0_etd / (double)numberOfETDscans * 100;
-
             double percentageGlycoPep = (double)numberOfMS2scansWithIntactGlycoPep / (double)numberOfMS2scans * 100;
-            double percentageGlycoPep_hcd = (double)numberOfMS2scansWithIntactGlycoPep_hcd / (double)numberOfHCDscans * 100;
-            double percentageGlycoPep_etd = (double)numberOfMS2scansWithIntactGlycoPep_etd / (double)numberOfETDscans * 100;
+
+            double percentageYions_hcd = 0;
+            double percentageYions_etd = 0;
+            double percentageY0_hcd = 0;
+            double percentageY0_etd = 0;
+            double percentageGlycoPep_hcd = 0;
+            double percentageGlycoPep_etd = 0;
+
+            if (!(numberOfHCDscans == 0))
+            {
+                percentageYions_hcd = (double)numberOfMS2scansWithYions_hcd / (double)numberOfHCDscans * 100;
+                percentageY0_hcd = (double)numberOfMS2scansWithY0_hcd / (double)numberOfHCDscans * 100;
+                percentageGlycoPep_hcd = (double)numberOfMS2scansWithIntactGlycoPep_hcd / (double)numberOfHCDscans * 100;
+            }
+            if (!(numberOfETDscans == 0))
+            {
+                percentageYions_etd = (double)numberOfMS2scansWithYions_etd / (double)numberOfETDscans * 100;
+                percentageY0_etd = (double)numberOfMS2scansWithY0_etd / (double)numberOfETDscans * 100;
+                percentageGlycoPep_etd = (double)numberOfMS2scansWithIntactGlycoPep_etd / (double)numberOfETDscans * 100;
+            }
 
             outputSummary.WriteLine("\tTotal\tHCD\tETD\t%Total\t%HCD\t%ETD");
             outputSummary.WriteLine("All GlycoPSMs\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\tNA\tNA\tNA");
@@ -3983,6 +4038,8 @@ namespace GlyCounter
 
             outputSummary.Close();
             outputYion.Close();
+            if (outputIPSA != null)
+                outputIPSA.Close();
             rawFile.Dispose();
 
             timer1.Stop();
