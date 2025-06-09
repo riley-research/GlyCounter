@@ -78,7 +78,7 @@ Shows the settings used and a summary of the results per scan type
 
 ## Ynaught
 
-Calculates and extracts Y-ions and/or glycan neutral losses from database searched data. Accepts a formatted .txt PSMs file with the headers "Spectrum", "Charge", "Peptide", "Total Glycan Composition", "Observed M/Z", and "Assigned Modifications"; a glycan masses .txt with headers "Glycan" and "Mass"; and a .raw file. Ynaught currently does not support .mzML files.
+Calculates and extracts Y-ions and/or glycan neutral losses from database searched data. Accepts a formatted .txt PSMs file with the headers "Spectrum", "Charge", "Peptide", "Total Glycan Composition", "Observed M/Z", and "Assigned Modifications"; a glycan masses .txt with headers "Glycan" and "Mass"; and a .raw file.
 Additional csv files can be uploaded with custom Y-ions or neutral losses (Headers "Mass" and "Description").
 
 ### Output Files
