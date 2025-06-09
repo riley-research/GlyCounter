@@ -30,9 +30,7 @@ The Pre-ID tab is heart of GlyCounter. Here you can pick common oxonium ions see
 
 ### Selecting Files
 
-GlyCounter accepts .raw or .mzML files. The top browse box allows you to navigate to folders that contain your data. Start by selecting one file. GlyCounter can process single files individually, or you can check the "All .raw and .mzML files in folder" box to perform batch processing on all raw data files in that folder location. GlyCounter will generate output files (see below) individually for each file regardless of choosing batch processing or not. Note, if you select the check box for all files in the folder, GlyCounter will process all .raw AND .mzML files, so be sure to move any files you would not want processed in batch. Each time GlyCounter is run for a give file, previous output files stored in that same location are overwritten, so be sure to remove or rename files if you want to keep outputs from different settings/iterations of GlyCounter.
-
-one or more .raw or .mzML file(s) and extracts information about the oxonium ions in your spectra.
+GlyCounter accepts .raw or .mzML files. The top browse box allows you to navigate to folders that contain your data. Choose one or more raw/mzml files that you'd like to process, and the text box should update to show how many files you've chosen. GlyCounter creates individual outputs for each file, and will overwrite files if a different output directory is not chosen. The bottom browse box allows you to set your output directory, which is the folder where the GlyCounter results will be stored. If you do not select a valid output directory the program will error.
 
 ### Variables
 
@@ -85,10 +83,6 @@ Additional csv files can be uploaded with custom Y-ions or neutral losses (Heade
 
 ### Output Files
 
-#### GlyCounter_YionPeakDepth.txt
-
-Shows the peak depth for each selected Y-ion in each spectrum
-
 #### GlyCounter_YionSignal.txt
 
 Shows the intensity for each selected Y-ion in each spectrum
@@ -105,8 +99,12 @@ Shows the settings used and a summary of the results per scan type
 
 **Isotope Options**: Choose if you want to look for C13 isotopes
 
-**Charge State Options**: Larger glycopeptide fragments have the potential to be at any charge state between +1 and the precursor charge state. The charge state limits are determined based on z-X and z-Y where z is the precursor charge, z-X is the highest considered charge state, and z-Y is the lowest considered charge state.
-For example: if the precursor charge is 4 and I want to consider anything with a charge +2 to +4, I would enter 0 for X and 2 for Y. If I only wanted to consider the precursor charge then X and Y should be 0.
+**Ouput IPSA Annotations**: Check if you want to output annotations compatable with IPSA 2.0. This creates a text file with the found oxonium ions per scan and their mass errors.
+
+**Charge State Options**: Larger glycopeptide fragments have the potential to be at any charge state between +1 and the precursor charge state. The charge state limits are determined based on the precursor charge "P".
+For example: if the precursor charge is 4 and I want to consider anything with a charge +2 to +4, I would enter either P-2 or 2 in the lower bound (depending on if I wanted to always be two charge states below my precursor charge or if I wanted to always start at charge state 2) and P or 4 in the upper bound.
+
+**Combining vs Splitting Columns for Charge States**: There are two options for how to format columns in the YionSignal output. First, the intensities for all charge states of a given Y-ion can be summed and placed in a column with that Y-ion name as a header. Additional information about which charge states were found is available in the "ChargeStatesFound" column, but the individual intensities will not be separable. Second, the columns can be expanded so that there is one column for every charge checked for each Y-ion. The column headers would contain both the Y-ion name and the charge state. This creates an output file with a lot of columns, but allows for individual peak intensities to be reported.
 
 ## Example Files
 
