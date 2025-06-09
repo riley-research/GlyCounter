@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GlyCounter
 {
-    internal class OxoniumIon : IEquatable<OxoniumIon>
+    public class OxoniumIon : IEquatable<OxoniumIon>
     {
         public double theoMZ { get; set; }
         public double measuredMZ { get; set; }

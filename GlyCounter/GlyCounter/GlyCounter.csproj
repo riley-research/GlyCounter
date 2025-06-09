@@ -24,12 +24,15 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <AssemblyName>GlyCounter</AssemblyName>
     <RootNamespace>GlyCounter</RootNamespace>
+	<ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
   </PropertyGroup>
   
 
   <ItemGroup>
     <PackageReference Include="LumenWorks.Framework.IO" Version="3.8.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="Nova" Version="1.0.0.7" />
+    <PackageReference Include="Nova.IO" Version="1.0.0.7" />
     <PackageReference Include="PSI_Interface" Version="2.6.4" />
     
     <PackageReference Include="NuGet.Core" Version="2.14.0" /> 
