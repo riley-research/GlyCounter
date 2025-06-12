@@ -177,6 +177,8 @@ namespace GlyCounter
                 outputPath = defaultOutput;
                 Gly_outputTextBox.Text = outputPath;
             }
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             timer1.Interval = 1000;
             timer1.Tick += new EventHandler(OnTimerTick);
@@ -315,6 +317,7 @@ namespace GlyCounter
                     oxoIon.uvpdCount = 0;
                     oxoIon.measuredMZ = 0;
                 }
+                Debug.WriteLine(fileName);
 
                 FileReader rawFile = new FileReader(fileName);
                 FileReader typeCheck = new FileReader();
@@ -796,6 +799,15 @@ namespace GlyCounter
                     outputSummary.WriteLine(oxoIon.description + "\t" + total + "\t" + oxoIon.hcdCount + "\t" + oxoIon.etdCount + "\t" + oxoIon.uvpdCount
                         + "\t" + percentTotal + "\t" + percentHCD + "\t" + percentETD + "\t" + percentUVPD);
                 }
+                outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
+                //output elapsed time
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+
+                string elapsedTime = String.Format("{0:00}:{1:00}.{2:00}",
+                    ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                outputSummary.WriteLine("Total search time: " + elapsedTime);
 
                 outputSummary.Close();
                 outputOxo.Close();
@@ -1591,6 +1603,8 @@ namespace GlyCounter
                 Gly_outputTextBox.Text = outputPath;
             }
 
+            Stopwatch stopwatch2 = new Stopwatch();
+            stopwatch2.Start();
             timer2.Interval = 1000;
             timer2.Tick += new EventHandler(OnTimerTick);
             timer2.Start();
@@ -2423,7 +2437,16 @@ namespace GlyCounter
                                             + "\t" + percentTotal + "\t" + percentHCD + "\t" + percentETD);
                     }
                 }
-                    
+                outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\ " + @" \\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
+                //output elapsed time
+                stopwatch2.Stop();
+                TimeSpan ts = stopwatch2.Elapsed;
+
+                string elapsedTime = String.Format("{0:00}:{1:00}.{2:00}",
+                    ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                outputSummary.WriteLine("Total search time: " + elapsedTime);
+
 
             }
 
