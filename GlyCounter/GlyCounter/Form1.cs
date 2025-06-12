@@ -101,6 +101,7 @@ namespace GlyCounter
 
         private void button1_Click(object sender, EventArgs e)
         {
+            fileList = [];
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Multiselect = true;
             fdlg.Title = "C# Corner Open File Dialog";
@@ -815,8 +816,6 @@ namespace GlyCounter
                 if (outputIPSA != null)
                     outputIPSA.Close();
             }
-
-            fileList = [];
             timer1.Stop();
             StatusLabel.Text = "Finished";
             FinishTimeLabel.Text = "Finished at: " + DateTime.Now.ToString("HH:mm:ss");
@@ -1209,7 +1208,7 @@ namespace GlyCounter
                 fdlg.InitialDirectory = @"c:\"; // Default directory if no previous directory is found
             }
             fdlg.Filter = "RAW files (*.raw*)|*.raw*|mzML files (*.mzML)|*.mzML";
-            fdlg.FilterIndex = 2;
+            fdlg.FilterIndex = 1;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
@@ -2437,18 +2436,17 @@ namespace GlyCounter
                                             + "\t" + percentTotal + "\t" + percentHCD + "\t" + percentETD);
                     }
                 }
-                outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\ " + @" \\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
-                //output elapsed time
-                stopwatch2.Stop();
-                TimeSpan ts = stopwatch2.Elapsed;
-
-                string elapsedTime = String.Format("{0:00}:{1:00}.{2:00}",
-                    ts.Minutes, ts.Seconds,
-                    ts.Milliseconds / 10);
-                outputSummary.WriteLine("Total search time: " + elapsedTime);
-
-
             }
+
+            outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\ " + @" \\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
+            //output elapsed time
+            stopwatch2.Stop();
+            TimeSpan ts = stopwatch2.Elapsed;
+
+            string elapsedTime = String.Format("{0:00}:{1:00}.{2:00}",
+                ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+            outputSummary.WriteLine("Total search time: " + elapsedTime);
 
             outputSummary.Close();
             outputYion.Close();
