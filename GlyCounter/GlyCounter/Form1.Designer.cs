@@ -81,6 +81,8 @@
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
+            Gly_outputButton = new Button();
+            Gly_outputTextBox = new TextBox();
             ipsaCheckBox = new CheckBox();
             DaltonCheckBox = new CheckBox();
             OxoCountThreshold_uvpd_label = new Label();
@@ -94,6 +96,10 @@
             intensityThresholdLabel = new Label();
             intensityThresholdTextBox = new TextBox();
             YnaughtTab = new TabPage();
+            Ynaught_intLabel = new Label();
+            Ynaught_intTextBox = new TextBox();
+            Ynaught_outputButton = new Button();
+            Ynaught_outputTextBox = new TextBox();
             YNaught_IPSAcheckbox = new CheckBox();
             ChargeExplanationLabel = new Label();
             UpperBoundLabel = new Label();
@@ -145,19 +151,75 @@
             FirstIsotopeCheckBox = new CheckBox();
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
+            tabPage1 = new TabPage();
+            checkBox4 = new CheckBox();
+            checkBox3 = new CheckBox();
+            label28 = new Label();
+            label27 = new Label();
+            label26 = new Label();
+            textBox17 = new TextBox();
+            textBox16 = new TextBox();
+            label25 = new Label();
+            pictureBox1 = new PictureBox();
+            checkedListBox4 = new CheckedListBox();
+            label24 = new Label();
+            checkedListBox3 = new CheckedListBox();
+            button7 = new Button();
+            label23 = new Label();
+            button6 = new Button();
+            label20 = new Label();
+            textBox15 = new TextBox();
+            label21 = new Label();
+            label22 = new Label();
+            checkedListBox2 = new CheckedListBox();
+            button5 = new Button();
+            label19 = new Label();
+            checkBox2 = new CheckBox();
+            label3 = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            textBox3 = new TextBox();
+            textBox4 = new TextBox();
+            textBox5 = new TextBox();
+            label6 = new Label();
+            label7 = new Label();
+            label8 = new Label();
+            textBox6 = new TextBox();
+            label9 = new Label();
+            label10 = new Label();
+            textBox7 = new TextBox();
+            label11 = new Label();
+            label12 = new Label();
+            textBox8 = new TextBox();
+            textBox9 = new TextBox();
+            label13 = new Label();
+            textBox10 = new TextBox();
+            label14 = new Label();
+            textBox11 = new TextBox();
+            label15 = new Label();
+            textBox12 = new TextBox();
+            label16 = new Label();
+            label17 = new Label();
+            label18 = new Label();
+            textBox13 = new TextBox();
+            textBox14 = new TextBox();
+            button4 = new Button();
+            checkedListBox1 = new CheckedListBox();
+            button3 = new Button();
+            label2 = new Label();
+            button2 = new Button();
+            textBox2 = new TextBox();
+            button1 = new Button();
+            checkBox1 = new CheckBox();
             timer2 = new System.Windows.Forms.Timer(components);
-            Ynaught_outputTextBox = new TextBox();
-            Ynaught_outputButton = new Button();
-            Ynaught_intTextBox = new TextBox();
-            Ynaught_intLabel = new Label();
-            Gly_outputTextBox = new TextBox();
-            Gly_outputButton = new Button();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
             YnaughtTab.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)Ynaught_GlyCounterLogo).BeginInit();
+            tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // textBox1
@@ -671,6 +733,7 @@
             // 
             GlyCounter_AllTabs.Controls.Add(GlyCounter_Tab);
             GlyCounter_AllTabs.Controls.Add(YnaughtTab);
+            GlyCounter_AllTabs.Controls.Add(tabPage1);
             GlyCounter_AllTabs.Location = new Point(13, 13);
             GlyCounter_AllTabs.Name = "GlyCounter_AllTabs";
             GlyCounter_AllTabs.SelectedIndex = 0;
@@ -748,6 +811,25 @@
             GlyCounter_Tab.TabIndex = 0;
             GlyCounter_Tab.Text = "Pre-ID";
             GlyCounter_Tab.UseVisualStyleBackColor = true;
+            // 
+            // Gly_outputButton
+            // 
+            Gly_outputButton.Location = new Point(1109, 49);
+            Gly_outputButton.Name = "Gly_outputButton";
+            Gly_outputButton.Size = new Size(88, 23);
+            Gly_outputButton.TabIndex = 69;
+            Gly_outputButton.Text = "Browse";
+            Gly_outputButton.UseVisualStyleBackColor = true;
+            Gly_outputButton.Click += Gly_outputButton_Click;
+            // 
+            // Gly_outputTextBox
+            // 
+            Gly_outputTextBox.Location = new Point(16, 47);
+            Gly_outputTextBox.Name = "Gly_outputTextBox";
+            Gly_outputTextBox.Size = new Size(1085, 23);
+            Gly_outputTextBox.TabIndex = 55;
+            Gly_outputTextBox.Text = "Select output directory";
+            Gly_outputTextBox.TextChanged += Gly_outputTextBox_TextChanged;
             // 
             // ipsaCheckBox
             // 
@@ -927,6 +1009,42 @@
             YnaughtTab.TabIndex = 1;
             YnaughtTab.Text = "Ynaught";
             YnaughtTab.UseVisualStyleBackColor = true;
+            // 
+            // Ynaught_intLabel
+            // 
+            Ynaught_intLabel.AutoSize = true;
+            Ynaught_intLabel.Location = new Point(1007, 374);
+            Ynaught_intLabel.Name = "Ynaught_intLabel";
+            Ynaught_intLabel.Size = new Size(170, 15);
+            Ynaught_intLabel.TabIndex = 82;
+            Ynaught_intLabel.Text = "Intensity Requirement (.mzML)";
+            // 
+            // Ynaught_intTextBox
+            // 
+            Ynaught_intTextBox.Location = new Point(951, 371);
+            Ynaught_intTextBox.Name = "Ynaught_intTextBox";
+            Ynaught_intTextBox.Size = new Size(50, 23);
+            Ynaught_intTextBox.TabIndex = 81;
+            Ynaught_intTextBox.Text = "1000";
+            // 
+            // Ynaught_outputButton
+            // 
+            Ynaught_outputButton.Location = new Point(819, 93);
+            Ynaught_outputButton.Name = "Ynaught_outputButton";
+            Ynaught_outputButton.Size = new Size(90, 23);
+            Ynaught_outputButton.TabIndex = 80;
+            Ynaught_outputButton.Text = "Browse";
+            Ynaught_outputButton.UseVisualStyleBackColor = true;
+            Ynaught_outputButton.Click += Ynaught_outputButton_Click;
+            // 
+            // Ynaught_outputTextBox
+            // 
+            Ynaught_outputTextBox.Location = new Point(15, 93);
+            Ynaught_outputTextBox.Name = "Ynaught_outputTextBox";
+            Ynaught_outputTextBox.Size = new Size(798, 23);
+            Ynaught_outputTextBox.TabIndex = 79;
+            Ynaught_outputTextBox.Text = "Select output directory";
+            Ynaught_outputTextBox.TextChanged += Ynaught_outputTextBox_TextChanged;
             // 
             // YNaught_IPSAcheckbox
             // 
@@ -1429,60 +1547,663 @@
             LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Assigned Modifications\", \"Charge\", \"Total Glycan Composition\", and \"Observed M/Z\"";
             LoadInGlycoPepIDs_TextBox.TextChanged += LoadInGlycoPepIDs_TextBox_TextChanged;
             // 
-            // Ynaught_outputTextBox
+            // tabPage1
             // 
-            Ynaught_outputTextBox.Location = new Point(15, 93);
-            Ynaught_outputTextBox.Name = "Ynaught_outputTextBox";
-            Ynaught_outputTextBox.Size = new Size(798, 23);
-            Ynaught_outputTextBox.TabIndex = 79;
-            Ynaught_outputTextBox.Text = "Select output directory";
-            Ynaught_outputTextBox.TextChanged += Ynaught_outputTextBox_TextChanged;
+            tabPage1.Controls.Add(checkBox4);
+            tabPage1.Controls.Add(checkBox3);
+            tabPage1.Controls.Add(label28);
+            tabPage1.Controls.Add(label27);
+            tabPage1.Controls.Add(label26);
+            tabPage1.Controls.Add(textBox17);
+            tabPage1.Controls.Add(textBox16);
+            tabPage1.Controls.Add(label25);
+            tabPage1.Controls.Add(pictureBox1);
+            tabPage1.Controls.Add(checkedListBox4);
+            tabPage1.Controls.Add(label24);
+            tabPage1.Controls.Add(checkedListBox3);
+            tabPage1.Controls.Add(button7);
+            tabPage1.Controls.Add(label23);
+            tabPage1.Controls.Add(button6);
+            tabPage1.Controls.Add(label20);
+            tabPage1.Controls.Add(textBox15);
+            tabPage1.Controls.Add(label21);
+            tabPage1.Controls.Add(label22);
+            tabPage1.Controls.Add(checkedListBox2);
+            tabPage1.Controls.Add(button5);
+            tabPage1.Controls.Add(label19);
+            tabPage1.Controls.Add(checkBox2);
+            tabPage1.Controls.Add(label3);
+            tabPage1.Controls.Add(label4);
+            tabPage1.Controls.Add(label5);
+            tabPage1.Controls.Add(textBox3);
+            tabPage1.Controls.Add(textBox4);
+            tabPage1.Controls.Add(textBox5);
+            tabPage1.Controls.Add(label6);
+            tabPage1.Controls.Add(label7);
+            tabPage1.Controls.Add(label8);
+            tabPage1.Controls.Add(textBox6);
+            tabPage1.Controls.Add(label9);
+            tabPage1.Controls.Add(label10);
+            tabPage1.Controls.Add(textBox7);
+            tabPage1.Controls.Add(label11);
+            tabPage1.Controls.Add(label12);
+            tabPage1.Controls.Add(textBox8);
+            tabPage1.Controls.Add(textBox9);
+            tabPage1.Controls.Add(label13);
+            tabPage1.Controls.Add(textBox10);
+            tabPage1.Controls.Add(label14);
+            tabPage1.Controls.Add(textBox11);
+            tabPage1.Controls.Add(label15);
+            tabPage1.Controls.Add(textBox12);
+            tabPage1.Controls.Add(label16);
+            tabPage1.Controls.Add(label17);
+            tabPage1.Controls.Add(label18);
+            tabPage1.Controls.Add(textBox13);
+            tabPage1.Controls.Add(textBox14);
+            tabPage1.Controls.Add(button4);
+            tabPage1.Controls.Add(checkedListBox1);
+            tabPage1.Controls.Add(button3);
+            tabPage1.Controls.Add(label2);
+            tabPage1.Controls.Add(button2);
+            tabPage1.Controls.Add(textBox2);
+            tabPage1.Controls.Add(button1);
+            tabPage1.Controls.Add(checkBox1);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(1201, 708);
+            tabPage1.TabIndex = 2;
+            tabPage1.Text = "iCounter";
+            tabPage1.UseVisualStyleBackColor = true;
             // 
-            // Ynaught_outputButton
+            // checkBox4
             // 
-            Ynaught_outputButton.Location = new Point(819, 93);
-            Ynaught_outputButton.Name = "Ynaught_outputButton";
-            Ynaught_outputButton.Size = new Size(90, 23);
-            Ynaught_outputButton.TabIndex = 80;
-            Ynaught_outputButton.Text = "Browse";
-            Ynaught_outputButton.UseVisualStyleBackColor = true;
-            Ynaught_outputButton.Click += Ynaught_outputButton_Click;
+            checkBox4.AutoSize = true;
+            checkBox4.Location = new Point(704, 499);
+            checkBox4.Name = "checkBox4";
+            checkBox4.Size = new Size(73, 19);
+            checkBox4.TabIndex = 120;
+            checkBox4.Text = "Negative";
+            checkBox4.UseVisualStyleBackColor = true;
+            checkBox4.CheckedChanged += checkBox4_CheckedChanged;
             // 
-            // Ynaught_intTextBox
+            // checkBox3
             // 
-            Ynaught_intTextBox.Location = new Point(951, 371);
-            Ynaught_intTextBox.Name = "Ynaught_intTextBox";
-            Ynaught_intTextBox.Size = new Size(50, 23);
-            Ynaught_intTextBox.TabIndex = 81;
-            Ynaught_intTextBox.Text = "1000";
+            checkBox3.AutoSize = true;
+            checkBox3.Checked = true;
+            checkBox3.CheckState = CheckState.Checked;
+            checkBox3.Location = new Point(618, 499);
+            checkBox3.Name = "checkBox3";
+            checkBox3.Size = new Size(67, 19);
+            checkBox3.TabIndex = 119;
+            checkBox3.Text = "Positive";
+            checkBox3.UseVisualStyleBackColor = true;
             // 
-            // Ynaught_intLabel
+            // label28
             // 
-            Ynaught_intLabel.AutoSize = true;
-            Ynaught_intLabel.Location = new Point(1007, 374);
-            Ynaught_intLabel.Name = "Ynaught_intLabel";
-            Ynaught_intLabel.Size = new Size(170, 15);
-            Ynaught_intLabel.TabIndex = 82;
-            Ynaught_intLabel.Text = "Intensity Requirement (.mzML)";
+            label28.AutoSize = true;
+            label28.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label28.Location = new Point(618, 471);
+            label28.Margin = new Padding(4, 0, 4, 0);
+            label28.Name = "label28";
+            label28.Size = new Size(96, 17);
+            label28.TabIndex = 118;
+            label28.Text = "Select polarity";
             // 
-            // Gly_outputTextBox
+            // label27
             // 
-            Gly_outputTextBox.Location = new Point(16, 47);
-            Gly_outputTextBox.Name = "Gly_outputTextBox";
-            Gly_outputTextBox.Size = new Size(1085, 23);
-            Gly_outputTextBox.TabIndex = 55;
-            Gly_outputTextBox.Text = "Select output directory";
-            Gly_outputTextBox.TextChanged += Gly_outputTextBox_TextChanged;
+            label27.AutoSize = true;
+            label27.Location = new Point(618, 350);
+            label27.Margin = new Padding(4, 0, 4, 0);
+            label27.Name = "label27";
+            label27.Size = new Size(67, 15);
+            label27.TabIndex = 117;
+            label27.Text = "Description";
             // 
-            // Gly_outputButton
+            // label26
             // 
-            Gly_outputButton.Location = new Point(1109, 49);
-            Gly_outputButton.Name = "Gly_outputButton";
-            Gly_outputButton.Size = new Size(88, 23);
-            Gly_outputButton.TabIndex = 69;
-            Gly_outputButton.Text = "Browse";
-            Gly_outputButton.UseVisualStyleBackColor = true;
-            Gly_outputButton.Click += Gly_outputButton_Click;
+            label26.AutoSize = true;
+            label26.Location = new Point(618, 402);
+            label26.Margin = new Padding(4, 0, 4, 0);
+            label26.Name = "label26";
+            label26.Size = new Size(28, 15);
+            label26.TabIndex = 116;
+            label26.Text = "m/z";
+            // 
+            // textBox17
+            // 
+            textBox17.Location = new Point(618, 423);
+            textBox17.Name = "textBox17";
+            textBox17.Size = new Size(99, 23);
+            textBox17.TabIndex = 115;
+            // 
+            // textBox16
+            // 
+            textBox16.Location = new Point(618, 370);
+            textBox16.Name = "textBox16";
+            textBox16.Size = new Size(198, 23);
+            textBox16.TabIndex = 114;
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label25.Location = new Point(618, 325);
+            label25.Margin = new Padding(4, 0, 4, 0);
+            label25.Name = "label25";
+            label25.Size = new Size(198, 17);
+            label25.TabIndex = 113;
+            label25.Text = "Enter your own single ion here";
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Location = new Point(315, 471);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(278, 75);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 112;
+            pictureBox1.TabStop = false;
+            // 
+            // checkedListBox4
+            // 
+            checkedListBox4.CheckOnClick = true;
+            checkedListBox4.FormattingEnabled = true;
+            checkedListBox4.Items.AddRange(new object[] { "216.0424, pTyr ", "__?__,  pSer ", "__?__, pThr ", "__?__, ESTLHLVLRLRGG (ubi) " });
+            checkedListBox4.Location = new Point(618, 139);
+            checkedListBox4.Margin = new Padding(4, 3, 4, 3);
+            checkedListBox4.Name = "checkedListBox4";
+            checkedListBox4.Size = new Size(278, 166);
+            checkedListBox4.TabIndex = 110;
+            // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label24.Location = new Point(618, 107);
+            label24.Margin = new Padding(4, 0, 4, 0);
+            label24.Name = "label24";
+            label24.Size = new Size(125, 17);
+            label24.TabIndex = 111;
+            label24.Text = "Miscellaneous ions";
+            // 
+            // checkedListBox3
+            // 
+            checkedListBox3.CheckOnClick = true;
+            checkedListBox3.FormattingEnabled = true;
+            checkedListBox3.Items.AddRange(new object[] { "101.1079, Lysine immonium", "126.0913, Cyclic acyl derivative", "129.1023, Unmodified lysine diagnostic", "143.1179, Acetyl lysine", "152.107, Crotonyl lysine", "154.1232, Butyrylated lysine", "156.1025, Cyclic lactyllysine ", "173.1290, Linear lactyllysine " });
+            checkedListBox3.Location = new Point(11, 427);
+            checkedListBox3.Margin = new Padding(4, 3, 4, 3);
+            checkedListBox3.Name = "checkedListBox3";
+            checkedListBox3.Size = new Size(278, 166);
+            checkedListBox3.TabIndex = 106;
+            // 
+            // button7
+            // 
+            button7.Location = new Point(147, 385);
+            button7.Margin = new Padding(2);
+            button7.Name = "button7";
+            button7.Size = new Size(142, 36);
+            button7.TabIndex = 108;
+            button7.Text = "Check all acyl ions";
+            button7.UseVisualStyleBackColor = true;
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label23.Location = new Point(11, 395);
+            label23.Margin = new Padding(4, 0, 4, 0);
+            label23.Name = "label23";
+            label23.Size = new Size(105, 17);
+            label23.TabIndex = 107;
+            label23.Text = "Acyl-lysine ions";
+            // 
+            // button6
+            // 
+            button6.Location = new Point(1101, 668);
+            button6.Margin = new Padding(4, 3, 4, 3);
+            button6.Name = "button6";
+            button6.Size = new Size(88, 25);
+            button6.TabIndex = 102;
+            button6.Text = "Browse";
+            button6.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label20.Location = new Point(11, 642);
+            label20.Margin = new Padding(4, 0, 4, 0);
+            label20.Name = "label20";
+            label20.Size = new Size(225, 16);
+            label20.TabIndex = 103;
+            label20.Text = "Status updates will appear here";
+            // 
+            // textBox15
+            // 
+            textBox15.Location = new Point(11, 668);
+            textBox15.Margin = new Padding(4, 3, 4, 3);
+            textBox15.Multiline = true;
+            textBox15.Name = "textBox15";
+            textBox15.Size = new Size(1085, 25);
+            textBox15.TabIndex = 101;
+            textBox15.Text = "Upload custom ions here - csv with headers \"m/z\" and \"Description\"";
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label21.Location = new Point(315, 577);
+            label21.Margin = new Padding(4, 0, 4, 0);
+            label21.Name = "label21";
+            label21.Size = new Size(148, 17);
+            label21.TabIndex = 104;
+            label21.Text = "Finish Time: Not Yet Run";
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label22.Location = new Point(316, 557);
+            label22.Name = "label22";
+            label22.Size = new Size(143, 17);
+            label22.TabIndex = 105;
+            label22.Text = "Start Time: Not Yet Run";
+            // 
+            // checkedListBox2
+            // 
+            checkedListBox2.CheckOnClick = true;
+            checkedListBox2.FormattingEnabled = true;
+            checkedListBox2.Items.AddRange(new object[] { "126.127726, TMT10-126", "127.124761, TMT10-127N", "127.131081, TMT10-127C", "128.128116, TMT10-128N", "128.134436, TMT10-128C", "129.131471, TMT10-129N", "129.137790, TMT10-129C", "130.134825, TMT10-130N", "130.141145, TMT10-130C", "131.138180, TMT10-131", "131.144499, TMT11-131C" });
+            checkedListBox2.Location = new Point(11, 141);
+            checkedListBox2.Margin = new Padding(4, 3, 4, 3);
+            checkedListBox2.Name = "checkedListBox2";
+            checkedListBox2.Size = new Size(278, 220);
+            checkedListBox2.TabIndex = 98;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(147, 99);
+            button5.Margin = new Padding(2);
+            button5.Name = "button5";
+            button5.Size = new Size(142, 36);
+            button5.TabIndex = 100;
+            button5.Text = "Check all TMT-11 ions";
+            button5.UseVisualStyleBackColor = true;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label19.Location = new Point(11, 109);
+            label19.Margin = new Padding(4, 0, 4, 0);
+            label19.Name = "label19";
+            label19.Size = new Size(110, 17);
+            label19.TabIndex = 99;
+            label19.Text = "TMT 11plex ions";
+            // 
+            // checkBox2
+            // 
+            checkBox2.AutoSize = true;
+            checkBox2.Location = new Point(1132, 114);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(40, 19);
+            checkBox2.TabIndex = 97;
+            checkBox2.Text = "Da";
+            checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(982, 524);
+            label3.Margin = new Padding(2, 0, 2, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(163, 30);
+            label3.TabIndex = 96;
+            label3.Text = "Oxonium Count Requirement\r\n0 = default";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(981, 503);
+            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(102, 15);
+            label4.TabIndex = 95;
+            label4.Text = "UVPD TIC fraction";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(982, 474);
+            label5.Margin = new Padding(2, 0, 2, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(202, 15);
+            label5.TabIndex = 94;
+            label5.Text = "Must be within N most intense peaks";
+            // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(918, 529);
+            textBox3.Margin = new Padding(4, 3, 4, 3);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(61, 23);
+            textBox3.TabIndex = 93;
+            textBox3.Text = "0";
+            // 
+            // textBox4
+            // 
+            textBox4.Location = new Point(918, 500);
+            textBox4.Margin = new Padding(4, 3, 4, 3);
+            textBox4.Name = "textBox4";
+            textBox4.Size = new Size(61, 23);
+            textBox4.TabIndex = 92;
+            textBox4.Text = "0.20";
+            // 
+            // textBox5
+            // 
+            textBox5.Location = new Point(918, 471);
+            textBox5.Margin = new Padding(4, 3, 4, 3);
+            textBox5.Name = "textBox5";
+            textBox5.Size = new Size(61, 23);
+            textBox5.TabIndex = 91;
+            textBox5.Text = "25";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Underline, GraphicsUnit.Point, 0);
+            label6.Location = new Point(919, 447);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(159, 16);
+            label6.TabIndex = 90;
+            label6.Text = "UVPD MSⁿ Scan Settings";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(981, 177);
+            label7.Name = "label7";
+            label7.Size = new Size(213, 15);
+            label7.TabIndex = 89;
+            label7.Text = "used if mass analyzer does not have SN";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(982, 162);
+            label8.Name = "label8";
+            label8.Size = new Size(108, 15);
+            label8.TabIndex = 88;
+            label8.Text = "Intensity Threshold";
+            // 
+            // textBox6
+            // 
+            textBox6.Location = new Point(919, 169);
+            textBox6.Name = "textBox6";
+            textBox6.Size = new Size(61, 23);
+            textBox6.TabIndex = 87;
+            textBox6.Text = "1000";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(981, 255);
+            label9.Margin = new Padding(4, 0, 4, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(97, 15);
+            label9.TabIndex = 77;
+            label9.Text = "HCD TIC fraction";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(981, 283);
+            label10.Margin = new Padding(2, 0, 2, 0);
+            label10.Name = "label10";
+            label10.Size = new Size(199, 30);
+            label10.TabIndex = 84;
+            label10.Text = "Ion Count Requirement (0 = default)\r\n\r\n";
+            // 
+            // textBox7
+            // 
+            textBox7.Location = new Point(919, 252);
+            textBox7.Margin = new Padding(4, 3, 4, 3);
+            textBox7.Name = "textBox7";
+            textBox7.Size = new Size(61, 23);
+            textBox7.TabIndex = 75;
+            textBox7.Text = "0.20";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(982, 408);
+            label11.Margin = new Padding(2, 0, 2, 0);
+            label11.Name = "label11";
+            label11.Size = new Size(163, 30);
+            label11.TabIndex = 85;
+            label11.Text = "Oxonium Count Requirement\r\n0 = default";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(981, 226);
+            label12.Margin = new Padding(2, 0, 2, 0);
+            label12.Name = "label12";
+            label12.Size = new Size(202, 15);
+            label12.TabIndex = 74;
+            label12.Text = "Must be within N most intense peaks";
+            // 
+            // textBox8
+            // 
+            textBox8.Location = new Point(919, 283);
+            textBox8.Margin = new Padding(2);
+            textBox8.Name = "textBox8";
+            textBox8.Size = new Size(61, 23);
+            textBox8.TabIndex = 83;
+            textBox8.Text = "0";
+            // 
+            // textBox9
+            // 
+            textBox9.Location = new Point(919, 408);
+            textBox9.Margin = new Padding(2);
+            textBox9.Name = "textBox9";
+            textBox9.Size = new Size(62, 23);
+            textBox9.TabIndex = 86;
+            textBox9.Text = "0";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Underline, GraphicsUnit.Point, 0);
+            label13.Location = new Point(919, 200);
+            label13.Margin = new Padding(4, 0, 4, 0);
+            label13.Name = "label13";
+            label13.Size = new Size(150, 16);
+            label13.TabIndex = 80;
+            label13.Text = "HCD MSⁿ Scan Settings";
+            // 
+            // textBox10
+            // 
+            textBox10.Location = new Point(919, 223);
+            textBox10.Margin = new Padding(2);
+            textBox10.Name = "textBox10";
+            textBox10.Size = new Size(61, 23);
+            textBox10.TabIndex = 73;
+            textBox10.Text = "25";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(982, 142);
+            label14.Margin = new Padding(2, 0, 2, 0);
+            label14.Name = "label14";
+            label14.Size = new Size(161, 15);
+            label14.TabIndex = 72;
+            label14.Text = "Signal-to-Noise Requirement";
+            // 
+            // textBox11
+            // 
+            textBox11.Location = new Point(919, 139);
+            textBox11.Margin = new Padding(2);
+            textBox11.Name = "textBox11";
+            textBox11.Size = new Size(61, 23);
+            textBox11.TabIndex = 71;
+            textBox11.Text = "3";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(981, 114);
+            label15.Margin = new Padding(4, 0, 4, 0);
+            label15.Name = "label15";
+            label15.Size = new Size(145, 15);
+            label15.TabIndex = 70;
+            label15.Text = "Tolerance (default = ppm)";
+            // 
+            // textBox12
+            // 
+            textBox12.Location = new Point(919, 111);
+            textBox12.Margin = new Padding(4, 3, 4, 3);
+            textBox12.Name = "textBox12";
+            textBox12.Size = new Size(61, 23);
+            textBox12.TabIndex = 69;
+            textBox12.Text = "15";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(982, 350);
+            label16.Margin = new Padding(2, 0, 2, 0);
+            label16.Name = "label16";
+            label16.Size = new Size(202, 15);
+            label16.TabIndex = 82;
+            label16.Text = "Must be within N most intense peaks";
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(982, 380);
+            label17.Margin = new Padding(4, 0, 4, 0);
+            label17.Name = "label17";
+            label17.Size = new Size(93, 15);
+            label17.TabIndex = 78;
+            label17.Text = "ETD TIC fraction";
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Underline, GraphicsUnit.Point, 0);
+            label18.Location = new Point(919, 325);
+            label18.Margin = new Padding(4, 0, 4, 0);
+            label18.Name = "label18";
+            label18.Size = new Size(149, 16);
+            label18.TabIndex = 81;
+            label18.Text = "ETD MSⁿ Scan Settings";
+            // 
+            // textBox13
+            // 
+            textBox13.Location = new Point(919, 377);
+            textBox13.Margin = new Padding(4, 3, 4, 3);
+            textBox13.Name = "textBox13";
+            textBox13.Size = new Size(61, 23);
+            textBox13.TabIndex = 76;
+            textBox13.Text = "0.05";
+            // 
+            // textBox14
+            // 
+            textBox14.Location = new Point(919, 347);
+            textBox14.Margin = new Padding(4, 3, 4, 3);
+            textBox14.Name = "textBox14";
+            textBox14.Size = new Size(61, 23);
+            textBox14.TabIndex = 79;
+            textBox14.Text = "50";
+            // 
+            // button4
+            // 
+            button4.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button4.Location = new Point(918, 567);
+            button4.Margin = new Padding(4, 3, 4, 3);
+            button4.Name = "button4";
+            button4.Size = new Size(276, 62);
+            button4.TabIndex = 68;
+            button4.Text = "Start";
+            button4.UseVisualStyleBackColor = true;
+            // 
+            // checkedListBox1
+            // 
+            checkedListBox1.CheckOnClick = true;
+            checkedListBox1.FormattingEnabled = true;
+            checkedListBox1.Items.AddRange(new object[] { "126.127726, TMT-pro-126", "127.124761, TMT-pro-127N", "127.131081, TMT-pro-127C", "128.128116, TMT-pro-128N", "128.134436, TMT-pro-128C", "129.131471, TMT-pro-129N", "129.137791, TMT-pro-129C", "130.134826, TMT-pro-130N", "130.141146, TMT-pro-130C", "131.138181, TMT-pro-131N", "131.144501, TMT-pro-131C", "132.141536, TMT-pro-132N", "132.147856, TMT-pro-132C", "133.144891, TMT-pro-133N", "133.151211, TMT-pro-133C", "134.148246, TMT-pro-134N" });
+            checkedListBox1.Location = new Point(315, 140);
+            checkedListBox1.Margin = new Padding(4, 3, 4, 3);
+            checkedListBox1.Name = "checkedListBox1";
+            checkedListBox1.Size = new Size(278, 310);
+            checkedListBox1.TabIndex = 28;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(451, 98);
+            button3.Margin = new Padding(2);
+            button3.Name = "button3";
+            button3.Size = new Size(142, 36);
+            button3.TabIndex = 30;
+            button3.Text = "Check all TMT-16 ions";
+            button3.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(315, 108);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(130, 17);
+            label2.TabIndex = 29;
+            label2.Text = "TMTpro 16plex ions";
+            // 
+            // button2
+            // 
+            button2.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button2.Location = new Point(912, 60);
+            button2.Margin = new Padding(4, 3, 4, 3);
+            button2.Name = "button2";
+            button2.Size = new Size(278, 36);
+            button2.TabIndex = 9;
+            button2.Text = "Clear Selections";
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new Point(9, 19);
+            textBox2.Margin = new Padding(4, 3, 4, 3);
+            textBox2.Multiline = true;
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(1085, 25);
+            textBox2.TabIndex = 6;
+            textBox2.Text = "Upload .raw or .mzML Files Here";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(1102, 19);
+            button1.Margin = new Padding(4, 3, 4, 3);
+            button1.Name = "button1";
+            button1.Size = new Size(88, 25);
+            button1.TabIndex = 7;
+            button1.Text = "Browse";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(9, 60);
+            checkBox1.Margin = new Padding(4, 3, 4, 3);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(222, 19);
+            checkBox1.TabIndex = 8;
+            checkBox1.Text = "All .raw files and .mzML files in folder";
+            checkBox1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -1503,6 +2224,9 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)Ynaught_GlyCounterLogo).EndInit();
+            tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
@@ -1626,6 +2350,66 @@
         private CheckBox DaltonCheckBox;
         private CheckBox Ynaught_DaCheckBox;
         private CheckBox ipsaCheckBox;
+        private TabPage tabPage1;
+        private Button button2;
+        private TextBox textBox2;
+        private Button button1;
+        private CheckBox checkBox1;
+        private CheckBox checkBox2;
+        private Label label3;
+        private Label label4;
+        private Label label5;
+        private TextBox textBox3;
+        private TextBox textBox4;
+        private TextBox textBox5;
+        private Label label6;
+        private Label label7;
+        private Label label8;
+        private TextBox textBox6;
+        private Label label9;
+        private Label label10;
+        private TextBox textBox7;
+        private Label label11;
+        private Label label12;
+        private TextBox textBox8;
+        private TextBox textBox9;
+        private Label label13;
+        private TextBox textBox10;
+        private Label label14;
+        private TextBox textBox11;
+        private Label label15;
+        private TextBox textBox12;
+        private Label label16;
+        private Label label17;
+        private Label label18;
+        private TextBox textBox13;
+        private TextBox textBox14;
+        private Button button4;
+        private CheckedListBox checkedListBox1;
+        private Button button3;
+        private Label label2;
+        private Button button6;
+        private Label label20;
+        private TextBox textBox15;
+        private Label label21;
+        private Label label22;
+        private CheckedListBox checkedListBox2;
+        private Button button5;
+        private Label label19;
+        private CheckedListBox checkedListBox3;
+        private Button button7;
+        private Label label23;
+        private CheckedListBox checkedListBox4;
+        private Label label24;
+        private PictureBox pictureBox1;
+        private Label label26;
+        private TextBox textBox17;
+        private TextBox textBox16;
+        private Label label25;
+        private Label label27;
+        private CheckBox checkBox3;
+        private Label label28;
+        private CheckBox checkBox4;
         private RadioButton SeparateChargeStates;
         private RadioButton GroupChargeStates;
         private Panel panel1;

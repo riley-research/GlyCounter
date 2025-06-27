@@ -199,7 +199,7 @@ namespace GlyCounter
             }
             else
                 if (CanConvertDouble(ppmTol_textBox.Text, ppmTolerance))
-                    ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text);
+                ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text);
 
             if (usingda)
                 tol = daTolerance;
@@ -754,7 +754,7 @@ namespace GlyCounter
                 int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
                 int numberofETDscansWithOxo = (int)Math.Round(numberofETDscansWithOxo_double);
                 int numberofUVPDscansWithOxo = (int)Math.Round(numberofUVPDscansWithOxo_double);
- 
+
                 numberofMS2scansWithOxo = Math.Max(0, numberofMS2scansWithOxo);
                 numberofHCDscansWithOxo = Math.Max(0, numberofHCDscansWithOxo);
                 numberofETDscansWithOxo = Math.Max(0, numberofETDscansWithOxo);
@@ -1837,7 +1837,7 @@ namespace GlyCounter
             outputSummary.WriteLine("Settings:\t" + toleranceString + Ynaught_tol + ", SNthreshold= " + Ynaught_SNthreshold +
                 "IntensityThreshold= " + Ynaught_intensityThreshold + "Charge states checked: " + Ynaught_chargeLB + " to " + Ynaught_chargeUB + ", First isotope checked: "
                 + FirstIsotopeCheckBox.Checked + ", Second isotope checked: " + SecondIsotopeCheckBox.Checked);
-            outputSummary.WriteLine(Ynaught_startTimeLabel.Text); 
+            outputSummary.WriteLine(Ynaught_startTimeLabel.Text);
             outputSummary.WriteLine();
 
             //create PSM list to add each entry to
@@ -2472,5 +2472,13 @@ namespace GlyCounter
             return new HashSet<Yion>(combined);
         }
 
+        /////////////////////////////////////////////////////
+        /// This starts the code for iCounter
+        /////////////////////////////////////////////////////
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            //Negative check box
+        }
     }
 }
