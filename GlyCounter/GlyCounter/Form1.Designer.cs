@@ -1812,6 +1812,7 @@
             iC_acylButton.TabIndex = 108;
             iC_acylButton.Text = "Check all acyl ions";
             iC_acylButton.UseVisualStyleBackColor = true;
+            iC_acylButton.Click += iC_acylButton_Click;
             // 
             // label23
             // 
@@ -1897,6 +1898,7 @@
             iC_tmt11Button.TabIndex = 100;
             iC_tmt11Button.Text = "Check all TMT-11 ions";
             iC_tmt11Button.UseVisualStyleBackColor = true;
+            iC_tmt11Button.Click += iC_tmt11Button_Click;
             // 
             // label19
             // 
@@ -1912,7 +1914,7 @@
             // iC_daCB
             // 
             iC_daCB.AutoSize = true;
-            iC_daCB.Location = new Point(1131, 205);
+            iC_daCB.Location = new Point(1140, 204);
             iC_daCB.Name = "iC_daCB";
             iC_daCB.Size = new Size(40, 19);
             iC_daCB.TabIndex = 97;
@@ -2015,6 +2017,7 @@
             iC_tmt16Button.TabIndex = 30;
             iC_tmt16Button.Text = "Check all TMT-16 ions";
             iC_tmt16Button.UseVisualStyleBackColor = true;
+            iC_tmt16Button.Click += iC_tmt16Button_Click;
             // 
             // label2
             // 
@@ -2037,6 +2040,7 @@
             iC_clearButton.TabIndex = 9;
             iC_clearButton.Text = "Clear Selections";
             iC_clearButton.UseVisualStyleBackColor = true;
+            iC_clearButton.Click += iC_clearButton_Click;
             // 
             // iC_uploadTB
             // 
