@@ -1742,6 +1742,7 @@
             iC_singleIonMZ.Name = "iC_singleIonMZ";
             iC_singleIonMZ.Size = new Size(99, 23);
             iC_singleIonMZ.TabIndex = 115;
+            iC_singleIonMZ.TextChanged += iC_singleIonMZ_TextChanged;
             // 
             // iC_singleIonDesc
             // 
@@ -1749,6 +1750,7 @@
             iC_singleIonDesc.Name = "iC_singleIonDesc";
             iC_singleIonDesc.Size = new Size(198, 23);
             iC_singleIonDesc.TabIndex = 114;
+            iC_singleIonDesc.TextChanged += iC_singleIonDesc_TextChanged;
             // 
             // label25
             // 
@@ -1856,6 +1858,7 @@
             iC_customIonUploadTB.Size = new Size(1085, 25);
             iC_customIonUploadTB.TabIndex = 101;
             iC_customIonUploadTB.Text = "Upload custom ions here - csv with headers \"m/z\" and \"Description\"";
+            iC_customIonUploadTB.TextChanged += iC_customIonUploadTB_TextChanged;
             // 
             // iC_finishTimeLabel
             // 
