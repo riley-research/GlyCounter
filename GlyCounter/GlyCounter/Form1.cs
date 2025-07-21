@@ -4,7 +4,6 @@ using CSMSL.Proteomics;
 using CSMSL.Spectral;
 using LumenWorks.Framework.IO.Csv;
 using MathNet.Numerics.Statistics;
-using PSI_Interface.MSData;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -2714,6 +2713,7 @@ namespace GlyCounter
                 int numberOfETDscans = 0;
                 int numberOfUVPDscans = 0;
                 double nce = 0.0;
+                bool firstSpectrumInFile = true;
 
                 //initialize streamwriter output files
                 string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
@@ -2893,6 +2893,14 @@ namespace GlyCounter
 
                     if (numberOfIons > 0)
                     {
+
+                        if (firstSpectrumInFile)
+                        {
+                            outputSignal.WriteLine(ionHeader);
+                            outputPeakDepth.WriteLine(ionHeader);
+                            firstSpectrumInFile = false;
+                        }
+
                         if (numberOfIons == 1)
                         {
                             numberOfMS2scansWithOxo_1++;
