@@ -49,6 +49,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CSMSL_dotNetCore\CSMSL_dotNetCore\CSMSL.csproj" />
+    <ProjectReference Include="..\CSMSL_dotNetCore\CSMSL_dotNetCore\CSMSL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
