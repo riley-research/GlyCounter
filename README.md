@@ -78,14 +78,14 @@ Shows the settings used and a summary of the results per scan type
 
 ## Ynaught
 
-Calculates and extracts Y-ions and/or glycan neutral losses from database searched data. Accepts a formatted .txt PSMs file with the headers "Spectrum", "Charge", "Peptide", "Total Glycan Composition", "Observed M/Z", and "Assigned Modifications"; a glycan masses .txt with headers "Glycan" and "Mass"; and a .raw file.
+Calculates and extracts Y-ions and/or glycan neutral losses from database searched data. Accepts a formatted .txt or .tsv PSMs file with the headers "Spectrum", "Charge", "Peptide", "Total Glycan Composition", "Observed M/Z", and "Assigned Modifications"; a glycan masses .txt with headers "Glycan" and "Mass"; and a .raw or .mzml file.
 Additional csv files can be uploaded with custom Y-ions or neutral losses (Headers "Mass" and "Description").
 
 ### Output Files
 
 #### GlyCounter_YionSignal.txt
 
-Shows the intensity for each selected Y-ion in each spectrum
+Shows the intensity for each selected Y-ion in each spectrum. The IonsFound column contains a list of Y-ions formatted as "m/z value, description:charge states;".
 
 #### GlyCounter_YionSummary.txt
 
@@ -124,12 +124,12 @@ To create a new release of GlyCounter:
 
 1. From the master branch, create a Git tag with a version number higher than the last release:
    ```bash
-   git tag v0.0.19
+   git tag v1.0.0
    ```
 2. Push the tag to GitHub:
 
    ```bash
-   git push origin v0.0.19
+   git push origin v1.0.0
    ```
 
 3. The GitHub Actions workflow will automatically build and publish the release artifacts.
