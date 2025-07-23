@@ -2564,7 +2564,7 @@ namespace GlyCounter
             {
                 if (CanConvertDouble(iC_toleranceTB.Text, _daTolerance))
                 {
-                    _daTolerance = Convert.ToDouble(ppmTol_textBox.Text);
+                    _daTolerance = Convert.ToDouble(iC_toleranceTB.Text);
                     usingda = true;
                 }
 
