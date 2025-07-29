@@ -158,12 +158,8 @@
             iC_msLevelLow = new NumericUpDown();
             iC_noMSnFilterCB = new CheckBox();
             label20 = new Label();
-            iC_polarityPanel = new Panel();
-            iC_polarityNeg = new RadioButton();
-            iC_polarityPos = new RadioButton();
             iC_outputButton = new Button();
             iC_outputTB = new TextBox();
-            label28 = new Label();
             label27 = new Label();
             label26 = new Label();
             iC_singleIonMZ = new TextBox();
@@ -208,7 +204,6 @@
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)iC_msLevelHigh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)iC_msLevelLow).BeginInit();
-            iC_polarityPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)iC_logo).BeginInit();
             SuspendLayout();
             // 
@@ -1544,10 +1539,8 @@
             tabPage1.Controls.Add(iC_msLevelLow);
             tabPage1.Controls.Add(iC_noMSnFilterCB);
             tabPage1.Controls.Add(label20);
-            tabPage1.Controls.Add(iC_polarityPanel);
             tabPage1.Controls.Add(iC_outputButton);
             tabPage1.Controls.Add(iC_outputTB);
-            tabPage1.Controls.Add(label28);
             tabPage1.Controls.Add(label27);
             tabPage1.Controls.Add(label26);
             tabPage1.Controls.Add(iC_singleIonMZ);
@@ -1603,7 +1596,7 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(967, 427);
+            label21.Location = new Point(1030, 373);
             label21.Name = "label21";
             label21.Size = new Size(18, 15);
             label21.TabIndex = 130;
@@ -1611,7 +1604,7 @@
             // 
             // iC_msLevelHigh
             // 
-            iC_msLevelHigh.Location = new Point(991, 425);
+            iC_msLevelHigh.Location = new Point(1054, 371);
             iC_msLevelHigh.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             iC_msLevelHigh.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             iC_msLevelHigh.Name = "iC_msLevelHigh";
@@ -1622,7 +1615,7 @@
             // 
             // iC_msLevelLow
             // 
-            iC_msLevelLow.Location = new Point(918, 425);
+            iC_msLevelLow.Location = new Point(981, 371);
             iC_msLevelLow.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             iC_msLevelLow.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             iC_msLevelLow.Name = "iC_msLevelLow";
@@ -1635,7 +1628,7 @@
             // 
             iC_noMSnFilterCB.AutoSize = true;
             iC_noMSnFilterCB.CheckAlign = ContentAlignment.TopLeft;
-            iC_noMSnFilterCB.Location = new Point(918, 471);
+            iC_noMSnFilterCB.Location = new Point(981, 417);
             iC_noMSnFilterCB.Name = "iC_noMSnFilterCB";
             iC_noMSnFilterCB.Size = new Size(133, 34);
             iC_noMSnFilterCB.TabIndex = 127;
@@ -1647,43 +1640,12 @@
             // 
             label20.AutoSize = true;
             label20.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label20.Location = new Point(918, 402);
+            label20.Location = new Point(981, 348);
             label20.Margin = new Padding(4, 0, 4, 0);
             label20.Name = "label20";
             label20.Size = new Size(126, 17);
             label20.TabIndex = 125;
             label20.Text = "MS levels to search";
-            // 
-            // iC_polarityPanel
-            // 
-            iC_polarityPanel.Controls.Add(iC_polarityNeg);
-            iC_polarityPanel.Controls.Add(iC_polarityPos);
-            iC_polarityPanel.Location = new Point(910, 351);
-            iC_polarityPanel.Name = "iC_polarityPanel";
-            iC_polarityPanel.Size = new Size(177, 38);
-            iC_polarityPanel.TabIndex = 123;
-            // 
-            // iC_polarityNeg
-            // 
-            iC_polarityNeg.AutoSize = true;
-            iC_polarityNeg.Location = new Point(96, 7);
-            iC_polarityNeg.Name = "iC_polarityNeg";
-            iC_polarityNeg.Size = new Size(72, 19);
-            iC_polarityNeg.TabIndex = 1;
-            iC_polarityNeg.Text = "Negative";
-            iC_polarityNeg.UseVisualStyleBackColor = true;
-            // 
-            // iC_polarityPos
-            // 
-            iC_polarityPos.AutoSize = true;
-            iC_polarityPos.Checked = true;
-            iC_polarityPos.Location = new Point(8, 7);
-            iC_polarityPos.Name = "iC_polarityPos";
-            iC_polarityPos.Size = new Size(66, 19);
-            iC_polarityPos.TabIndex = 0;
-            iC_polarityPos.TabStop = true;
-            iC_polarityPos.Text = "Positive";
-            iC_polarityPos.UseVisualStyleBackColor = true;
             // 
             // iC_outputButton
             // 
@@ -1704,17 +1666,6 @@
             iC_outputTB.TabIndex = 121;
             iC_outputTB.Text = "Select output directory";
             iC_outputTB.TextChanged += iC_outputTB_TextChanged;
-            // 
-            // label28
-            // 
-            label28.AutoSize = true;
-            label28.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label28.Location = new Point(918, 325);
-            label28.Margin = new Padding(4, 0, 4, 0);
-            label28.Name = "label28";
-            label28.Size = new Size(96, 17);
-            label28.TabIndex = 118;
-            label28.Text = "Select polarity";
             // 
             // label27
             // 
@@ -2089,8 +2040,6 @@
             tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)iC_msLevelHigh).EndInit();
             ((System.ComponentModel.ISupportInitialize)iC_msLevelLow).EndInit();
-            iC_polarityPanel.ResumeLayout(false);
-            iC_polarityPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)iC_logo).EndInit();
             ResumeLayout(false);
         }
@@ -2246,7 +2195,6 @@
         private TextBox iC_singleIonDesc;
         private Label label25;
         private Label label27;
-        private Label label28;
         private RadioButton SeparateChargeStates;
         private RadioButton GroupChargeStates;
         private Panel panel1;
@@ -2265,9 +2213,6 @@
         private TextBox Gly_outputTextBox;
         private TextBox iC_outputTB;
         private Button iC_outputButton;
-        private Panel iC_polarityPanel;
-        private RadioButton iC_polarityNeg;
-        private RadioButton iC_polarityPos;
         private Label label20;
         private CheckBox iC_noMSnFilterCB;
         private NumericUpDown iC_msLevelLow;

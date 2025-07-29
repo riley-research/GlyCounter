@@ -2660,9 +2660,6 @@ namespace GlyCounter
             if (iC_ipsaCB.Checked)
                 _ipsa = true;
 
-            //set polarity
-            _polarity = iC_polarityPos.Checked;
-
             foreach (string fileName in _fileList)
             {
                 //reset ions
@@ -2675,7 +2672,6 @@ namespace GlyCounter
                     ion.uvpdCount = 0;
                     ion.measuredMZ = 0;
                 }
-                Debug.WriteLine(fileName);
 
                 FileReader rawFile = new FileReader(fileName);
                 FileReader typeCheck = new FileReader();
@@ -2828,11 +2824,15 @@ namespace GlyCounter
 
                         if (thermo)
                         {
-                            string scanFilter = spectrum.ScanFilter;
-                            string[] hcdHeader = scanFilter.Split('@');
-                            string[] splitHCDheader = hcdHeader[1].Split('d');
-                            string[] collisionEnergyArray = splitHCDheader[1].Split('.');
-                            nce = Convert.ToDouble(collisionEnergyArray[0]);
+                            if (spectrum.MsLevel == 1) nce = 0;
+                            else
+                            {
+                                string scanFilter = spectrum.ScanFilter;
+                                string[] hcdHeader = scanFilter.Split('@');
+                                string[] splitHCDheader = hcdHeader[1].Split('d');
+                                string[] collisionEnergyArray = splitHCDheader[1].Split('.');
+                                nce = Convert.ToDouble(collisionEnergyArray[0]);
+                            }
                         }
                         else nce = spectrum.Precursors[0].CollisionEnergy;
                         foreach (Ion ion in _ionHashSet)
@@ -2951,10 +2951,11 @@ namespace GlyCounter
                             if (uvpdTrue)
                                 numberOfMS2scansWithOxo_5plus_uvpd++;
                         }
-                        double parentScan = spectrum.PrecursorMasterScanNumber;
+                        double parentScan = spectrum.PrecursorMasterScanNumber;                     
                         double scanTIC = spectrum.TotalIonCurrent;
                         double scanInjTime = spectrum.IonInjectionTime;
                         string fragmentationType = "";
+                        if (spectrum.MsLevel == 1) fragmentationType = "MS1";
                         if (hcdTrue) fragmentationType = "HCD";
                         if (etdTrue) fragmentationType = "ETD";
                         if (uvpdTrue) fragmentationType = "UVPD";
