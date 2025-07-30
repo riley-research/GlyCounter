@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GlyCounter
+﻿namespace GlyCounter
 {
     public class OxoniumIon : IEquatable<OxoniumIon>
     {
@@ -18,14 +12,14 @@ namespace GlyCounter
         public int etdCount { get; set; }
         public int uvpdCount { get; set; }
 
-        public bool Equals(OxoniumIon other)
+        public bool Equals(OxoniumIon? other)
         {
             if (other == null) return false;
 
             return this.theoMZ == other.theoMZ || this.description == other.description;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType()) return false;
             return Equals(obj as OxoniumIon);
