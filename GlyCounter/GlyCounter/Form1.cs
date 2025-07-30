@@ -1,7 +1,5 @@
 using CSMSL;
-using CSMSL.IO.Thermo;
 using CSMSL.Proteomics;
-using CSMSL.Spectral;
 using LumenWorks.Framework.IO.Csv;
 using MathNet.Numerics.Statistics;
 using System.ComponentModel;
@@ -11,9 +9,9 @@ using System.IO;
 using System.Text;
 using Nova.Data;
 using Nova.Io.Read;
-using System.Reflection.Metadata.Ecma335;
 using ThermoFisher.CommonCore.Data.Interfaces;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.CodeDom;
 
 
 namespace GlyCounter
@@ -70,8 +68,10 @@ namespace GlyCounter
         {
             InitializeComponent();
 
+
             // Initialize the update manager
             _updateManager = UpdateManager.Instance;
+
 
             // Set window title to include version
             Version? version = Assembly.GetExecutingAssembly().GetName().Version;
@@ -80,6 +80,7 @@ namespace GlyCounter
             // Check for updates on startup (silently)
             Task.Run(() => CheckForUpdatesAsync(true));
         }
+
 
         private async void CheckForUpdatesAsync(bool silent = false)
         {
@@ -122,6 +123,8 @@ namespace GlyCounter
 
                 //set the most recent folder to the path of the last file selected
                 Properties.Settings1.Default.LastOpenFolder = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
+                //set the most recent folder to the path of the last file selected
+                Properties.Settings1.Default.LastOpenFolder = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
                 Properties.Settings1.Default.Save();
 
                 //also set a default output directory to the path of the last file saved
@@ -158,25 +161,35 @@ namespace GlyCounter
             _outputPath = Gly_outputTextBox.Text + @"\";
         }
 
-        private void StartButton_Click(object sender, EventArgs e)
+        private void Gly_outputTextBox_TextChanged(object sender, EventArgs e)
         {
-            bool usingda = false;
-            bool using204 = false;
+            outputPath = Gly_outputTextBox.Text + @"\";
+        }
 
-            if (string.IsNullOrEmpty(_outputPath) || !Directory.Exists(_outputPath))
-            {
-                //hopefully this defaults to the raw file path
-                _outputPath = _defaultOutput;
-                Gly_outputTextBox.Text = _outputPath;
-            }
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+        private async void StartButton_Click(object sender, EventArgs e)
+        {
 
             timer1.Interval = 1000;
             timer1.Tick += new EventHandler(OnTimerTick);
             timer1.Start();
             StatusLabel.Text = @"Processing...";
             StartTimeLabel.Text = @"Start Time: " + DateTime.Now.ToString("HH:mm:ss");
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    bool usingda = false;
+                    bool using204 = false;
+
+                    if (string.IsNullOrEmpty(outputPath) || !Directory.Exists(outputPath))
+                    {
+                        //hopefully this defaults to the raw file path
+                        outputPath = defaultOutput;
+                        Gly_outputTextBox.Text = outputPath;
+                    }
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
 
             //make sure all user inputs are in the correct format, otherwise use defaults
             if (DaltonCheckBox.Checked)
@@ -289,10 +302,10 @@ namespace GlyCounter
 
                     _oxoniumIonHashSet.Add(oxoIon);
 
-                    if (oxoIon.theoMZ == 204.0867 || oxoIon.description == "HexNAc")
-                        using204 = true;
-                }
-            }
+                            if (oxoIon.theoMZ == 204.0867 || oxoIon.description == "HexNAc")
+                                using204 = true;
+                        }
+                    }
 
             if (ipsaCheckBox.Checked)
                 _ipsa = true;
@@ -437,8 +450,8 @@ namespace GlyCounter
                                 uvpdTrue = true;
                             }
 
-                        }
-                        string oxoIonHeader = "";
+                                }
+                                string oxoIonHeader = "";
 
                         if (spectrum is { TotalIonCurrent: > 0, BasePeakIntensity: > 0 })
                         {
@@ -633,7 +646,7 @@ namespace GlyCounter
 
                                 }
 
-                            }
+                                    }
 
                             //double medianRanks = Statistics.Median(oxoRanks);
                             //the median peak depth has to be "higher" (i.e., less than) the peak depth threshold 
@@ -798,19 +811,26 @@ namespace GlyCounter
                     ts.Milliseconds / 10);
                 outputSummary.WriteLine("Total search time: " + elapsedTime);
 
-                outputSummary.Close();
-                outputOxo.Close();
-                outputPeakDepth.Close();
-                if (outputIPSA != null)
-                    outputIPSA.Close();
+                        outputSummary.Close();
+                        outputOxo.Close();
+                        outputPeakDepth.Close();
+                        if (outputIPSA != null)
+                            outputIPSA.Close();
+                    }
+                });
             }
-            timer1.Stop();
-            StatusLabel.Text = @"Finished";
-            FinishTimeLabel.Text = @"Finished at: " + DateTime.Now.ToString("HH:mm:ss");
-            MessageBox.Show(@"Finished.");
-            _oxoniumIonHashSet.Clear();
+            finally
+            {
+                timer1.Stop();
+                StatusLabel.Text = "Finished";
+                FinishTimeLabel.Text = "Finished at: " + DateTime.Now.ToString("HH:mm:ss");
+                MessageBox.Show("Finished.");
+                oxoniumIonHashSet.Clear();
+            }
+
         }
 
+        public OxoniumIon ProcessOxoIon(object item, string glycanSource, bool check204 = false)
         public OxoniumIon ProcessOxoIon(object item, string glycanSource, bool check204 = false)
         {
             string[] oxoniumIonArray = item.ToString().Split(',');
@@ -864,6 +884,7 @@ namespace GlyCounter
             return peakList.FirstOrDefault();
         }
 
+        public static Dictionary<double, int> RankOrderPeaks(Dictionary<double, int> dictionary, SpectrumEx spectrum)
         public static Dictionary<double, int> RankOrderPeaks(Dictionary<double, int> dictionary, SpectrumEx spectrum)
         {
             SpecDataPointEx[] peaks = spectrum.DataPoints;
@@ -1583,6 +1604,18 @@ namespace GlyCounter
         //start the Y-ion processing
         private void Ynaught_StartButton_Click(object sender, EventArgs e)
         {
+            Ynaught_chargeLB = LowerBoundTextBox.Text; //these are stored as strings until later
+        }
+
+        private void UpperBoundTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Ynaught_chargeUB = UpperBoundTextBox.Text;
+        }
+
+
+        //start the Y-ion processing
+        private async void Ynaught_StartButton_Click(object sender, EventArgs e)
+        {
             bool Ynaught_usingda = false;
 
             //make sure output path is real otherwise set to default
@@ -1599,10 +1632,26 @@ namespace GlyCounter
             timer2.Tick += new EventHandler(OnTimerTick);
             timer2.Start();
             Ynaught_startTimeLabel.Text = "Start Time: " + DateTime.Now.ToString("HH:mm:ss");
-            Ynaught_startTimeLabel.Refresh();
 
-            //clear out Y-ions
-            _yIonHashSet = new HashSet<Yion>();
+            try
+            {
+                await Task.Run(() =>
+                {
+                    bool Ynaught_usingda = false;
+                    //make sure output path is real otherwise set to default
+                    if (string.IsNullOrEmpty(outputPath) || !Directory.Exists(outputPath))
+                    {
+                        //hopefully this defaults to the raw file path
+                        outputPath = defaultOutput;
+                        Gly_outputTextBox.Text = outputPath;
+                    }
+
+                    Stopwatch stopwatch2 = new Stopwatch();
+                    stopwatch2.Start();
+
+
+                    //clear out Y-ions
+                    yIonHashSet = new HashSet<Yion>();
 
             //either take in custom values or use defaults
             if (Ynaught_DaCheckBox.Checked)
@@ -1657,7 +1706,7 @@ namespace GlyCounter
                 else
                     _yIonHashSet.Add(yIon);
 
-            }
+                    }
 
             foreach (var item in Yions_FucoseNlinkedCheckedBox.CheckedItems)
             {
@@ -1787,24 +1836,30 @@ namespace GlyCounter
             FileReader typeCheck = new FileReader();
             bool thermo = !typeCheck.CheckFileFormat(_Ynaught_rawFilePath).ToString().Contains("MzML");
 
-            //update the timer
-            Ynaught_FinishTimeLabel.Text = @"Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
-            Ynaught_FinishTimeLabel.Refresh();
+                    //update the timer
+                    if (Ynaught_FinishTimeLabel.InvokeRequired)
+                    {
+                        Ynaught_FinishTimeLabel.Invoke(new Action(() => Ynaught_FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss")));
+                    }
+                    else
+                    {
+                        Ynaught_FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
+                    }
 
-            //define variables for scan counting
-            int numberOfMS2scansWithYions = 0;
-            int numberOfMS2scansWithY0 = 0;
-            int numberOfMS2scansWithIntactGlycoPep = 0;
-            int numberOfMS2scansWithYions_hcd = 0;
-            int numberOfMS2scansWithY0_hcd = 0;
-            int numberOfMS2scansWithIntactGlycoPep_hcd = 0;
-            int numberOfMS2scansWithYions_etd = 0;
-            int numberOfMS2scansWithY0_etd = 0;
-            int numberOfMS2scansWithIntactGlycoPep_etd = 0;
-            int numberOfMS2scans = 0;
-            int numberOfHCDscans = 0;
-            int numberOfETDscans = 0;
-            bool firstSpectrumInFile = true;
+                    //define variables for scan counting
+                    int numberOfMS2scansWithYions = 0;
+                    int numberOfMS2scansWithY0 = 0;
+                    int numberOfMS2scansWithIntactGlycoPep = 0;
+                    int numberOfMS2scansWithYions_hcd = 0;
+                    int numberOfMS2scansWithY0_hcd = 0;
+                    int numberOfMS2scansWithIntactGlycoPep_hcd = 0;
+                    int numberOfMS2scansWithYions_etd = 0;
+                    int numberOfMS2scansWithY0_etd = 0;
+                    int numberOfMS2scansWithIntactGlycoPep_etd = 0;
+                    int numberOfMS2scans = 0;
+                    int numberOfHCDscans = 0;
+                    int numberOfETDscans = 0;
+                    bool firstSpectrumInFile = true;
 
             //set up each output stream
             string fileNameShort = Path.GetFileNameWithoutExtension(_Ynaught_rawFilePath);
@@ -1818,9 +1873,9 @@ namespace GlyCounter
                 outputIPSA.WriteLine("ScanNumber" + '\t' + "Yion" + '\t' + "m/z" + '\t' + "MassError");
             }
 
-            string toleranceString = "ppmTol= ";
-            if (Ynaught_usingda)
-                toleranceString = "daTol= ";
+                    string toleranceString = "ppmTol= ";
+                    if (Ynaught_usingda)
+                        toleranceString = "daTol= ";
 
             outputSummary.WriteLine("Settings:\t" + toleranceString + _tol + ", SNthreshold= " + _SNthreshold +
                                     "IntensityThreshold= " + _intensityThreshold + "Charge states checked: " + _Ynaught_chargeLB + " to " + _Ynaught_chargeUB + ", First isotope checked: "
@@ -1842,21 +1897,21 @@ namespace GlyCounter
                     //create a new PSM object
                     PSM psm = new PSM { modificationDictionary = new Dictionary<int, double>() };
 
-                    //read in peptide sequence and create peptide objects
-                    string peptideSeq = txt["Peptide"];
-                    Peptide peptide = new Peptide(peptideSeq); //create new peptide object with this PSM's ID'ed sequence that will have all mods (useful for subtraction)
-                    Peptide peptideNoGlycanMods = new Peptide(peptideSeq); //create new peptide object with this PSM's ID'ed sequence but will not have glycan attached (useful for addition)
+                            //read in peptide sequence and create peptide objects
+                            string peptideSeq = txt["Peptide"];
+                            Peptide peptide = new Peptide(peptideSeq); //create new peptide object with this PSM's ID'ed sequence that will have all mods (useful for subtraction)
+                            Peptide peptideNoGlycanMods = new Peptide(peptideSeq); //create new peptide object with this PSM's ID'ed sequence but will not have glycan attached (useful for addition)
 
-                    //add these items to the PSM object
-                    psm.peptide = peptide;
-                    psm.peptideNoGlycanMods = peptideNoGlycanMods;
+                            //add these items to the PSM object
+                            psm.peptide = peptide;
+                            psm.peptideNoGlycanMods = peptideNoGlycanMods;
 
-                    //read in other details
-                    string spectrumToBeParsed = txt["Spectrum"];
-                    string modsToBeParsed = txt["Assigned Modifications"];
-                    int charge = int.Parse(txt["Charge"]);
-                    string totalGlycanCompToBeParsed = txt["Total Glycan Composition"];
-                    double precursorMZ = double.Parse(txt["Observed M/Z"]);
+                            //read in other details
+                            string spectrumToBeParsed = txt["Spectrum"];
+                            string modsToBeParsed = txt["Assigned Modifications"];
+                            int charge = int.Parse(txt["Charge"]);
+                            string totalGlycanCompToBeParsed = txt["Total Glycan Composition"];
+                            double precursorMZ = double.Parse(txt["Observed M/Z"]);
 
                     //only process if it's a glycopeptide
                     if (totalGlycanCompToBeParsed.Equals("")) continue;
@@ -1888,18 +1943,19 @@ namespace GlyCounter
                                 //get postion of the mod
                                 int modPosition = Convert.ToInt32(modsArray2[0].Substring(0, modsArray2[0].Length - 1));
 
-                                if (modPosition <= 0) continue;
-
-                                //add the modification to the peptide only if it is not a glycan mass
-                                if (!glycanMassDictionary.ContainsKey(modMass))
-                                {
-                                    peptide.AddModification(modToAdd, modPosition);
+                                            if (modPosition > 0)
+                                            {
+                                                //add the modification to the peptide only if it is not a glycan mass
+                                                if (!glycanMassDictionary.ContainsKey(modMass))
+                                                {
+                                                    peptide.AddModification(modToAdd, modPosition);
+                                                }
+                                                //add this to the PSM object dictionary that keeps track of all mods
+                                                psm.modificationDictionary.Add(modPosition, modMass);
+                                            }
+                                        }
+                                    }
                                 }
-                                //add this to the PSM object dictionary that keeps track of all mods
-                                psm.modificationDictionary.Add(modPosition, modMass);
-                            }
-                        }
-                    }
 
                     //set spectrum number
                     string[] spectrumArray = spectrumToBeParsed.Split('.');
@@ -2021,11 +2077,11 @@ namespace GlyCounter
                     double totalYionSignal = 0;
                     int numberOfChargeStatesConsidered = 1;
 
-                    bool hcdTrue = false;
-                    bool etdTrue = false;
+                            bool hcdTrue = false;
+                            bool etdTrue = false;
 
-                    bool Y0_found = false;
-                    bool intactGlycoPep_found = false;
+                            bool Y0_found = false;
+                            bool intactGlycoPep_found = false;
 
                     numberOfMS2scans++;
                     if (spectrum.ScanFilter.Contains("etd") || spectrum.Precursors[0].FramentationMethod.ToString().Contains("ETD"))
@@ -2039,20 +2095,20 @@ namespace GlyCounter
                         hcdTrue = true;
                     }
 
-                    Dictionary<double, int> sortedPeakDepths = new Dictionary<double, int>();
+                            Dictionary<double, int> sortedPeakDepths = new Dictionary<double, int>();
 
-                    RankOrderPeaks(sortedPeakDepths, spectrum);
+                            RankOrderPeaks(sortedPeakDepths, spectrum);
 
                     List<SpecDataPointEx> yIonFoundPeaks = new List<SpecDataPointEx>();
 
-                    //set up peptide and glycopeptide masses to look for
-                    double peptideNoGlycan_MonoMass = psm.peptideNoGlycanMods.MonoisotopicMass;
-                    double peptideNoGlycan_firstIsoMass = psm.peptideNoGlycanMods.MonoisotopicMass + (1 * Constants.C13C12Difference);
-                    double peptideNoGlycan_secondIsoMass = psm.peptideNoGlycanMods.MonoisotopicMass + (2 * Constants.C13C12Difference);
+                            //set up peptide and glycopeptide masses to look for
+                            double peptideNoGlycan_MonoMass = psm.peptideNoGlycanMods.MonoisotopicMass;
+                            double peptideNoGlycan_firstIsoMass = psm.peptideNoGlycanMods.MonoisotopicMass + (1 * Constants.C13C12Difference);
+                            double peptideNoGlycan_secondIsoMass = psm.peptideNoGlycanMods.MonoisotopicMass + (2 * Constants.C13C12Difference);
 
-                    double glycopeptide_MonoMass = psm.peptide.MonoisotopicMass;
-                    double glycopeptide_firstIsoMass = psm.peptide.MonoisotopicMass + (1 * Constants.C13C12Difference);
-                    double glycopeptide_secondIsoMass = psm.peptide.MonoisotopicMass + (2 * Constants.C13C12Difference);
+                            double glycopeptide_MonoMass = psm.peptide.MonoisotopicMass;
+                            double glycopeptide_firstIsoMass = psm.peptide.MonoisotopicMass + (1 * Constants.C13C12Difference);
+                            double glycopeptide_secondIsoMass = psm.peptide.MonoisotopicMass + (2 * Constants.C13C12Difference);
 
                     //look for each Y-ion
                     List<Yion> finalYionList = new List<Yion>(); //creating this to store charge separately
@@ -2067,7 +2123,7 @@ namespace GlyCounter
                         foundYion.hcdCount = yIon.hcdCount;
                         foundYion.etdCount = yIon.etdCount;
 
-                        bool countYion = false;
+                                bool countYion = false;
 
                         //use the user input to determine what charge states to look for. Set the minimum charge state to 1
                         int precursorCharge = psm.charge;
@@ -2124,8 +2180,8 @@ namespace GlyCounter
                             chargeLowerBound = 1;
                         }
 
-                        //how many charge states are we looking for?
-                        numberOfChargeStatesConsidered = chargeUpperBound - chargeLowerBound + 1;
+                                //how many charge states are we looking for?
+                                numberOfChargeStatesConsidered = chargeUpperBound - chargeLowerBound + 1;
 
                         //use intensity threshold for mzml files
                         if (CanConvertDouble(Ynaught_intTextBox.Text, _intensityThreshold))
@@ -2216,33 +2272,33 @@ namespace GlyCounter
                                     totalYionSignal = totalYionSignal + peak.Intensity + firstIsotopeIntensity + secondIsotopeIntensity;
 
 
+                                        }
+                                    }
+
                                 }
+                                if (hcdTrue && countYion)
+                                    yIon.hcdCount++;
+                                if (etdTrue && countYion)
+                                    yIon.etdCount++;
                             }
 
-                        }
-                        if (hcdTrue && countYion)
-                            yIon.hcdCount++;
-                        if (etdTrue && countYion)
-                            yIon.etdCount++;
-                    }
-
-                    //update counts
-                    if (Y0_found)
-                    {
-                        numberOfMS2scansWithY0++;
-                        if (hcdTrue)
-                            numberOfMS2scansWithY0_hcd++;
-                        if (etdTrue)
-                            numberOfMS2scansWithY0_etd++;
-                    }
-                    if (intactGlycoPep_found)
-                    {
-                        numberOfMS2scansWithIntactGlycoPep++;
-                        if (hcdTrue)
-                            numberOfMS2scansWithIntactGlycoPep_hcd++;
-                        if (etdTrue)
-                            numberOfMS2scansWithIntactGlycoPep_etd++;
-                    }
+                            //update counts
+                            if (Y0_found)
+                            {
+                                numberOfMS2scansWithY0++;
+                                if (hcdTrue)
+                                    numberOfMS2scansWithY0_hcd++;
+                                if (etdTrue)
+                                    numberOfMS2scansWithY0_etd++;
+                            }
+                            if (intactGlycoPep_found)
+                            {
+                                numberOfMS2scansWithIntactGlycoPep++;
+                                if (hcdTrue)
+                                    numberOfMS2scansWithIntactGlycoPep_hcd++;
+                                if (etdTrue)
+                                    numberOfMS2scansWithIntactGlycoPep_etd++;
+                            }
 
 
                     //print out the headers for each Y-ion searched for, with the last column being a ratio of total TIC we will calculate
@@ -2265,8 +2321,8 @@ namespace GlyCounter
 
                     double retentionTime = spectrum.RetentionTime;
 
-                    //calculate fraction of TIC
-                    double yIonTICfraction = totalYionSignal / scanTIC;
+                            //calculate fraction of TIC
+                            double yIonTICfraction = totalYionSignal / scanTIC;
 
                     //get all the charge states found into a string
                     string chargeStatesFinal = "";
@@ -2343,20 +2399,25 @@ namespace GlyCounter
 
                     outputYion.WriteLine();
 
-                    if (numberOfYions > 0)
-                    {
-                        numberOfMS2scansWithYions++;
-                        if (hcdTrue)
-                            numberOfMS2scansWithYions_hcd++;
-                        if (etdTrue)
-                            numberOfMS2scansWithYions_etd++;
+                            if (numberOfYions > 0)
+                            {
+                                numberOfMS2scansWithYions++;
+                                if (hcdTrue)
+                                    numberOfMS2scansWithYions_hcd++;
+                                if (etdTrue)
+                                    numberOfMS2scansWithYions_etd++;
+                            }
+
+                        }
+                        if (Ynaught_FinishTimeLabel.InvokeRequired)
+                        {
+                            Ynaught_FinishTimeLabel.Invoke(new Action(() => Ynaught_FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss")));
+                        }
+                        else
+                        {
+                            Ynaught_FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
+                        }
                     }
-
-                }
-
-                Ynaught_FinishTimeLabel.Text = @"Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
-                Ynaught_FinishTimeLabel.Refresh();
-            }
 
             double percentageYions = (double)numberOfMS2scansWithYions / (double)numberOfMS2scans * 100;
             double percentageY0 = (double)numberOfMS2scansWithY0 / (double)numberOfMS2scans * 100;
@@ -2382,8 +2443,8 @@ namespace GlyCounter
                 percentageGlycoPep_etd = (double)numberOfMS2scansWithIntactGlycoPep_etd / (double)numberOfETDscans * 100;
             }
 
-            outputSummary.WriteLine("\tTotal\tHCD\tETD\t%Total\t%HCD\t%ETD");
-            outputSummary.WriteLine("All GlycoPSMs\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\tNA\tNA\tNA");
+                    outputSummary.WriteLine("\tTotal\tHCD\tETD\t%Total\t%HCD\t%ETD");
+                    outputSummary.WriteLine("All GlycoPSMs\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\tNA\tNA\tNA");
 
             outputSummary.WriteLine("GlycoPSMs with Y-ions\t" + numberOfMS2scansWithYions + "\t" + numberOfMS2scansWithYions_hcd + "\t" + numberOfMS2scansWithYions_etd
                                     + "\t" + percentageYions + "\t" + percentageYions_hcd + "\t" + percentageYions_etd);
@@ -2394,17 +2455,17 @@ namespace GlyCounter
                                     + "\t" + percentageGlycoPep + "\t" + percentageGlycoPep_hcd + "\t" + percentageGlycoPep_etd);
 
 
-            outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
-            outputSummary.WriteLine("\tTotal\tHCD\tETD\t%Total\t%HCD\t%ETD");
+                    outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
+                    outputSummary.WriteLine("\tTotal\tHCD\tETD\t%Total\t%HCD\t%ETD");
 
             string currentGlycanSource = "first";
             foreach (Yion yIon in _yIonHashSet)
             {
                 int total = yIon.hcdCount + yIon.etdCount;
 
-                double percentTotal = (double)total / (double)numberOfMS2scans * 100;
-                double percentHCD = (double)yIon.hcdCount / (double)numberOfHCDscans * 100;
-                double percentETD = (double)yIon.etdCount / (double)numberOfETDscans * 100;
+                        double percentTotal = (double)total / (double)numberOfMS2scans * 100;
+                        double percentHCD = (double)yIon.hcdCount / (double)numberOfHCDscans * 100;
+                        double percentETD = (double)yIon.etdCount / (double)numberOfETDscans * 100;
 
                 foreach (string source in yIon.glycanSource.Split(','))
                 {
@@ -2432,90 +2493,24 @@ namespace GlyCounter
                 ts.Milliseconds / 10);
             outputSummary.WriteLine("Total search time: " + elapsedTime);
 
-            outputSummary.Close();
-            outputYion.Close();
-            outputIPSA?.Close();
+                    outputSummary.Close();
+                    outputYion.Close();
+                    if (outputIPSA != null)
+                        outputIPSA.Close();
+                });
+            }
+                
 
-            timer1.Stop();
-            Ynaught_FinishTimeLabel.Text = @"Finished at: " + DateTime.Now.ToString("HH:mm:ss");
-            MessageBox.Show(@"Finished.");
-            _yIonHashSet.Clear();
+            
+            finally
+            {
+                timer1.Stop();
+                Ynaught_FinishTimeLabel.Text = "Finished at: " + DateTime.Now.ToString("HH:mm:ss");
+                MessageBox.Show("Finished.");
+                yIonHashSet.Clear();
+            }
         }
         private HashSet<Yion> CombineDuplicateYions(HashSet<Yion> yIonHashSet)
-        {
-            IEnumerable<Yion> combined = yIonHashSet
-                .GroupBy(y => new { y.description, y.theoMass })
-                .Select(g =>
-                {
-                    Yion first = g.First();
-                    // Combine glycan sources, remove duplicates, and join as comma-separated string
-                    first.glycanSource = string.Join(",", g.Select(y => y.glycanSource).Distinct());
-                    return first;
-                });
-            return [.. combined];
-        }
-
-        /////////////////////////////////////////////////////
-        /// This starts the code for iCounter
-        /////////////////////////////////////////////////////
-
-        private void iC_uploadButton_Click(object sender, EventArgs e)
-        {
-            _fileList = [];
-            OpenFileDialog fdlg = new OpenFileDialog();
-            fdlg.Multiselect = true;
-            fdlg.Title = @"C# Corner Open File Dialog";
-
-            // Set the initial directory to the last open folder, if it exists
-            if (!string.IsNullOrEmpty(Properties.Settings1.Default.LastOpenFolder) && Directory.Exists(Properties.Settings1.Default.LastOpenFolder))
-            {
-                fdlg.InitialDirectory = Properties.Settings1.Default.LastOpenFolder;
-            }
-            else
-            {
-                fdlg.InitialDirectory = @"c:\"; // Default directory if no previous directory is found
-            }
-
-            fdlg.Filter = @"RAW and mzML files (*.raw;*.mzML)|*.raw;*.mzML|RAW files (*.raw*)|*.raw*|mzML files (*.mzML)|*.mzML";
-            fdlg.FilterIndex = 1;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == DialogResult.OK)
-            {
-                iC_uploadTB.Text = @"Successfully uploaded " + fdlg.FileNames.Count() + @" file(s)";
-
-                //set the most recent folder to the path of the last file selected
-                Properties.Settings1.Default.LastOpenFolder = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
-                Properties.Settings1.Default.Save();
-
-                //also set a default output directory to the path of the last file saved
-                _defaultOutput = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
-            }
-
-            //add file paths to file list
-            foreach (string filePath in fdlg.FileNames)
-                _fileList.Add(filePath);
-        }
-
-        private void iC_outputButton_Click(object sender, EventArgs e)
-        {
-            using FolderBrowserDialog dialog = new FolderBrowserDialog();
-            dialog.Description = @"Select Output Directory";
-            dialog.UseDescriptionForTitle = true;
-            dialog.ShowNewFolderButton = true;
-
-            if (!string.IsNullOrEmpty(Properties.Settings1.Default.LastOpenFolder) && Directory.Exists(Properties.Settings1.Default.LastOpenFolder))
-                dialog.InitialDirectory = Properties.Settings1.Default.LastOpenFolder;
-            else
-                dialog.InitialDirectory = @"c:\"; // Default directory if no previous directory is found
-
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                iC_outputTB.Text = dialog.SelectedPath;
-                Properties.Settings1.Default.LastOpenFolder = Path.GetDirectoryName(dialog.SelectedPath);
-                Properties.Settings1.Default.Save();
-            }
-        }
-        private void iC_customIonUploadButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = @"C# Corner Open File Dialog";

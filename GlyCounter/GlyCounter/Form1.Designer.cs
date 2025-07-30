@@ -195,10 +195,17 @@
             iC_uploadTB = new TextBox();
             iC_uploadButton = new Button();
             timer2 = new System.Windows.Forms.Timer(components);
+            Ynaught_outputTextBox = new TextBox();
+            Ynaught_outputButton = new Button();
+            Ynaught_intTextBox = new TextBox();
+            Ynaught_intLabel = new Label();
+            Gly_outputTextBox = new TextBox();
+            Gly_outputButton = new Button();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
             YnaughtTab.SuspendLayout();
+            panel1.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)Ynaught_GlyCounterLogo).BeginInit();
             tabPage1.SuspendLayout();
@@ -211,17 +218,24 @@
             // 
             textBox1.Location = new Point(16, 18);
             textBox1.Margin = new Padding(4, 3, 4, 3);
+            textBox1.Location = new Point(16, 18);
+            textBox1.Margin = new Padding(4, 3, 4, 3);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(1085, 25);
+            textBox1.Size = new Size(1085, 25);
             textBox1.TabIndex = 0;
+            textBox1.Text = "Upload .raw or .mzML files";
             textBox1.Text = "Upload .raw or .mzML files";
             // 
             // browseButton
             // 
             browseButton.Location = new Point(1109, 18);
             browseButton.Margin = new Padding(4, 3, 4, 3);
+            browseButton.Location = new Point(1109, 18);
+            browseButton.Margin = new Padding(4, 3, 4, 3);
             browseButton.Name = "browseButton";
+            browseButton.Size = new Size(88, 25);
             browseButton.Size = new Size(88, 25);
             browseButton.TabIndex = 3;
             browseButton.Text = "Browse";
@@ -235,7 +249,10 @@
             HexNAcCheckedListBox.Items.AddRange(new object[] { "84.0444, HexNAc - C2H8O4", "126.055, HexNAc - C2H6O3", "138.055, HexNAc - CH6O3", "144.0655, HexNAc - C2H4O2", "168.0655, HexNAc - 2H2O", "186.0761, HexNAc - H2O", "204.0867, HexNAc" });
             HexNAcCheckedListBox.Location = new Point(16, 158);
             HexNAcCheckedListBox.Margin = new Padding(4, 3, 4, 3);
+            HexNAcCheckedListBox.Location = new Point(16, 158);
+            HexNAcCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             HexNAcCheckedListBox.Name = "HexNAcCheckedListBox";
+            HexNAcCheckedListBox.Size = new Size(276, 130);
             HexNAcCheckedListBox.Size = new Size(276, 130);
             HexNAcCheckedListBox.TabIndex = 1;
             HexNAcCheckedListBox.SelectedIndexChanged += HexNAcCheckedListBox_SelectedIndexChanged;
@@ -247,7 +264,10 @@
             HexCheckedListBox.Items.AddRange(new object[] { "85.0284, Hex - C2H6O3", "97.0284, Hex - CH6O3", "127.0390, Hex - 2H2O", "145.0495, Hex - H2O", "163.0601, Hex" });
             HexCheckedListBox.Location = new Point(16, 367);
             HexCheckedListBox.Margin = new Padding(4, 3, 4, 3);
+            HexCheckedListBox.Location = new Point(16, 367);
+            HexCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             HexCheckedListBox.Name = "HexCheckedListBox";
+            HexCheckedListBox.Size = new Size(276, 94);
             HexCheckedListBox.Size = new Size(276, 94);
             HexCheckedListBox.TabIndex = 4;
             HexCheckedListBox.SelectedIndexChanged += HexCheckedListBox_SelectedIndexChanged;
@@ -259,7 +279,10 @@
             SialicAcidCheckedListBox.Items.AddRange(new object[] { "274.0921, NeuAc-H2O", "292.1027, NeuAc", "316.103, NeuAc[Ac] - H2O", "334.113, NeuAc[Ac]", "290.0870, NeuGc - H2O", "308.0976, NeuGc", "332.098, NeuGc[Ac] - H2O", "350.1081, NeuGc[Ac]" });
             SialicAcidCheckedListBox.Location = new Point(315, 158);
             SialicAcidCheckedListBox.Margin = new Padding(4, 3, 4, 3);
+            SialicAcidCheckedListBox.Location = new Point(315, 158);
+            SialicAcidCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             SialicAcidCheckedListBox.Name = "SialicAcidCheckedListBox";
+            SialicAcidCheckedListBox.Size = new Size(278, 130);
             SialicAcidCheckedListBox.Size = new Size(278, 130);
             SialicAcidCheckedListBox.TabIndex = 2;
             SialicAcidCheckedListBox.SelectedIndexChanged += SialicAcidCheckedListBox_SelectedIndexChanged;
@@ -271,7 +294,10 @@
             OligosaccharideCheckedListBox.Items.AddRange(new object[] { "325.1129, Hex2", "366.1395, HexNAc-Hex", "407.1660, HexNAc2", "454.1555, Hex-NeuAc", "470.1503, Hex-NeuGc", "495.1821, HexNAc-NeuAc", "511.1769, HexNAc-NeuGc", "528.1923, HexNAc-Hex2", "537.1927, HexNAc-NeuAc[Ac]", "553.1875, HexNAc-NeuGc[Ac]", "569.2188, HexNAc2-Hex", "657.2349, HexNAc-Hex-NeuAc", "673.2297, HexNAc-Hex-NeuGc", "690.2451, HexNAc-Hex3", "731.2717, HexNAc2-Hex2 (diLacNAc)", "819.2877, HexNAc-Hex2-NeuAc", "835.2825, HexNAc-Hex2-NeuGc", "860.3143, HexNAc2-Hex-NeuAc", "876.3091, HexNAc2-Hex-NeuGc", "893.3245, HexNAc2-Hex3", "948.3303, HexNAc-Hex-NeuAc2", "964.3251, HexNAc-Hex-NeuGc2", "1022.3671, HexNAc2-Hex2-NeuAc1", "1038.3619, HexNAc2-Hex2-NeuGc1", "1313.4625, HexNAc2-Hex2-NeuAc2", "1329.4573, HexNAc2-Hex2-NeuGc2" });
             OligosaccharideCheckedListBox.Location = new Point(619, 158);
             OligosaccharideCheckedListBox.Margin = new Padding(4, 3, 4, 3);
+            OligosaccharideCheckedListBox.Location = new Point(619, 158);
+            OligosaccharideCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             OligosaccharideCheckedListBox.Name = "OligosaccharideCheckedListBox";
+            OligosaccharideCheckedListBox.Size = new Size(278, 454);
             OligosaccharideCheckedListBox.Size = new Size(278, 454);
             OligosaccharideCheckedListBox.TabIndex = 3;
             OligosaccharideCheckedListBox.SelectedIndexChanged += OligosaccharideCheckedListBox_SelectedIndexChanged;
@@ -282,7 +308,10 @@
             HexNAc_ions.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             HexNAc_ions.Location = new Point(16, 126);
             HexNAc_ions.Margin = new Padding(4, 0, 4, 0);
+            HexNAc_ions.Location = new Point(16, 126);
+            HexNAc_ions.Margin = new Padding(4, 0, 4, 0);
             HexNAc_ions.Name = "HexNAc_ions";
+            HexNAc_ions.Size = new Size(87, 17);
             HexNAc_ions.Size = new Size(87, 17);
             HexNAc_ions.TabIndex = 14;
             HexNAc_ions.Text = "HexNAc ions";
@@ -293,7 +322,10 @@
             Hex_ions.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             Hex_ions.Location = new Point(16, 335);
             Hex_ions.Margin = new Padding(4, 0, 4, 0);
+            Hex_ions.Location = new Point(16, 335);
+            Hex_ions.Margin = new Padding(4, 0, 4, 0);
             Hex_ions.Name = "Hex_ions";
+            Hex_ions.Size = new Size(62, 17);
             Hex_ions.Size = new Size(62, 17);
             Hex_ions.TabIndex = 15;
             Hex_ions.Text = "Hex ions";
@@ -304,7 +336,10 @@
             Sia_ions.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             Sia_ions.Location = new Point(315, 126);
             Sia_ions.Margin = new Padding(4, 0, 4, 0);
+            Sia_ions.Location = new Point(315, 126);
+            Sia_ions.Margin = new Padding(4, 0, 4, 0);
             Sia_ions.Name = "Sia_ions";
+            Sia_ions.Size = new Size(101, 17);
             Sia_ions.Size = new Size(101, 17);
             Sia_ions.TabIndex = 16;
             Sia_ions.Text = "Sialic Acid ions";
@@ -315,7 +350,10 @@
             Oligosaccharide_ions.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             Oligosaccharide_ions.Location = new Point(619, 126);
             Oligosaccharide_ions.Margin = new Padding(4, 0, 4, 0);
+            Oligosaccharide_ions.Location = new Point(619, 126);
+            Oligosaccharide_ions.Margin = new Padding(4, 0, 4, 0);
             Oligosaccharide_ions.Name = "Oligosaccharide_ions";
+            Oligosaccharide_ions.Size = new Size(136, 17);
             Oligosaccharide_ions.Size = new Size(136, 17);
             Oligosaccharide_ions.TabIndex = 17;
             Oligosaccharide_ions.Text = "Oligosaccharide ions";
@@ -327,7 +365,10 @@
             M6PCheckedListBox.Items.AddRange(new object[] { "243.0264, Man-P", "405.0798, Man2-P" });
             M6PCheckedListBox.Location = new Point(16, 551);
             M6PCheckedListBox.Margin = new Padding(4, 3, 4, 3);
+            M6PCheckedListBox.Location = new Point(16, 551);
+            M6PCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             M6PCheckedListBox.Name = "M6PCheckedListBox";
+            M6PCheckedListBox.Size = new Size(276, 40);
             M6PCheckedListBox.Size = new Size(276, 40);
             M6PCheckedListBox.TabIndex = 5;
             M6PCheckedListBox.SelectedIndexChanged += M6PCheckedListBox_SelectedIndexChanged;
@@ -338,7 +379,10 @@
             M6P_ions.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             M6P_ions.Location = new Point(16, 520);
             M6P_ions.Margin = new Padding(4, 0, 4, 0);
+            M6P_ions.Location = new Point(16, 520);
+            M6P_ions.Margin = new Padding(4, 0, 4, 0);
             M6P_ions.Name = "M6P_ions";
+            M6P_ions.Size = new Size(65, 17);
             M6P_ions.Size = new Size(65, 17);
             M6P_ions.TabIndex = 19;
             M6P_ions.Text = "M6P ions";
@@ -348,7 +392,10 @@
             StartButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             StartButton.Location = new Point(918, 565);
             StartButton.Margin = new Padding(4, 3, 4, 3);
+            StartButton.Location = new Point(918, 565);
+            StartButton.Margin = new Padding(4, 3, 4, 3);
             StartButton.Name = "StartButton";
+            StartButton.Size = new Size(276, 62);
             StartButton.Size = new Size(276, 62);
             StartButton.TabIndex = 0;
             StartButton.Text = "Start";
@@ -359,7 +406,10 @@
             // 
             ClearButton.Location = new Point(619, 76);
             ClearButton.Margin = new Padding(4, 3, 4, 3);
+            ClearButton.Location = new Point(619, 76);
+            ClearButton.Margin = new Padding(4, 3, 4, 3);
             ClearButton.Name = "ClearButton";
+            ClearButton.Size = new Size(278, 36);
             ClearButton.Size = new Size(278, 36);
             ClearButton.TabIndex = 0;
             ClearButton.Text = "Clear Selections";
@@ -370,7 +420,10 @@
             // 
             ppmTol_textBox.Location = new Point(919, 109);
             ppmTol_textBox.Margin = new Padding(4, 3, 4, 3);
+            ppmTol_textBox.Location = new Point(919, 109);
+            ppmTol_textBox.Margin = new Padding(4, 3, 4, 3);
             ppmTol_textBox.Name = "ppmTol_textBox";
+            ppmTol_textBox.Size = new Size(61, 23);
             ppmTol_textBox.Size = new Size(61, 23);
             ppmTol_textBox.TabIndex = 20;
             ppmTol_textBox.Text = "15";
@@ -380,7 +433,10 @@
             ppmTol_label.AutoSize = true;
             ppmTol_label.Location = new Point(981, 112);
             ppmTol_label.Margin = new Padding(4, 0, 4, 0);
+            ppmTol_label.Location = new Point(981, 112);
+            ppmTol_label.Margin = new Padding(4, 0, 4, 0);
             ppmTol_label.Name = "ppmTol_label";
+            ppmTol_label.Size = new Size(145, 15);
             ppmTol_label.Size = new Size(145, 15);
             ppmTol_label.TabIndex = 21;
             ppmTol_label.Text = "Tolerance (default = ppm)";
@@ -389,7 +445,10 @@
             // 
             CheckAll_Button.Location = new Point(16, 76);
             CheckAll_Button.Margin = new Padding(4, 3, 4, 3);
+            CheckAll_Button.Location = new Point(16, 76);
+            CheckAll_Button.Margin = new Padding(4, 3, 4, 3);
             CheckAll_Button.Name = "CheckAll_Button";
+            CheckAll_Button.Size = new Size(279, 36);
             CheckAll_Button.Size = new Size(279, 36);
             CheckAll_Button.TabIndex = 22;
             CheckAll_Button.Text = "Check All Ions";
@@ -400,7 +459,10 @@
             // 
             CheckAll_Hex_Button.Location = new Point(136, 325);
             CheckAll_Hex_Button.Margin = new Padding(2);
+            CheckAll_Hex_Button.Location = new Point(136, 325);
+            CheckAll_Hex_Button.Margin = new Padding(2);
             CheckAll_Hex_Button.Name = "CheckAll_Hex_Button";
+            CheckAll_Hex_Button.Size = new Size(156, 36);
             CheckAll_Hex_Button.Size = new Size(156, 36);
             CheckAll_Hex_Button.TabIndex = 23;
             CheckAll_Hex_Button.Text = "Check all Hex ions";
@@ -411,7 +473,10 @@
             // 
             CheckAll_HexNAc_Button.Location = new Point(136, 117);
             CheckAll_HexNAc_Button.Margin = new Padding(2);
+            CheckAll_HexNAc_Button.Location = new Point(136, 117);
+            CheckAll_HexNAc_Button.Margin = new Padding(2);
             CheckAll_HexNAc_Button.Name = "CheckAll_HexNAc_Button";
+            CheckAll_HexNAc_Button.Size = new Size(156, 36);
             CheckAll_HexNAc_Button.Size = new Size(156, 36);
             CheckAll_HexNAc_Button.TabIndex = 24;
             CheckAll_HexNAc_Button.Text = "Check all HexNAc ions";
@@ -422,7 +487,10 @@
             // 
             CheckAll_Sialic_Button.Location = new Point(449, 116);
             CheckAll_Sialic_Button.Margin = new Padding(2);
+            CheckAll_Sialic_Button.Location = new Point(449, 116);
+            CheckAll_Sialic_Button.Margin = new Padding(2);
             CheckAll_Sialic_Button.Name = "CheckAll_Sialic_Button";
+            CheckAll_Sialic_Button.Size = new Size(142, 36);
             CheckAll_Sialic_Button.Size = new Size(142, 36);
             CheckAll_Sialic_Button.TabIndex = 25;
             CheckAll_Sialic_Button.Text = "Check all Sia ions";
@@ -433,7 +501,10 @@
             // 
             CheckAll_M6P_Button.Location = new Point(136, 509);
             CheckAll_M6P_Button.Margin = new Padding(2);
+            CheckAll_M6P_Button.Location = new Point(136, 509);
+            CheckAll_M6P_Button.Margin = new Padding(2);
             CheckAll_M6P_Button.Name = "CheckAll_M6P_Button";
+            CheckAll_M6P_Button.Size = new Size(156, 36);
             CheckAll_M6P_Button.Size = new Size(156, 36);
             CheckAll_M6P_Button.TabIndex = 26;
             CheckAll_M6P_Button.Text = "Check all M6P ions";
@@ -444,7 +515,10 @@
             // 
             CheckAll_Oligo_Button.Location = new Point(755, 116);
             CheckAll_Oligo_Button.Margin = new Padding(2);
+            CheckAll_Oligo_Button.Location = new Point(755, 116);
+            CheckAll_Oligo_Button.Margin = new Padding(2);
             CheckAll_Oligo_Button.Name = "CheckAll_Oligo_Button";
+            CheckAll_Oligo_Button.Size = new Size(142, 36);
             CheckAll_Oligo_Button.Size = new Size(142, 36);
             CheckAll_Oligo_Button.TabIndex = 27;
             CheckAll_Oligo_Button.Text = "Check all Oligo ions";
@@ -455,7 +529,10 @@
             // 
             SN_textBox.Location = new Point(919, 137);
             SN_textBox.Margin = new Padding(2);
+            SN_textBox.Location = new Point(919, 137);
+            SN_textBox.Margin = new Padding(2);
             SN_textBox.Name = "SN_textBox";
+            SN_textBox.Size = new Size(61, 23);
             SN_textBox.Size = new Size(61, 23);
             SN_textBox.TabIndex = 28;
             SN_textBox.Text = "3";
@@ -464,8 +541,10 @@
             // 
             SN_label.AutoSize = true;
             SN_label.Location = new Point(982, 140);
+            SN_label.Location = new Point(982, 140);
             SN_label.Margin = new Padding(2, 0, 2, 0);
             SN_label.Name = "SN_label";
+            SN_label.Size = new Size(161, 15);
             SN_label.Size = new Size(161, 15);
             SN_label.TabIndex = 29;
             SN_label.Text = "Signal-to-Noise Requirement";
@@ -474,7 +553,10 @@
             // 
             PeakDepth_Box_HCD.Location = new Point(919, 221);
             PeakDepth_Box_HCD.Margin = new Padding(2);
+            PeakDepth_Box_HCD.Location = new Point(919, 221);
+            PeakDepth_Box_HCD.Margin = new Padding(2);
             PeakDepth_Box_HCD.Name = "PeakDepth_Box_HCD";
+            PeakDepth_Box_HCD.Size = new Size(61, 23);
             PeakDepth_Box_HCD.Size = new Size(61, 23);
             PeakDepth_Box_HCD.TabIndex = 30;
             PeakDepth_Box_HCD.Text = "25";
@@ -483,8 +565,10 @@
             // 
             PeakDepth_label_HCD.AutoSize = true;
             PeakDepth_label_HCD.Location = new Point(981, 224);
+            PeakDepth_label_HCD.Location = new Point(981, 224);
             PeakDepth_label_HCD.Margin = new Padding(2, 0, 2, 0);
             PeakDepth_label_HCD.Name = "PeakDepth_label_HCD";
+            PeakDepth_label_HCD.Size = new Size(202, 15);
             PeakDepth_label_HCD.Size = new Size(202, 15);
             PeakDepth_label_HCD.TabIndex = 31;
             PeakDepth_label_HCD.Text = "Must be within N most intense peaks";
@@ -493,7 +577,10 @@
             // 
             hcdTICfraction.Location = new Point(919, 250);
             hcdTICfraction.Margin = new Padding(4, 3, 4, 3);
+            hcdTICfraction.Location = new Point(919, 250);
+            hcdTICfraction.Margin = new Padding(4, 3, 4, 3);
             hcdTICfraction.Name = "hcdTICfraction";
+            hcdTICfraction.Size = new Size(61, 23);
             hcdTICfraction.Size = new Size(61, 23);
             hcdTICfraction.TabIndex = 32;
             hcdTICfraction.Text = "0.20";
@@ -502,7 +589,10 @@
             // 
             etdTICfraction.Location = new Point(919, 375);
             etdTICfraction.Margin = new Padding(4, 3, 4, 3);
+            etdTICfraction.Location = new Point(919, 375);
+            etdTICfraction.Margin = new Padding(4, 3, 4, 3);
             etdTICfraction.Name = "etdTICfraction";
+            etdTICfraction.Size = new Size(61, 23);
             etdTICfraction.Size = new Size(61, 23);
             etdTICfraction.TabIndex = 33;
             etdTICfraction.Text = "0.05";
@@ -512,7 +602,10 @@
             hcdTICfraction_Label.AutoSize = true;
             hcdTICfraction_Label.Location = new Point(981, 253);
             hcdTICfraction_Label.Margin = new Padding(4, 0, 4, 0);
+            hcdTICfraction_Label.Location = new Point(981, 253);
+            hcdTICfraction_Label.Margin = new Padding(4, 0, 4, 0);
             hcdTICfraction_Label.Name = "hcdTICfraction_Label";
+            hcdTICfraction_Label.Size = new Size(97, 15);
             hcdTICfraction_Label.Size = new Size(97, 15);
             hcdTICfraction_Label.TabIndex = 34;
             hcdTICfraction_Label.Text = "HCD TIC fraction";
@@ -522,7 +615,10 @@
             etdTICfraction_Label.AutoSize = true;
             etdTICfraction_Label.Location = new Point(982, 378);
             etdTICfraction_Label.Margin = new Padding(4, 0, 4, 0);
+            etdTICfraction_Label.Location = new Point(982, 378);
+            etdTICfraction_Label.Margin = new Padding(4, 0, 4, 0);
             etdTICfraction_Label.Name = "etdTICfraction_Label";
+            etdTICfraction_Label.Size = new Size(93, 15);
             etdTICfraction_Label.Size = new Size(93, 15);
             etdTICfraction_Label.TabIndex = 35;
             etdTICfraction_Label.Text = "ETD TIC fraction";
@@ -531,7 +627,10 @@
             // 
             PeakDepth_Box_ETD.Location = new Point(919, 345);
             PeakDepth_Box_ETD.Margin = new Padding(4, 3, 4, 3);
+            PeakDepth_Box_ETD.Location = new Point(919, 345);
+            PeakDepth_Box_ETD.Margin = new Padding(4, 3, 4, 3);
             PeakDepth_Box_ETD.Name = "PeakDepth_Box_ETD";
+            PeakDepth_Box_ETD.Size = new Size(61, 23);
             PeakDepth_Box_ETD.Size = new Size(61, 23);
             PeakDepth_Box_ETD.TabIndex = 36;
             PeakDepth_Box_ETD.Text = "50";
@@ -542,7 +641,10 @@
             HCDsettingLabel.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Underline, GraphicsUnit.Point, 0);
             HCDsettingLabel.Location = new Point(919, 198);
             HCDsettingLabel.Margin = new Padding(4, 0, 4, 0);
+            HCDsettingLabel.Location = new Point(919, 198);
+            HCDsettingLabel.Margin = new Padding(4, 0, 4, 0);
             HCDsettingLabel.Name = "HCDsettingLabel";
+            HCDsettingLabel.Size = new Size(168, 16);
             HCDsettingLabel.Size = new Size(168, 16);
             HCDsettingLabel.TabIndex = 37;
             HCDsettingLabel.Text = "HCD MS/MS Scan Settings";
@@ -553,7 +655,10 @@
             ETDsettingsLabel.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Underline, GraphicsUnit.Point, 0);
             ETDsettingsLabel.Location = new Point(919, 323);
             ETDsettingsLabel.Margin = new Padding(4, 0, 4, 0);
+            ETDsettingsLabel.Location = new Point(919, 323);
+            ETDsettingsLabel.Margin = new Padding(4, 0, 4, 0);
             ETDsettingsLabel.Name = "ETDsettingsLabel";
+            ETDsettingsLabel.Size = new Size(167, 16);
             ETDsettingsLabel.Size = new Size(167, 16);
             ETDsettingsLabel.TabIndex = 38;
             ETDsettingsLabel.Text = "ETD MS/MS Scan Settings";
@@ -562,8 +667,10 @@
             // 
             PeakDepth_label_ETD.AutoSize = true;
             PeakDepth_label_ETD.Location = new Point(982, 348);
+            PeakDepth_label_ETD.Location = new Point(982, 348);
             PeakDepth_label_ETD.Margin = new Padding(2, 0, 2, 0);
             PeakDepth_label_ETD.Name = "PeakDepth_label_ETD";
+            PeakDepth_label_ETD.Size = new Size(202, 15);
             PeakDepth_label_ETD.Size = new Size(202, 15);
             PeakDepth_label_ETD.TabIndex = 39;
             PeakDepth_label_ETD.Text = "Must be within N most intense peaks";
@@ -572,7 +679,10 @@
             // 
             MostCommonButton.Location = new Point(314, 76);
             MostCommonButton.Margin = new Padding(4, 3, 4, 3);
+            MostCommonButton.Location = new Point(314, 76);
+            MostCommonButton.Margin = new Padding(4, 3, 4, 3);
             MostCommonButton.Name = "MostCommonButton";
+            MostCommonButton.Size = new Size(278, 36);
             MostCommonButton.Size = new Size(278, 36);
             MostCommonButton.TabIndex = 40;
             MostCommonButton.Text = "Check Common Ions";
@@ -586,7 +696,10 @@
             FucoseCheckedListBox.Items.AddRange(new object[] { "350.1446, HexNAc-dHex", "512.1974, HexNAc-Hex-dHex (LeX/A)", "674.2502, HexNAc-Hex2-dHex", "803.2928, HexNAc-Hex-dHex-NeuAc (sLeX/A)", "819.2908, HexNAc-Hex-dHex-NeuGc", "877.3296, HexNAc2-Hex2-dHex (diLacNAc-Fuc)" });
             FucoseCheckedListBox.Location = new Point(314, 367);
             FucoseCheckedListBox.Margin = new Padding(4, 3, 4, 3);
+            FucoseCheckedListBox.Location = new Point(314, 367);
+            FucoseCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             FucoseCheckedListBox.Name = "FucoseCheckedListBox";
+            FucoseCheckedListBox.Size = new Size(278, 94);
             FucoseCheckedListBox.Size = new Size(278, 94);
             FucoseCheckedListBox.TabIndex = 41;
             FucoseCheckedListBox.SelectedIndexChanged += FucoseCheckedListBox_SelectedIndexChanged;
@@ -597,7 +710,10 @@
             Fucose_ions_label.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             Fucose_ions_label.Location = new Point(314, 334);
             Fucose_ions_label.Margin = new Padding(4, 0, 4, 0);
+            Fucose_ions_label.Location = new Point(314, 334);
+            Fucose_ions_label.Margin = new Padding(4, 0, 4, 0);
             Fucose_ions_label.Name = "Fucose_ions_label";
+            Fucose_ions_label.Size = new Size(131, 17);
             Fucose_ions_label.Size = new Size(131, 17);
             Fucose_ions_label.TabIndex = 42;
             Fucose_ions_label.Text = "Fucose-specific ions";
@@ -606,7 +722,10 @@
             // 
             CheckAll_Fucose_Button.Location = new Point(453, 325);
             CheckAll_Fucose_Button.Margin = new Padding(4, 3, 4, 3);
+            CheckAll_Fucose_Button.Location = new Point(453, 325);
+            CheckAll_Fucose_Button.Margin = new Padding(4, 3, 4, 3);
             CheckAll_Fucose_Button.Name = "CheckAll_Fucose_Button";
+            CheckAll_Fucose_Button.Size = new Size(140, 36);
             CheckAll_Fucose_Button.Size = new Size(140, 36);
             CheckAll_Fucose_Button.TabIndex = 43;
             CheckAll_Fucose_Button.Text = "Check all Fucose ions";
@@ -617,8 +736,10 @@
             // 
             OxoCountThreshold_hcd_label.AutoSize = true;
             OxoCountThreshold_hcd_label.Location = new Point(981, 281);
+            OxoCountThreshold_hcd_label.Location = new Point(981, 281);
             OxoCountThreshold_hcd_label.Margin = new Padding(2, 0, 2, 0);
             OxoCountThreshold_hcd_label.Name = "OxoCountThreshold_hcd_label";
+            OxoCountThreshold_hcd_label.Size = new Size(163, 30);
             OxoCountThreshold_hcd_label.Size = new Size(163, 30);
             OxoCountThreshold_hcd_label.TabIndex = 45;
             OxoCountThreshold_hcd_label.Text = "Oxonium Count Requirement\r\n0 = default";
@@ -627,7 +748,10 @@
             // 
             OxoCountRequireBox_hcd.Location = new Point(919, 281);
             OxoCountRequireBox_hcd.Margin = new Padding(2);
+            OxoCountRequireBox_hcd.Location = new Point(919, 281);
+            OxoCountRequireBox_hcd.Margin = new Padding(2);
             OxoCountRequireBox_hcd.Name = "OxoCountRequireBox_hcd";
+            OxoCountRequireBox_hcd.Size = new Size(61, 23);
             OxoCountRequireBox_hcd.Size = new Size(61, 23);
             OxoCountRequireBox_hcd.TabIndex = 44;
             OxoCountRequireBox_hcd.Text = "0";
@@ -636,8 +760,10 @@
             // 
             OxoCountThreshold_etd_label.AutoSize = true;
             OxoCountThreshold_etd_label.Location = new Point(982, 406);
+            OxoCountThreshold_etd_label.Location = new Point(982, 406);
             OxoCountThreshold_etd_label.Margin = new Padding(2, 0, 2, 0);
             OxoCountThreshold_etd_label.Name = "OxoCountThreshold_etd_label";
+            OxoCountThreshold_etd_label.Size = new Size(163, 30);
             OxoCountThreshold_etd_label.Size = new Size(163, 30);
             OxoCountThreshold_etd_label.TabIndex = 46;
             OxoCountThreshold_etd_label.Text = "Oxonium Count Requirement\r\n0 = default";
@@ -646,7 +772,10 @@
             // 
             OxoCountRequireBox_etd.Location = new Point(919, 406);
             OxoCountRequireBox_etd.Margin = new Padding(2);
+            OxoCountRequireBox_etd.Location = new Point(919, 406);
+            OxoCountRequireBox_etd.Margin = new Padding(2);
             OxoCountRequireBox_etd.Name = "OxoCountRequireBox_etd";
+            OxoCountRequireBox_etd.Size = new Size(62, 23);
             OxoCountRequireBox_etd.Size = new Size(62, 23);
             OxoCountRequireBox_etd.TabIndex = 47;
             OxoCountRequireBox_etd.Text = "0";
@@ -655,8 +784,11 @@
             // 
             uploadCustomTextBox.Location = new Point(16, 663);
             uploadCustomTextBox.Margin = new Padding(4, 3, 4, 3);
+            uploadCustomTextBox.Location = new Point(16, 663);
+            uploadCustomTextBox.Margin = new Padding(4, 3, 4, 3);
             uploadCustomTextBox.Multiline = true;
             uploadCustomTextBox.Name = "uploadCustomTextBox";
+            uploadCustomTextBox.Size = new Size(1085, 25);
             uploadCustomTextBox.Size = new Size(1085, 25);
             uploadCustomTextBox.TabIndex = 48;
             uploadCustomTextBox.Text = "Upload custom ions here - csv with headers \"m/z\" and \"Description\"";
@@ -666,7 +798,10 @@
             // 
             UploadCustomBrowseButton.Location = new Point(1106, 663);
             UploadCustomBrowseButton.Margin = new Padding(4, 3, 4, 3);
+            UploadCustomBrowseButton.Location = new Point(1106, 663);
+            UploadCustomBrowseButton.Margin = new Padding(4, 3, 4, 3);
             UploadCustomBrowseButton.Name = "UploadCustomBrowseButton";
+            UploadCustomBrowseButton.Size = new Size(88, 25);
             UploadCustomBrowseButton.Size = new Size(88, 25);
             UploadCustomBrowseButton.TabIndex = 49;
             UploadCustomBrowseButton.Text = "Browse";
@@ -679,7 +814,10 @@
             StatusLabel.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             StatusLabel.Location = new Point(16, 637);
             StatusLabel.Margin = new Padding(4, 0, 4, 0);
+            StatusLabel.Location = new Point(16, 637);
+            StatusLabel.Margin = new Padding(4, 0, 4, 0);
             StatusLabel.Name = "StatusLabel";
+            StatusLabel.Size = new Size(225, 16);
             StatusLabel.Size = new Size(225, 16);
             StatusLabel.TabIndex = 50;
             StatusLabel.Text = "Status updates will appear here";
@@ -690,7 +828,10 @@
             FinishTimeLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FinishTimeLabel.Location = new Point(316, 607);
             FinishTimeLabel.Margin = new Padding(4, 0, 4, 0);
+            FinishTimeLabel.Location = new Point(316, 607);
+            FinishTimeLabel.Margin = new Padding(4, 0, 4, 0);
             FinishTimeLabel.Name = "FinishTimeLabel";
+            FinishTimeLabel.Size = new Size(148, 17);
             FinishTimeLabel.Size = new Size(148, 17);
             FinishTimeLabel.TabIndex = 51;
             FinishTimeLabel.Text = "Finish Time: Not Yet Run";
@@ -700,7 +841,9 @@
             StartTimeLabel.AutoSize = true;
             StartTimeLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             StartTimeLabel.Location = new Point(316, 587);
+            StartTimeLabel.Location = new Point(316, 587);
             StartTimeLabel.Name = "StartTimeLabel";
+            StartTimeLabel.Size = new Size(143, 17);
             StartTimeLabel.Size = new Size(143, 17);
             StartTimeLabel.TabIndex = 52;
             StartTimeLabel.Text = "Start Time: Not Yet Run";
@@ -709,7 +852,9 @@
             // 
             GlyCounterLogo.Image = (Image)resources.GetObject("GlyCounterLogo.Image");
             GlyCounterLogo.Location = new Point(314, 509);
+            GlyCounterLogo.Location = new Point(314, 509);
             GlyCounterLogo.Name = "GlyCounterLogo";
+            GlyCounterLogo.Size = new Size(276, 71);
             GlyCounterLogo.Size = new Size(276, 71);
             GlyCounterLogo.TabIndex = 53;
             GlyCounterLogo.TabStop = false;
@@ -723,10 +868,13 @@
             GlyCounter_AllTabs.Name = "GlyCounter_AllTabs";
             GlyCounter_AllTabs.SelectedIndex = 0;
             GlyCounter_AllTabs.Size = new Size(1209, 736);
+            GlyCounter_AllTabs.Size = new Size(1209, 736);
             GlyCounter_AllTabs.TabIndex = 54;
             // 
             // GlyCounter_Tab
             // 
+            GlyCounter_Tab.Controls.Add(Gly_outputButton);
+            GlyCounter_Tab.Controls.Add(Gly_outputTextBox);
             GlyCounter_Tab.Controls.Add(Gly_outputButton);
             GlyCounter_Tab.Controls.Add(Gly_outputTextBox);
             GlyCounter_Tab.Controls.Add(ipsaCheckBox);
@@ -790,7 +938,11 @@
             GlyCounter_Tab.Controls.Add(StartButton);
             GlyCounter_Tab.Controls.Add(HexNAcCheckedListBox);
             GlyCounter_Tab.Location = new Point(4, 24);
+            GlyCounter_Tab.Controls.Add(HexNAcCheckedListBox);
+            GlyCounter_Tab.Location = new Point(4, 24);
             GlyCounter_Tab.Name = "GlyCounter_Tab";
+            GlyCounter_Tab.Padding = new Padding(3);
+            GlyCounter_Tab.Size = new Size(1201, 708);
             GlyCounter_Tab.Padding = new Padding(3);
             GlyCounter_Tab.Size = new Size(1201, 708);
             GlyCounter_Tab.TabIndex = 0;
@@ -820,7 +972,9 @@
             // 
             ipsaCheckBox.AutoSize = true;
             ipsaCheckBox.Location = new Point(1038, 638);
+            ipsaCheckBox.Location = new Point(1038, 638);
             ipsaCheckBox.Name = "ipsaCheckBox";
+            ipsaCheckBox.Size = new Size(159, 19);
             ipsaCheckBox.Size = new Size(159, 19);
             ipsaCheckBox.TabIndex = 68;
             ipsaCheckBox.Text = "Output IPSA Annotations";
@@ -830,7 +984,9 @@
             // 
             DaltonCheckBox.AutoSize = true;
             DaltonCheckBox.Location = new Point(1132, 112);
+            DaltonCheckBox.Location = new Point(1132, 112);
             DaltonCheckBox.Name = "DaltonCheckBox";
+            DaltonCheckBox.Size = new Size(40, 19);
             DaltonCheckBox.Size = new Size(40, 19);
             DaltonCheckBox.TabIndex = 67;
             DaltonCheckBox.Text = "Da";
@@ -841,8 +997,10 @@
             // 
             OxoCountThreshold_uvpd_label.AutoSize = true;
             OxoCountThreshold_uvpd_label.Location = new Point(982, 522);
+            OxoCountThreshold_uvpd_label.Location = new Point(982, 522);
             OxoCountThreshold_uvpd_label.Margin = new Padding(2, 0, 2, 0);
             OxoCountThreshold_uvpd_label.Name = "OxoCountThreshold_uvpd_label";
+            OxoCountThreshold_uvpd_label.Size = new Size(163, 30);
             OxoCountThreshold_uvpd_label.Size = new Size(163, 30);
             OxoCountThreshold_uvpd_label.TabIndex = 64;
             OxoCountThreshold_uvpd_label.Text = "Oxonium Count Requirement\r\n0 = default";

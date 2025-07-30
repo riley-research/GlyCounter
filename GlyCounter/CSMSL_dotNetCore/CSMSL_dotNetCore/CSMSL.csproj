@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -83,6 +83,10 @@
   <ItemGroup>
     <PackageReference Include="LumenWorksCsvReader" Version="4.0.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="ThermoFisher.CommonCore.BackgroundSubtraction" Version="8.0.6" />
+    <PackageReference Include="ThermoFisher.CommonCore.Data" Version="8.0.6" />
+    <PackageReference Include="ThermoFisher.CommonCore.MassPrecisionEstimator" Version="8.0.6" />
+    <PackageReference Include="ThermoFisher.CommonCore.RawFileReader" Version="8.0.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -92,18 +96,6 @@
     </Reference>
     <Reference Include="OpenMcdf.Extensions">
       <HintPath>IO\VendorLibraries\dotNetCore\OpenMcdf.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.BackgroundSubtraction">
-      <HintPath>IO\VendorLibraries\dotNetCore\ThermoFisher.CommonCore.BackgroundSubtraction.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.Data">
-      <HintPath>IO\VendorLibraries\dotNetCore\ThermoFisher.CommonCore.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.MassPrecisionEstimator">
-      <HintPath>IO\VendorLibraries\dotNetCore\ThermoFisher.CommonCore.MassPrecisionEstimator.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.RawFileReader">
-      <HintPath>IO\VendorLibraries\dotNetCore\ThermoFisher.CommonCore.RawFileReader.dll</HintPath>
     </Reference>
   </ItemGroup>
 
