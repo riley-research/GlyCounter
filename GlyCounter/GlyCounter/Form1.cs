@@ -771,9 +771,9 @@ namespace GlyCounter
                         double percentageLikelyGlyco_etd = (double)numberScansCountedLikelyGlyco_etd / (double)numberOfETDscans * 100;
                         double percentageLikelyGlyco_uvpd = (double)numberScansCountedLikelyGlyco_uvpd / (double)numberOfUVPDscans * 100;
 
-                        double percentageHCD = (double)numberOfHCDscans / numberOfMS2scans;
-                        double percentageETD = (double)numberOfETDscans / numberOfMS2scans;
-                        double percentageUVPD = (double)numberOfUVPDscans / numberOfMS2scans;
+                        double percentageHCD = (double)numberOfHCDscans / numberOfMS2scans * 100;
+                        double percentageETD = (double)numberOfETDscans / numberOfMS2scans * 100;
+                        double percentageUVPD = (double)numberOfUVPDscans / numberOfMS2scans * 100;
 
                         int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
                         int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
