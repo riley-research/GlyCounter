@@ -324,7 +324,6 @@ namespace GlyCounter
                             oxoIon.uvpdCount = 0;
                             oxoIon.measuredMZ = 0;
                         }
-                        Debug.WriteLine(fileName);
 
                         FileReader rawFile = new FileReader(fileName);
                         FileReader typeCheck = new FileReader();
@@ -415,7 +414,35 @@ namespace GlyCounter
                             SpectrumEx spectrum = rawFile.ReadSpectrumEx(scanNumber: i);
                             bool IT = spectrum.Analyzer.ToString().Contains("ITMS");
 
-                            if (spectrum.MsLevel == 2)
+                            //custom ms levels
+                            List<int> levels = [];
+
+                            if (MSLevelLB.Value == MSLevelUB.Value)
+                                levels.Add(Convert.ToInt32(MSLevelLB.Value));
+
+                            int lowestval;
+                            int highestval;
+
+                            if (MSLevelLB.Value < MSLevelUB.Value)
+                            {
+                                lowestval = Convert.ToInt32(MSLevelLB.Value);
+                                highestval = Convert.ToInt32(MSLevelUB.Value);
+
+                                levels = Enumerable.Range(lowestval, (highestval - lowestval + 1)).ToList();
+                            }
+
+                            //if user puts values in backwards for some reason
+                            if (MSLevelLB.Value > MSLevelUB.Value)
+                            {
+                                lowestval = Convert.ToInt32(MSLevelUB.Value);
+                                highestval = Convert.ToInt32(MSLevelLB.Value);
+
+                                levels = Enumerable.Range(lowestval, (highestval - lowestval + 1)).ToList();
+                            }
+
+                            //if ignore ms levels is checked ignore levels list
+                            if (!ignoreMSLevelCB.Checked)
+                                if (!levels.Contains(spectrum.MsLevel)) continue;
                             {
                                 numberOfMS2scans++;
                                 int numberOfOxoIons = 0;

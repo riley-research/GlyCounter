@@ -81,6 +81,13 @@
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
+            label3 = new Label();
+            label2 = new Label();
+            MSLevelUB = new NumericUpDown();
+            MSLevelLB = new NumericUpDown();
+            polarityCB = new CheckBox();
+            Gly_outputButton = new Button();
+            Gly_outputTextBox = new TextBox();
             ipsaCheckBox = new CheckBox();
             DaltonCheckBox = new CheckBox();
             OxoCountThreshold_uvpd_label = new Label();
@@ -94,6 +101,10 @@
             intensityThresholdLabel = new Label();
             intensityThresholdTextBox = new TextBox();
             YnaughtTab = new TabPage();
+            Ynaught_intLabel = new Label();
+            Ynaught_intTextBox = new TextBox();
+            Ynaught_outputButton = new Button();
+            Ynaught_outputTextBox = new TextBox();
             YNaught_IPSAcheckbox = new CheckBox();
             ChargeExplanationLabel = new Label();
             UpperBoundLabel = new Label();
@@ -146,15 +157,12 @@
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
             timer2 = new System.Windows.Forms.Timer(components);
-            Ynaught_outputTextBox = new TextBox();
-            Ynaught_outputButton = new Button();
-            Ynaught_intTextBox = new TextBox();
-            Ynaught_intLabel = new Label();
-            Gly_outputTextBox = new TextBox();
-            Gly_outputButton = new Button();
+            ignoreMSLevelCB = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)MSLevelUB).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)MSLevelLB).BeginInit();
             YnaughtTab.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)Ynaught_GlyCounterLogo).BeginInit();
@@ -225,7 +233,7 @@
             OligosaccharideCheckedListBox.Location = new Point(619, 158);
             OligosaccharideCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             OligosaccharideCheckedListBox.Name = "OligosaccharideCheckedListBox";
-            OligosaccharideCheckedListBox.Size = new Size(278, 454);
+            OligosaccharideCheckedListBox.Size = new Size(278, 346);
             OligosaccharideCheckedListBox.TabIndex = 3;
             OligosaccharideCheckedListBox.SelectedIndexChanged += OligosaccharideCheckedListBox_SelectedIndexChanged;
             // 
@@ -299,7 +307,7 @@
             // StartButton
             // 
             StartButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            StartButton.Location = new Point(918, 565);
+            StartButton.Location = new Point(619, 542);
             StartButton.Margin = new Padding(4, 3, 4, 3);
             StartButton.Name = "StartButton";
             StartButton.Size = new Size(276, 62);
@@ -679,6 +687,12 @@
             // 
             // GlyCounter_Tab
             // 
+            GlyCounter_Tab.Controls.Add(ignoreMSLevelCB);
+            GlyCounter_Tab.Controls.Add(label3);
+            GlyCounter_Tab.Controls.Add(label2);
+            GlyCounter_Tab.Controls.Add(MSLevelUB);
+            GlyCounter_Tab.Controls.Add(MSLevelLB);
+            GlyCounter_Tab.Controls.Add(polarityCB);
             GlyCounter_Tab.Controls.Add(Gly_outputButton);
             GlyCounter_Tab.Controls.Add(Gly_outputTextBox);
             GlyCounter_Tab.Controls.Add(ipsaCheckBox);
@@ -749,10 +763,79 @@
             GlyCounter_Tab.Text = "Pre-ID";
             GlyCounter_Tab.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(1012, 602);
+            label3.Name = "label3";
+            label3.Size = new Size(18, 15);
+            label3.TabIndex = 74;
+            label3.Text = "to";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(962, 576);
+            label2.Name = "label2";
+            label2.Size = new Size(111, 15);
+            label2.TabIndex = 73;
+            label2.Text = "MS Levels to Search";
+            // 
+            // MSLevelUB
+            // 
+            MSLevelUB.Location = new Point(1036, 600);
+            MSLevelUB.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            MSLevelUB.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            MSLevelUB.Name = "MSLevelUB";
+            MSLevelUB.Size = new Size(44, 23);
+            MSLevelUB.TabIndex = 72;
+            MSLevelUB.TextAlign = HorizontalAlignment.Center;
+            MSLevelUB.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            // 
+            // MSLevelLB
+            // 
+            MSLevelLB.Location = new Point(962, 600);
+            MSLevelLB.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            MSLevelLB.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            MSLevelLB.Name = "MSLevelLB";
+            MSLevelLB.Size = new Size(44, 23);
+            MSLevelLB.TabIndex = 71;
+            MSLevelLB.TextAlign = HorizontalAlignment.Center;
+            MSLevelLB.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            // 
+            // polarityCB
+            // 
+            polarityCB.AutoSize = true;
+            polarityCB.Location = new Point(619, 637);
+            polarityCB.Name = "polarityCB";
+            polarityCB.Size = new Size(146, 19);
+            polarityCB.TabIndex = 70;
+            polarityCB.Text = "Toggle Negative Mode";
+            polarityCB.UseVisualStyleBackColor = true;
+            // 
+            // Gly_outputButton
+            // 
+            Gly_outputButton.Location = new Point(1109, 49);
+            Gly_outputButton.Name = "Gly_outputButton";
+            Gly_outputButton.Size = new Size(88, 23);
+            Gly_outputButton.TabIndex = 69;
+            Gly_outputButton.Text = "Browse";
+            Gly_outputButton.UseVisualStyleBackColor = true;
+            Gly_outputButton.Click += Gly_outputButton_Click;
+            // 
+            // Gly_outputTextBox
+            // 
+            Gly_outputTextBox.Location = new Point(16, 47);
+            Gly_outputTextBox.Name = "Gly_outputTextBox";
+            Gly_outputTextBox.Size = new Size(1085, 23);
+            Gly_outputTextBox.TabIndex = 55;
+            Gly_outputTextBox.Text = "Select output directory";
+            Gly_outputTextBox.TextChanged += Gly_outputTextBox_TextChanged;
+            // 
             // ipsaCheckBox
             // 
             ipsaCheckBox.AutoSize = true;
-            ipsaCheckBox.Location = new Point(1038, 638);
+            ipsaCheckBox.Location = new Point(619, 612);
             ipsaCheckBox.Name = "ipsaCheckBox";
             ipsaCheckBox.Size = new Size(159, 19);
             ipsaCheckBox.TabIndex = 68;
@@ -927,6 +1010,42 @@
             YnaughtTab.TabIndex = 1;
             YnaughtTab.Text = "Ynaught";
             YnaughtTab.UseVisualStyleBackColor = true;
+            // 
+            // Ynaught_intLabel
+            // 
+            Ynaught_intLabel.AutoSize = true;
+            Ynaught_intLabel.Location = new Point(1007, 374);
+            Ynaught_intLabel.Name = "Ynaught_intLabel";
+            Ynaught_intLabel.Size = new Size(170, 15);
+            Ynaught_intLabel.TabIndex = 82;
+            Ynaught_intLabel.Text = "Intensity Requirement (.mzML)";
+            // 
+            // Ynaught_intTextBox
+            // 
+            Ynaught_intTextBox.Location = new Point(951, 371);
+            Ynaught_intTextBox.Name = "Ynaught_intTextBox";
+            Ynaught_intTextBox.Size = new Size(50, 23);
+            Ynaught_intTextBox.TabIndex = 81;
+            Ynaught_intTextBox.Text = "1000";
+            // 
+            // Ynaught_outputButton
+            // 
+            Ynaught_outputButton.Location = new Point(819, 93);
+            Ynaught_outputButton.Name = "Ynaught_outputButton";
+            Ynaught_outputButton.Size = new Size(90, 23);
+            Ynaught_outputButton.TabIndex = 80;
+            Ynaught_outputButton.Text = "Browse";
+            Ynaught_outputButton.UseVisualStyleBackColor = true;
+            Ynaught_outputButton.Click += Ynaught_outputButton_Click;
+            // 
+            // Ynaught_outputTextBox
+            // 
+            Ynaught_outputTextBox.Location = new Point(15, 93);
+            Ynaught_outputTextBox.Name = "Ynaught_outputTextBox";
+            Ynaught_outputTextBox.Size = new Size(798, 23);
+            Ynaught_outputTextBox.TabIndex = 79;
+            Ynaught_outputTextBox.Text = "Select output directory";
+            Ynaught_outputTextBox.TextChanged += Ynaught_outputTextBox_TextChanged;
             // 
             // YNaught_IPSAcheckbox
             // 
@@ -1429,60 +1548,15 @@
             LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Assigned Modifications\", \"Charge\", \"Total Glycan Composition\", and \"Observed M/Z\"";
             LoadInGlycoPepIDs_TextBox.TextChanged += LoadInGlycoPepIDs_TextBox_TextChanged;
             // 
-            // Ynaught_outputTextBox
+            // ignoreMSLevelCB
             // 
-            Ynaught_outputTextBox.Location = new Point(15, 93);
-            Ynaught_outputTextBox.Name = "Ynaught_outputTextBox";
-            Ynaught_outputTextBox.Size = new Size(798, 23);
-            Ynaught_outputTextBox.TabIndex = 79;
-            Ynaught_outputTextBox.Text = "Select output directory";
-            Ynaught_outputTextBox.TextChanged += Ynaught_outputTextBox_TextChanged;
-            // 
-            // Ynaught_outputButton
-            // 
-            Ynaught_outputButton.Location = new Point(819, 93);
-            Ynaught_outputButton.Name = "Ynaught_outputButton";
-            Ynaught_outputButton.Size = new Size(90, 23);
-            Ynaught_outputButton.TabIndex = 80;
-            Ynaught_outputButton.Text = "Browse";
-            Ynaught_outputButton.UseVisualStyleBackColor = true;
-            Ynaught_outputButton.Click += Ynaught_outputButton_Click;
-            // 
-            // Ynaught_intTextBox
-            // 
-            Ynaught_intTextBox.Location = new Point(951, 371);
-            Ynaught_intTextBox.Name = "Ynaught_intTextBox";
-            Ynaught_intTextBox.Size = new Size(50, 23);
-            Ynaught_intTextBox.TabIndex = 81;
-            Ynaught_intTextBox.Text = "1000";
-            // 
-            // Ynaught_intLabel
-            // 
-            Ynaught_intLabel.AutoSize = true;
-            Ynaught_intLabel.Location = new Point(1007, 374);
-            Ynaught_intLabel.Name = "Ynaught_intLabel";
-            Ynaught_intLabel.Size = new Size(170, 15);
-            Ynaught_intLabel.TabIndex = 82;
-            Ynaught_intLabel.Text = "Intensity Requirement (.mzML)";
-            // 
-            // Gly_outputTextBox
-            // 
-            Gly_outputTextBox.Location = new Point(16, 47);
-            Gly_outputTextBox.Name = "Gly_outputTextBox";
-            Gly_outputTextBox.Size = new Size(1085, 23);
-            Gly_outputTextBox.TabIndex = 55;
-            Gly_outputTextBox.Text = "Select output directory";
-            Gly_outputTextBox.TextChanged += Gly_outputTextBox_TextChanged;
-            // 
-            // Gly_outputButton
-            // 
-            Gly_outputButton.Location = new Point(1109, 49);
-            Gly_outputButton.Name = "Gly_outputButton";
-            Gly_outputButton.Size = new Size(88, 23);
-            Gly_outputButton.TabIndex = 69;
-            Gly_outputButton.Text = "Browse";
-            Gly_outputButton.UseVisualStyleBackColor = true;
-            Gly_outputButton.Click += Gly_outputButton_Click;
+            ignoreMSLevelCB.AutoSize = true;
+            ignoreMSLevelCB.Location = new Point(918, 629);
+            ignoreMSLevelCB.Name = "ignoreMSLevelCB";
+            ignoreMSLevelCB.Size = new Size(221, 19);
+            ignoreMSLevelCB.TabIndex = 75;
+            ignoreMSLevelCB.Text = "Ignore MS Level and Search All Scans";
+            ignoreMSLevelCB.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -1498,6 +1572,8 @@
             GlyCounter_AllTabs.ResumeLayout(false);
             GlyCounter_Tab.ResumeLayout(false);
             GlyCounter_Tab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)MSLevelUB).EndInit();
+            ((System.ComponentModel.ISupportInitialize)MSLevelLB).EndInit();
             YnaughtTab.ResumeLayout(false);
             YnaughtTab.PerformLayout();
             panel1.ResumeLayout(false);
@@ -1642,5 +1718,11 @@
         private TextBox Ynaught_intTextBox;
         private Button Gly_outputButton;
         private TextBox Gly_outputTextBox;
+        private Label label3;
+        private Label label2;
+        private NumericUpDown MSLevelUB;
+        private NumericUpDown MSLevelLB;
+        private CheckBox polarityCB;
+        private CheckBox ignoreMSLevelCB;
     }
 }
