@@ -22,8 +22,8 @@ namespace GlyCounter
         private double _ppmTolerance = 15;
         private double _SNthreshold = 3;
         private double _intensityThreshold = 1000;
-        private double _tol = 0;
-        private bool _ipsa = false;
+        private double _tol;
+        private bool _ipsa;
         private const int ArbitraryPeakDepthIfNotFound = 10000;
 
         //GlyCounter settings
@@ -34,10 +34,10 @@ namespace GlyCounter
         private double _oxoTICfractionThreshold_hcd = 0.20;
         private double _oxoTICfractionThreshold_etd = 0.05;
         private double _oxoTICfractionThreshold_uvpd = 0.20;
-        private double _oxoCountRequirement_hcd_user = 0;
-        private double _oxoCountRequirement_etd_user = 0;
-        private double _oxoCountRequirement_uvpd_user = 0;
-        private bool _using204 = false;
+        private double _oxoCountRequirement_hcd_user;
+        private double _oxoCountRequirement_etd_user;
+        private double _oxoCountRequirement_uvpd_user;
+        private bool _using204;
 
         //Ynaught variables
         private HashSet<Yion> _yIonHashSet = [];
@@ -53,7 +53,7 @@ namespace GlyCounter
         //iCounter variables
         private HashSet<Ion> _ionHashSet = [];
         private string _singleIonDesc = "";
-        private double _singleIonMZ = 0;
+        private double _singleIonMZ;
 
         // For application updates
         private readonly UpdateManager _updateManager;
@@ -734,9 +734,9 @@ namespace GlyCounter
                         double percentageLikelyGlyco_etd = (double)numberScansCountedLikelyGlyco_etd / (double)numberOfETDscans * 100;
                         double percentageLikelyGlyco_uvpd = (double)numberScansCountedLikelyGlyco_uvpd / (double)numberOfUVPDscans * 100;
 
-                        double percentageHCD = (double)numberOfHCDscans / numberOfMS2scans;
-                        double percentageETD = (double)numberOfETDscans / numberOfMS2scans;
-                        double percentageUVPD = (double)numberOfUVPDscans / numberOfMS2scans;
+                        double percentageHCD = (double)numberOfHCDscans / numberOfMS2scans * 100;
+                        double percentageETD = (double)numberOfETDscans / numberOfMS2scans * 100;
+                        double percentageUVPD = (double)numberOfUVPDscans / numberOfMS2scans * 100;
 
                         int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
                         int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
@@ -3052,9 +3052,9 @@ namespace GlyCounter
                 double percentageSum_uvpd = percentage1ox_uvpd + percentage2ox_uvpd + percentage3ox_uvpd + percentage4ox_uvpd + percentage5plusox_uvpd;
                 double numberofUVPDscansWithOxo_double = percentageSum_uvpd / 100 * numberOfUVPDscans;
 
-                double percentageHCD = (double)numberOfHCDscans / numberOfMSnscans;
-                double percentageETD = (double)numberOfETDscans / numberOfMSnscans;
-                double percentageUVPD = (double)numberOfUVPDscans / numberOfMSnscans;
+                double percentageHCD = (double)numberOfHCDscans / numberOfMSnscans * 100;
+                double percentageETD = (double)numberOfETDscans / numberOfMSnscans * 100;
+                double percentageUVPD = (double)numberOfUVPDscans / numberOfMSnscans * 100;
 
                 int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
                 int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
