@@ -67,7 +67,9 @@ namespace GlyCounter
         public Form1()
         {
             InitializeComponent();
-
+            this.AllowDrop = true;
+            this.DragEnter += new DragEventHandler(Form1_DragEnter);
+            this.DragDrop += new DragEventHandler(Form1_DragDrop);
             // Initialize the update manager
             _updateManager = UpdateManager.Instance;
 
@@ -2522,6 +2524,22 @@ namespace GlyCounter
                     return first;
                 });
             return new HashSet<Yion>(combined);
+        }
+
+        void Form1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                if (file.EndsWith("raw") || file.EndsWith("mzML"))
+                    fileList.Add(file);
+            }
+            textBox1.Text = "Successfully uploaded " + fileList.Count() + " file(s)";
         }
 
     }
