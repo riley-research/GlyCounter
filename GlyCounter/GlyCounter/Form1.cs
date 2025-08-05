@@ -61,6 +61,9 @@ namespace GlyCounter
         bool Ynaught_condenseChargeStates = true;
         bool Ynaught_ipsa = false;
 
+        private Color normalBackColor = Color.White;
+        private Color alternateBackColor = Color.Lavender;
+
         // For application updates
         private UpdateManager _updateManager;
 
@@ -70,6 +73,7 @@ namespace GlyCounter
             this.AllowDrop = true;
             this.DragEnter += new DragEventHandler(Form1_DragEnter);
             this.DragDrop += new DragEventHandler(Form1_DragDrop);
+
             // Initialize the update manager
             _updateManager = UpdateManager.Instance;
 
@@ -399,7 +403,7 @@ namespace GlyCounter
                         StreamWriter outputSummary = new StreamWriter(outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt");
 
                         //write headers
-                        outputOxo.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
+                        outputOxo.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
                         outputPeakDepth.Write("ScanNumber\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
                         if (outputIPSA != null)
                             outputIPSA.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
@@ -665,7 +669,7 @@ namespace GlyCounter
                                         errorString = errorString + error.ToString("F6") + "; ";
 
                                     //write scan info
-                                    outputOxo.Write(i + "\t" + retentionTime + "\t" + precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
+                                    outputOxo.Write(i + "\t" + retentionTime + "\t" + spectrum.MsLevel + "\t" + precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
                                     outputPeakDepth.Write(i + "\t" + retentionTime + "\t" + scanTIC + "\t" + totalOxoSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfOxoIons + "\t" + totalOxoSignal + "\t");
                                     if (outputIPSA != null)
                                         outputIPSA.WriteLine(i + "\t" + peakString + "\t" + errorString + "\t");
@@ -909,13 +913,13 @@ namespace GlyCounter
 
             List<SpecDataPointEx> peaks = spectrum.DataPoints.ToList();
 
-            var peakList = peaks.Where(peak => rangeOxonium.Contains(peak.Mz)).ToList();
+            List<SpecDataPointEx> peakList = peaks.Where(peak => rangeOxonium.Contains(peak.Mz)).ToList();
 
 
             if (!IT && thermo)
-                peakList = peakList.OrderBy(peak => (peak.Intensity / peak.Noise)).ToList();
+                peakList = peakList.OrderByDescending(peak => (peak.Intensity / peak.Noise)).ToList();
             else
-                peakList = peakList.OrderBy(peak => (peak.Intensity)).ToList();
+                peakList = peakList.OrderByDescending(peak => (peak.Intensity)).ToList();
 
             return peakList.FirstOrDefault();
         }
@@ -2528,9 +2532,9 @@ namespace GlyCounter
                         outputIPSA.Close();
                 });
             }
-                
 
-            
+
+
             finally
             {
                 timer1.Stop();
@@ -2569,5 +2573,66 @@ namespace GlyCounter
             textBox1.Text = "Successfully uploaded " + fileList.Count() + " file(s)";
         }
 
+        private void polarityCB_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox toggle = sender as CheckBox;
+
+            if (toggle.Checked)
+            {
+                SetNegativeMode();
+            }
+            else
+            {
+                SetPositiveMode();
+            }
+        }
+
+        private void SetNegativeMode()
+        {
+            HexNAcCheckedListBox.BackColor = alternateBackColor;
+            HexCheckedListBox.BackColor = alternateBackColor;
+            M6PCheckedListBox.BackColor = alternateBackColor;
+            FucoseCheckedListBox.BackColor = alternateBackColor;
+            SialicAcidCheckedListBox.BackColor = alternateBackColor;
+            OligosaccharideCheckedListBox.BackColor = alternateBackColor;
+
+            HexNAcCheckedListBox.Items.Clear();
+            HexCheckedListBox.Items.Clear();
+            M6PCheckedListBox.Items.Clear();
+            FucoseCheckedListBox.Items.Clear();
+            SialicAcidCheckedListBox.Items.Clear();
+            OligosaccharideCheckedListBox.Items.Clear();
+
+            HexNAcCheckedListBox.Items.AddRange(HexNAcNeg);
+            HexCheckedListBox.Items.AddRange(HexNeg);
+            M6PCheckedListBox.Items.AddRange(ManNeg);
+            FucoseCheckedListBox.Items.AddRange(FucoseNeg);
+            SialicAcidCheckedListBox.Items.AddRange(SialicNeg);
+            OligosaccharideCheckedListBox.Items.AddRange(OligoNeg);
+        }
+
+        private void SetPositiveMode()
+        {
+            HexNAcCheckedListBox.BackColor = normalBackColor;
+            HexCheckedListBox.BackColor = normalBackColor;
+            M6PCheckedListBox.BackColor = normalBackColor;
+            FucoseCheckedListBox.BackColor = normalBackColor;
+            SialicAcidCheckedListBox.BackColor = normalBackColor;
+            OligosaccharideCheckedListBox.BackColor = normalBackColor;
+
+            HexNAcCheckedListBox.Items.Clear();
+            HexCheckedListBox.Items.Clear();
+            M6PCheckedListBox.Items.Clear();
+            FucoseCheckedListBox.Items.Clear();
+            SialicAcidCheckedListBox.Items.Clear();
+            OligosaccharideCheckedListBox.Items.Clear();
+
+            HexNAcCheckedListBox.Items.AddRange(HexNAcPos);
+            HexCheckedListBox.Items.AddRange(HexPos);
+            M6PCheckedListBox.Items.AddRange(ManPos);
+            FucoseCheckedListBox.Items.AddRange(FucosePos);
+            SialicAcidCheckedListBox.Items.AddRange(SialicPos);
+            OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
+        }
     }
 }
