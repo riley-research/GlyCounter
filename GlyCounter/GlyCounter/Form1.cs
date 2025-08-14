@@ -20,8 +20,8 @@ namespace GlyCounter
     public partial class Form1 : Form
     {
         //here we build variables
+        string outputPath = "";
         List<string> fileList = [];
-        string outputPath = @"C:\";
         HashSet<OxoniumIon> oxoniumIonHashSet = new HashSet<OxoniumIon>();
         string filePath = "";
         string defaultOutput = @"C:\";
@@ -169,7 +169,10 @@ namespace GlyCounter
 
         private void Gly_outputTextBox_TextChanged(object sender, EventArgs e)
         {
-            outputPath = Gly_outputTextBox.Text + @"\";
+            if (Directory.Exists(Gly_outputTextBox.Text))
+            {
+                outputPath = Gly_outputTextBox.Text + @"\";
+            }
         }
 
         private async void StartButton_Click(object sender, EventArgs e)
@@ -186,13 +189,35 @@ namespace GlyCounter
                 await Task.Run(() =>
                 {
                     bool usingda = false;
-                    bool using204 = false;
+                    using204 = false;
 
                     if (string.IsNullOrEmpty(outputPath) || !Directory.Exists(outputPath))
                     {
-                        //hopefully this defaults to the raw file path
-                        outputPath = defaultOutput;
-                        Gly_outputTextBox.Text = outputPath;
+                        if (fileList.Count > 0)
+                            outputPath = Path.GetDirectoryName(fileList[0]) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                        else
+                            outputPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    }
+
+                    if (string.IsNullOrEmpty(outputPath) || !Directory.Exists(outputPath))
+                    {
+                        if (fileList.Count > 0)
+                        {
+                            outputPath = Path.GetDirectoryName(fileList[0]) ?? defaultOutput;
+                        }
+                        else
+                        {
+                            outputPath = defaultOutput;
+                        }
+
+                        if (Gly_outputTextBox.InvokeRequired)
+                        {
+                            Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = outputPath));
+                        }
+                        else
+                        {
+                            Gly_outputTextBox.Text = outputPath;
+                        }
                     }
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
@@ -392,15 +417,15 @@ namespace GlyCounter
 
                         //initialize streamwriter output files
                         string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
-                        StreamWriter outputOxo = new StreamWriter(outputPath + @"\" + fileNameShort + "_GlyCounter_OxoSignal.txt");
-                        StreamWriter outputPeakDepth = new StreamWriter(outputPath + @"\" + fileNameShort + "_GlyCounter_OxoPeakDepth.txt");
+                        StreamWriter outputOxo = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_GlyCounter_OxoSignal.txt"));
+                        StreamWriter outputPeakDepth = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_GlyCounter_OxoPeakDepth.txt"));
                         StreamWriter outputIPSA = null;
 
                         if (ipsaCheckBox.Checked)
                         {
-                            outputIPSA = new StreamWriter(outputPath + @"\" + fileNameShort + "_Glycounter_IPSA.txt");
+                            outputIPSA = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_Glycounter_IPSA.txt"));
                         }
-                        StreamWriter outputSummary = new StreamWriter(outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt");
+                        StreamWriter outputSummary = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt"));
 
                         //write headers
                         outputOxo.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
@@ -1312,7 +1337,8 @@ namespace GlyCounter
 
         private void Ynaught_outputTextBox_TextChanged(object sender, EventArgs e)
         {
-            outputPath = Ynaught_outputTextBox.Text + @"\";
+            if(Directory.Exists(Ynaught_outputTextBox.Text))
+                outputPath = Ynaught_outputTextBox.Text + @"\";
         }
 
         //set up custom additions for Y-ion upload
@@ -1668,9 +1694,38 @@ namespace GlyCounter
                     //make sure output path is real otherwise set to default
                     if (string.IsNullOrEmpty(outputPath) || !Directory.Exists(outputPath))
                     {
-                        //hopefully this defaults to the raw file path
-                        outputPath = defaultOutput;
-                        Gly_outputTextBox.Text = outputPath;
+                        if (!string.IsNullOrEmpty(Ynaught_rawFilePath) && File.Exists(Ynaught_rawFilePath))
+                        {
+                            if (string.IsNullOrEmpty(outputPath) || !Directory.Exists(outputPath))
+                            {
+                                if (fileList.Count > 0)
+                                    outputPath = Path.GetDirectoryName(fileList[0]) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                                else
+                                    outputPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                            }
+
+                            outputPath = Path.GetDirectoryName(Ynaught_rawFilePath) ?? defaultOutput;
+                            if (Ynaught_outputTextBox.InvokeRequired)
+                            {
+                                Ynaught_outputTextBox.Invoke(new Action(() => Ynaught_outputTextBox.Text = outputPath));
+                            }
+                            else
+                            {
+                                Ynaught_outputTextBox.Text = outputPath;
+                            }
+                        }
+                        else
+                        {
+                            outputPath = defaultOutput;
+                            if (Ynaught_outputTextBox.InvokeRequired)
+                            {
+                                Ynaught_outputTextBox.Invoke(new Action(() => Ynaught_outputTextBox.Text = outputPath));
+                            }
+                            else
+                            {
+                                Ynaught_outputTextBox.Text = outputPath;
+                            }
+                        }
                     }
 
                     Stopwatch stopwatch2 = new Stopwatch();
@@ -1893,12 +1948,12 @@ namespace GlyCounter
 
                     //set up each output stream
                     string fileNameShort = Path.GetFileNameWithoutExtension(Ynaught_rawFilePath);
-                    StreamWriter outputYion = new StreamWriter(outputPath + @"\" + fileNameShort + "_GlyCounter_YionSignal.txt");
-                    StreamWriter outputSummary = new StreamWriter(outputPath + @"\" + fileNameShort + "_GlyCounter_YionSummary.txt");
+                    StreamWriter outputYion = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_GlyCounter_YionSignal.txt"));
+                    StreamWriter outputSummary = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_GlyCounter_YionSummary.txt"));
                     StreamWriter outputIPSA = null;
                     if (Ynaught_ipsa)
                     {
-                        outputIPSA = new StreamWriter(outputPath + @"\" + fileNameShort + "_Glycounter_YionIPSA.txt");
+                        outputIPSA = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_Glycounter_YionIPSA.txt"));
 
                         outputIPSA.WriteLine("ScanNumber" + '\t' + "Yion" + '\t' + "m/z" + '\t' + "MassError");
                     }
