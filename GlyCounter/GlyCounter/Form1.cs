@@ -13,6 +13,7 @@ using Nova.Io.Read;
 using ThermoFisher.CommonCore.Data.Interfaces;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using System.CodeDom;
+using System.Globalization;
 
 
 namespace GlyCounter
@@ -227,14 +228,14 @@ namespace GlyCounter
                     {
                         if (CanConvertDouble(ppmTol_textBox.Text, daTolerance))
                         {
-                            daTolerance = Convert.ToDouble(ppmTol_textBox.Text);
+                            daTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
                             usingda = true;
                         }
 
                     }
                     else
                         if (CanConvertDouble(ppmTol_textBox.Text, ppmTolerance))
-                        ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text);
+                            ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
 
                     if (usingda)
                         tol = daTolerance;
@@ -242,37 +243,37 @@ namespace GlyCounter
                         tol = ppmTolerance;
 
                     if (CanConvertDouble(SN_textBox.Text, SNthreshold))
-                        SNthreshold = Convert.ToDouble(SN_textBox.Text);
+                        SNthreshold = Convert.ToDouble(SN_textBox.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(PeakDepth_Box_HCD.Text, peakDepthThreshold_hcd))
-                        peakDepthThreshold_hcd = Convert.ToDouble(PeakDepth_Box_HCD.Text);
+                        peakDepthThreshold_hcd = Convert.ToDouble(PeakDepth_Box_HCD.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(PeakDepth_Box_ETD.Text, peakDepthThreshold_etd))
-                        peakDepthThreshold_etd = Convert.ToDouble(PeakDepth_Box_ETD.Text);
+                        peakDepthThreshold_etd = Convert.ToDouble(PeakDepth_Box_ETD.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(PeakDepth_Box_UVPD.Text, peakDepthThreshold_uvpd))
-                        peakDepthThreshold_uvpd = Convert.ToDouble(PeakDepth_Box_UVPD.Text);
+                        peakDepthThreshold_uvpd = Convert.ToDouble(PeakDepth_Box_UVPD.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(hcdTICfraction.Text, oxoTICfractionThreshold_hcd))
-                        oxoTICfractionThreshold_hcd = Convert.ToDouble(hcdTICfraction.Text);
+                        oxoTICfractionThreshold_hcd = Convert.ToDouble(hcdTICfraction.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(etdTICfraction.Text, oxoTICfractionThreshold_etd))
-                        oxoTICfractionThreshold_etd = Convert.ToDouble(etdTICfraction.Text);
+                        oxoTICfractionThreshold_etd = Convert.ToDouble(etdTICfraction.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(uvpdTICfraction.Text, oxoTICfractionThreshold_uvpd))
-                        oxoTICfractionThreshold_uvpd = Convert.ToDouble(uvpdTICfraction.Text);
+                        oxoTICfractionThreshold_uvpd = Convert.ToDouble(uvpdTICfraction.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(OxoCountRequireBox_hcd.Text, oxoCountRequirement_hcd_user))
-                        oxoCountRequirement_hcd_user = Convert.ToDouble(OxoCountRequireBox_hcd.Text);
+                        oxoCountRequirement_hcd_user = Convert.ToDouble(OxoCountRequireBox_hcd.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(OxoCountRequireBox_etd.Text, oxoCountRequirement_etd_user))
-                        oxoCountRequirement_etd_user = Convert.ToDouble(OxoCountRequireBox_etd.Text);
+                        oxoCountRequirement_etd_user = Convert.ToDouble(OxoCountRequireBox_etd.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(OxoCountRequireBox_uvpd.Text, oxoCountRequirement_uvpd_user))
-                        oxoCountRequirement_uvpd_user = Convert.ToDouble(OxoCountRequireBox_uvpd.Text);
+                        oxoCountRequirement_uvpd_user = Convert.ToDouble(OxoCountRequireBox_uvpd.Text, CultureInfo.InvariantCulture);
 
                     if (CanConvertDouble(intensityThresholdTextBox.Text, intensityThreshold))
-                        intensityThreshold = Convert.ToDouble(intensityThresholdTextBox.Text);
+                        intensityThreshold = Convert.ToDouble(intensityThresholdTextBox.Text, CultureInfo.InvariantCulture);
 
                     string toleranceString = "ppmTol: ";
                     if (usingda)
@@ -309,9 +310,9 @@ namespace GlyCounter
                         while (csv.ReadNextRecord())
                         {
                             OxoniumIon oxoIon = new OxoniumIon();
-                            oxoIon.theoMZ = double.Parse(csv["m/z"]);
+                            oxoIon.theoMZ = double.Parse(csv["m/z"], CultureInfo.InvariantCulture);
                             string userDescription = csv["Description"];
-                            oxoIon.description = double.Parse(csv["m/z"]) + ", " + userDescription;
+                            oxoIon.description = double.Parse(csv["m/z"], CultureInfo.InvariantCulture) + ", " + userDescription;
                             oxoIon.glycanSource = "Custom";
                             oxoIon.hcdCount = 0;
                             oxoIon.etdCount = 0;
@@ -916,7 +917,7 @@ namespace GlyCounter
         {
             string[] oxoniumIonArray = item.ToString().Split(',');
             OxoniumIon oxoIon = new OxoniumIon();
-            oxoIon.theoMZ = Convert.ToDouble(oxoniumIonArray[0]);
+            oxoIon.theoMZ = Convert.ToDouble(oxoniumIonArray[0], CultureInfo.InvariantCulture);
             oxoIon.description = item.ToString();
             oxoIon.glycanSource = glycanSource;
             oxoIon.hcdCount = 0;
@@ -925,7 +926,7 @@ namespace GlyCounter
             oxoIon.peakDepth = arbitraryPeakDepthIfNotFound;
             //only need to check for 204 in hexnac ions and custom ions
             if (check204)
-                if (Convert.ToDouble(oxoniumIonArray[0]) == 204.0867)
+                if (Convert.ToDouble(oxoniumIonArray[0], CultureInfo.InvariantCulture) == 204.0867)
                     using204 = true;
             return oxoIon;
         }
@@ -1739,13 +1740,13 @@ namespace GlyCounter
                     if (Ynaught_DaCheckBox.Checked)
                     {
                         if (CanConvertDouble(Ynaught_ppmTolTextBox.Text, daTolerance))
-                            Ynaught_daTolerance = Convert.ToDouble(Ynaught_ppmTolTextBox.Text);
+                            Ynaught_daTolerance = Convert.ToDouble(Ynaught_ppmTolTextBox.Text, CultureInfo.InvariantCulture);
                         Ynaught_usingda = true;
                     }
                     else
                     {
                         if (CanConvertDouble(Ynaught_ppmTolTextBox.Text, ppmTolerance))
-                            Ynaught_ppmTolerance = Convert.ToDouble(Ynaught_ppmTolTextBox.Text);
+                            Ynaught_ppmTolerance = Convert.ToDouble(Ynaught_ppmTolTextBox.Text, CultureInfo.InvariantCulture);
                     }
 
                     if (Ynaught_usingda)
@@ -1754,7 +1755,7 @@ namespace GlyCounter
                         Ynaught_tol = ppmTolerance;
 
                     if (CanConvertDouble(Ynaught_SNthresholdTextBox.Text, SNthreshold))
-                        Ynaught_SNthreshold = Convert.ToDouble(Ynaught_SNthresholdTextBox.Text);
+                        Ynaught_SNthreshold = Convert.ToDouble(Ynaught_SNthresholdTextBox.Text, CultureInfo.InvariantCulture);
 
                     if (YNaught_IPSAcheckbox.Checked) Ynaught_ipsa = true;
 
@@ -1764,7 +1765,7 @@ namespace GlyCounter
                     {
                         string[] yIonArray = item.ToString().Split(',');
                         Yion yIon = new Yion();
-                        yIon.theoMass = Convert.ToDouble(yIonArray[0]);
+                        yIon.theoMass = Convert.ToDouble(yIonArray[0], CultureInfo.InvariantCulture);
                         yIon.description = item.ToString();
                         yIon.glycanSource = "Nglycan";
                         yIon.hcdCount = 0;
@@ -1794,7 +1795,7 @@ namespace GlyCounter
                     {
                         string[] yIonArray = item.ToString().Split(',');
                         Yion yIon = new Yion();
-                        yIon.theoMass = Convert.ToDouble(yIonArray[0]);
+                        yIon.theoMass = Convert.ToDouble(yIonArray[0], CultureInfo.InvariantCulture);
                         yIon.description = item.ToString();
                         yIon.glycanSource = "Nglycan_Fucose";
                         yIon.hcdCount = 0;
@@ -1822,7 +1823,7 @@ namespace GlyCounter
                     {
                         string[] yIonArray = item.ToString().Split(',');
                         Yion yIon = new Yion();
-                        yIon.theoMass = Convert.ToDouble(yIonArray[0]);
+                        yIon.theoMass = Convert.ToDouble(yIonArray[0], CultureInfo.InvariantCulture);
                         yIon.description = item.ToString();
                         yIon.glycanSource = "Oglycan";
                         yIon.hcdCount = 0;
@@ -1850,7 +1851,7 @@ namespace GlyCounter
                     {
                         string[] yIonArray = item.ToString().Split(',');
                         Yion yIon = new Yion();
-                        yIon.theoMass = Convert.ToDouble(yIonArray[1].Substring(1));
+                        yIon.theoMass = Convert.ToDouble(yIonArray[1].Substring(1), CultureInfo.InvariantCulture);
                         yIon.description = item.ToString();
                         yIon.glycanSource = "Subtraction";
                         yIon.hcdCount = 0;
@@ -1868,9 +1869,9 @@ namespace GlyCounter
                             while (csv.ReadNextRecord())
                             {
                                 Yion yIon = new Yion();
-                                yIon.theoMass = double.Parse(csv["Mass"]);
+                                yIon.theoMass = double.Parse(csv["Mass"], CultureInfo.InvariantCulture);
                                 string userDescription = csv["Description"];
-                                yIon.description = double.Parse(csv["Mass"]) + ", " + userDescription;
+                                yIon.description = double.Parse(csv["Mass"], CultureInfo.InvariantCulture) + ", " + userDescription;
                                 yIon.glycanSource = "CustomAddition";
                                 yIon.hcdCount = 0;
                                 yIon.etdCount = 0;
@@ -1889,9 +1890,9 @@ namespace GlyCounter
                             while (csv.ReadNextRecord())
                             {
                                 Yion yIon = new Yion();
-                                yIon.theoMass = double.Parse(csv["Mass"]);
+                                yIon.theoMass = double.Parse(csv["Mass"], CultureInfo.InvariantCulture);
                                 string userDescription = csv["Description"];
-                                yIon.description = double.Parse(csv["Mass"]) + ", " + userDescription;
+                                yIon.description = double.Parse(csv["Mass"], CultureInfo.InvariantCulture) + ", " + userDescription;
                                 yIon.glycanSource = "CustomSubtraction";
                                 yIon.hcdCount = 0;
                                 yIon.etdCount = 0;
@@ -1908,7 +1909,7 @@ namespace GlyCounter
                         while (txt.ReadNextRecord())
                         {
                             string glycanName = txt["Glycan"];
-                            double glycanMass = double.Parse(txt["Mass"]);
+                            double glycanMass = double.Parse(txt["Mass"], CultureInfo.InvariantCulture);
                             if (!glycanMassDictionary.ContainsKey(glycanMass))
                                 glycanMassDictionary.Add(glycanMass, glycanName);
                         }
@@ -1997,7 +1998,7 @@ namespace GlyCounter
                             string modsToBeParsed = txt["Assigned Modifications"];
                             int charge = int.Parse(txt["Charge"]);
                             string totalGlycanCompToBeParsed = txt["Total Glycan Composition"];
-                            double precursorMZ = double.Parse(txt["Observed M/Z"]);
+                            double precursorMZ = double.Parse(txt["Observed M/Z"], CultureInfo.InvariantCulture);
 
                             //only process if it's a glycopeptide
                             if (!totalGlycanCompToBeParsed.Equals(""))
@@ -2014,7 +2015,7 @@ namespace GlyCounter
 
                                         //get the mass of the mod
                                         string[] modsArray3 = modsArray2[1].Split(')');
-                                        double modMass = Convert.ToDouble(modsArray3[0]);
+                                        double modMass = Convert.ToDouble(modsArray3[0], CultureInfo.InvariantCulture);
 
                                         Modification modToAdd = new Modification(modMass, modsArray3[0]);
                                         int modPosition = 0;
@@ -2273,7 +2274,7 @@ namespace GlyCounter
 
                                 //use intensity threshold for mzml files
                                 if (CanConvertDouble(Ynaught_intTextBox.Text, Ynaught_intensityThreshold))
-                                    Ynaught_intensityThreshold = Convert.ToDouble(Ynaught_intTextBox.Text);
+                                    Ynaught_intensityThreshold = Convert.ToDouble(Ynaught_intTextBox.Text, CultureInfo.InvariantCulture);
 
                                 //find all the Yions for each charge state considered
                                 for (int i = chargeUpperBound; i >= chargeLowerBound; i--)

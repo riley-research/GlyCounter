@@ -226,6 +226,7 @@ namespace GlyCounter
             HexNAcCheckedListBox.Name = "HexNAcCheckedListBox";
             HexNAcCheckedListBox.Size = new Size(276, 130);
             HexNAcCheckedListBox.TabIndex = 1;
+            HexNAcCheckedListBox.Items.AddRange(HexNAcPos);
             HexNAcCheckedListBox.SelectedIndexChanged += HexNAcCheckedListBox_SelectedIndexChanged;
             // 
             // HexCheckedListBox
@@ -237,6 +238,7 @@ namespace GlyCounter
             HexCheckedListBox.Name = "HexCheckedListBox";
             HexCheckedListBox.Size = new Size(276, 94);
             HexCheckedListBox.TabIndex = 4;
+            HexCheckedListBox.Items.AddRange(HexPos);
             HexCheckedListBox.SelectedIndexChanged += HexCheckedListBox_SelectedIndexChanged;
             // 
             // SialicAcidCheckedListBox
@@ -248,6 +250,7 @@ namespace GlyCounter
             SialicAcidCheckedListBox.Name = "SialicAcidCheckedListBox";
             SialicAcidCheckedListBox.Size = new Size(278, 130);
             SialicAcidCheckedListBox.TabIndex = 2;
+            SialicAcidCheckedListBox.Items.AddRange(SialicPos);
             SialicAcidCheckedListBox.SelectedIndexChanged += SialicAcidCheckedListBox_SelectedIndexChanged;
             // 
             // OligosaccharideCheckedListBox
@@ -259,6 +262,7 @@ namespace GlyCounter
             OligosaccharideCheckedListBox.Name = "OligosaccharideCheckedListBox";
             OligosaccharideCheckedListBox.Size = new Size(278, 346);
             OligosaccharideCheckedListBox.TabIndex = 3;
+            OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
             OligosaccharideCheckedListBox.SelectedIndexChanged += OligosaccharideCheckedListBox_SelectedIndexChanged;
             // 
             // HexNAc_ions
@@ -314,6 +318,7 @@ namespace GlyCounter
             M6PCheckedListBox.Name = "M6PCheckedListBox";
             M6PCheckedListBox.Size = new Size(276, 40);
             M6PCheckedListBox.TabIndex = 5;
+            M6PCheckedListBox.Items.AddRange(ManPos);
             M6PCheckedListBox.SelectedIndexChanged += M6PCheckedListBox_SelectedIndexChanged;
             // 
             // M6P_ions
@@ -572,6 +577,7 @@ namespace GlyCounter
             FucoseCheckedListBox.Name = "FucoseCheckedListBox";
             FucoseCheckedListBox.Size = new Size(278, 94);
             FucoseCheckedListBox.TabIndex = 41;
+            FucoseCheckedListBox.Items.AddRange(FucosePos);
             FucoseCheckedListBox.SelectedIndexChanged += FucoseCheckedListBox_SelectedIndexChanged;
             // 
             // Fucose_ions_label
