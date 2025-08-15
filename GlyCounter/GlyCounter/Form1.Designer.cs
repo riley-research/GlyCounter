@@ -221,7 +221,6 @@ namespace GlyCounter
             HexNAcCheckedListBox.BackColor = SystemColors.Window;
             HexNAcCheckedListBox.CheckOnClick = true;
             HexNAcCheckedListBox.FormattingEnabled = true;
-            HexNAcCheckedListBox.Items.AddRange(HexNAcPos);
             HexNAcCheckedListBox.Location = new Point(16, 158);
             HexNAcCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             HexNAcCheckedListBox.Name = "HexNAcCheckedListBox";
@@ -233,7 +232,6 @@ namespace GlyCounter
             // 
             HexCheckedListBox.CheckOnClick = true;
             HexCheckedListBox.FormattingEnabled = true;
-            HexCheckedListBox.Items.AddRange(HexPos);
             HexCheckedListBox.Location = new Point(16, 367);
             HexCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             HexCheckedListBox.Name = "HexCheckedListBox";
@@ -245,7 +243,6 @@ namespace GlyCounter
             // 
             SialicAcidCheckedListBox.CheckOnClick = true;
             SialicAcidCheckedListBox.FormattingEnabled = true;
-            SialicAcidCheckedListBox.Items.AddRange(SialicPos);
             SialicAcidCheckedListBox.Location = new Point(315, 158);
             SialicAcidCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             SialicAcidCheckedListBox.Name = "SialicAcidCheckedListBox";
@@ -257,7 +254,6 @@ namespace GlyCounter
             // 
             OligosaccharideCheckedListBox.CheckOnClick = true;
             OligosaccharideCheckedListBox.FormattingEnabled = true;
-            OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
             OligosaccharideCheckedListBox.Location = new Point(619, 158);
             OligosaccharideCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             OligosaccharideCheckedListBox.Name = "OligosaccharideCheckedListBox";
@@ -313,7 +309,6 @@ namespace GlyCounter
             // 
             M6PCheckedListBox.CheckOnClick = true;
             M6PCheckedListBox.FormattingEnabled = true;
-            M6PCheckedListBox.Items.AddRange(ManPos);
             M6PCheckedListBox.Location = new Point(16, 551);
             M6PCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             M6PCheckedListBox.Name = "M6PCheckedListBox";
@@ -572,7 +567,6 @@ namespace GlyCounter
             // 
             FucoseCheckedListBox.CheckOnClick = true;
             FucoseCheckedListBox.FormattingEnabled = true;
-            FucoseCheckedListBox.Items.AddRange(FucosePos);
             FucoseCheckedListBox.Location = new Point(314, 367);
             FucoseCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             FucoseCheckedListBox.Name = "FucoseCheckedListBox";
@@ -794,7 +788,7 @@ namespace GlyCounter
             // ignoreMSLevelCB
             // 
             ignoreMSLevelCB.AutoSize = true;
-            ignoreMSLevelCB.Location = new Point(918, 629);
+            ignoreMSLevelCB.Location = new Point(962, 629);
             ignoreMSLevelCB.Name = "ignoreMSLevelCB";
             ignoreMSLevelCB.Size = new Size(221, 19);
             ignoreMSLevelCB.TabIndex = 75;
@@ -844,7 +838,7 @@ namespace GlyCounter
             // polarityCB
             // 
             polarityCB.AutoSize = true;
-            polarityCB.Location = new Point(619, 637);
+            polarityCB.Location = new Point(783, 612);
             polarityCB.Name = "polarityCB";
             polarityCB.Size = new Size(146, 19);
             polarityCB.TabIndex = 70;
@@ -874,7 +868,7 @@ namespace GlyCounter
             // ipsaCheckBox
             // 
             ipsaCheckBox.AutoSize = true;
-            ipsaCheckBox.Location = new Point(619, 612);
+            ipsaCheckBox.Location = new Point(618, 612);
             ipsaCheckBox.Name = "ipsaCheckBox";
             ipsaCheckBox.Size = new Size(159, 19);
             ipsaCheckBox.TabIndex = 68;
