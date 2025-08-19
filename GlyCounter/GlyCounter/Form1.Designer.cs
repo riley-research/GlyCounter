@@ -869,7 +869,6 @@ namespace GlyCounter
             Gly_outputTextBox.Size = new Size(1085, 23);
             Gly_outputTextBox.TabIndex = 55;
             Gly_outputTextBox.Text = "Select output directory";
-            Gly_outputTextBox.TextChanged += Gly_outputTextBox_TextChanged;
             // 
             // ipsaCheckBox
             // 
@@ -1084,7 +1083,6 @@ namespace GlyCounter
             Ynaught_outputTextBox.Size = new Size(798, 23);
             Ynaught_outputTextBox.TabIndex = 79;
             Ynaught_outputTextBox.Text = "Select output directory";
-            Ynaught_outputTextBox.TextChanged += Ynaught_outputTextBox_TextChanged;
             // 
             // YNaught_IPSAcheckbox
             // 

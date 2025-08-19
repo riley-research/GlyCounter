@@ -2,7 +2,6 @@ using CSMSL;
 using CSMSL.Proteomics;
 using LumenWorks.Framework.IO.Csv;
 using MathNet.Numerics.Statistics;
-using PSI_Interface.MSData;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -10,7 +9,6 @@ using System.IO;
 using System.Text;
 using Nova.Data;
 using Nova.Io.Read;
-using ThermoFisher.CommonCore.Data.Interfaces;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using System.CodeDom;
 using System.Globalization;
@@ -168,16 +166,35 @@ namespace GlyCounter
             }
         }
 
-        private void Gly_outputTextBox_TextChanged(object sender, EventArgs e)
+        private async void StartButton_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(Gly_outputTextBox.Text))
             {
                 outputPath = Gly_outputTextBox.Text + @"\";
             }
-        }
+            else
+            {
+                DialogResult result = MessageBox.Show(
+                    "Folder does not exist. Do you want to create a new one?",
+                    "Create Folder",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Question
+                );
 
-        private async void StartButton_Click(object sender, EventArgs e)
-        {
+                if (result == DialogResult.OK)
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(Gly_outputTextBox.Text);
+                    }
+                    catch { }
+                }
+                else
+                {
+                    return;
+                }
+
+            }
 
             timer1.Interval = 1000;
             timer1.Tick += new EventHandler(OnTimerTick);
@@ -905,7 +922,7 @@ namespace GlyCounter
             finally
             {
                 timer1.Stop();
-                StatusLabel.Text = "Finished";
+                StatusLabel.Text = "Output to: " + outputPath;
                 FinishTimeLabel.Text = "Finished at: " + DateTime.Now.ToString("HH:mm:ss");
                 MessageBox.Show("Finished.");
                 oxoniumIonHashSet.Clear();
@@ -1336,12 +1353,6 @@ namespace GlyCounter
             }
         }
 
-        private void Ynaught_outputTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if(Directory.Exists(Ynaught_outputTextBox.Text))
-                outputPath = Ynaught_outputTextBox.Text + @"\";
-        }
-
         //set up custom additions for Y-ion upload
         private void BrowseCustomAdditions_Button_Click(object sender, EventArgs e)
         {
@@ -1682,6 +1693,34 @@ namespace GlyCounter
         //start the Y-ion processing
         private async void Ynaught_StartButton_Click(object sender, EventArgs e)
         {
+            if (Directory.Exists(Ynaught_outputTextBox.Text))
+            {
+                outputPath = Ynaught_outputTextBox.Text + @"\";
+            }
+            else
+            {
+                DialogResult result = MessageBox.Show(
+                    "Folder does not exist. Do you want to create a new one?",
+                    "Create Folder",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.OK)
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(Ynaught_outputTextBox.Text);
+                    }
+                    catch { }
+                }
+                else
+                {
+                    return;
+                }
+
+            }
+
             timer2.Interval = 1000;
             timer2.Tick += new EventHandler(OnTimerTick);
             timer2.Start();
