@@ -48,17 +48,17 @@ namespace GlyCounter
         string Ynaught_pepIDFilePath = "";
         string Ynaught_glycanMassesFilePath = "";
         string Ynaught_rawFilePath = "";
-        double Ynaught_daTolerance = 1;
-        double Ynaught_ppmTolerance = 15;
-        double Ynaught_tol = new double();
+        double Ynaught_tol = 0;
         double Ynaught_SNthreshold = 3;
         double Ynaught_intensityThreshold = 1000;
+        double Ynaught_ppmTolerance;
+        double Ynaught_daTolerance;
         string Ynaught_chargeLB = "1";
         string Ynaught_chargeUB = "P";
         string Ynaught_csvCustomAdditions = "empty";
         string Ynaught_csvCustomSubtractions = "empty";
         bool Ynaught_condenseChargeStates = true;
-        bool Ynaught_ipsa = false;
+        bool Ynaught_ipsa;
 
         private Color normalBackColor = Color.White;
         private Color alternateBackColor = Color.Lavender;
@@ -323,7 +323,7 @@ namespace GlyCounter
 
                     if (!csvCustomFile.Equals("empty"))
                     {
-                        StreamReader csvFile = new StreamReader(csvCustomFile);
+                        using StreamReader csvFile = new StreamReader(csvCustomFile);
                         using var csv = new CsvReader(csvFile, true);
                         while (csv.ReadNextRecord())
                         {
@@ -1903,7 +1903,7 @@ namespace GlyCounter
                     //this will only execute if the user uploaded a file and changed the text from being empty
                     if (!Ynaught_csvCustomAdditions.Equals("empty"))
                     {
-                        StreamReader csvFile = new StreamReader(Ynaught_csvCustomAdditions);
+                        using StreamReader csvFile = new StreamReader(Ynaught_csvCustomAdditions);
                         using (var csv = new CsvReader(csvFile, true))
                         {
                             while (csv.ReadNextRecord())
@@ -1924,7 +1924,7 @@ namespace GlyCounter
                     //this will only execute if the user uploaded a file and changed the text from being empty
                     if (!Ynaught_csvCustomSubtractions.Equals("empty"))
                     {
-                        StreamReader csvFile = new StreamReader(Ynaught_csvCustomSubtractions);
+                        using StreamReader csvFile = new StreamReader(Ynaught_csvCustomSubtractions);
                         using (var csv = new CsvReader(csvFile, true))
                         {
                             while (csv.ReadNextRecord())
@@ -1943,7 +1943,7 @@ namespace GlyCounter
 
                     //create dictionary for glycan masses and populate from the user uploaded file
                     Dictionary<double, string> glycanMassDictionary = new Dictionary<double, string>();
-                    StreamReader glycanMassesTxtFile = new StreamReader(Ynaught_glycanMassesFilePath);
+                    using StreamReader glycanMassesTxtFile = new StreamReader(Ynaught_glycanMassesFilePath);
                     using (var txt = new CsvReader(glycanMassesTxtFile, true, '\t'))
                     {
                         while (txt.ReadNextRecord())
@@ -2015,7 +2015,7 @@ namespace GlyCounter
 
                     //this is currently set up for MSFragger data form the psms file
                     //we might want to write a converter for different data types
-                    StreamReader pepIDtxtFile = new StreamReader(Ynaught_pepIDFilePath);
+                    using StreamReader pepIDtxtFile = new StreamReader(Ynaught_pepIDFilePath);
                     using (var txt = new CsvReader(pepIDtxtFile, true, '\t'))
                     {
                         while (txt.ReadNextRecord())
