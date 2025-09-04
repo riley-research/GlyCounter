@@ -72,6 +72,13 @@ namespace GlyCounter
             this.DragEnter += new DragEventHandler(Form1_DragEnter);
             this.DragDrop += new DragEventHandler(Form1_DragDrop);
 
+            HexNAcCheckedListBox.Items.AddRange(HexNAcPos);
+            HexCheckedListBox.Items.AddRange(HexPos);
+            SialicAcidCheckedListBox.Items.AddRange(SialicPos);
+            OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
+            M6PCheckedListBox.Items.AddRange(ManPos);
+            FucoseCheckedListBox.Items.AddRange(FucosePos);
+
             // Initialize the update manager
             _updateManager = UpdateManager.Instance;
 
