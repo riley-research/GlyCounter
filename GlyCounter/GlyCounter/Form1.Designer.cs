@@ -144,8 +144,6 @@ namespace GlyCounter
             SeparateChargeStates = new RadioButton();
             GroupChargeStates = new RadioButton();
             Ynaught_DaCheckBox = new CheckBox();
-            BrowseGlycans_Button = new Button();
-            LoadInGlycanMasses_TextBox = new TextBox();
             Ynaught_GlyCounterLogo = new PictureBox();
             Ynaught_FinishTimeLabel = new Label();
             Ynaught_startTimeLabel = new Label();
@@ -1001,8 +999,6 @@ namespace GlyCounter
             YnaughtTab.Controls.Add(LowerBoundTextBox);
             YnaughtTab.Controls.Add(panel1);
             YnaughtTab.Controls.Add(Ynaught_DaCheckBox);
-            YnaughtTab.Controls.Add(BrowseGlycans_Button);
-            YnaughtTab.Controls.Add(LoadInGlycanMasses_TextBox);
             YnaughtTab.Controls.Add(Ynaught_GlyCounterLogo);
             YnaughtTab.Controls.Add(Ynaught_FinishTimeLabel);
             YnaughtTab.Controls.Add(Ynaught_startTimeLabel);
@@ -1068,7 +1064,7 @@ namespace GlyCounter
             // 
             // Ynaught_outputButton
             // 
-            Ynaught_outputButton.Location = new Point(819, 93);
+            Ynaught_outputButton.Location = new Point(1095, 80);
             Ynaught_outputButton.Name = "Ynaught_outputButton";
             Ynaught_outputButton.Size = new Size(90, 23);
             Ynaught_outputButton.TabIndex = 80;
@@ -1078,16 +1074,16 @@ namespace GlyCounter
             // 
             // Ynaught_outputTextBox
             // 
-            Ynaught_outputTextBox.Location = new Point(15, 93);
+            Ynaught_outputTextBox.Location = new Point(15, 81);
             Ynaught_outputTextBox.Name = "Ynaught_outputTextBox";
-            Ynaught_outputTextBox.Size = new Size(798, 23);
+            Ynaught_outputTextBox.Size = new Size(1074, 23);
             Ynaught_outputTextBox.TabIndex = 79;
             Ynaught_outputTextBox.Text = "Select output directory";
             // 
             // YNaught_IPSAcheckbox
             // 
             YNaught_IPSAcheckbox.AutoSize = true;
-            YNaught_IPSAcheckbox.Location = new Point(320, 615);
+            YNaught_IPSAcheckbox.Location = new Point(320, 601);
             YNaught_IPSAcheckbox.Name = "YNaught_IPSAcheckbox";
             YNaught_IPSAcheckbox.Size = new Size(159, 19);
             YNaught_IPSAcheckbox.TabIndex = 78;
@@ -1194,29 +1190,10 @@ namespace GlyCounter
             Ynaught_DaCheckBox.UseVisualStyleBackColor = true;
             Ynaught_DaCheckBox.CheckedChanged += Ynaught_DaCheckBox_CheckedChanged;
             // 
-            // BrowseGlycans_Button
-            // 
-            BrowseGlycans_Button.Location = new Point(1095, 35);
-            BrowseGlycans_Button.Name = "BrowseGlycans_Button";
-            BrowseGlycans_Button.Size = new Size(90, 23);
-            BrowseGlycans_Button.TabIndex = 48;
-            BrowseGlycans_Button.Text = "Browse";
-            BrowseGlycans_Button.UseVisualStyleBackColor = true;
-            BrowseGlycans_Button.Click += BrowseGlycans_Button_Click;
-            // 
-            // LoadInGlycanMasses_TextBox
-            // 
-            LoadInGlycanMasses_TextBox.Location = new Point(15, 35);
-            LoadInGlycanMasses_TextBox.Name = "LoadInGlycanMasses_TextBox";
-            LoadInGlycanMasses_TextBox.Size = new Size(1074, 23);
-            LoadInGlycanMasses_TextBox.TabIndex = 47;
-            LoadInGlycanMasses_TextBox.Text = "Upload glycan masses here: tab-delimited .txt with headers \"Glycan\" and \"Mass\"";
-            LoadInGlycanMasses_TextBox.TextChanged += LoadInGlycanMasses_TextBox_TextChanged_1;
-            // 
             // Ynaught_GlyCounterLogo
             // 
             Ynaught_GlyCounterLogo.Image = (Image)resources.GetObject("Ynaught_GlyCounterLogo.Image");
-            Ynaught_GlyCounterLogo.Location = new Point(330, 399);
+            Ynaught_GlyCounterLogo.Location = new Point(330, 385);
             Ynaught_GlyCounterLogo.Name = "Ynaught_GlyCounterLogo";
             Ynaught_GlyCounterLogo.Size = new Size(283, 77);
             Ynaught_GlyCounterLogo.TabIndex = 46;
@@ -1226,7 +1203,7 @@ namespace GlyCounter
             // 
             Ynaught_FinishTimeLabel.AutoSize = true;
             Ynaught_FinishTimeLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Ynaught_FinishTimeLabel.Location = new Point(320, 516);
+            Ynaught_FinishTimeLabel.Location = new Point(320, 502);
             Ynaught_FinishTimeLabel.Name = "Ynaught_FinishTimeLabel";
             Ynaught_FinishTimeLabel.Size = new Size(148, 17);
             Ynaught_FinishTimeLabel.TabIndex = 45;
@@ -1236,7 +1213,7 @@ namespace GlyCounter
             // 
             Ynaught_startTimeLabel.AutoSize = true;
             Ynaught_startTimeLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Ynaught_startTimeLabel.Location = new Point(320, 494);
+            Ynaught_startTimeLabel.Location = new Point(320, 480);
             Ynaught_startTimeLabel.Name = "Ynaught_startTimeLabel";
             Ynaught_startTimeLabel.Size = new Size(143, 17);
             Ynaught_startTimeLabel.TabIndex = 44;
@@ -1245,7 +1222,7 @@ namespace GlyCounter
             // Ynaught_StartButton
             // 
             Ynaught_StartButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            Ynaught_StartButton.Location = new Point(320, 536);
+            Ynaught_StartButton.Location = new Point(320, 522);
             Ynaught_StartButton.Name = "Ynaught_StartButton";
             Ynaught_StartButton.Size = new Size(305, 73);
             Ynaught_StartButton.TabIndex = 43;
@@ -1257,7 +1234,7 @@ namespace GlyCounter
             // 
             NeutralLosses_Label.AutoSize = true;
             NeutralLosses_Label.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            NeutralLosses_Label.Location = new Point(631, 138);
+            NeutralLosses_Label.Location = new Point(631, 124);
             NeutralLosses_Label.Name = "NeutralLosses_Label";
             NeutralLosses_Label.Size = new Size(127, 15);
             NeutralLosses_Label.TabIndex = 42;
@@ -1294,7 +1271,7 @@ namespace GlyCounter
             // 
             CommonOglyco_Label.AutoSize = true;
             CommonOglyco_Label.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            CommonOglyco_Label.Location = new Point(15, 409);
+            CommonOglyco_Label.Location = new Point(15, 395);
             CommonOglyco_Label.Name = "CommonOglyco_Label";
             CommonOglyco_Label.Size = new Size(135, 15);
             CommonOglyco_Label.TabIndex = 36;
@@ -1304,7 +1281,7 @@ namespace GlyCounter
             // 
             FucoseYions_Label.AutoSize = true;
             FucoseYions_Label.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            FucoseYions_Label.Location = new Point(320, 138);
+            FucoseYions_Label.Location = new Point(320, 124);
             FucoseYions_Label.Name = "FucoseYions_Label";
             FucoseYions_Label.Size = new Size(129, 15);
             FucoseYions_Label.TabIndex = 35;
@@ -1314,7 +1291,7 @@ namespace GlyCounter
             // 
             CommonNglycoLabel.AutoSize = true;
             CommonNglycoLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            CommonNglycoLabel.Location = new Point(15, 138);
+            CommonNglycoLabel.Location = new Point(15, 124);
             CommonNglycoLabel.Name = "CommonNglycoLabel";
             CommonNglycoLabel.Size = new Size(135, 15);
             CommonNglycoLabel.TabIndex = 34;
@@ -1322,7 +1299,7 @@ namespace GlyCounter
             // 
             // CheckAllOglyco_Button
             // 
-            CheckAllOglyco_Button.Location = new Point(157, 401);
+            CheckAllOglyco_Button.Location = new Point(157, 387);
             CheckAllOglyco_Button.Name = "CheckAllOglyco_Button";
             CheckAllOglyco_Button.Size = new Size(157, 31);
             CheckAllOglyco_Button.TabIndex = 33;
@@ -1332,7 +1309,7 @@ namespace GlyCounter
             // 
             // CheckAllNeutralLosses_Button
             // 
-            CheckAllNeutralLosses_Button.Location = new Point(779, 130);
+            CheckAllNeutralLosses_Button.Location = new Point(779, 116);
             CheckAllNeutralLosses_Button.Name = "CheckAllNeutralLosses_Button";
             CheckAllNeutralLosses_Button.Size = new Size(157, 31);
             CheckAllNeutralLosses_Button.TabIndex = 32;
@@ -1342,7 +1319,7 @@ namespace GlyCounter
             // 
             // CheckAllFucose_Button
             // 
-            CheckAllFucose_Button.Location = new Point(468, 130);
+            CheckAllFucose_Button.Location = new Point(468, 116);
             CheckAllFucose_Button.Name = "CheckAllFucose_Button";
             CheckAllFucose_Button.Size = new Size(157, 31);
             CheckAllFucose_Button.TabIndex = 31;
@@ -1352,7 +1329,7 @@ namespace GlyCounter
             // 
             // CheckAllNglyco_Button
             // 
-            CheckAllNglyco_Button.Location = new Point(157, 130);
+            CheckAllNglyco_Button.Location = new Point(157, 116);
             CheckAllNglyco_Button.Name = "CheckAllNglyco_Button";
             CheckAllNglyco_Button.Size = new Size(157, 31);
             CheckAllNglyco_Button.TabIndex = 30;
@@ -1488,7 +1465,7 @@ namespace GlyCounter
             // 
             // LoadInGlycoPepRawFile_TextBox
             // 
-            LoadInGlycoPepRawFile_TextBox.Location = new Point(15, 64);
+            LoadInGlycoPepRawFile_TextBox.Location = new Point(15, 52);
             LoadInGlycoPepRawFile_TextBox.Name = "LoadInGlycoPepRawFile_TextBox";
             LoadInGlycoPepRawFile_TextBox.Size = new Size(1074, 23);
             LoadInGlycoPepRawFile_TextBox.TabIndex = 9;
@@ -1497,7 +1474,7 @@ namespace GlyCounter
             // 
             // BrowseGlycoPepRawFiles_Button
             // 
-            BrowseGlycoPepRawFiles_Button.Location = new Point(1095, 64);
+            BrowseGlycoPepRawFiles_Button.Location = new Point(1095, 52);
             BrowseGlycoPepRawFiles_Button.Name = "BrowseGlycoPepRawFiles_Button";
             BrowseGlycoPepRawFiles_Button.Size = new Size(90, 23);
             BrowseGlycoPepRawFiles_Button.TabIndex = 8;
@@ -1510,7 +1487,7 @@ namespace GlyCounter
             Yions_OlinkedChecklistBox.CheckOnClick = true;
             Yions_OlinkedChecklistBox.FormattingEnabled = true;
             Yions_OlinkedChecklistBox.Items.AddRange(new object[] { "0, Pep (Y0)", "203.0794, Pep+[HexNAc]", "365.1322, Pep+[HexNAc-Hex]", "406.1588, Pep+[HexNAc2]", "568.2116, Pep+[HexNAc2-Hex]", "730.2644, Pep+[HexNAc2-Hex2]", "494.1748, Pep+[HexNAc-NeuAc]", "510.1697, Pep+[HexNAc-NeuGc]", "656.2276, Pep+[HexNAc-Hex-NeuAc]", "672.2225, Pep+[HexNAc-Hex-NeuGc]" });
-            Yions_OlinkedChecklistBox.Location = new Point(15, 438);
+            Yions_OlinkedChecklistBox.Location = new Point(15, 424);
             Yions_OlinkedChecklistBox.Name = "Yions_OlinkedChecklistBox";
             Yions_OlinkedChecklistBox.Size = new Size(299, 184);
             Yions_OlinkedChecklistBox.TabIndex = 7;
@@ -1530,7 +1507,7 @@ namespace GlyCounter
             Yions_LossFromPepChecklistBox.CheckOnClick = true;
             Yions_LossFromPepChecklistBox.FormattingEnabled = true;
             Yions_LossFromPepChecklistBox.Items.AddRange(new object[] { "GlycoPep (Intact Mass), 0", "GlycoPep-[Hex], 162.0528", "GlycoPep-[Hex2], 324.1057", "GlycoPep-[Hex3], 486.1585", "GlycoPep-[Hex4], 648.2113", "GlycoPep-[Hex5], 810.2641", "GlycoPep-[Hex6], 972.3169", "GlycoPep-[NeuAc], 291.0954", "GlycoPep-[NeuAc-Hex], 453.1482", "GlycoPep-[NeuAc-Hex-HexNAc], 656.2276", "GlycoPep-[NeuAc2], 582.1903", "GlycoPep-[NeuAc2-Hex2], 906.2965", "GlycoPep-[NeuAc2-Hex2-HexNAc2], 1312.4552", "GlycoPep-[NeuGc], 307.1903", "GlycoPep-[NeuGc-Hex], 469.1431", "GlycoPep-[NeuGc-Hex-HexNAc], 672.2225", "GlycoPep-[NeuGc2], 614.1806", "GlycoPep-[NeuGc2-Hex2], 938.2862", "GlycoPep-[NeuGc2-Hex2-HexNAc2], 1344.4450", "GlycoPep-[NeuAc-Hex-HexNAc-dHex], 802.2855", "GlycoPep-[Hex-HexNAc-dHex], 511.1901" });
-            Yions_LossFromPepChecklistBox.Location = new Point(631, 167);
+            Yions_LossFromPepChecklistBox.Location = new Point(631, 153);
             Yions_LossFromPepChecklistBox.Name = "Yions_LossFromPepChecklistBox";
             Yions_LossFromPepChecklistBox.Size = new Size(305, 454);
             Yions_LossFromPepChecklistBox.TabIndex = 5;
@@ -1540,7 +1517,7 @@ namespace GlyCounter
             Yions_FucoseNlinkedCheckedBox.CheckOnClick = true;
             Yions_FucoseNlinkedCheckedBox.FormattingEnabled = true;
             Yions_FucoseNlinkedCheckedBox.Items.AddRange(new object[] { "0, Pep (Y0)", "349.1373, Pep+[HexNAc-dHex]", "552.2167, Pep+[HexNAc2-dHex]", "714.2695, Pep+[HexNAc2-Hex-dHex]", "876.3223, Pep+[HexNAc2-Hex2-dHex]", "1038.3751, Pep+[HexNAc2-Hex3-dHex]", "917.3486, Pep+[HexNAc3-Hex-dHex] (bisecting)", "1241.4545, Pep+[HexNAc3-Hex3-dHex]", "1403.5073, Pep+[HexNAc3-Hex4-dHex]", "1606.5867, Pep+[HexNAc4-Hex4-dHex]", "1768.6395, Pep+[HexNAc4-Hex5-dHex]" });
-            Yions_FucoseNlinkedCheckedBox.Location = new Point(320, 167);
+            Yions_FucoseNlinkedCheckedBox.Location = new Point(320, 153);
             Yions_FucoseNlinkedCheckedBox.Name = "Yions_FucoseNlinkedCheckedBox";
             Yions_FucoseNlinkedCheckedBox.Size = new Size(305, 202);
             Yions_FucoseNlinkedCheckedBox.TabIndex = 4;
@@ -1550,7 +1527,7 @@ namespace GlyCounter
             Yions_NlinkedCheckBox.CheckOnClick = true;
             Yions_NlinkedCheckBox.FormattingEnabled = true;
             Yions_NlinkedCheckBox.Items.AddRange(new object[] { "0, Pep (Y0)", "203.0794, Pep+[HexNAc]", "406.1588, Pep+[HexNAc2]", "568.2116, Pep+[HexNAc2-Hex]", "730.2644, Pep+[HexNAc2-Hex2] ", "892.3172, Pep+[HexNAc2-Hex3] ", "771.2909, Pep+[HexNAc3-Hex] (bisecting GlcNAc)", "1095.3966, Pep+[HexNAc3-Hex3]", "1257.4494, Pep+[HexNAc3-Hex4]", "1460.5288, Pep+[HexNAc4-Hex4]", "1622.5816, Pep+[HexNAc4-Hex5]" });
-            Yions_NlinkedCheckBox.Location = new Point(15, 167);
+            Yions_NlinkedCheckBox.Location = new Point(15, 153);
             Yions_NlinkedCheckBox.Name = "Yions_NlinkedCheckBox";
             Yions_NlinkedCheckBox.Size = new Size(299, 202);
             Yions_NlinkedCheckBox.TabIndex = 3;
@@ -1568,7 +1545,7 @@ namespace GlyCounter
             // 
             // BrowseGlycoPepIDs
             // 
-            BrowseGlycoPepIDs.Location = new Point(1095, 6);
+            BrowseGlycoPepIDs.Location = new Point(1095, 23);
             BrowseGlycoPepIDs.Name = "BrowseGlycoPepIDs";
             BrowseGlycoPepIDs.Size = new Size(90, 23);
             BrowseGlycoPepIDs.TabIndex = 1;
@@ -1578,7 +1555,7 @@ namespace GlyCounter
             // 
             // LoadInGlycoPepIDs_TextBox
             // 
-            LoadInGlycoPepIDs_TextBox.Location = new Point(15, 6);
+            LoadInGlycoPepIDs_TextBox.Location = new Point(15, 23);
             LoadInGlycoPepIDs_TextBox.Name = "LoadInGlycoPepIDs_TextBox";
             LoadInGlycoPepIDs_TextBox.Size = new Size(1074, 23);
             LoadInGlycoPepIDs_TextBox.TabIndex = 0;
@@ -1714,8 +1691,6 @@ namespace GlyCounter
         private Button Ynaught_StartButton;
         private System.Windows.Forms.Timer timer2;
         private PictureBox Ynaught_GlyCounterLogo;
-        private TextBox LoadInGlycanMasses_TextBox;
-        private Button BrowseGlycans_Button;
         private TextBox intensityThresholdTextBox;
         private Label UVPDsettingslabel;
         private Label label1;

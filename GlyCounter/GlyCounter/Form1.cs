@@ -46,7 +46,6 @@ namespace GlyCounter
         //Ynaught variables
         HashSet<Yion> yIonHashSet = new HashSet<Yion>();
         string Ynaught_pepIDFilePath = "";
-        string Ynaught_glycanMassesFilePath = "";
         string Ynaught_rawFilePath = "";
         double Ynaught_tol = 0;
         double Ynaught_SNthreshold = 3;
@@ -1275,32 +1274,7 @@ namespace GlyCounter
             }
 
         }
-
-        //find the glycan mass list
-        private void BrowseGlycans_Button_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog fdlg = new OpenFileDialog();
-            fdlg.Title = "C# Corner Open File Dialog";
-            if (!string.IsNullOrEmpty(Properties.Settings1.Default.LastOpenFolder) && Directory.Exists(Properties.Settings1.Default.LastOpenFolder))
-            {
-                fdlg.InitialDirectory = Properties.Settings1.Default.LastOpenFolder;
-            }
-            else
-            {
-                fdlg.InitialDirectory = @"c:\"; // Default directory if no previous directory is found
-            }
-            fdlg.Filter = "*.txt|*.txt";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == DialogResult.OK)
-            {
-                LoadInGlycanMasses_TextBox.Text = fdlg.FileName;
-
-                Properties.Settings1.Default.LastOpenFolder = Path.GetDirectoryName(fdlg.FileName);
-                Properties.Settings1.Default.Save();
-            }
-
-        }
+        
         //find the raw file to look for Y-ions
         private void BrowseGlycoPepRawFiles_Button_Click(object sender, EventArgs e)
         {
@@ -1324,7 +1298,6 @@ namespace GlyCounter
                 Properties.Settings1.Default.LastOpenFolder = Path.GetDirectoryName(fdlg.FileName);
                 Properties.Settings1.Default.Save();
             }
-
         }
 
         //set up output directory
@@ -1415,10 +1388,6 @@ namespace GlyCounter
         }
 
         //setting variables to file paths so they can be processed later
-        private void LoadInGlycanMasses_TextBox_TextChanged_1(object sender, EventArgs e)
-        {
-            Ynaught_glycanMassesFilePath = LoadInGlycanMasses_TextBox.Text;
-        }
         private void LoadInGlycoPepRawFile_TextBox_TextChanged(object sender, EventArgs e)
         {
             Ynaught_rawFilePath = LoadInGlycoPepRawFile_TextBox.Text;
@@ -1941,20 +1910,6 @@ namespace GlyCounter
                         }
                     }
 
-                    //create dictionary for glycan masses and populate from the user uploaded file
-                    Dictionary<double, string> glycanMassDictionary = new Dictionary<double, string>();
-                    using StreamReader glycanMassesTxtFile = new StreamReader(Ynaught_glycanMassesFilePath);
-                    using (var txt = new CsvReader(glycanMassesTxtFile, true, '\t'))
-                    {
-                        while (txt.ReadNextRecord())
-                        {
-                            string glycanName = txt["Glycan"];
-                            double glycanMass = double.Parse(txt["Mass"], CultureInfo.InvariantCulture);
-                            if (!glycanMassDictionary.ContainsKey(glycanMass))
-                                glycanMassDictionary.Add(glycanMass, glycanName);
-                        }
-                    }
-
                     //set the rawfile path and open it
                     FileReader rawFile = new FileReader(Ynaught_rawFilePath);
                     FileReader typeCheck = new FileReader();
@@ -2018,11 +1973,11 @@ namespace GlyCounter
                     using StreamReader pepIDtxtFile = new StreamReader(Ynaught_pepIDFilePath);
                     using (var txt = new CsvReader(pepIDtxtFile, true, '\t'))
                     {
+
                         while (txt.ReadNextRecord())
                         {
                             //create a new PSM object
                             PSM psm = new PSM();
-                            psm.modificationDictionary = new Dictionary<int, double>();
 
                             //read in peptide sequence and create peptide objects
                             string peptideSeq = txt["Peptide"];
@@ -2035,69 +1990,23 @@ namespace GlyCounter
 
                             //read in other details
                             string spectrumToBeParsed = txt["Spectrum"];
-                            string modsToBeParsed = txt["Assigned Modifications"];
                             int charge = int.Parse(txt["Charge"]);
-                            string totalGlycanCompToBeParsed = txt["Total Glycan Composition"];
-                            double precursorMZ = double.Parse(txt["Observed M/Z"], CultureInfo.InvariantCulture);
+                            string totalGlycanComp = txt["Total Glycan Composition"];
 
                             //only process if it's a glycopeptide
-                            if (!totalGlycanCompToBeParsed.Equals(""))
-                            {
-                                //read in modifications and assign to peptide
-                                if (modsToBeParsed.Length > 0)
-                                {
-                                    string[] modsArray1 = modsToBeParsed.Split(',');
-                                    for (int i = 0; i < modsArray1.Length; i++)
-                                    {
-                                        string mod = modsArray1[i].Replace(" ", "");
-                                        //this is for the first entry in the line, which has no extra space
-                                        string[] modsArray2 = mod.Split('(');
+                            if (totalGlycanComp.Equals("")) continue;
 
-                                        //get the mass of the mod
-                                        string[] modsArray3 = modsArray2[1].Split(')');
-                                        double modMass = Convert.ToDouble(modsArray3[0], CultureInfo.InvariantCulture);
+                            //set spectrum number
+                            string[] spectrumArray = spectrumToBeParsed.Split('.');
+                            int spectrumNum = Convert.ToInt32(spectrumArray[1]);
 
-                                        Modification modToAdd = new Modification(modMass, modsArray3[0]);
-                                        int modPosition = 0;
-                                        if (modsArray2[0].Equals("N-term"))
-                                        {
-                                            peptide.AddModification(modToAdd, Terminus.N);
-                                        }
-                                        else
-                                        {
-                                            //get the residue of the mod
-                                            string modResidue = modsArray2[0].Substring(modsArray2[0].Length - 1);
+                            //add the rest of the information to the PSM object
+                            psm.charge = charge;
+                            psm.spectrumNumber = spectrumNum;
+                            psm.totalGlycanComposition = totalGlycanComp;
 
-                                            //get postion of the mod
-                                            modPosition = Convert.ToInt32(modsArray2[0].Substring(0, modsArray2[0].Length - 1));
-
-                                            if (modPosition > 0)
-                                            {
-                                                //add the modification to the peptide only if it is not a glycan mass
-                                                if (!glycanMassDictionary.ContainsKey(modMass))
-                                                {
-                                                    peptide.AddModification(modToAdd, modPosition);
-                                                }
-                                                //add this to the PSM object dictionary that keeps track of all mods
-                                                psm.modificationDictionary.Add(modPosition, modMass);
-                                            }
-                                        }
-                                    }
-                                }
-
-                                //set spectrum number
-                                string[] spectrumArray = spectrumToBeParsed.Split('.');
-                                int spectrumNum = Convert.ToInt32(spectrumArray[1]);
-
-                                //add the rest of the information to the PSM object
-                                psm.charge = charge;
-                                psm.spectrumNumber = spectrumNum;
-                                psm.totalGlycanComposition = totalGlycanCompToBeParsed;
-                                psm.precursorMZ = precursorMZ;
-
-                                //add PSM to list
-                                psmList.Add(psm);
-                            }
+                            //add PSM to list
+                            psmList.Add(psm);
 
                         }
                     }
@@ -2228,16 +2137,14 @@ namespace GlyCounter
 
                             RankOrderPeaks(sortedPeakDepths, spectrum);
 
-                            List<SpecDataPointEx> yIonFoundPeaks = new List<SpecDataPointEx>();
-
                             //set up peptide and glycopeptide masses to look for
                             double peptideNoGlycan_MonoMass = psm.peptideNoGlycanMods.MonoisotopicMass;
                             double peptideNoGlycan_firstIsoMass = psm.peptideNoGlycanMods.MonoisotopicMass + (1 * Constants.C13C12Difference);
                             double peptideNoGlycan_secondIsoMass = psm.peptideNoGlycanMods.MonoisotopicMass + (2 * Constants.C13C12Difference);
 
-                            double glycopeptide_MonoMass = psm.peptide.MonoisotopicMass;
-                            double glycopeptide_firstIsoMass = psm.peptide.MonoisotopicMass + (1 * Constants.C13C12Difference);
-                            double glycopeptide_secondIsoMass = psm.peptide.MonoisotopicMass + (2 * Constants.C13C12Difference);
+                            double glycopeptide_MonoMass = spectrum.Precursors[0].MonoisotopicMz * psm.charge - (psm.charge * Constants.Proton);
+                            double glycopeptide_firstIsoMass = glycopeptide_MonoMass + (1 * Constants.C13C12Difference);
+                            double glycopeptide_secondIsoMass = glycopeptide_MonoMass + (2 * Constants.C13C12Difference);
 
                             //look for each Y-ion
                             List<Yion> finalYionList = new List<Yion>(); //creating this to store charge separately
@@ -2462,7 +2369,7 @@ namespace GlyCounter
 
                             //print out information for this scan that is not Y-ions
                             outputYion.Write(psm.spectrumNumber + "\t" + psm.peptideNoGlycanMods.SequenceWithModifications + "\t" + psm.peptide.SequenceWithModifications + "\t" +
-                                psm.totalGlycanComposition + "\t" + psm.precursorMZ + "\t" + psm.charge + "\t" + retentionTime + "\t" + numberOfChargeStatesConsidered + "\t" + chargeStatesFinal + "\t" +
+                                psm.totalGlycanComposition + "\t" + spectrum.Precursors[0].MonoisotopicMz + "\t" + psm.charge + "\t" + retentionTime + "\t" + numberOfChargeStatesConsidered + "\t" + chargeStatesFinal + "\t" +
                                 scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfYions + "\t" + scanTIC + "\t" + totalYionSignal + "\t" + yIonTICfraction + "\t");
 
                             var yIonIntensityDict = new Dictionary<(string, int), double>();
@@ -2507,7 +2414,7 @@ namespace GlyCounter
                                         double massDiff = 0;
                                         if (yion.glycanSource.Contains("Subtraction"))
                                         {
-                                            double theomass = (psm.precursorMZ * psm.charge) - (psm.charge * Constants.Proton) - yion.theoMass;
+                                            double theomass = (spectrum.Precursors[0].MonoisotopicMz * psm.charge) - (psm.charge * Constants.Proton) - yion.theoMass;
                                             massDiff = theomass - ((mz * chargestate) - (chargestate * Constants.Proton));
                                         }
                                         else
