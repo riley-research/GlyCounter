@@ -30,7 +30,7 @@ The Pre-ID tab is heart of GlyCounter. Here you can pick common oxonium ions see
 
 ### Selecting Files
 
-GlyCounter accepts .raw or .mzML files. The top browse box allows you to navigate to folders that contain your data. Choose one or more raw/mzml files that you'd like to process, and the text box should update to show how many files you've chosen. GlyCounter creates individual outputs for each file, and will overwrite files if a different output directory is not chosen. The bottom browse box allows you to set your output directory, which is the folder where the GlyCounter results will be stored. If you do not select a valid output directory the program will error.
+GlyCounter accepts .raw or .mzML files. The top browse box allows you to navigate to folders that contain your data. Choose one or more raw/mzml files that you'd like to process, and the text box should update to show how many files you've chosen. You can also drag and drop MS files to automatically upload them. GlyCounter creates individual outputs for each file, and will overwrite files if a different output directory is not chosen. The bottom browse box allows you to set your output directory, which is the folder where the GlyCounter results will be stored.
 
 ### Variables
 
@@ -78,7 +78,7 @@ Shows the settings used and a summary of the results per scan type
 
 ## Ynaught
 
-Calculates and extracts Y-ions and/or glycan neutral losses from database searched data. Accepts a formatted .txt or .tsv PSMs file with the headers "Spectrum", "Charge", "Peptide", "Total Glycan Composition", "Observed M/Z", and "Assigned Modifications"; a glycan masses .txt with headers "Glycan" and "Mass"; and a .raw or .mzml file.
+Calculates and extracts Y-ions and/or glycan neutral losses from database searched data. Accepts a formatted .txt or .tsv PSMs file with the headers "Spectrum", "Charge", "Peptide", "Total Glycan Composition" and a .raw or .mzml file.
 Additional csv files can be uploaded with custom Y-ions or neutral losses (Headers "Mass" and "Description").
 
 ### Output Files
@@ -99,7 +99,7 @@ Shows the settings used and a summary of the results per scan type
 
 **Isotope Options**: Choose if you want to look for C13 isotopes
 
-**Ouput IPSA Annotations**: Check if you want to output annotations compatable with IPSA 2.0. This creates a text file with the found oxonium ions per scan and their mass errors.
+**Ouput IPSA Annotations**: Check if you want to output annotations compatable with IPSA 2.0. This creates a text file with the found oxonium ions per scan, their m/z values, and their mass errors.
 
 **Charge State Options**: Larger glycopeptide fragments have the potential to be at any charge state between +1 and the precursor charge state. The charge state limits are determined based on the precursor charge "P".
 For example: if the precursor charge is 4 and I want to consider anything with a charge +2 to +4, I would enter either P-2 or 2 in the lower bound (depending on if I wanted to always be two charge states below my precursor charge or if I wanted to always start at charge state 2) and P or 4 in the upper bound.
