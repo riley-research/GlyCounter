@@ -1718,6 +1718,7 @@
             // 
             // iC_logo
             // 
+            iC_logo.Image = (Image)resources.GetObject("iC_logo.Image");
             iC_logo.Location = new Point(315, 471);
             iC_logo.Name = "iC_logo";
             iC_logo.Size = new Size(278, 75);
@@ -1729,7 +1730,7 @@
             // 
             iC_miscIonsCBList.CheckOnClick = true;
             iC_miscIonsCBList.FormattingEnabled = true;
-            iC_miscIonsCBList.Items.AddRange(new object[] { "216.0424, pTyr ", "__?__,  pSer ", "__?__, pThr ", "__?__, ESTLHLVLRLRGG (ubi) " });
+            iC_miscIonsCBList.Items.AddRange(new object[] { "216.0424, pTyr ", "__?__,  pSer ", "__?__, pThr" });
             iC_miscIonsCBList.Location = new Point(618, 139);
             iC_miscIonsCBList.Margin = new Padding(4, 3, 4, 3);
             iC_miscIonsCBList.Name = "iC_miscIonsCBList";
@@ -1743,9 +1744,9 @@
             label24.Location = new Point(618, 107);
             label24.Margin = new Padding(4, 0, 4, 0);
             label24.Name = "label24";
-            label24.Size = new Size(125, 17);
+            label24.Size = new Size(92, 17);
             label24.TabIndex = 111;
-            label24.Text = "Miscellaneous ions";
+            label24.Text = "Phospho ions";
             // 
             // iC_acylCBList
             // 
