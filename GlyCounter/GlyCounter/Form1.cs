@@ -462,7 +462,7 @@ namespace GlyCounter
                                 oxoIon.measuredMZ = 0;
                                 oxoIon.intensity = 0;
 
-                                SpecDataPointEx peak = GetPeak(spectrum, oxoIon.theoMZ, usingda, _tol, IT);
+                                SpecDataPointEx peak = GetPeak(spectrum, oxoIon.theoMZ, usingda, _tol, thermo, true, IT);
 
                                 if (!IT && thermo)
                                 {
@@ -845,7 +845,7 @@ namespace GlyCounter
             return ion;
         }
 
-        public static SpecDataPointEx GetPeak(SpectrumEx spectrum, double mz, bool usingda, double tolerance, bool thermo, bool IT = false)
+        public static SpecDataPointEx GetPeak(SpectrumEx spectrum, double mz, bool usingda, double tolerance, bool thermo, bool polarity, bool IT = false)
         {
             DoubleRange rangeOxonium = usingda
                 ? DoubleRange.FromDa(mz, tolerance)
@@ -2138,7 +2138,7 @@ namespace GlyCounter
                             if (!yIon.glycanSource.Contains("Subtraction"))
                             {
                                 double yIon_mz = (peptideNoGlycan_MonoMass + yIon.theoMass + (i * Constants.Proton)) / i;
-                                SpecDataPointEx peak = GetPeak(spectrum, yIon_mz, Ynaught_usingda, _tol, thermo);
+                                SpecDataPointEx peak = GetPeak(spectrum, yIon_mz, Ynaught_usingda, _tol, thermo, true);
 
                                 if ((thermo && !peak.Equals(new SpecDataPointEx()) && peak.Intensity > 0 && (peak.Intensity / peak.Noise) > _SNthreshold)
                                     || (!thermo && !peak.Equals(new SpecDataPointEx()) && peak.Intensity > _intensityThreshold))
@@ -2153,7 +2153,7 @@ namespace GlyCounter
                                     if (FirstIsotopeCheckBox.Checked)
                                     {
                                         double yIon_mzfirstIso = (peptideNoGlycan_firstIsoMass + yIon.theoMass + (i * Constants.Proton)) / i;
-                                        SpecDataPointEx firstIsotopePeak = GetPeak(spectrum, yIon_mzfirstIso, Ynaught_usingda, _tol, thermo);
+                                        SpecDataPointEx firstIsotopePeak = GetPeak(spectrum, yIon_mzfirstIso, Ynaught_usingda, _tol, thermo, true);
                                         if ((thermo && !firstIsotopePeak.Equals(new SpecDataPointEx()) && firstIsotopePeak.Intensity > 0 && (firstIsotopePeak.Intensity / firstIsotopePeak.Noise) > _SNthreshold)
                                             || (!thermo && !firstIsotopePeak.Equals(new SpecDataPointEx()) && firstIsotopePeak.Intensity > _intensityThreshold))
                                             firstIsotopeIntensity = firstIsotopePeak.Intensity;
@@ -2161,7 +2161,7 @@ namespace GlyCounter
                                     if (SecondIsotopeCheckBox.Checked)
                                     {
                                         double yIon_mzSecondIso = (peptideNoGlycan_secondIsoMass + yIon.theoMass + (i * Constants.Proton)) / i;
-                                        SpecDataPointEx secondIsotopePeak = GetPeak(spectrum, yIon_mzSecondIso, Ynaught_usingda, _tol, thermo);
+                                        SpecDataPointEx secondIsotopePeak = GetPeak(spectrum, yIon_mzSecondIso, Ynaught_usingda, _tol, thermo, true);
                                         if ((thermo && !secondIsotopePeak.Equals(new SpecDataPointEx()) && secondIsotopePeak.Intensity > 0 && (secondIsotopePeak.Intensity / secondIsotopePeak.Noise) > _SNthreshold)
                                             || (!thermo && !secondIsotopePeak.Equals(new SpecDataPointEx()) && secondIsotopePeak.Intensity > _intensityThreshold))
                                             secondIsotopeIntensity = secondIsotopePeak.Intensity;
@@ -2181,7 +2181,7 @@ namespace GlyCounter
                             else
                             {
                                 double yIon_mz = (glycopeptide_MonoMass - yIon.theoMass + (i * Constants.Proton)) / i;
-                                SpecDataPointEx peak = GetPeak(spectrum, yIon_mz, Ynaught_usingda, _tol, thermo);
+                                SpecDataPointEx peak = GetPeak(spectrum, yIon_mz, Ynaught_usingda, _tol, thermo, true);
 
                                 if ((thermo && !peak.Equals(new SpecDataPointEx()) && peak.Intensity > 0 && (peak.Intensity / peak.Noise) > _SNthreshold)
                                     || (!thermo && !peak.Equals(new SpecDataPointEx()) && peak.Intensity > _intensityThreshold))
@@ -2195,14 +2195,14 @@ namespace GlyCounter
                                     if (FirstIsotopeCheckBox.Checked)
                                     {
                                         double yIon_mzfirstIso = (glycopeptide_firstIsoMass - yIon.theoMass + (i * Constants.Proton)) / i;
-                                        SpecDataPointEx firstIsotopePeak = GetPeak(spectrum, yIon_mzfirstIso, Ynaught_usingda, _tol, thermo);
+                                        SpecDataPointEx firstIsotopePeak = GetPeak(spectrum, yIon_mzfirstIso, Ynaught_usingda, _tol, thermo, true);
                                         if ((thermo && !firstIsotopePeak.Equals(new SpecDataPointEx()) && firstIsotopePeak.Intensity > 0 && (firstIsotopePeak.Intensity / firstIsotopePeak.Noise) > _SNthreshold)
                                             || (!thermo && !firstIsotopePeak.Equals(new SpecDataPointEx()) && firstIsotopePeak.Intensity > _intensityThreshold)) ;
                                     }
                                     if (SecondIsotopeCheckBox.Checked)
                                     {
                                         double yIon_mzSecondIso = (glycopeptide_secondIsoMass - yIon.theoMass + (i * Constants.Proton)) / i;
-                                        SpecDataPointEx secondIsotopePeak = GetPeak(spectrum, yIon_mzSecondIso, Ynaught_usingda, _tol, thermo);
+                                        SpecDataPointEx secondIsotopePeak = GetPeak(spectrum, yIon_mzSecondIso, Ynaught_usingda, _tol, thermo, true);
                                         if ((thermo && !secondIsotopePeak.Equals(new SpecDataPointEx()) && secondIsotopePeak.Intensity > 0 && (secondIsotopePeak.Intensity / secondIsotopePeak.Noise) > _SNthreshold)
                                             || (!thermo && !secondIsotopePeak.Equals(new SpecDataPointEx()) && secondIsotopePeak.Intensity > _intensityThreshold))
                                             secondIsotopeIntensity = secondIsotopePeak.Intensity;
@@ -2775,8 +2775,8 @@ namespace GlyCounter
                     bool hcdTrue = false;
                     bool etdTrue = false;
                     bool uvpdTrue = false;
-                    List<double> ionFoundPeaks = new List<double>();
-                    List<double> ionFoundMassErrors = new List<double>();
+                    List<double> ionFoundPeaks = [];
+                    List<double> ionFoundMassErrors = [];
 
                     //figure out dissociation type
                     if (thermo)
@@ -2830,7 +2830,8 @@ namespace GlyCounter
                         {
                             string scanFilter = spectrum.ScanFilter;
                             string[] hcdHeader = scanFilter.Split('@');
-                            string[] splitHCDheader = hcdHeader[1].Split('d');
+                            string[] splitHCDheader = [];
+                            splitHCDheader = hcdHeader[1].Contains("ptr") ? hcdHeader[2].Split('d') : hcdHeader[1].Split('d');
                             string[] collisionEnergyArray = splitHCDheader[1].Split('.');
                             nce = Convert.ToDouble(collisionEnergyArray[0]);
                         }
@@ -2843,7 +2844,7 @@ namespace GlyCounter
                             ion.measuredMZ = 0;
                             ion.intensity = 0;
 
-                            SpecDataPointEx peak = GetPeak(spectrum, ion.theoMZ, usingda, _tol, IT);
+                            SpecDataPointEx peak = GetPeak(spectrum, ion.theoMZ, usingda, _tol, thermo, true, IT);
 
                             if (!IT && thermo)
                             {
