@@ -52,6 +52,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CSMSL_dotNetCore\CSMSL_dotNetCore\CSMSL.csproj" />
+    <ProjectReference Include="..\CSMSL_dotNetCore\CSMSL_dotNetCore\CSMSL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -80,5 +81,12 @@
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="ThermoFisher.CommonCore.RawFileReader">
+			<HintPath>path\to\ThermoFisher.CommonCore.RawFileReader.dll</HintPath>
+			<Private>true</Private>
+		</Reference>
+	</ItemGroup>
 
 </Project>
