@@ -1,4 +1,6 @@
-﻿namespace GlyCounter
+﻿using System.Drawing.Text;
+
+namespace GlyCounter
 {
     partial class Form1
     {
@@ -19,6 +21,31 @@
             }
             base.Dispose(disposing);
         }
+
+        private string[] HexNAcPos = { "84.0444, HexNAc - C2H8O4", "126.055, HexNAc - C2H6O3", "138.055, HexNAc - CH6O3", "144.0655, HexNAc - C2H4O2", "168.0655, HexNAc - 2H2O", "186.0761, HexNAc - H2O", "204.0867, HexNAc" };
+        private string[] HexNAcNeg = { "154.0510, HexNAc - CH2O (B,Z)", "160.0610, HexNAc - C2H2O (Z)", "162.0767, HexNAc - C2H4O2", "166.0511, HexNAc - H2O", "178.0710, HexNAc - C2H2O (Y)", "184.0616, HexNAc (B,Z)", "202.0716, HexNAc, (B)", "204.0878, HexNAc (Z)", "220.0816, HexNAc (C)", "222.0978, HexNAc, (Y)" };
+
+        private string[] HexPos = { "85.0284, Hex - C2H6O3", "97.0284, Hex - CH6O3", "127.0390, Hex - 2H2O", "145.0495, Hex - H2O", "163.0601, Hex" };
+        private string[] HexNeg = { "161.0450, Hex (B)", "179.0550, Hex (C)" };
+
+        private string[] ManPos = { "243.0264, Man-P", "405.0798, Man2-P" };
+        private string[] ManNeg = { "241.0113, Man-P", "403.0647, Man2-P" };
+
+        private string[] SialicPos = { "274.0921, NeuAc-H2O", "292.1027, NeuAc", "316.103, NeuAc[Ac] - H2O", "334.113, NeuAc[Ac]", "290.0870, NeuGc - H2O", "308.0976, NeuGc", "332.098, NeuGc[Ac] - H2O", "350.1081, NeuGc[Ac]" };
+        private string[] SialicNeg = { "290.0876, NeuAc (B)", "308.0976, NeuAc (C)" };
+
+        private string[] FucosePos = { "350.1446, HexNAc-dHex", "512.1974, HexNAc-Hex-dHex (LeX/A)", "674.2502, HexNAc-Hex2-dHex", "803.2928, HexNAc-Hex-dHex-NeuAc (sLeX/A)", "819.2908, HexNAc-Hex-dHex-NeuGc", "877.3296, HexNAc2-Hex2-dHex (diLacNAc-Fuc)" };
+        private string[] FucoseNeg = { "163.0601, dHex (C)", "165.0762, dHex (Y)", "350.1457, HexNAc-dHex (Z)", "368.1557, HexNAc-dHex (Y)", "307.1029, Hex-dHex (B)", "325.1129, Hex-dHex (C)", "488.1979, HexNAc-Hex-dHex", "510.1823, HexNAc-Hex-dHex (B)", 
+            "553.2251, HexNAc2-dHex (Y,Z)", "697.2678, HexNAc2-Hex-dHex (Z,Z)", "715.2778, HexNAc2-Hex-dHex (Z)", "733.2879, HexNAc2-Hex-dHex (Y)", "895.3407, HexNAc2-Hex2-dHex (Y,Y)", "1057.3935, HexNAc2-Hex3 (Y,Y)", "1080.4101, HexNAc3-Hex2-dHex (Z)", "1098.4201, HexNAc3-Hex2-dHex (Y)" };
+
+        private string[] OligoPos = { "325.1129, Hex2", "366.1395, HexNAc-Hex", "407.1660, HexNAc2", "454.1555, Hex-NeuAc", "470.1503, Hex-NeuGc", "495.1821, HexNAc-NeuAc", "511.1769, HexNAc-NeuGc", "528.1923, HexNAc-Hex2", 
+            "537.1927, HexNAc-NeuAc[Ac]", "553.1875, HexNAc-NeuGc[Ac]", "569.2188, HexNAc2-Hex", "657.2349, HexNAc-Hex-NeuAc", "673.2297, HexNAc-Hex-NeuGc", "690.2451, HexNAc-Hex3", "731.2717, HexNAc2-Hex2 (diLacNAc)", 
+            "819.2877, HexNAc-Hex2-NeuAc", "835.2825, HexNAc-Hex2-NeuGc", "860.3143, HexNAc2-Hex-NeuAc", "876.3091, HexNAc2-Hex-NeuGc", "893.3245, HexNAc2-Hex3", "948.3303, HexNAc-Hex-NeuAc2", "964.3251, HexNAc-Hex-NeuGc2", 
+            "1022.3671, HexNAc2-Hex2-NeuAc1", "1038.3619, HexNAc2-Hex2-NeuGc1", "1313.4625, HexNAc2-Hex2-NeuAc2", "1329.4573, HexNAc2-Hex2-NeuGc2" };
+        private string[] OligoNeg = { "364.1244, HexNAc-Hex (B)", "366.1406, HexNAc-Hex (Z)", "382.1344, HexNAc-Hex (C)", "384.1506, HexNAc-Hex (Y)", "389.1572, HexNAc2 (Z,Z)", "407.1672, HexNAc2 (Z)",
+            "425.1772, HexNAc2 (Y)", "544.4, HexNAc-Hex2 (C,Y)", "551.2100, HexNAc2-Hex (Z,Z)", "569.2200, HexNAc2-Hex (Z)", "587.2300, HexNAc2-Hex (Y)", "675.2460, HexNAc-Hex-NeuAc (Y)", "731.2728, HexNAc2-Hex2 (Z)",
+            "749.2828, HexNAc2-Hex2 (Y)", "829.2396, HexNAc2-Hex2 (Y)", "873.2994, HexNAc2-Hex3 (B,Z)", "934.3522, HexNAc3-Hex2 (Y,Z)", "952.3622, HexNAc3-Hex2 (Y,Y)", "1096.4050, HexNAc3-Hex3 (Y,Z)", "1114.415, HexNAc3-Hex3 (Y)",
+            "1120.3350, HexNAc2-Hex2-NeuAc (Y)", "1299.4844, HexNAc3-Hex3 (Z)" };
 
         #region Windows Form Designer generated code
 
@@ -81,6 +108,12 @@
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
+            ignoreMSLevelCB = new CheckBox();
+            label3 = new Label();
+            label2 = new Label();
+            MSLevelUB = new NumericUpDown();
+            MSLevelLB = new NumericUpDown();
+            polarityCB = new CheckBox();
             Gly_outputButton = new Button();
             Gly_outputTextBox = new TextBox();
             ipsaCheckBox = new CheckBox();
@@ -111,8 +144,6 @@
             SeparateChargeStates = new RadioButton();
             GroupChargeStates = new RadioButton();
             Ynaught_DaCheckBox = new CheckBox();
-            BrowseGlycans_Button = new Button();
-            LoadInGlycanMasses_TextBox = new TextBox();
             Ynaught_GlyCounterLogo = new PictureBox();
             Ynaught_FinishTimeLabel = new Label();
             Ynaught_startTimeLabel = new Label();
@@ -198,6 +229,8 @@
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)MSLevelUB).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)MSLevelLB).BeginInit();
             YnaughtTab.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)Ynaught_GlyCounterLogo).BeginInit();
@@ -230,13 +263,14 @@
             // 
             // HexNAcCheckedListBox
             // 
+            HexNAcCheckedListBox.BackColor = SystemColors.Window;
             HexNAcCheckedListBox.CheckOnClick = true;
             HexNAcCheckedListBox.FormattingEnabled = true;
-            HexNAcCheckedListBox.Items.AddRange(new object[] { "84.0444, HexNAc - C2H8O4", "126.055, HexNAc - C2H6O3", "138.055, HexNAc - CH6O3", "144.0655, HexNAc - C2H4O2", "168.0655, HexNAc - 2H2O", "186.0761, HexNAc - H2O", "204.0867, HexNAc" });
             HexNAcCheckedListBox.Location = new Point(16, 158);
             HexNAcCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             HexNAcCheckedListBox.Name = "HexNAcCheckedListBox";
             HexNAcCheckedListBox.Size = new Size(276, 130);
+            HexNAcCheckedListBox.Items.AddRange(HexNAcPos);
             HexNAcCheckedListBox.TabIndex = 1;
             HexNAcCheckedListBox.SelectedIndexChanged += HexNAcCheckedListBox_SelectedIndexChanged;
             // 
@@ -244,11 +278,11 @@
             // 
             HexCheckedListBox.CheckOnClick = true;
             HexCheckedListBox.FormattingEnabled = true;
-            HexCheckedListBox.Items.AddRange(new object[] { "85.0284, Hex - C2H6O3", "97.0284, Hex - CH6O3", "127.0390, Hex - 2H2O", "145.0495, Hex - H2O", "163.0601, Hex" });
             HexCheckedListBox.Location = new Point(16, 367);
             HexCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             HexCheckedListBox.Name = "HexCheckedListBox";
             HexCheckedListBox.Size = new Size(276, 94);
+            HexCheckedListBox.Items.AddRange(HexPos);
             HexCheckedListBox.TabIndex = 4;
             HexCheckedListBox.SelectedIndexChanged += HexCheckedListBox_SelectedIndexChanged;
             // 
@@ -256,11 +290,11 @@
             // 
             SialicAcidCheckedListBox.CheckOnClick = true;
             SialicAcidCheckedListBox.FormattingEnabled = true;
-            SialicAcidCheckedListBox.Items.AddRange(new object[] { "274.0921, NeuAc-H2O", "292.1027, NeuAc", "316.103, NeuAc[Ac] - H2O", "334.113, NeuAc[Ac]", "290.0870, NeuGc - H2O", "308.0976, NeuGc", "332.098, NeuGc[Ac] - H2O", "350.1081, NeuGc[Ac]" });
             SialicAcidCheckedListBox.Location = new Point(315, 158);
             SialicAcidCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             SialicAcidCheckedListBox.Name = "SialicAcidCheckedListBox";
             SialicAcidCheckedListBox.Size = new Size(278, 130);
+            SialicAcidCheckedListBox.Items.AddRange(SialicPos);
             SialicAcidCheckedListBox.TabIndex = 2;
             SialicAcidCheckedListBox.SelectedIndexChanged += SialicAcidCheckedListBox_SelectedIndexChanged;
             // 
@@ -268,11 +302,11 @@
             // 
             OligosaccharideCheckedListBox.CheckOnClick = true;
             OligosaccharideCheckedListBox.FormattingEnabled = true;
-            OligosaccharideCheckedListBox.Items.AddRange(new object[] { "325.1129, Hex2", "366.1395, HexNAc-Hex", "407.1660, HexNAc2", "454.1555, Hex-NeuAc", "470.1503, Hex-NeuGc", "495.1821, HexNAc-NeuAc", "511.1769, HexNAc-NeuGc", "528.1923, HexNAc-Hex2", "537.1927, HexNAc-NeuAc[Ac]", "553.1875, HexNAc-NeuGc[Ac]", "569.2188, HexNAc2-Hex", "657.2349, HexNAc-Hex-NeuAc", "673.2297, HexNAc-Hex-NeuGc", "690.2451, HexNAc-Hex3", "731.2717, HexNAc2-Hex2 (diLacNAc)", "819.2877, HexNAc-Hex2-NeuAc", "835.2825, HexNAc-Hex2-NeuGc", "860.3143, HexNAc2-Hex-NeuAc", "876.3091, HexNAc2-Hex-NeuGc", "893.3245, HexNAc2-Hex3", "948.3303, HexNAc-Hex-NeuAc2", "964.3251, HexNAc-Hex-NeuGc2", "1022.3671, HexNAc2-Hex2-NeuAc1", "1038.3619, HexNAc2-Hex2-NeuGc1", "1313.4625, HexNAc2-Hex2-NeuAc2", "1329.4573, HexNAc2-Hex2-NeuGc2" });
             OligosaccharideCheckedListBox.Location = new Point(619, 158);
             OligosaccharideCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             OligosaccharideCheckedListBox.Name = "OligosaccharideCheckedListBox";
-            OligosaccharideCheckedListBox.Size = new Size(278, 454);
+            OligosaccharideCheckedListBox.Size = new Size(278, 346);
+            OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
             OligosaccharideCheckedListBox.TabIndex = 3;
             OligosaccharideCheckedListBox.SelectedIndexChanged += OligosaccharideCheckedListBox_SelectedIndexChanged;
             // 
@@ -324,11 +358,11 @@
             // 
             M6PCheckedListBox.CheckOnClick = true;
             M6PCheckedListBox.FormattingEnabled = true;
-            M6PCheckedListBox.Items.AddRange(new object[] { "243.0264, Man-P", "405.0798, Man2-P" });
             M6PCheckedListBox.Location = new Point(16, 551);
             M6PCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             M6PCheckedListBox.Name = "M6PCheckedListBox";
             M6PCheckedListBox.Size = new Size(276, 40);
+            M6PCheckedListBox.Items.AddRange(ManPos);
             M6PCheckedListBox.TabIndex = 5;
             M6PCheckedListBox.SelectedIndexChanged += M6PCheckedListBox_SelectedIndexChanged;
             // 
@@ -346,7 +380,7 @@
             // StartButton
             // 
             StartButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            StartButton.Location = new Point(918, 565);
+            StartButton.Location = new Point(619, 542);
             StartButton.Margin = new Padding(4, 3, 4, 3);
             StartButton.Name = "StartButton";
             StartButton.Size = new Size(276, 62);
@@ -583,11 +617,11 @@
             // 
             FucoseCheckedListBox.CheckOnClick = true;
             FucoseCheckedListBox.FormattingEnabled = true;
-            FucoseCheckedListBox.Items.AddRange(new object[] { "350.1446, HexNAc-dHex", "512.1974, HexNAc-Hex-dHex (LeX/A)", "674.2502, HexNAc-Hex2-dHex", "803.2928, HexNAc-Hex-dHex-NeuAc (sLeX/A)", "819.2908, HexNAc-Hex-dHex-NeuGc", "877.3296, HexNAc2-Hex2-dHex (diLacNAc-Fuc)" });
             FucoseCheckedListBox.Location = new Point(314, 367);
             FucoseCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             FucoseCheckedListBox.Name = "FucoseCheckedListBox";
             FucoseCheckedListBox.Size = new Size(278, 94);
+            FucoseCheckedListBox.Items.AddRange(FucosePos);
             FucoseCheckedListBox.TabIndex = 41;
             FucoseCheckedListBox.SelectedIndexChanged += FucoseCheckedListBox_SelectedIndexChanged;
             // 
@@ -727,6 +761,12 @@
             // 
             // GlyCounter_Tab
             // 
+            GlyCounter_Tab.Controls.Add(ignoreMSLevelCB);
+            GlyCounter_Tab.Controls.Add(label3);
+            GlyCounter_Tab.Controls.Add(label2);
+            GlyCounter_Tab.Controls.Add(MSLevelUB);
+            GlyCounter_Tab.Controls.Add(MSLevelLB);
+            GlyCounter_Tab.Controls.Add(polarityCB);
             GlyCounter_Tab.Controls.Add(Gly_outputButton);
             GlyCounter_Tab.Controls.Add(Gly_outputTextBox);
             GlyCounter_Tab.Controls.Add(ipsaCheckBox);
@@ -797,6 +837,67 @@
             GlyCounter_Tab.Text = "Pre-ID";
             GlyCounter_Tab.UseVisualStyleBackColor = true;
             // 
+            // ignoreMSLevelCB
+            // 
+            ignoreMSLevelCB.AutoSize = true;
+            ignoreMSLevelCB.Location = new Point(962, 629);
+            ignoreMSLevelCB.Name = "ignoreMSLevelCB";
+            ignoreMSLevelCB.Size = new Size(221, 19);
+            ignoreMSLevelCB.TabIndex = 75;
+            ignoreMSLevelCB.Text = "Ignore MS Level and Search All Scans";
+            ignoreMSLevelCB.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(1012, 602);
+            label3.Name = "label3";
+            label3.Size = new Size(18, 15);
+            label3.TabIndex = 74;
+            label3.Text = "to";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(962, 576);
+            label2.Name = "label2";
+            label2.Size = new Size(111, 15);
+            label2.TabIndex = 73;
+            label2.Text = "MS Levels to Search";
+            // 
+            // MSLevelUB
+            // 
+            MSLevelUB.Location = new Point(1036, 600);
+            MSLevelUB.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            MSLevelUB.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            MSLevelUB.Name = "MSLevelUB";
+            MSLevelUB.Size = new Size(44, 23);
+            MSLevelUB.TabIndex = 72;
+            MSLevelUB.TextAlign = HorizontalAlignment.Center;
+            MSLevelUB.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            // 
+            // MSLevelLB
+            // 
+            MSLevelLB.Location = new Point(962, 600);
+            MSLevelLB.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            MSLevelLB.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            MSLevelLB.Name = "MSLevelLB";
+            MSLevelLB.Size = new Size(44, 23);
+            MSLevelLB.TabIndex = 71;
+            MSLevelLB.TextAlign = HorizontalAlignment.Center;
+            MSLevelLB.Value = new decimal(new int[] { 2, 0, 0, 0 });
+            // 
+            // polarityCB
+            // 
+            polarityCB.AutoSize = true;
+            polarityCB.Location = new Point(783, 612);
+            polarityCB.Name = "polarityCB";
+            polarityCB.Size = new Size(146, 19);
+            polarityCB.TabIndex = 70;
+            polarityCB.Text = "Toggle Negative Mode";
+            polarityCB.UseVisualStyleBackColor = true;
+            polarityCB.CheckedChanged += polarityCB_CheckedChanged;
+            // 
             // Gly_outputButton
             // 
             Gly_outputButton.Location = new Point(1109, 49);
@@ -814,12 +915,11 @@
             Gly_outputTextBox.Size = new Size(1085, 23);
             Gly_outputTextBox.TabIndex = 55;
             Gly_outputTextBox.Text = "Select output directory";
-            Gly_outputTextBox.TextChanged += Gly_outputTextBox_TextChanged;
             // 
             // ipsaCheckBox
             // 
             ipsaCheckBox.AutoSize = true;
-            ipsaCheckBox.Location = new Point(1038, 638);
+            ipsaCheckBox.Location = new Point(618, 612);
             ipsaCheckBox.Name = "ipsaCheckBox";
             ipsaCheckBox.Size = new Size(159, 19);
             ipsaCheckBox.TabIndex = 68;
@@ -946,8 +1046,6 @@
             YnaughtTab.Controls.Add(LowerBoundTextBox);
             YnaughtTab.Controls.Add(panel1);
             YnaughtTab.Controls.Add(Ynaught_DaCheckBox);
-            YnaughtTab.Controls.Add(BrowseGlycans_Button);
-            YnaughtTab.Controls.Add(LoadInGlycanMasses_TextBox);
             YnaughtTab.Controls.Add(Ynaught_GlyCounterLogo);
             YnaughtTab.Controls.Add(Ynaught_FinishTimeLabel);
             YnaughtTab.Controls.Add(Ynaught_startTimeLabel);
@@ -1013,7 +1111,7 @@
             // 
             // Ynaught_outputButton
             // 
-            Ynaught_outputButton.Location = new Point(819, 93);
+            Ynaught_outputButton.Location = new Point(1095, 80);
             Ynaught_outputButton.Name = "Ynaught_outputButton";
             Ynaught_outputButton.Size = new Size(90, 23);
             Ynaught_outputButton.TabIndex = 80;
@@ -1023,17 +1121,16 @@
             // 
             // Ynaught_outputTextBox
             // 
-            Ynaught_outputTextBox.Location = new Point(15, 93);
+            Ynaught_outputTextBox.Location = new Point(15, 81);
             Ynaught_outputTextBox.Name = "Ynaught_outputTextBox";
-            Ynaught_outputTextBox.Size = new Size(798, 23);
+            Ynaught_outputTextBox.Size = new Size(1074, 23);
             Ynaught_outputTextBox.TabIndex = 79;
             Ynaught_outputTextBox.Text = "Select output directory";
-            Ynaught_outputTextBox.TextChanged += Ynaught_outputTextBox_TextChanged;
             // 
             // YNaught_IPSAcheckbox
             // 
             YNaught_IPSAcheckbox.AutoSize = true;
-            YNaught_IPSAcheckbox.Location = new Point(320, 615);
+            YNaught_IPSAcheckbox.Location = new Point(320, 601);
             YNaught_IPSAcheckbox.Name = "YNaught_IPSAcheckbox";
             YNaught_IPSAcheckbox.Size = new Size(159, 19);
             YNaught_IPSAcheckbox.TabIndex = 78;
@@ -1142,29 +1239,10 @@
             Ynaught_DaCheckBox.UseVisualStyleBackColor = true;
             Ynaught_DaCheckBox.CheckedChanged += Ynaught_DaCheckBox_CheckedChanged;
             // 
-            // BrowseGlycans_Button
-            // 
-            BrowseGlycans_Button.Location = new Point(1095, 35);
-            BrowseGlycans_Button.Name = "BrowseGlycans_Button";
-            BrowseGlycans_Button.Size = new Size(90, 23);
-            BrowseGlycans_Button.TabIndex = 48;
-            BrowseGlycans_Button.Text = "Browse";
-            BrowseGlycans_Button.UseVisualStyleBackColor = true;
-            BrowseGlycans_Button.Click += BrowseGlycans_Button_Click;
-            // 
-            // LoadInGlycanMasses_TextBox
-            // 
-            LoadInGlycanMasses_TextBox.Location = new Point(15, 35);
-            LoadInGlycanMasses_TextBox.Name = "LoadInGlycanMasses_TextBox";
-            LoadInGlycanMasses_TextBox.Size = new Size(1074, 23);
-            LoadInGlycanMasses_TextBox.TabIndex = 47;
-            LoadInGlycanMasses_TextBox.Text = "Upload glycan masses here: tab-delimited .txt with headers \"Glycan\" and \"Mass\"";
-            LoadInGlycanMasses_TextBox.TextChanged += LoadInGlycanMasses_TextBox_TextChanged_1;
-            // 
             // Ynaught_GlyCounterLogo
             // 
             Ynaught_GlyCounterLogo.Image = (Image)resources.GetObject("Ynaught_GlyCounterLogo.Image");
-            Ynaught_GlyCounterLogo.Location = new Point(330, 399);
+            Ynaught_GlyCounterLogo.Location = new Point(330, 385);
             Ynaught_GlyCounterLogo.Name = "Ynaught_GlyCounterLogo";
             Ynaught_GlyCounterLogo.Size = new Size(283, 77);
             Ynaught_GlyCounterLogo.TabIndex = 46;
@@ -1174,7 +1252,7 @@
             // 
             Ynaught_FinishTimeLabel.AutoSize = true;
             Ynaught_FinishTimeLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Ynaught_FinishTimeLabel.Location = new Point(320, 516);
+            Ynaught_FinishTimeLabel.Location = new Point(320, 502);
             Ynaught_FinishTimeLabel.Name = "Ynaught_FinishTimeLabel";
             Ynaught_FinishTimeLabel.Size = new Size(148, 17);
             Ynaught_FinishTimeLabel.TabIndex = 45;
@@ -1184,7 +1262,7 @@
             // 
             Ynaught_startTimeLabel.AutoSize = true;
             Ynaught_startTimeLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Ynaught_startTimeLabel.Location = new Point(320, 494);
+            Ynaught_startTimeLabel.Location = new Point(320, 480);
             Ynaught_startTimeLabel.Name = "Ynaught_startTimeLabel";
             Ynaught_startTimeLabel.Size = new Size(143, 17);
             Ynaught_startTimeLabel.TabIndex = 44;
@@ -1193,7 +1271,7 @@
             // Ynaught_StartButton
             // 
             Ynaught_StartButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            Ynaught_StartButton.Location = new Point(320, 536);
+            Ynaught_StartButton.Location = new Point(320, 522);
             Ynaught_StartButton.Name = "Ynaught_StartButton";
             Ynaught_StartButton.Size = new Size(305, 73);
             Ynaught_StartButton.TabIndex = 43;
@@ -1205,7 +1283,7 @@
             // 
             NeutralLosses_Label.AutoSize = true;
             NeutralLosses_Label.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            NeutralLosses_Label.Location = new Point(631, 138);
+            NeutralLosses_Label.Location = new Point(631, 124);
             NeutralLosses_Label.Name = "NeutralLosses_Label";
             NeutralLosses_Label.Size = new Size(127, 15);
             NeutralLosses_Label.TabIndex = 42;
@@ -1242,7 +1320,7 @@
             // 
             CommonOglyco_Label.AutoSize = true;
             CommonOglyco_Label.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            CommonOglyco_Label.Location = new Point(15, 409);
+            CommonOglyco_Label.Location = new Point(15, 395);
             CommonOglyco_Label.Name = "CommonOglyco_Label";
             CommonOglyco_Label.Size = new Size(135, 15);
             CommonOglyco_Label.TabIndex = 36;
@@ -1252,7 +1330,7 @@
             // 
             FucoseYions_Label.AutoSize = true;
             FucoseYions_Label.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            FucoseYions_Label.Location = new Point(320, 138);
+            FucoseYions_Label.Location = new Point(320, 124);
             FucoseYions_Label.Name = "FucoseYions_Label";
             FucoseYions_Label.Size = new Size(129, 15);
             FucoseYions_Label.TabIndex = 35;
@@ -1262,7 +1340,7 @@
             // 
             CommonNglycoLabel.AutoSize = true;
             CommonNglycoLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            CommonNglycoLabel.Location = new Point(15, 138);
+            CommonNglycoLabel.Location = new Point(15, 124);
             CommonNglycoLabel.Name = "CommonNglycoLabel";
             CommonNglycoLabel.Size = new Size(135, 15);
             CommonNglycoLabel.TabIndex = 34;
@@ -1270,7 +1348,7 @@
             // 
             // CheckAllOglyco_Button
             // 
-            CheckAllOglyco_Button.Location = new Point(157, 401);
+            CheckAllOglyco_Button.Location = new Point(157, 387);
             CheckAllOglyco_Button.Name = "CheckAllOglyco_Button";
             CheckAllOglyco_Button.Size = new Size(157, 31);
             CheckAllOglyco_Button.TabIndex = 33;
@@ -1280,7 +1358,7 @@
             // 
             // CheckAllNeutralLosses_Button
             // 
-            CheckAllNeutralLosses_Button.Location = new Point(779, 130);
+            CheckAllNeutralLosses_Button.Location = new Point(779, 116);
             CheckAllNeutralLosses_Button.Name = "CheckAllNeutralLosses_Button";
             CheckAllNeutralLosses_Button.Size = new Size(157, 31);
             CheckAllNeutralLosses_Button.TabIndex = 32;
@@ -1290,7 +1368,7 @@
             // 
             // CheckAllFucose_Button
             // 
-            CheckAllFucose_Button.Location = new Point(468, 130);
+            CheckAllFucose_Button.Location = new Point(468, 116);
             CheckAllFucose_Button.Name = "CheckAllFucose_Button";
             CheckAllFucose_Button.Size = new Size(157, 31);
             CheckAllFucose_Button.TabIndex = 31;
@@ -1300,7 +1378,7 @@
             // 
             // CheckAllNglyco_Button
             // 
-            CheckAllNglyco_Button.Location = new Point(157, 130);
+            CheckAllNglyco_Button.Location = new Point(157, 116);
             CheckAllNglyco_Button.Name = "CheckAllNglyco_Button";
             CheckAllNglyco_Button.Size = new Size(157, 31);
             CheckAllNglyco_Button.TabIndex = 30;
@@ -1436,7 +1514,7 @@
             // 
             // LoadInGlycoPepRawFile_TextBox
             // 
-            LoadInGlycoPepRawFile_TextBox.Location = new Point(15, 64);
+            LoadInGlycoPepRawFile_TextBox.Location = new Point(15, 52);
             LoadInGlycoPepRawFile_TextBox.Name = "LoadInGlycoPepRawFile_TextBox";
             LoadInGlycoPepRawFile_TextBox.Size = new Size(1074, 23);
             LoadInGlycoPepRawFile_TextBox.TabIndex = 9;
@@ -1445,7 +1523,7 @@
             // 
             // BrowseGlycoPepRawFiles_Button
             // 
-            BrowseGlycoPepRawFiles_Button.Location = new Point(1095, 64);
+            BrowseGlycoPepRawFiles_Button.Location = new Point(1095, 52);
             BrowseGlycoPepRawFiles_Button.Name = "BrowseGlycoPepRawFiles_Button";
             BrowseGlycoPepRawFiles_Button.Size = new Size(90, 23);
             BrowseGlycoPepRawFiles_Button.TabIndex = 8;
@@ -1458,7 +1536,7 @@
             Yions_OlinkedChecklistBox.CheckOnClick = true;
             Yions_OlinkedChecklistBox.FormattingEnabled = true;
             Yions_OlinkedChecklistBox.Items.AddRange(new object[] { "0, Pep (Y0)", "203.0794, Pep+[HexNAc]", "365.1322, Pep+[HexNAc-Hex]", "406.1588, Pep+[HexNAc2]", "568.2116, Pep+[HexNAc2-Hex]", "730.2644, Pep+[HexNAc2-Hex2]", "494.1748, Pep+[HexNAc-NeuAc]", "510.1697, Pep+[HexNAc-NeuGc]", "656.2276, Pep+[HexNAc-Hex-NeuAc]", "672.2225, Pep+[HexNAc-Hex-NeuGc]" });
-            Yions_OlinkedChecklistBox.Location = new Point(15, 438);
+            Yions_OlinkedChecklistBox.Location = new Point(15, 424);
             Yions_OlinkedChecklistBox.Name = "Yions_OlinkedChecklistBox";
             Yions_OlinkedChecklistBox.Size = new Size(299, 184);
             Yions_OlinkedChecklistBox.TabIndex = 7;
@@ -1478,7 +1556,7 @@
             Yions_LossFromPepChecklistBox.CheckOnClick = true;
             Yions_LossFromPepChecklistBox.FormattingEnabled = true;
             Yions_LossFromPepChecklistBox.Items.AddRange(new object[] { "GlycoPep (Intact Mass), 0", "GlycoPep-[Hex], 162.0528", "GlycoPep-[Hex2], 324.1057", "GlycoPep-[Hex3], 486.1585", "GlycoPep-[Hex4], 648.2113", "GlycoPep-[Hex5], 810.2641", "GlycoPep-[Hex6], 972.3169", "GlycoPep-[NeuAc], 291.0954", "GlycoPep-[NeuAc-Hex], 453.1482", "GlycoPep-[NeuAc-Hex-HexNAc], 656.2276", "GlycoPep-[NeuAc2], 582.1903", "GlycoPep-[NeuAc2-Hex2], 906.2965", "GlycoPep-[NeuAc2-Hex2-HexNAc2], 1312.4552", "GlycoPep-[NeuGc], 307.1903", "GlycoPep-[NeuGc-Hex], 469.1431", "GlycoPep-[NeuGc-Hex-HexNAc], 672.2225", "GlycoPep-[NeuGc2], 614.1806", "GlycoPep-[NeuGc2-Hex2], 938.2862", "GlycoPep-[NeuGc2-Hex2-HexNAc2], 1344.4450", "GlycoPep-[NeuAc-Hex-HexNAc-dHex], 802.2855", "GlycoPep-[Hex-HexNAc-dHex], 511.1901" });
-            Yions_LossFromPepChecklistBox.Location = new Point(631, 167);
+            Yions_LossFromPepChecklistBox.Location = new Point(631, 153);
             Yions_LossFromPepChecklistBox.Name = "Yions_LossFromPepChecklistBox";
             Yions_LossFromPepChecklistBox.Size = new Size(305, 454);
             Yions_LossFromPepChecklistBox.TabIndex = 5;
@@ -1488,7 +1566,7 @@
             Yions_FucoseNlinkedCheckedBox.CheckOnClick = true;
             Yions_FucoseNlinkedCheckedBox.FormattingEnabled = true;
             Yions_FucoseNlinkedCheckedBox.Items.AddRange(new object[] { "0, Pep (Y0)", "349.1373, Pep+[HexNAc-dHex]", "552.2167, Pep+[HexNAc2-dHex]", "714.2695, Pep+[HexNAc2-Hex-dHex]", "876.3223, Pep+[HexNAc2-Hex2-dHex]", "1038.3751, Pep+[HexNAc2-Hex3-dHex]", "917.3486, Pep+[HexNAc3-Hex-dHex] (bisecting)", "1241.4545, Pep+[HexNAc3-Hex3-dHex]", "1403.5073, Pep+[HexNAc3-Hex4-dHex]", "1606.5867, Pep+[HexNAc4-Hex4-dHex]", "1768.6395, Pep+[HexNAc4-Hex5-dHex]" });
-            Yions_FucoseNlinkedCheckedBox.Location = new Point(320, 167);
+            Yions_FucoseNlinkedCheckedBox.Location = new Point(320, 153);
             Yions_FucoseNlinkedCheckedBox.Name = "Yions_FucoseNlinkedCheckedBox";
             Yions_FucoseNlinkedCheckedBox.Size = new Size(305, 202);
             Yions_FucoseNlinkedCheckedBox.TabIndex = 4;
@@ -1498,7 +1576,7 @@
             Yions_NlinkedCheckBox.CheckOnClick = true;
             Yions_NlinkedCheckBox.FormattingEnabled = true;
             Yions_NlinkedCheckBox.Items.AddRange(new object[] { "0, Pep (Y0)", "203.0794, Pep+[HexNAc]", "406.1588, Pep+[HexNAc2]", "568.2116, Pep+[HexNAc2-Hex]", "730.2644, Pep+[HexNAc2-Hex2] ", "892.3172, Pep+[HexNAc2-Hex3] ", "771.2909, Pep+[HexNAc3-Hex] (bisecting GlcNAc)", "1095.3966, Pep+[HexNAc3-Hex3]", "1257.4494, Pep+[HexNAc3-Hex4]", "1460.5288, Pep+[HexNAc4-Hex4]", "1622.5816, Pep+[HexNAc4-Hex5]" });
-            Yions_NlinkedCheckBox.Location = new Point(15, 167);
+            Yions_NlinkedCheckBox.Location = new Point(15, 153);
             Yions_NlinkedCheckBox.Name = "Yions_NlinkedCheckBox";
             Yions_NlinkedCheckBox.Size = new Size(299, 202);
             Yions_NlinkedCheckBox.TabIndex = 3;
@@ -1516,7 +1594,7 @@
             // 
             // BrowseGlycoPepIDs
             // 
-            BrowseGlycoPepIDs.Location = new Point(1095, 6);
+            BrowseGlycoPepIDs.Location = new Point(1095, 23);
             BrowseGlycoPepIDs.Name = "BrowseGlycoPepIDs";
             BrowseGlycoPepIDs.Size = new Size(90, 23);
             BrowseGlycoPepIDs.TabIndex = 1;
@@ -1526,11 +1604,11 @@
             // 
             // LoadInGlycoPepIDs_TextBox
             // 
-            LoadInGlycoPepIDs_TextBox.Location = new Point(15, 6);
+            LoadInGlycoPepIDs_TextBox.Location = new Point(15, 23);
             LoadInGlycoPepIDs_TextBox.Name = "LoadInGlycoPepIDs_TextBox";
             LoadInGlycoPepIDs_TextBox.Size = new Size(1074, 23);
             LoadInGlycoPepIDs_TextBox.TabIndex = 0;
-            LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Assigned Modifications\", \"Charge\", \"Total Glycan Composition\", and \"Observed M/Z\"";
+            LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Charge\", and \"Total Glycan Composition\"";
             LoadInGlycoPepIDs_TextBox.TextChanged += LoadInGlycoPepIDs_TextBox_TextChanged;
             // 
             // tabPage1
@@ -2034,6 +2112,8 @@
             GlyCounter_AllTabs.ResumeLayout(false);
             GlyCounter_Tab.ResumeLayout(false);
             GlyCounter_Tab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)MSLevelUB).EndInit();
+            ((System.ComponentModel.ISupportInitialize)MSLevelLB).EndInit();
             YnaughtTab.ResumeLayout(false);
             YnaughtTab.PerformLayout();
             panel1.ResumeLayout(false);
@@ -2148,8 +2228,6 @@
         private Button Ynaught_StartButton;
         private System.Windows.Forms.Timer timer2;
         private PictureBox Ynaught_GlyCounterLogo;
-        private TextBox LoadInGlycanMasses_TextBox;
-        private Button BrowseGlycans_Button;
         private TextBox intensityThresholdTextBox;
         private Label UVPDsettingslabel;
         private Label label1;
@@ -2222,5 +2300,11 @@
         private Label label21;
         private NumericUpDown iC_msLevelHigh;
         private CheckBox iC_ipsaCB;
+        private Label label3;
+        private Label label2;
+        private NumericUpDown MSLevelUB;
+        private NumericUpDown MSLevelLB;
+        private CheckBox polarityCB;
+        private CheckBox ignoreMSLevelCB;
     }
 }
