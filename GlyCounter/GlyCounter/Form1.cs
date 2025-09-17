@@ -176,11 +176,11 @@ namespace GlyCounter
         {
             if (Directory.Exists(Gly_outputTextBox.Text))
             {
-                outputPath = Gly_outputTextBox.Text + @"\";
+                _outputPath = Gly_outputTextBox.Text + @"\";
             }
             else
             {
-                outputPath = Gly_outputTextBox.Text + @"\";
+                _outputPath = Gly_outputTextBox.Text + @"\";
                 DialogResult result = MessageBox.Show(
                     "Folder does not exist. Do you want to create a new one?",
                     "Create Folder",
@@ -214,34 +214,34 @@ namespace GlyCounter
                 await Task.Run(() =>
                 {
                     bool usingda = false;
-                    using204 = false;
+                    _using204 = false;
 
                     if (string.IsNullOrEmpty(_outputPath) || !Directory.Exists(_outputPath))
                     {
-                        if (fileList.Count > 0)
-                            outputPath = Path.GetDirectoryName(fileList[0]) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                        if (_fileList.Count > 0)
+                            _outputPath = Path.GetDirectoryName(_fileList[0]) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                         else
-                            outputPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                            _outputPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     }
 
-                    if (string.IsNullOrEmpty(outputPath) || !Directory.Exists(outputPath))
+                    if (string.IsNullOrEmpty(_outputPath) || !Directory.Exists(_outputPath))
                     {
-                        if (fileList.Count > 0)
+                        if (_fileList.Count > 0)
                         {
-                            outputPath = Path.GetDirectoryName(fileList[0]) ?? defaultOutput;
+                            _outputPath = Path.GetDirectoryName(_fileList[0]) ?? _defaultOutput;
                         }
                         else
                         {
-                            outputPath = defaultOutput;
+                            _outputPath = _defaultOutput;
                         }
 
                         if (Gly_outputTextBox.InvokeRequired)
                         {
-                            Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = outputPath));
+                            Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = _outputPath));
                         }
                         else
                         {
-                            Gly_outputTextBox.Text = outputPath;
+                            Gly_outputTextBox.Text = _outputPath;
                         }
                     }
                     Stopwatch stopwatch = new Stopwatch();
@@ -252,49 +252,49 @@ namespace GlyCounter
                     {
                         if (CanConvertDouble(ppmTol_textBox.Text, _daTolerance))
                         {
-                            daTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
+                            _daTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
                             usingda = true;
                         }
 
                     }
                     else
-                        if (CanConvertDouble(ppmTol_textBox.Text, ppmTolerance))
-                            ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
+                        if (CanConvertDouble(ppmTol_textBox.Text, _ppmTolerance))
+                            _ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
 
                     _tol = usingda ? _daTolerance : _ppmTolerance;
 
-                    if (CanConvertDouble(SN_textBox.Text, SNthreshold))
-                        SNthreshold = Convert.ToDouble(SN_textBox.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(SN_textBox.Text, _SNthreshold))
+                        _SNthreshold = Convert.ToDouble(SN_textBox.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(PeakDepth_Box_HCD.Text, peakDepthThreshold_hcd))
-                        peakDepthThreshold_hcd = Convert.ToDouble(PeakDepth_Box_HCD.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(PeakDepth_Box_HCD.Text, _peakDepthThreshold_hcd))
+                        _peakDepthThreshold_hcd = Convert.ToDouble(PeakDepth_Box_HCD.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(PeakDepth_Box_ETD.Text, peakDepthThreshold_etd))
-                        peakDepthThreshold_etd = Convert.ToDouble(PeakDepth_Box_ETD.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(PeakDepth_Box_ETD.Text, _peakDepthThreshold_etd))
+                        _peakDepthThreshold_etd = Convert.ToDouble(PeakDepth_Box_ETD.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(PeakDepth_Box_UVPD.Text, peakDepthThreshold_uvpd))
-                        peakDepthThreshold_uvpd = Convert.ToDouble(PeakDepth_Box_UVPD.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(PeakDepth_Box_UVPD.Text, _peakDepthThreshold_uvpd))
+                        _peakDepthThreshold_uvpd = Convert.ToDouble(PeakDepth_Box_UVPD.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(hcdTICfraction.Text, oxoTICfractionThreshold_hcd))
-                        oxoTICfractionThreshold_hcd = Convert.ToDouble(hcdTICfraction.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(hcdTICfraction.Text, _oxoTICfractionThreshold_hcd))
+                        _oxoTICfractionThreshold_hcd = Convert.ToDouble(hcdTICfraction.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(etdTICfraction.Text, oxoTICfractionThreshold_etd))
-                        oxoTICfractionThreshold_etd = Convert.ToDouble(etdTICfraction.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(etdTICfraction.Text, _oxoTICfractionThreshold_etd))
+                        _oxoTICfractionThreshold_etd = Convert.ToDouble(etdTICfraction.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(uvpdTICfraction.Text, oxoTICfractionThreshold_uvpd))
-                        oxoTICfractionThreshold_uvpd = Convert.ToDouble(uvpdTICfraction.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(uvpdTICfraction.Text, _oxoTICfractionThreshold_uvpd))
+                        _oxoTICfractionThreshold_uvpd = Convert.ToDouble(uvpdTICfraction.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(OxoCountRequireBox_hcd.Text, oxoCountRequirement_hcd_user))
-                        oxoCountRequirement_hcd_user = Convert.ToDouble(OxoCountRequireBox_hcd.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(OxoCountRequireBox_hcd.Text, _oxoCountRequirement_hcd_user))
+                        _oxoCountRequirement_hcd_user = Convert.ToDouble(OxoCountRequireBox_hcd.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(OxoCountRequireBox_etd.Text, oxoCountRequirement_etd_user))
-                        oxoCountRequirement_etd_user = Convert.ToDouble(OxoCountRequireBox_etd.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(OxoCountRequireBox_etd.Text, _oxoCountRequirement_etd_user))
+                        _oxoCountRequirement_etd_user = Convert.ToDouble(OxoCountRequireBox_etd.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(OxoCountRequireBox_uvpd.Text, oxoCountRequirement_uvpd_user))
-                        oxoCountRequirement_uvpd_user = Convert.ToDouble(OxoCountRequireBox_uvpd.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(OxoCountRequireBox_uvpd.Text, _oxoCountRequirement_uvpd_user))
+                        _oxoCountRequirement_uvpd_user = Convert.ToDouble(OxoCountRequireBox_uvpd.Text, CultureInfo.InvariantCulture);
 
-                    if (CanConvertDouble(intensityThresholdTextBox.Text, intensityThreshold))
-                        intensityThreshold = Convert.ToDouble(intensityThresholdTextBox.Text, CultureInfo.InvariantCulture);
+                    if (CanConvertDouble(intensityThresholdTextBox.Text, _intensityThreshold))
+                        _intensityThreshold = Convert.ToDouble(intensityThresholdTextBox.Text, CultureInfo.InvariantCulture);
 
                     string toleranceString = "ppmTol: ";
                     if (usingda)
@@ -326,19 +326,21 @@ namespace GlyCounter
 
                     if (!_csvCustomFile.Equals("empty"))
                     {
-                        using StreamReader csvFile = new StreamReader(csvCustomFile);
+                        using StreamReader csvFile = new(_csvCustomFile);
                         using var csv = new CsvReader(csvFile, true);
                         while (csv.ReadNextRecord())
                         {
-                            OxoniumIon oxoIon = new OxoniumIon();
-                            oxoIon.theoMZ = double.Parse(csv["m/z"], CultureInfo.InvariantCulture);
                             string userDescription = csv["Description"];
-                            oxoIon.description = double.Parse(csv["m/z"], CultureInfo.InvariantCulture) + ", " + userDescription;
-                            oxoIon.glycanSource = "Custom";
-                            oxoIon.hcdCount = 0;
-                            oxoIon.etdCount = 0;
-                            oxoIon.uvpdCount = 0;
-                            oxoIon.peakDepth = ArbitraryPeakDepthIfNotFound;
+                            OxoniumIon oxoIon = new()
+                            {
+                                theoMZ = double.Parse(csv["m/z"], CultureInfo.InvariantCulture),
+                                description = double.Parse(csv["m/z"], CultureInfo.InvariantCulture) + ", " + userDescription,
+                                glycanSource = "Custom",
+                                hcdCount = 0,
+                                etdCount = 0,
+                                uvpdCount = 0,
+                                peakDepth = ArbitraryPeakDepthIfNotFound
+                            };
 
                             //If an oxonium ion with the same theoretical m/z value exists, replace it with the one from the custom csv
                             List<OxoniumIon> ionsToRemove = [];
@@ -356,7 +358,7 @@ namespace GlyCounter
                             _oxoniumIonHashSet.Add(oxoIon);
 
                             if (oxoIon.theoMZ == 204.0867 || oxoIon.description == "HexNAc")
-                                using204 = true;
+                                _using204 = true;
                         }
                     }
 
@@ -546,19 +548,19 @@ namespace GlyCounter
                                     nce = Convert.ToDouble(collisionEnergyArray[0]);
                                 }
                                 else nce = spectrum.Precursors[0].CollisionEnergy;
-                                foreach (OxoniumIon oxoIon in oxoniumIonHashSet)
+                                foreach (OxoniumIon oxoIon in _oxoniumIonHashSet)
                                 {
                                     oxoIon.intensity = 0;
-                                    oxoIon.peakDepth = arbitraryPeakDepthIfNotFound;
+                                    oxoIon.peakDepth = ArbitraryPeakDepthIfNotFound;
                                     oxoIonHeader = oxoIonHeader + oxoIon.description + "\t";
                                     oxoIon.measuredMZ = 0;
                                     oxoIon.intensity = 0;
 
-                                    SpecDataPointEx peak = GetPeak(spectrum, oxoIon.theoMZ, usingda, tol, IT);
+                                    SpecDataPointEx peak = GetPeak(spectrum, oxoIon.theoMZ, usingda, _tol, thermo, IT);
 
                                     if (!IT && thermo)
                                     {
-                                        if (!peak.Equals(new SpecDataPointEx()) && peak.Intensity > 0 && (peak.Intensity / peak.Noise) > SNthreshold)
+                                        if (!peak.Equals(new SpecDataPointEx()) && peak.Intensity > 0 && (peak.Intensity / peak.Noise) > _SNthreshold)
                                         {
                                             oxoIon.measuredMZ = peak.Mz;
                                             oxoIon.intensity = peak.Intensity;
@@ -573,13 +575,13 @@ namespace GlyCounter
                                             if (uvpdTrue)
                                                 oxoIon.uvpdCount++;
 
-                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= peakDepthThreshold_hcd && hcdTrue)
+                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= _peakDepthThreshold_hcd && hcdTrue)
                                                 test204 = true;
 
-                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= peakDepthThreshold_etd && etdTrue)
+                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= _peakDepthThreshold_etd && etdTrue)
                                                 test204 = true;
 
-                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= peakDepthThreshold_uvpd && uvpdTrue)
+                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= _peakDepthThreshold_uvpd && uvpdTrue)
                                                 test204 = true;
 
                                             oxoniumIonFoundPeaks.Add(oxoIon.theoMZ);
@@ -589,7 +591,7 @@ namespace GlyCounter
                                     }
                                     else
                                     {
-                                        if (!peak.Equals(new SpecDataPointEx()) && peak.Intensity > intensityThreshold)
+                                        if (!peak.Equals(new SpecDataPointEx()) && peak.Intensity > _intensityThreshold)
                                         {
                                             oxoIon.measuredMZ = peak.Mz;
                                             oxoIon.intensity = peak.Intensity;
@@ -604,13 +606,13 @@ namespace GlyCounter
                                             if (uvpdTrue)
                                                 oxoIon.uvpdCount++;
 
-                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= peakDepthThreshold_hcd && hcdTrue)
+                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= _peakDepthThreshold_hcd && hcdTrue)
                                                 test204 = true;
 
-                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= peakDepthThreshold_etd && etdTrue)
+                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= _peakDepthThreshold_etd && etdTrue)
                                                 test204 = true;
 
-                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= peakDepthThreshold_uvpd && uvpdTrue)
+                                            if (oxoIon.theoMZ == 204.0867 && sortedPeakDepths[peak.Intensity] <= _peakDepthThreshold_uvpd && uvpdTrue)
                                                 test204 = true;
 
                                             oxoniumIonFoundPeaks.Add(oxoIon.theoMZ);
@@ -703,11 +705,11 @@ namespace GlyCounter
                                 if (outputIPSA != null)
                                     outputIPSA.WriteLine(i + "\t" + peakString + "\t" + errorString + "\t");
 
-                                foreach (OxoniumIon oxoIon in oxoniumIonHashSet)
+                                foreach (OxoniumIon oxoIon in _oxoniumIonHashSet)
                                 {
                                     outputOxo.Write(oxoIon.intensity + "\t");
 
-                                    if (oxoIon.peakDepth == arbitraryPeakDepthIfNotFound)
+                                    if (oxoIon.peakDepth == ArbitraryPeakDepthIfNotFound)
                                     {
                                         outputPeakDepth.Write("NotFound\t");
                                     }
@@ -715,13 +717,13 @@ namespace GlyCounter
                                     {
                                         outputPeakDepth.Write(oxoIon.peakDepth + "\t");
                                         oxoRanks.Add(oxoIon.peakDepth);
-                                        if (hcdTrue && oxoIon.peakDepth <= peakDepthThreshold_hcd)
+                                        if (hcdTrue && oxoIon.peakDepth <= _peakDepthThreshold_hcd)
                                             countOxoWithinPeakDepthThreshold++;
 
-                                        if (etdTrue && oxoIon.peakDepth <= peakDepthThreshold_etd)
+                                        if (etdTrue && oxoIon.peakDepth <= _peakDepthThreshold_etd)
                                             countOxoWithinPeakDepthThreshold++;
 
-                                        if (uvpdTrue && oxoIon.peakDepth <= peakDepthThreshold_uvpd)
+                                        if (uvpdTrue && oxoIon.peakDepth <= _peakDepthThreshold_uvpd)
                                             countOxoWithinPeakDepthThreshold++;
 
                                     }
@@ -731,17 +733,17 @@ namespace GlyCounter
                                 //double medianRanks = Statistics.Median(oxoRanks);
                                 //the median peak depth has to be "higher" (i.e., less than) the peak depth threshold 
                                 //considered also using the number of oxonium ions found has to be at least half to the total list looked for, but decided against it for now (what if big list?)
-                                if (oxoniumIonHashSet.Count < 6)
+                                if (_oxoniumIonHashSet.Count < 6)
                                 {
                                     halfTotalList = 4;
                                 }
-                                if (oxoniumIonHashSet.Count > 15)
+                                if (_oxoniumIonHashSet.Count > 15)
                                 {
                                     halfTotalList = 8;
                                 }
 
                                 //if not using 204, the below test will fail by default, so we need to add this in to make sure we check the calculation even if 204 isn't being used.
-                                if (!using204)
+                                if (!_using204)
                                     test204 = true;
 
                                 double oxoTICfraction = totalOxoSignal / scanTIC;
@@ -749,29 +751,29 @@ namespace GlyCounter
                                 //Check if there is a user input oxonium count requirement. If not, use default values
                                 double oxoCountRequirement = 0;
                                 if (hcdTrue)
-                                    oxoCountRequirement = oxoCountRequirement_hcd_user > 0 ? oxoCountRequirement_hcd_user : halfTotalList;
+                                    oxoCountRequirement = _oxoCountRequirement_hcd_user > 0 ? _oxoCountRequirement_hcd_user : halfTotalList;
                                 if (etdTrue)
-                                    oxoCountRequirement = oxoCountRequirement_etd_user > 0 ? oxoCountRequirement_etd_user : halfTotalList / 2;
+                                    oxoCountRequirement = _oxoCountRequirement_etd_user > 0 ? _oxoCountRequirement_etd_user : halfTotalList / 2;
                                 if (uvpdTrue)
-                                    oxoCountRequirement = oxoCountRequirement_uvpd_user > 0 ? oxoCountRequirement_uvpd_user : halfTotalList;
+                                    oxoCountRequirement = _oxoCountRequirement_uvpd_user > 0 ? _oxoCountRequirement_uvpd_user : halfTotalList;
 
                                 //intensity differences for HCD and ETD means we need to have two different % TIC threshold values.
                                 //changed this to not use median, but instead say the number of oxonium ions with peakdepth within user-deined threshold
                                 //needs to be greater than half the total list (or its definitions given above
-                                if (hcdTrue && countOxoWithinPeakDepthThreshold >= oxoCountRequirement && test204 && oxoTICfraction >= oxoTICfractionThreshold_hcd)
+                                if (hcdTrue && countOxoWithinPeakDepthThreshold >= oxoCountRequirement && test204 && oxoTICfraction >= _oxoTICfractionThreshold_hcd)
                                 {
                                     likelyGlycoSpectrum = true;
                                     numberScansCountedLikelyGlyco_hcd++;
                                 }
 
                                 //etd also differs in peak depth, so changed scaled this by 1.5
-                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 && oxoTICfraction >= oxoTICfractionThreshold_etd)
+                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 && oxoTICfraction >= _oxoTICfractionThreshold_etd)
                                 {
                                     likelyGlycoSpectrum = true;
                                     numberScansCountedLikelyGlyco_etd++;
                                 }
 
-                                if (uvpdTrue && countOxoWithinPeakDepthThreshold >= oxoCountRequirement && test204 && oxoTICfraction >= oxoTICfractionThreshold_uvpd)
+                                if (uvpdTrue && countOxoWithinPeakDepthThreshold >= oxoCountRequirement && test204 && oxoTICfraction >= _oxoTICfractionThreshold_uvpd)
                                 {
                                     likelyGlycoSpectrum = true;
                                     numberScansCountedLikelyGlyco_uvpd++;
@@ -948,7 +950,7 @@ namespace GlyCounter
             return ion;
         }
 
-        public static SpecDataPointEx GetPeak(SpectrumEx spectrum, double mz, bool usingda, double tolerance, bool thermo, bool polarity, bool IT = false)
+        public static SpecDataPointEx GetPeak(SpectrumEx spectrum, double mz, bool usingda, double tolerance, bool thermo, bool IT = false)
         {
             DoubleRange rangeOxonium = usingda
                 ? DoubleRange.FromDa(mz, tolerance)
@@ -1691,17 +1693,17 @@ namespace GlyCounter
                     //make sure output path is real otherwise set to default
                     if (string.IsNullOrEmpty(_outputPath) || !Directory.Exists(_outputPath))
                     {
-                        if (!string.IsNullOrEmpty(Ynaught_rawFilePath) && File.Exists(Ynaught_rawFilePath))
+                        if (!string.IsNullOrEmpty(_Ynaught_rawFilePath) && File.Exists(_Ynaught_rawFilePath))
                         {
                             if (string.IsNullOrEmpty(_outputPath) || !Directory.Exists(_outputPath))
                             {
-                                if (fileList.Count > 0)
-                                    _outputPath = Path.GetDirectoryName(fileList[0]) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                                if (_fileList.Count > 0)
+                                    _outputPath = Path.GetDirectoryName(_fileList[0]) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                                 else
                                     _outputPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                             }
 
-                            _outputPath = Path.GetDirectoryName(Ynaught_rawFilePath) ?? defaultOutput;
+                            _outputPath = Path.GetDirectoryName(_Ynaught_rawFilePath) ?? _defaultOutput;
                             if (Ynaught_outputTextBox.InvokeRequired)
                             {
                                 Ynaught_outputTextBox.Invoke(new Action(() => Ynaught_outputTextBox.Text = _outputPath));
@@ -1713,7 +1715,7 @@ namespace GlyCounter
                         }
                         else
                         {
-                            outputPath = defaultOutput;
+                            _outputPath = _defaultOutput;
                             if (Ynaught_outputTextBox.InvokeRequired)
                             {
                                 Ynaught_outputTextBox.Invoke(new Action(() => Ynaught_outputTextBox.Text = _outputPath));
@@ -1736,19 +1738,19 @@ namespace GlyCounter
                     if (Ynaught_DaCheckBox.Checked)
                     {
                         if (CanConvertDouble(Ynaught_ppmTolTextBox.Text, _daTolerance))
-                            Ynaught_daTolerance = Convert.ToDouble(Ynaught_ppmTolTextBox.Text, CultureInfo.InvariantCulture);
+                            _daTolerance = Convert.ToDouble(Ynaught_ppmTolTextBox.Text, CultureInfo.InvariantCulture);
                         Ynaught_usingda = true;
                     }
                     else
                     {
                         if (CanConvertDouble(Ynaught_ppmTolTextBox.Text, _ppmTolerance))
-                            Ynaught_ppmTolerance = Convert.ToDouble(Ynaught_ppmTolTextBox.Text, CultureInfo.InvariantCulture);
+                            _ppmTolerance = Convert.ToDouble(Ynaught_ppmTolTextBox.Text, CultureInfo.InvariantCulture);
                     }
 
                     _tol = Ynaught_usingda ? _daTolerance : _ppmTolerance;
 
                     if (CanConvertDouble(Ynaught_SNthresholdTextBox.Text, _SNthreshold))
-                        Ynaught_SNthreshold = Convert.ToDouble(Ynaught_SNthresholdTextBox.Text, CultureInfo.InvariantCulture);
+                        _SNthreshold = Convert.ToDouble(Ynaught_SNthresholdTextBox.Text, CultureInfo.InvariantCulture);
 
                     if (YNaught_IPSAcheckbox.Checked) _ipsa = true;
 
@@ -1859,7 +1861,7 @@ namespace GlyCounter
                     //this will only execute if the user uploaded a file and changed the text from being empty
                     if (!_Ynaught_csvCustomAdditions.Equals("empty"))
                     {
-                        using StreamReader csvFile = new StreamReader(Ynaught_csvCustomAdditions);
+                        using StreamReader csvFile = new StreamReader(_Ynaught_csvCustomAdditions);
                         using (var csv = new CsvReader(csvFile, true))
                         {
                             string userDescription = csv["Description"];
@@ -1879,19 +1881,19 @@ namespace GlyCounter
                     //this will only execute if the user uploaded a file and changed the text from being empty
                     if (!_Ynaught_csvCustomSubtractions.Equals("empty"))
                     {
-                        using StreamReader csvFile = new StreamReader(Ynaught_csvCustomSubtractions);
+                        using StreamReader csvFile = new StreamReader(_Ynaught_csvCustomSubtractions);
                         using (var csv = new CsvReader(csvFile, true))
                         {
                             string userDescription = csv["Description"];
                             Yion yIon = new Yion
                             {
-                                yIon.theoMass = double.Parse(csv["Mass"], CultureInfo.InvariantCulture),
-                                yIon.description = double.Parse(csv["Mass"], CultureInfo.InvariantCulture) + ", " + userDescription,
-                                yIon.glycanSource = "CustomSubtraction",
-                                yIon.hcdCount = 0,
-                                yIon.etdCount = 0,
-                                yIonHashSet.Add(yIon)
+                                theoMass = double.Parse(csv["Mass"], CultureInfo.InvariantCulture),
+                                description = double.Parse(csv["Mass"], CultureInfo.InvariantCulture) + ", " + userDescription,
+                                glycanSource = "CustomSubtraction",
+                                hcdCount = 0,
+                                etdCount = 0
                             };
+                            _yIonHashSet.Add(yIon);
                         }
                     }
 
@@ -1953,7 +1955,7 @@ namespace GlyCounter
 
                     //this is currently set up for MSFragger data form the psms file
                     //we might want to write a converter for different data types
-                    using StreamReader pepIDtxtFile = new StreamReader(Ynaught_pepIDFilePath);
+                    using StreamReader pepIDtxtFile = new StreamReader(_Ynaught_pepIDFilePath);
                     using (var txt = new CsvReader(pepIDtxtFile, true, '\t'))
                     {
 
@@ -1990,20 +1992,6 @@ namespace GlyCounter
 
                             //add PSM to list
                             psmList.Add(psm);
-
-                            //set spectrum number
-                            string[] spectrumArray = spectrumToBeParsed.Split('.');
-                            int spectrumNum = Convert.ToInt32(spectrumArray[1]);
-
-                            //add the rest of the information to the PSM object
-                            psm.charge = charge;
-                            psm.spectrumNumber = spectrumNum;
-                            psm.totalGlycanComposition = totalGlycanCompToBeParsed;
-                            psm.precursorMZ = precursorMZ;
-
-                            //add PSM to list
-                            psmList.Add(psm);
-
                         }
                     }
 
@@ -2216,8 +2204,8 @@ namespace GlyCounter
                                 numberOfChargeStatesConsidered = chargeUpperBound - chargeLowerBound + 1;
 
                                 //use intensity threshold for mzml files
-                                if (CanConvertDouble(Ynaught_intTextBox.Text, Ynaught_intensityThreshold))
-                                    Ynaught_intensityThreshold = Convert.ToDouble(Ynaught_intTextBox.Text, CultureInfo.InvariantCulture);
+                                if (CanConvertDouble(Ynaught_intTextBox.Text, _intensityThreshold))
+                                    _intensityThreshold = Convert.ToDouble(Ynaught_intTextBox.Text, CultureInfo.InvariantCulture);
 
                         //find all the Yions for each charge state considered
                         for (int i = chargeUpperBound; i >= chargeLowerBound; i--)
@@ -2550,6 +2538,22 @@ namespace GlyCounter
                     return first;
                 });
             return [..combined];
+        }
+
+        void Form1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                if (file.EndsWith("raw") || file.EndsWith("mzML"))
+                    _fileList.Add(file);
+            }
+            textBox1.Text = "Successfully uploaded " + _fileList.Count() + " file(s)";
         }
 
         /////////////////////////////////////////////////////
@@ -2991,8 +2995,7 @@ namespace GlyCounter
                                     ion.measuredMZ = 0;
                                     ion.intensity = 0;
 
-                                    SpecDataPointEx peak = GetPeak(spectrum, ion.theoMZ, usingda, _tol, thermo, true,
-                                        IT);
+                                    SpecDataPointEx peak = GetPeak(spectrum, ion.theoMZ, usingda, _tol, thermo, IT);
 
                                     if (!IT && thermo)
                                     {
