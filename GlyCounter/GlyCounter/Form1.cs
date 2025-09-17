@@ -2568,556 +2568,689 @@ namespace GlyCounter
             _csvCustomFile = iC_customIonUploadTB.Text;
         }
 
-        private void iC_startButton_Click(object sender, EventArgs e)
+        private async void iC_startButton_Click(object sender, EventArgs e)
         {
-            bool usingda = false;
-
-            if (string.IsNullOrEmpty(_outputPath) || !Directory.Exists(_outputPath))
-            {
-                //hopefully this defaults to the raw file path
-                _outputPath = _defaultOutput;
-                iC_outputTB.Text = _outputPath;
-            }
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
 
             timer1.Interval = 1000;
             timer1.Tick += OnTimerTick;
             timer1.Start();
             iC_statusUpdatesLabel.Text = @"Processing...";
             iC_startTimeLabel.Text = @"Start Time: " + DateTime.Now.ToString("HH:mm:ss");
-
-            //make sure all user inputs are in the correct format, otherwise use defaults
-            if (iC_daCB.Checked)
+            try
             {
-                if (CanConvertDouble(iC_toleranceTB.Text, _daTolerance))
+                await Task.Run(() =>
                 {
-                    _daTolerance = Convert.ToDouble(iC_toleranceTB.Text);
-                    usingda = true;
-                }
+                    bool usingda = false;
 
-            }
-            else
-                if (CanConvertDouble(iC_toleranceTB.Text, _ppmTolerance))
-                _ppmTolerance = Convert.ToDouble(iC_toleranceTB.Text);
-
-            if (usingda)
-                _tol = _daTolerance;
-            else
-                _tol = _ppmTolerance;
-
-            if (CanConvertDouble(iC_SNTB.Text, _SNthreshold))
-                _SNthreshold = Convert.ToDouble(iC_SNTB.Text);
-
-            if (CanConvertDouble(iC_intensityTB.Text, _intensityThreshold))
-                _intensityThreshold = Convert.ToDouble(iC_intensityTB.Text);
-
-            string toleranceString = "ppmTol: ";
-            if (usingda)
-                toleranceString = "DaTol: ";
-
-            //popup with settings to user
-            MessageBox.Show("You are using these settings:\r\n" + toleranceString + _tol + "\r\nSNthreshold: " + _SNthreshold + "\r\nIntensityTheshold: " + _intensityThreshold);
-
-            foreach (var item in iC_tmt11CBList.CheckedItems)
-                _ionHashSet.Add(ProcessIon(item, source: "TMT11"));
-
-            foreach (var item in iC_acylCBList.CheckedItems)
-                _ionHashSet.Add(ProcessIon(item, source: "Acyl-Lysine"));
-
-            foreach (var item in iC_tmt16CBList.CheckedItems)
-                _ionHashSet.Add(ProcessIon(item, source: "TMT16"));
-
-            foreach (var item in iC_miscIonsCBList.CheckedItems)
-                _ionHashSet.Add(ProcessIon(item, source: "Misc"));
-
-            if (!_csvCustomFile.Equals("empty"))
-            {
-                StreamReader csvFile = new StreamReader(_csvCustomFile);
-                using var csv = new CsvReader(csvFile, true);
-                while (csv.ReadNextRecord())
-                {
-                    string userDescription = csv["Description"];
-                    Ion ion = new Ion
+                    if (string.IsNullOrEmpty(_outputPath) || !Directory.Exists(_outputPath))
                     {
-                        theoMZ = double.Parse(csv["m/z"]),
-                        description = double.Parse(csv["m/z"]) + ", " + userDescription,
-                        ionSource = "Custom",
-                        hcdCount = 0,
-                        etdCount = 0,
-                        uvpdCount = 0,
-                        peakDepth = ArbitraryPeakDepthIfNotFound
-                    };
-
-                    //If an ion with the same theoretical m/z value exists, replace it with the one from the custom csv
-                    List<Ion> ionsToRemove = [];
-                    foreach (Ion checkedIon in _ionHashSet)
-                        if (ion.Equals(checkedIon))
-                            ionsToRemove.Add(checkedIon);
-
-                    foreach (Ion removeIon in ionsToRemove)
-                        _ionHashSet.Remove(removeIon);
-
-                    _ionHashSet.Add(ion);
-                }
-            }
-
-            if (_singleIonMZ != 0)
-            {
-                string userDescription = _singleIonDesc;
-                Ion ion = new Ion
-                {
-                    theoMZ = _singleIonMZ,
-                    description = _singleIonMZ + ", " + userDescription,
-                    ionSource = "Custom",
-                    hcdCount = 0,
-                    etdCount = 0,
-                    uvpdCount = 0,
-                    peakDepth = ArbitraryPeakDepthIfNotFound
-                };
-
-                //If an ion with the same theoretical m/z value exists, replace it with the one from the custom csv
-                List<Ion> ionsToRemove = [];
-                foreach (Ion checkedIon in _ionHashSet)
-                    if (ion.Equals(checkedIon))
-                        _ionHashSet.Remove(checkedIon);
-
-                _ionHashSet.Add(ion);
-            }
-
-            if (iC_ipsaCB.Checked)
-                _ipsa = true;
-
-            foreach (string fileName in _fileList)
-            {
-                //reset ions
-                foreach (Ion ion in _ionHashSet)
-                {
-                    ion.intensity = 0;
-                    ion.peakDepth = ArbitraryPeakDepthIfNotFound;
-                    ion.hcdCount = 0;
-                    ion.etdCount = 0;
-                    ion.uvpdCount = 0;
-                    ion.measuredMZ = 0;
-                }
-
-                FileReader rawFile = new FileReader(fileName);
-                FileReader typeCheck = new FileReader();
-                string fileType = typeCheck.CheckFileFormat(fileName).ToString(); //either "ThermoRaw" or "MzML"
-                bool thermo = fileType != "MzML";
-
-                iC_statusUpdatesLabel.Text = @"Current file: " + fileName;
-                iC_finishTimeLabel.Text = @"Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
-                iC_statusUpdatesLabel.Refresh();
-                iC_finishTimeLabel.Refresh();
-
-                //set vars - I can't be bothered to rename all these
-                int numberOfMS2scansWithOxo_1 = 0;
-                int numberOfMS2scansWithOxo_2 = 0;
-                int numberOfMS2scansWithOxo_3 = 0;
-                int numberOfMS2scansWithOxo_4 = 0;
-                int numberOfMS2scansWithOxo_5plus = 0;
-                int numberOfMS2scansWithOxo_1_hcd = 0;
-                int numberOfMS2scansWithOxo_2_hcd = 0;
-                int numberOfMS2scansWithOxo_3_hcd = 0;
-                int numberOfMS2scansWithOxo_4_hcd = 0;
-                int numberOfMS2scansWithOxo_5plus_hcd = 0;
-                int numberOfMS2scansWithOxo_1_etd = 0;
-                int numberOfMS2scansWithOxo_2_etd = 0;
-                int numberOfMS2scansWithOxo_3_etd = 0;
-                int numberOfMS2scansWithOxo_4_etd = 0;
-                int numberOfMS2scansWithOxo_5plus_etd = 0;
-                int numberOfMS2scansWithOxo_1_uvpd = 0;
-                int numberOfMS2scansWithOxo_2_uvpd = 0;
-                int numberOfMS2scansWithOxo_3_uvpd = 0;
-                int numberOfMS2scansWithOxo_4_uvpd = 0;
-                int numberOfMS2scansWithOxo_5plus_uvpd = 0;
-                int numberOfMSnscans = 0;
-                int numberOfHCDscans = 0;
-                int numberOfETDscans = 0;
-                int numberOfUVPDscans = 0;
-                double nce = 0.0;
-                bool firstSpectrumInFile = true;
-
-                //initialize streamwriter output files
-                string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
-                StreamWriter outputSignal = new StreamWriter(_outputPath + @"\" + fileNameShort + "_iCounter_Signal.txt");
-                StreamWriter outputPeakDepth = new StreamWriter(_outputPath + @"\" + fileNameShort + "_iCounter_PeakDepth.txt");
-                StreamWriter outputIPSA = null;
-
-                if (ipsaCheckBox.Checked)
-                    outputIPSA = new StreamWriter(_outputPath + @"\" + fileNameShort + "_iCounter_IPSA.txt");
-                StreamWriter outputSummary = new StreamWriter(_outputPath + @"\" + fileNameShort + "_iCounter_Summary.txt");
-
-                //write headers
-                outputSignal.Write("ScanNumber\tMSLevel\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalFoundIonSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumIonsFound\tTotalFoundIonSignal\t");
-                outputPeakDepth.Write("ScanNumber\tMSLevel\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalFoundIonSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumIonsFound\tTotalFoundIonSignal\t");
-                outputIPSA?.WriteLine("ScanNumber\tIons\tMassError\t");
-                outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + _SNthreshold + ", IntensityThreshold=" + _intensityThreshold);
-                outputSummary.WriteLine("Started At: " + iC_startTimeLabel.Text);
-                outputSummary.WriteLine();
-
-                //start processing file
-                for (int i = rawFile.FirstScan; i <= rawFile.LastScan; i++)
-                {
-                    SpectrumEx spectrum = rawFile.ReadSpectrumEx(scanNumber: i);
-                    bool IT = spectrum.Analyzer.Contains("ITMS");
-
-                    //custom ms levels
-                    List<int> levels = [];
-
-                    if (iC_msLevelLow.Value == iC_msLevelHigh.Value)
-                        levels.Add(Convert.ToInt32(iC_msLevelLow.Value));
-
-                    int lowestval;
-                    int highestval;
-
-                    if (iC_msLevelLow.Value < iC_msLevelHigh.Value)
-                    {
-                        lowestval = Convert.ToInt32(iC_msLevelLow.Value);
-                        highestval = Convert.ToInt32(iC_msLevelHigh.Value);
-
-                        levels = Enumerable.Range(lowestval, (highestval - lowestval + 1)).ToList();
+                        if (_fileList.Count > 0)
+                            _outputPath = Path.GetDirectoryName(_fileList[0]) ??
+                                          Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                        else
+                            _outputPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     }
 
-                    //if user puts values in backwards for some reason
-                    if (iC_msLevelLow.Value > iC_msLevelHigh.Value)
+                    if (string.IsNullOrEmpty(_outputPath) || !Directory.Exists(_outputPath))
                     {
-                        lowestval = Convert.ToInt32(iC_msLevelHigh.Value);
-                        highestval = Convert.ToInt32(iC_msLevelLow.Value);
+                        if (_fileList.Count > 0)
+                        {
+                            _outputPath = Path.GetDirectoryName(_fileList[0]) ?? _defaultOutput;
+                        }
+                        else
+                        {
+                            _outputPath = _defaultOutput;
+                        }
 
-                        levels = Enumerable.Range(lowestval, (highestval - lowestval + 1)).ToList();
+                        if (iC_outputTB.InvokeRequired)
+                        {
+                            iC_outputTB.Invoke(new Action(() => iC_outputTB.Text = _outputPath));
+                        }
+                        else
+                        {
+                            iC_outputTB.Text = _outputPath;
+                        }
                     }
 
-                    //if ignore ms levels is checked ignore levels list
-                    if (!iC_noMSnFilterCB.Checked)
-                        if (!levels.Contains(spectrum.MsLevel)) continue;
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
 
-                    numberOfMSnscans++;
-                    int numberOfIons = 0;
-                    double totalSignal = 0;
-                    bool hcdTrue = false;
-                    bool etdTrue = false;
-                    bool uvpdTrue = false;
-                    List<double> ionFoundPeaks = [];
-                    List<double> ionFoundMassErrors = [];
-
-                    //figure out dissociation type
-                    if (thermo)
+                    //make sure all user inputs are in the correct format, otherwise use defaults
+                    if (iC_daCB.Checked)
                     {
-                        //using this order means ethcd will count as etd (since both show in scan filter)
-                        if (spectrum.ScanFilter.Contains("etd"))
+                        if (CanConvertDouble(iC_toleranceTB.Text, _daTolerance))
                         {
-                            numberOfETDscans++;
-                            etdTrue = true;
+                            _daTolerance = Convert.ToDouble(iC_toleranceTB.Text);
+                            usingda = true;
                         }
-                        else if (spectrum.ScanFilter.Contains("hcd"))
-                        {
-                            numberOfHCDscans++;
-                            hcdTrue = true;
-                        }
-                        else if (spectrum.ScanFilter.Contains("uvpd") || spectrum.ScanFilter.Contains("ci"))
-                        {
-                            numberOfUVPDscans++;
-                            uvpdTrue = true;
-                        }
+
                     }
+                    else if (CanConvertDouble(iC_toleranceTB.Text, _ppmTolerance))
+                        _ppmTolerance = Convert.ToDouble(iC_toleranceTB.Text);
+
+                    if (usingda)
+                        _tol = _daTolerance;
                     else
+                        _tol = _ppmTolerance;
+
+                    if (CanConvertDouble(iC_SNTB.Text, _SNthreshold))
+                        _SNthreshold = Convert.ToDouble(iC_SNTB.Text);
+
+                    if (CanConvertDouble(iC_intensityTB.Text, _intensityThreshold))
+                        _intensityThreshold = Convert.ToDouble(iC_intensityTB.Text);
+
+                    string toleranceString = "ppmTol: ";
+                    if (usingda)
+                        toleranceString = "DaTol: ";
+                    //popup with settings to user
+                    MessageBox.Show("You are using these settings:\r\n" + toleranceString + _tol + "\r\nSNthreshold: " +
+                                    _SNthreshold + "\r\nIntensityTheshold: " + _intensityThreshold);
+
+                    foreach (var item in iC_tmt11CBList.CheckedItems)
+                        _ionHashSet.Add(ProcessIon(item, source: "TMT11"));
+
+                    foreach (var item in iC_acylCBList.CheckedItems)
+                        _ionHashSet.Add(ProcessIon(item, source: "Acyl-Lysine"));
+
+                    foreach (var item in iC_tmt16CBList.CheckedItems)
+                        _ionHashSet.Add(ProcessIon(item, source: "TMT16"));
+
+                    foreach (var item in iC_miscIonsCBList.CheckedItems)
+                        _ionHashSet.Add(ProcessIon(item, source: "Misc"));
+
+                    if (!_csvCustomFile.Equals("empty"))
                     {
-                        string dt = spectrum.Precursors[0].FramentationMethod.ToString();
+                        StreamReader csvFile = new StreamReader(_csvCustomFile);
+                        using var csv = new CsvReader(csvFile, true);
+                        while (csv.ReadNextRecord())
+                        {
+                            string userDescription = csv["Description"];
+                            Ion ion = new Ion
+                            {
+                                theoMZ = double.Parse(csv["m/z"]),
+                                description = double.Parse(csv["m/z"]) + ", " + userDescription,
+                                ionSource = "Custom",
+                                hcdCount = 0,
+                                etdCount = 0,
+                                uvpdCount = 0,
+                                peakDepth = ArbitraryPeakDepthIfNotFound
+                            };
 
-                        if (dt.Equals("HCD"))
-                        {
-                            numberOfHCDscans++;
-                            hcdTrue = true;
-                        }
-                        if (dt.Equals("ETD"))
-                        {
-                            numberOfETDscans++;
-                            etdTrue = true;
-                        }
-                        if (dt.Equals("CI") || dt.Equals("UVPD"))
-                        {
-                            numberOfUVPDscans++;
-                            uvpdTrue = true;
-                        }
+                            //If an ion with the same theoretical m/z value exists, replace it with the one from the custom csv
+                            List<Ion> ionsToRemove = [];
+                            foreach (Ion checkedIon in _ionHashSet)
+                                if (ion.Equals(checkedIon))
+                                    ionsToRemove.Add(checkedIon);
 
+                            foreach (Ion removeIon in ionsToRemove)
+                                _ionHashSet.Remove(removeIon);
+
+                            _ionHashSet.Add(ion);
+                        }
                     }
-                    string ionHeader = "";
 
-                    if (spectrum is { TotalIonCurrent: > 0, BasePeakIntensity: > 0 })
+                    if (_singleIonMZ != 0)
                     {
-                        Dictionary<double, int> sortedPeakDepths = new Dictionary<double, int>();
-                        RankOrderPeaks(sortedPeakDepths, spectrum);
-
-                        if (thermo)
+                        string userDescription = _singleIonDesc;
+                        Ion ion = new Ion
                         {
-                            string scanFilter = spectrum.ScanFilter;
-                            string[] hcdHeader = scanFilter.Split('@');
-                            string[] splitHCDheader = [];
-                            splitHCDheader = hcdHeader[1].Contains("ptr") ? hcdHeader[2].Split('d') : hcdHeader[1].Split('d');
-                            string[] collisionEnergyArray = splitHCDheader[1].Split('.');
-                            nce = Convert.ToDouble(collisionEnergyArray[0]);
-                        }
-                        else nce = spectrum.Precursors[0].CollisionEnergy;
+                            theoMZ = _singleIonMZ,
+                            description = _singleIonMZ + ", " + userDescription,
+                            ionSource = "Custom",
+                            hcdCount = 0,
+                            etdCount = 0,
+                            uvpdCount = 0,
+                            peakDepth = ArbitraryPeakDepthIfNotFound
+                        };
+
+                        //If an ion with the same theoretical m/z value exists, replace it with the one from the custom csv
+                        List<Ion> ionsToRemove = [];
+                        foreach (Ion checkedIon in _ionHashSet)
+                            if (ion.Equals(checkedIon))
+                                _ionHashSet.Remove(checkedIon);
+
+                        _ionHashSet.Add(ion);
+                    }
+
+                    if (iC_ipsaCB.Checked)
+                        _ipsa = true;
+
+                    foreach (string fileName in _fileList)
+                    {
+                        //reset ions
                         foreach (Ion ion in _ionHashSet)
                         {
                             ion.intensity = 0;
                             ion.peakDepth = ArbitraryPeakDepthIfNotFound;
-                            ionHeader = ionHeader + ion.description + "\t";
+                            ion.hcdCount = 0;
+                            ion.etdCount = 0;
+                            ion.uvpdCount = 0;
                             ion.measuredMZ = 0;
-                            ion.intensity = 0;
+                        }
 
-                            SpecDataPointEx peak = GetPeak(spectrum, ion.theoMZ, usingda, _tol, thermo, true, IT);
+                        FileReader rawFile = new FileReader(fileName);
+                        FileReader typeCheck = new FileReader();
+                        string fileType = typeCheck.CheckFileFormat(fileName).ToString(); //either "ThermoRaw" or "MzML"
+                        bool thermo = fileType != "MzML";
 
-                            if (!IT && thermo)
+                        if (iC_statusUpdatesLabel.InvokeRequired)
+                        {
+                            iC_statusUpdatesLabel.Invoke(new Action(() => iC_statusUpdatesLabel.Text = "Current file: " + fileName));
+                        }
+                        else
+                        {
+                            iC_statusUpdatesLabel.Text = "Current file: " + fileName;
+
+                        }
+
+                        if (iC_finishTimeLabel.InvokeRequired)
+                        {
+                            iC_finishTimeLabel.Invoke(new Action(() => iC_finishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss")));
+                        }
+                        else
+                        {
+                            iC_finishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
+
+                        }
+
+                        //set vars - I can't be bothered to rename all these
+                        int numberOfMS2scansWithOxo_1 = 0;
+                        int numberOfMS2scansWithOxo_2 = 0;
+                        int numberOfMS2scansWithOxo_3 = 0;
+                        int numberOfMS2scansWithOxo_4 = 0;
+                        int numberOfMS2scansWithOxo_5plus = 0;
+                        int numberOfMS2scansWithOxo_1_hcd = 0;
+                        int numberOfMS2scansWithOxo_2_hcd = 0;
+                        int numberOfMS2scansWithOxo_3_hcd = 0;
+                        int numberOfMS2scansWithOxo_4_hcd = 0;
+                        int numberOfMS2scansWithOxo_5plus_hcd = 0;
+                        int numberOfMS2scansWithOxo_1_etd = 0;
+                        int numberOfMS2scansWithOxo_2_etd = 0;
+                        int numberOfMS2scansWithOxo_3_etd = 0;
+                        int numberOfMS2scansWithOxo_4_etd = 0;
+                        int numberOfMS2scansWithOxo_5plus_etd = 0;
+                        int numberOfMS2scansWithOxo_1_uvpd = 0;
+                        int numberOfMS2scansWithOxo_2_uvpd = 0;
+                        int numberOfMS2scansWithOxo_3_uvpd = 0;
+                        int numberOfMS2scansWithOxo_4_uvpd = 0;
+                        int numberOfMS2scansWithOxo_5plus_uvpd = 0;
+                        int numberOfMSnscans = 0;
+                        int numberOfHCDscans = 0;
+                        int numberOfETDscans = 0;
+                        int numberOfUVPDscans = 0;
+                        double nce = 0.0;
+                        bool firstSpectrumInFile = true;
+
+                        //initialize streamwriter output files
+                        string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
+                        StreamWriter outputSignal =
+                            new StreamWriter(_outputPath + @"\" + fileNameShort + "_iCounter_Signal.txt");
+                        StreamWriter outputPeakDepth =
+                            new StreamWriter(_outputPath + @"\" + fileNameShort + "_iCounter_PeakDepth.txt");
+                        StreamWriter outputIPSA = null;
+
+                        if (ipsaCheckBox.Checked)
+                            outputIPSA = new StreamWriter(_outputPath + @"\" + fileNameShort + "_iCounter_IPSA.txt");
+                        StreamWriter outputSummary =
+                            new StreamWriter(_outputPath + @"\" + fileNameShort + "_iCounter_Summary.txt");
+
+                        //write headers
+                        outputSignal.Write(
+                            "ScanNumber\tMSLevel\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalFoundIonSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumIonsFound\tTotalFoundIonSignal\t");
+                        outputPeakDepth.Write(
+                            "ScanNumber\tMSLevel\tRetentionTime\tPrecursorMZ\tNCE\tScanTIC\tTotalFoundIonSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumIonsFound\tTotalFoundIonSignal\t");
+                        outputIPSA?.WriteLine("ScanNumber\tIons\tMassError\t");
+                        outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + _SNthreshold +
+                                                ", IntensityThreshold=" + _intensityThreshold);
+                        outputSummary.WriteLine("Started At: " + iC_startTimeLabel.Text);
+                        outputSummary.WriteLine();
+                        //start processing file
+                        for (int i = rawFile.FirstScan; i <= rawFile.LastScan; i++)
+                        {
+                            SpectrumEx spectrum = rawFile.ReadSpectrumEx(scanNumber: i);
+                            bool IT = spectrum.Analyzer.Contains("ITMS");
+
+                            //custom ms levels
+                            List<int> levels = [];
+
+                            if (iC_msLevelLow.Value == iC_msLevelHigh.Value)
+                                levels.Add(Convert.ToInt32(iC_msLevelLow.Value));
+
+                            int lowestval;
+                            int highestval;
+
+                            if (iC_msLevelLow.Value < iC_msLevelHigh.Value)
                             {
-                                if (peak.Equals(new SpecDataPointEx()) || !(peak.Intensity > 0) ||
-                                    !((peak.Intensity / peak.Noise) > _SNthreshold)) continue;
+                                lowestval = Convert.ToInt32(iC_msLevelLow.Value);
+                                highestval = Convert.ToInt32(iC_msLevelHigh.Value);
 
-                                ion.measuredMZ = peak.Mz;
-                                ion.intensity = peak.Intensity;
-                                ion.peakDepth = sortedPeakDepths[peak.Intensity];
-                                numberOfIons++;
-                                totalSignal = totalSignal + peak.Intensity;
+                                levels = Enumerable.Range(lowestval, (highestval - lowestval + 1)).ToList();
+                            }
 
-                                if (hcdTrue)
-                                    ion.hcdCount++;
-                                if (etdTrue)
-                                    ion.etdCount++;
-                                if (uvpdTrue)
-                                    ion.uvpdCount++;
+                            //if user puts values in backwards for some reason
+                            if (iC_msLevelLow.Value > iC_msLevelHigh.Value)
+                            {
+                                lowestval = Convert.ToInt32(iC_msLevelHigh.Value);
+                                highestval = Convert.ToInt32(iC_msLevelLow.Value);
 
-                                ionFoundPeaks.Add(ion.theoMZ);
-                                double massError = ion.measuredMZ - ion.theoMZ;
-                                ionFoundMassErrors.Add(massError);
+                                levels = Enumerable.Range(lowestval, (highestval - lowestval + 1)).ToList();
+                            }
+
+                            //if ignore ms levels is checked ignore levels list
+                            if (!iC_noMSnFilterCB.Checked)
+                                if (!levels.Contains(spectrum.MsLevel))
+                                    continue;
+
+                            numberOfMSnscans++;
+                            int numberOfIons = 0;
+                            double totalSignal = 0;
+                            bool hcdTrue = false;
+                            bool etdTrue = false;
+                            bool uvpdTrue = false;
+                            List<double> ionFoundPeaks = [];
+                            List<double> ionFoundMassErrors = [];
+
+                            //figure out dissociation type
+                            if (thermo)
+                            {
+                                //using this order means ethcd will count as etd (since both show in scan filter)
+                                if (spectrum.ScanFilter.Contains("etd"))
+                                {
+                                    numberOfETDscans++;
+                                    etdTrue = true;
+                                }
+                                else if (spectrum.ScanFilter.Contains("hcd"))
+                                {
+                                    numberOfHCDscans++;
+                                    hcdTrue = true;
+                                }
+                                else if (spectrum.ScanFilter.Contains("uvpd") || spectrum.ScanFilter.Contains("ci"))
+                                {
+                                    numberOfUVPDscans++;
+                                    uvpdTrue = true;
+                                }
                             }
                             else
                             {
-                                if (peak.Equals(new SpecDataPointEx()) || !(peak.Intensity > _intensityThreshold)) continue;
+                                string dt = spectrum.Precursors[0].FramentationMethod.ToString();
 
-                                ion.measuredMZ = peak.Mz;
-                                ion.intensity = peak.Intensity;
-                                ion.peakDepth = sortedPeakDepths[peak.Intensity];
-                                numberOfIons++;
-                                totalSignal = totalSignal + peak.Intensity;
+                                if (dt.Equals("HCD"))
+                                {
+                                    numberOfHCDscans++;
+                                    hcdTrue = true;
+                                }
 
-                                if (hcdTrue)
-                                    ion.hcdCount++;
-                                if (etdTrue)
-                                    ion.etdCount++;
-                                if (uvpdTrue)
-                                    ion.uvpdCount++;
+                                if (dt.Equals("ETD"))
+                                {
+                                    numberOfETDscans++;
+                                    etdTrue = true;
+                                }
 
-                                ionFoundPeaks.Add(ion.theoMZ);
-                                double massError = ion.measuredMZ - ion.theoMZ;
-                                ionFoundMassErrors.Add(massError);
+                                if (dt.Equals("CI") || dt.Equals("UVPD"))
+                                {
+                                    numberOfUVPDscans++;
+                                    uvpdTrue = true;
+                                }
+
+                            }
+
+                            string ionHeader = "";
+
+                            if (spectrum is { TotalIonCurrent: > 0, BasePeakIntensity: > 0 })
+                            {
+                                Dictionary<double, int> sortedPeakDepths = new Dictionary<double, int>();
+                                RankOrderPeaks(sortedPeakDepths, spectrum);
+
+                                if (thermo)
+                                {
+                                    string scanFilter = spectrum.ScanFilter;
+                                    string[] hcdHeader = scanFilter.Split('@');
+                                    string[] splitHCDheader = [];
+                                    splitHCDheader = hcdHeader[1].Contains("ptr")
+                                        ? hcdHeader[2].Split('d')
+                                        : hcdHeader[1].Split('d');
+                                    string[] collisionEnergyArray = splitHCDheader[1].Split('.');
+                                    nce = Convert.ToDouble(collisionEnergyArray[0]);
+                                }
+                                else nce = spectrum.Precursors[0].CollisionEnergy;
+
+                                foreach (Ion ion in _ionHashSet)
+                                {
+                                    ion.intensity = 0;
+                                    ion.peakDepth = ArbitraryPeakDepthIfNotFound;
+                                    ionHeader = ionHeader + ion.description + "\t";
+                                    ion.measuredMZ = 0;
+                                    ion.intensity = 0;
+
+                                    SpecDataPointEx peak = GetPeak(spectrum, ion.theoMZ, usingda, _tol, thermo, true,
+                                        IT);
+
+                                    if (!IT && thermo)
+                                    {
+                                        if (peak.Equals(new SpecDataPointEx()) || !(peak.Intensity > 0) ||
+                                            !((peak.Intensity / peak.Noise) > _SNthreshold)) continue;
+
+                                        ion.measuredMZ = peak.Mz;
+                                        ion.intensity = peak.Intensity;
+                                        ion.peakDepth = sortedPeakDepths[peak.Intensity];
+                                        numberOfIons++;
+                                        totalSignal = totalSignal + peak.Intensity;
+
+                                        if (hcdTrue)
+                                            ion.hcdCount++;
+                                        if (etdTrue)
+                                            ion.etdCount++;
+                                        if (uvpdTrue)
+                                            ion.uvpdCount++;
+
+                                        ionFoundPeaks.Add(ion.theoMZ);
+                                        double massError = ion.measuredMZ - ion.theoMZ;
+                                        ionFoundMassErrors.Add(massError);
+                                    }
+                                    else
+                                    {
+                                        if (peak.Equals(new SpecDataPointEx()) ||
+                                            !(peak.Intensity > _intensityThreshold)) continue;
+
+                                        ion.measuredMZ = peak.Mz;
+                                        ion.intensity = peak.Intensity;
+                                        ion.peakDepth = sortedPeakDepths[peak.Intensity];
+                                        numberOfIons++;
+                                        totalSignal = totalSignal + peak.Intensity;
+
+                                        if (hcdTrue)
+                                            ion.hcdCount++;
+                                        if (etdTrue)
+                                            ion.etdCount++;
+                                        if (uvpdTrue)
+                                            ion.uvpdCount++;
+
+                                        ionFoundPeaks.Add(ion.theoMZ);
+                                        double massError = ion.measuredMZ - ion.theoMZ;
+                                        ionFoundMassErrors.Add(massError);
+                                    }
+                                }
+                            }
+
+                            if (numberOfIons > 0)
+                            {
+
+                                if (firstSpectrumInFile)
+                                {
+                                    outputSignal.WriteLine(ionHeader);
+                                    outputPeakDepth.WriteLine(ionHeader);
+                                    firstSpectrumInFile = false;
+                                }
+
+                                if (numberOfIons == 1)
+                                {
+                                    numberOfMS2scansWithOxo_1++;
+                                    if (hcdTrue)
+                                        numberOfMS2scansWithOxo_1_hcd++;
+                                    if (etdTrue)
+                                        numberOfMS2scansWithOxo_1_etd++;
+                                    if (uvpdTrue)
+                                        numberOfMS2scansWithOxo_1_uvpd++;
+                                }
+
+                                if (numberOfIons == 2)
+                                {
+                                    numberOfMS2scansWithOxo_2++;
+                                    if (hcdTrue)
+                                        numberOfMS2scansWithOxo_2_hcd++;
+                                    if (etdTrue)
+                                        numberOfMS2scansWithOxo_2_etd++;
+                                    if (uvpdTrue)
+                                        numberOfMS2scansWithOxo_2_uvpd++;
+                                }
+
+                                if (numberOfIons == 3)
+                                {
+                                    numberOfMS2scansWithOxo_3++;
+                                    if (hcdTrue)
+                                        numberOfMS2scansWithOxo_3_hcd++;
+                                    if (etdTrue)
+                                        numberOfMS2scansWithOxo_3_etd++;
+                                    if (uvpdTrue)
+                                        numberOfMS2scansWithOxo_3_uvpd++;
+                                }
+
+                                if (numberOfIons == 4)
+                                {
+                                    numberOfMS2scansWithOxo_4++;
+                                    if (hcdTrue)
+                                        numberOfMS2scansWithOxo_4_hcd++;
+                                    if (etdTrue)
+                                        numberOfMS2scansWithOxo_4_etd++;
+                                    if (uvpdTrue)
+                                        numberOfMS2scansWithOxo_4_uvpd++;
+                                }
+
+                                if (numberOfIons > 4)
+                                {
+                                    numberOfMS2scansWithOxo_5plus++;
+                                    if (hcdTrue)
+                                        numberOfMS2scansWithOxo_5plus_hcd++;
+                                    if (etdTrue)
+                                        numberOfMS2scansWithOxo_5plus_etd++;
+                                    if (uvpdTrue)
+                                        numberOfMS2scansWithOxo_5plus_uvpd++;
+                                }
+
+                                double parentScan = spectrum.PrecursorMasterScanNumber;
+                                double scanTIC = spectrum.TotalIonCurrent;
+                                double scanInjTime = spectrum.IonInjectionTime;
+                                string fragmentationType = "";
+                                if (spectrum.MsLevel == 1) fragmentationType = "MS1";
+                                if (hcdTrue) fragmentationType = "HCD";
+                                if (etdTrue) fragmentationType = "ETD";
+                                if (uvpdTrue) fragmentationType = "UVPD";
+                                double retentionTime = spectrum.RetentionTime;
+                                double precursormz = spectrum.Precursors[0].IsolationMz;
+                                string peakString = "";
+                                foreach (double theoMZ in ionFoundPeaks)
+                                    peakString = peakString + theoMZ.ToString() + "; ";
+                                string errorString = new string("");
+                                foreach (double error in ionFoundMassErrors)
+                                    errorString = errorString + error.ToString("F6") + "; ";
+
+                                //write scan info
+                                outputSignal.Write(i + "\t" + spectrum.MsLevel + '\t' + retentionTime + "\t" +
+                                                   precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalSignal +
+                                                   "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan +
+                                                   "\t" + numberOfIons + "\t" + totalSignal + "\t");
+                                outputPeakDepth.Write(i + "\t" + spectrum.MsLevel + '\t' + retentionTime + "\t" +
+                                                      scanTIC + "\t" + totalSignal + "\t" + scanInjTime + "\t" +
+                                                      fragmentationType + "\t" + parentScan + "\t" + numberOfIons +
+                                                      "\t" + totalSignal + "\t");
+                                outputIPSA?.WriteLine(i + "\t" + peakString + "\t" + errorString + "\t");
+
+                                foreach (Ion ion in _ionHashSet)
+                                {
+                                    outputSignal.Write(ion.intensity + "\t");
+
+                                    if (ion.peakDepth == ArbitraryPeakDepthIfNotFound)
+                                        outputPeakDepth.Write("NotFound\t");
+                                    else
+                                        outputPeakDepth.Write(ion.peakDepth + "\t");
+                                }
+
+                                outputSignal.WriteLine();
+                                outputPeakDepth.WriteLine();
+                            }
+                            if (iC_finishTimeLabel.InvokeRequired)
+                            {
+                                iC_finishTimeLabel.Invoke(new Action(() => iC_finishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss")));
+                            }
+                            else
+                            {
+                                iC_finishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
                             }
                         }
-                    }
 
-                    if (numberOfIons > 0)
-                    {
+                        //all scans have been processed, get some total stats
+                        double percentage1ox = (double)numberOfMS2scansWithOxo_1 / (double)numberOfMSnscans * 100;
+                        double percentage2ox = (double)numberOfMS2scansWithOxo_2 / (double)numberOfMSnscans * 100;
+                        double percentage3ox = (double)numberOfMS2scansWithOxo_3 / (double)numberOfMSnscans * 100;
+                        double percentage4ox = (double)numberOfMS2scansWithOxo_4 / (double)numberOfMSnscans * 100;
+                        double percentage5plusox =
+                            (double)numberOfMS2scansWithOxo_5plus / (double)numberOfMSnscans * 100;
+                        double percentageSum = percentage1ox + percentage2ox + percentage3ox + percentage4ox +
+                                               percentage5plusox;
+                        double numberofMS2scansWithOxo_double = (double)percentageSum / 100 * numberOfMSnscans;
 
-                        if (firstSpectrumInFile)
-                        {
-                            outputSignal.WriteLine(ionHeader);
-                            outputPeakDepth.WriteLine(ionHeader);
-                            firstSpectrumInFile = false;
-                        }
+                        double percentage1ox_hcd =
+                            (double)numberOfMS2scansWithOxo_1_hcd / (double)numberOfHCDscans * 100;
+                        double percentage2ox_hcd =
+                            (double)numberOfMS2scansWithOxo_2_hcd / (double)numberOfHCDscans * 100;
+                        double percentage3ox_hcd =
+                            (double)numberOfMS2scansWithOxo_3_hcd / (double)numberOfHCDscans * 100;
+                        double percentage4ox_hcd =
+                            (double)numberOfMS2scansWithOxo_4_hcd / (double)numberOfHCDscans * 100;
+                        double percentage5plusox_hcd =
+                            (double)numberOfMS2scansWithOxo_5plus_hcd / (double)numberOfHCDscans * 100;
+                        double percentageSum_hcd = percentage1ox_hcd + percentage2ox_hcd + percentage3ox_hcd +
+                                                   percentage4ox_hcd + percentage5plusox_hcd;
+                        double numberofHCDscansWithOxo_double = percentageSum_hcd / 100 * numberOfHCDscans;
 
-                        if (numberOfIons == 1)
-                        {
-                            numberOfMS2scansWithOxo_1++;
-                            if (hcdTrue)
-                                numberOfMS2scansWithOxo_1_hcd++;
-                            if (etdTrue)
-                                numberOfMS2scansWithOxo_1_etd++;
-                            if (uvpdTrue)
-                                numberOfMS2scansWithOxo_1_uvpd++;
-                        }
-                        if (numberOfIons == 2)
-                        {
-                            numberOfMS2scansWithOxo_2++;
-                            if (hcdTrue)
-                                numberOfMS2scansWithOxo_2_hcd++;
-                            if (etdTrue)
-                                numberOfMS2scansWithOxo_2_etd++;
-                            if (uvpdTrue)
-                                numberOfMS2scansWithOxo_2_uvpd++;
-                        }
-                        if (numberOfIons == 3)
-                        {
-                            numberOfMS2scansWithOxo_3++;
-                            if (hcdTrue)
-                                numberOfMS2scansWithOxo_3_hcd++;
-                            if (etdTrue)
-                                numberOfMS2scansWithOxo_3_etd++;
-                            if (uvpdTrue)
-                                numberOfMS2scansWithOxo_3_uvpd++;
-                        }
-                        if (numberOfIons == 4)
-                        {
-                            numberOfMS2scansWithOxo_4++;
-                            if (hcdTrue)
-                                numberOfMS2scansWithOxo_4_hcd++;
-                            if (etdTrue)
-                                numberOfMS2scansWithOxo_4_etd++;
-                            if (uvpdTrue)
-                                numberOfMS2scansWithOxo_4_uvpd++;
-                        }
-                        if (numberOfIons > 4)
-                        {
-                            numberOfMS2scansWithOxo_5plus++;
-                            if (hcdTrue)
-                                numberOfMS2scansWithOxo_5plus_hcd++;
-                            if (etdTrue)
-                                numberOfMS2scansWithOxo_5plus_etd++;
-                            if (uvpdTrue)
-                                numberOfMS2scansWithOxo_5plus_uvpd++;
-                        }
-                        double parentScan = spectrum.PrecursorMasterScanNumber;
-                        double scanTIC = spectrum.TotalIonCurrent;
-                        double scanInjTime = spectrum.IonInjectionTime;
-                        string fragmentationType = "";
-                        if (spectrum.MsLevel == 1) fragmentationType = "MS1";
-                        if (hcdTrue) fragmentationType = "HCD";
-                        if (etdTrue) fragmentationType = "ETD";
-                        if (uvpdTrue) fragmentationType = "UVPD";
-                        double retentionTime = spectrum.RetentionTime;
-                        double precursormz = spectrum.Precursors[0].IsolationMz;
-                        string peakString = "";
-                        foreach (double theoMZ in ionFoundPeaks)
-                            peakString = peakString + theoMZ.ToString() + "; ";
-                        string errorString = new string("");
-                        foreach (double error in ionFoundMassErrors)
-                            errorString = errorString + error.ToString("F6") + "; ";
+                        double percentage1ox_etd =
+                            (double)numberOfMS2scansWithOxo_1_etd / (double)numberOfETDscans * 100;
+                        double percentage2ox_etd =
+                            (double)numberOfMS2scansWithOxo_2_etd / (double)numberOfETDscans * 100;
+                        double percentage3ox_etd =
+                            (double)numberOfMS2scansWithOxo_3_etd / (double)numberOfETDscans * 100;
+                        double percentage4ox_etd =
+                            (double)numberOfMS2scansWithOxo_4_etd / (double)numberOfETDscans * 100;
+                        double percentage5plusox_etd =
+                            (double)numberOfMS2scansWithOxo_5plus_etd / (double)numberOfETDscans * 100;
+                        double percentageSum_etd = percentage1ox_etd + percentage2ox_etd + percentage3ox_etd +
+                                                   percentage4ox_etd + percentage5plusox_etd;
+                        double numberofETDscansWithOxo_double = percentageSum_etd / 100 * numberOfETDscans;
 
-                        //write scan info
-                        outputSignal.Write(i + "\t" + spectrum.MsLevel + '\t' + retentionTime + "\t" + precursormz + "\t" + nce + "\t" + scanTIC + "\t" + totalSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfIons + "\t" + totalSignal + "\t");
-                        outputPeakDepth.Write(i + "\t" + spectrum.MsLevel + '\t' + retentionTime + "\t" + scanTIC + "\t" + totalSignal + "\t" + scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfIons + "\t" + totalSignal + "\t");
-                        outputIPSA?.WriteLine(i + "\t" + peakString + "\t" + errorString + "\t");
+                        double percentage1ox_uvpd =
+                            (double)numberOfMS2scansWithOxo_1_uvpd / (double)numberOfUVPDscans * 100;
+                        double percentage2ox_uvpd =
+                            (double)numberOfMS2scansWithOxo_2_uvpd / (double)numberOfUVPDscans * 100;
+                        double percentage3ox_uvpd =
+                            (double)numberOfMS2scansWithOxo_3_uvpd / (double)numberOfUVPDscans * 100;
+                        double percentage4ox_uvpd =
+                            (double)numberOfMS2scansWithOxo_4_uvpd / (double)numberOfUVPDscans * 100;
+                        double percentage5plusox_uvpd =
+                            (double)numberOfMS2scansWithOxo_5plus_uvpd / (double)numberOfUVPDscans * 100;
+                        double percentageSum_uvpd = percentage1ox_uvpd + percentage2ox_uvpd + percentage3ox_uvpd +
+                                                    percentage4ox_uvpd + percentage5plusox_uvpd;
+                        double numberofUVPDscansWithOxo_double = percentageSum_uvpd / 100 * numberOfUVPDscans;
 
+                        double percentageHCD = (double)numberOfHCDscans / numberOfMSnscans * 100;
+                        double percentageETD = (double)numberOfETDscans / numberOfMSnscans * 100;
+                        double percentageUVPD = (double)numberOfUVPDscans / numberOfMSnscans * 100;
+
+                        int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
+                        int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
+                        int numberofETDscansWithOxo = (int)Math.Round(numberofETDscansWithOxo_double);
+                        int numberofUVPDscansWithOxo = (int)Math.Round(numberofUVPDscansWithOxo_double);
+
+                        numberofMS2scansWithOxo = Math.Max(0, numberofMS2scansWithOxo);
+                        numberofHCDscansWithOxo = Math.Max(0, numberofHCDscansWithOxo);
+                        numberofETDscansWithOxo = Math.Max(0, numberofETDscansWithOxo);
+                        numberofUVPDscansWithOxo = Math.Max(0, numberofUVPDscansWithOxo);
+
+                        outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
+                        outputSummary.WriteLine("MSn Scans\t" + numberOfMSnscans + "\t" + numberOfHCDscans + "\t" +
+                                                numberOfETDscans + "\t" + numberOfUVPDscans
+                                                + "\t" + 100 + "\t" + percentageHCD + "\t" + percentageETD + "\t" +
+                                                percentageUVPD);
+                        outputSummary.WriteLine("MSn Scans with Found Ions\t" + numberofMS2scansWithOxo + "\t" +
+                                                numberofHCDscansWithOxo + "\t" + numberofETDscansWithOxo + "\t" +
+                                                numberofUVPDscansWithOxo
+                                                + "\t" + percentageSum + "\t" + percentageSum_hcd + "\t" +
+                                                percentageSum_etd + "\t" + percentageSum_uvpd);
+                        outputSummary.WriteLine("IonCount_1\t" + numberOfMS2scansWithOxo_1 + "\t" +
+                                                numberOfMS2scansWithOxo_1_hcd + "\t" + numberOfMS2scansWithOxo_1_etd +
+                                                "\t" + numberOfMS2scansWithOxo_1_uvpd
+                                                + "\t" + percentage1ox + "\t" + percentage1ox_hcd + "\t" +
+                                                percentage1ox_etd + "\t" + percentage1ox_uvpd);
+                        outputSummary.WriteLine("IonCount_2\t" + numberOfMS2scansWithOxo_2 + "\t" +
+                                                numberOfMS2scansWithOxo_2_hcd + "\t" + numberOfMS2scansWithOxo_2_etd +
+                                                "\t" + numberOfMS2scansWithOxo_2_uvpd
+                                                + "\t" + percentage2ox + "\t" + percentage2ox_hcd + "\t" +
+                                                percentage2ox_etd + "\t" + percentage2ox_uvpd);
+                        outputSummary.WriteLine("IonCount_3\t" + numberOfMS2scansWithOxo_3 + "\t" +
+                                                numberOfMS2scansWithOxo_3_hcd + "\t" + numberOfMS2scansWithOxo_3_etd +
+                                                "\t" + numberOfMS2scansWithOxo_3_uvpd
+                                                + "\t" + percentage3ox + "\t" + percentage3ox_hcd + "\t" +
+                                                percentage3ox_etd + "\t" + percentage3ox_uvpd);
+                        outputSummary.WriteLine("IonCount_4\t" + numberOfMS2scansWithOxo_4 + "\t" +
+                                                numberOfMS2scansWithOxo_4_hcd + "\t" + numberOfMS2scansWithOxo_4_etd +
+                                                "\t" + numberOfMS2scansWithOxo_4_uvpd
+                                                + "\t" + percentage4ox + "\t" + percentage4ox_hcd + "\t" +
+                                                percentage4ox_etd + "\t" + percentage4ox_uvpd);
+                        outputSummary.WriteLine("IonCount_5+\t" + numberOfMS2scansWithOxo_5plus + "\t" +
+                                                numberOfMS2scansWithOxo_5plus_hcd + "\t" +
+                                                numberOfMS2scansWithOxo_5plus_etd + "\t" +
+                                                numberOfMS2scansWithOxo_5plus_uvpd
+                                                + "\t" + percentage5plusox + "\t" + percentage5plusox_hcd + "\t" +
+                                                percentage5plusox_etd + "\t" + percentage5plusox_uvpd);
+
+                        outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" +
+                                                @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" +
+                                                @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" +
+                                                @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
+                        outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
+
+                        string currentSource = "";
                         foreach (Ion ion in _ionHashSet)
                         {
-                            outputSignal.Write(ion.intensity + "\t");
+                            int total = ion.hcdCount + ion.etdCount + ion.uvpdCount;
 
-                            if (ion.peakDepth == ArbitraryPeakDepthIfNotFound)
-                                outputPeakDepth.Write("NotFound\t");
-                            else
-                                outputPeakDepth.Write(ion.peakDepth + "\t");
+                            double percentTotal = (double)total / (double)numberOfMSnscans * 100;
+                            double percentHCD = (double)ion.hcdCount / (double)numberOfHCDscans * 100;
+                            double percentETD = (double)ion.etdCount / (double)numberOfETDscans * 100;
+                            double percentUVPD = (double)ion.uvpdCount / (double)numberOfUVPDscans * 100;
+
+                            if (!currentSource.Equals(ion.ionSource))
+                            {
+                                outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\ " + ion.ionSource +
+                                                        @" \\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" +
+                                                        @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" +
+                                                        "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" +
+                                                        @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
+                                currentSource = ion.ionSource;
+                            }
+
+                            outputSummary.WriteLine(ion.description + "\t" + total + "\t" + ion.hcdCount + "\t" +
+                                                    ion.etdCount + "\t" + ion.uvpdCount
+                                                    + "\t" + percentTotal + "\t" + percentHCD + "\t" + percentETD +
+                                                    "\t" + percentUVPD);
                         }
-                        outputSignal.WriteLine();
-                        outputPeakDepth.WriteLine();
+
+                        outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" +
+                                                @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" +
+                                                @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" +
+                                                @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
+                        //output elapsed time
+                        stopwatch.Stop();
+                        TimeSpan ts = stopwatch.Elapsed;
+
+                        string elapsedTime = $"{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
+                        outputSummary.WriteLine("Total search time: " + elapsedTime);
+
+                        outputSummary.Close();
+                        outputSignal.Close();
+                        outputPeakDepth.Close();
+                        outputIPSA?.Close();
                     }
-
-                    FinishTimeLabel.Text = @"Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
-                    FinishTimeLabel.Refresh();
-                }
-
-                //all scans have been processed, get some total stats
-                double percentage1ox = (double)numberOfMS2scansWithOxo_1 / (double)numberOfMSnscans * 100;
-                double percentage2ox = (double)numberOfMS2scansWithOxo_2 / (double)numberOfMSnscans * 100;
-                double percentage3ox = (double)numberOfMS2scansWithOxo_3 / (double)numberOfMSnscans * 100;
-                double percentage4ox = (double)numberOfMS2scansWithOxo_4 / (double)numberOfMSnscans * 100;
-                double percentage5plusox = (double)numberOfMS2scansWithOxo_5plus / (double)numberOfMSnscans * 100;
-                double percentageSum = percentage1ox + percentage2ox + percentage3ox + percentage4ox + percentage5plusox;
-                double numberofMS2scansWithOxo_double = (double)percentageSum / 100 * numberOfMSnscans;
-
-                double percentage1ox_hcd = (double)numberOfMS2scansWithOxo_1_hcd / (double)numberOfHCDscans * 100;
-                double percentage2ox_hcd = (double)numberOfMS2scansWithOxo_2_hcd / (double)numberOfHCDscans * 100;
-                double percentage3ox_hcd = (double)numberOfMS2scansWithOxo_3_hcd / (double)numberOfHCDscans * 100;
-                double percentage4ox_hcd = (double)numberOfMS2scansWithOxo_4_hcd / (double)numberOfHCDscans * 100;
-                double percentage5plusox_hcd = (double)numberOfMS2scansWithOxo_5plus_hcd / (double)numberOfHCDscans * 100;
-                double percentageSum_hcd = percentage1ox_hcd + percentage2ox_hcd + percentage3ox_hcd + percentage4ox_hcd + percentage5plusox_hcd;
-                double numberofHCDscansWithOxo_double = percentageSum_hcd / 100 * numberOfHCDscans;
-
-                double percentage1ox_etd = (double)numberOfMS2scansWithOxo_1_etd / (double)numberOfETDscans * 100;
-                double percentage2ox_etd = (double)numberOfMS2scansWithOxo_2_etd / (double)numberOfETDscans * 100;
-                double percentage3ox_etd = (double)numberOfMS2scansWithOxo_3_etd / (double)numberOfETDscans * 100;
-                double percentage4ox_etd = (double)numberOfMS2scansWithOxo_4_etd / (double)numberOfETDscans * 100;
-                double percentage5plusox_etd = (double)numberOfMS2scansWithOxo_5plus_etd / (double)numberOfETDscans * 100;
-                double percentageSum_etd = percentage1ox_etd + percentage2ox_etd + percentage3ox_etd + percentage4ox_etd + percentage5plusox_etd;
-                double numberofETDscansWithOxo_double = percentageSum_etd / 100 * numberOfETDscans;
-
-                double percentage1ox_uvpd = (double)numberOfMS2scansWithOxo_1_uvpd / (double)numberOfUVPDscans * 100;
-                double percentage2ox_uvpd = (double)numberOfMS2scansWithOxo_2_uvpd / (double)numberOfUVPDscans * 100;
-                double percentage3ox_uvpd = (double)numberOfMS2scansWithOxo_3_uvpd / (double)numberOfUVPDscans * 100;
-                double percentage4ox_uvpd = (double)numberOfMS2scansWithOxo_4_uvpd / (double)numberOfUVPDscans * 100;
-                double percentage5plusox_uvpd = (double)numberOfMS2scansWithOxo_5plus_uvpd / (double)numberOfUVPDscans * 100;
-                double percentageSum_uvpd = percentage1ox_uvpd + percentage2ox_uvpd + percentage3ox_uvpd + percentage4ox_uvpd + percentage5plusox_uvpd;
-                double numberofUVPDscansWithOxo_double = percentageSum_uvpd / 100 * numberOfUVPDscans;
-
-                double percentageHCD = (double)numberOfHCDscans / numberOfMSnscans * 100;
-                double percentageETD = (double)numberOfETDscans / numberOfMSnscans * 100;
-                double percentageUVPD = (double)numberOfUVPDscans / numberOfMSnscans * 100;
-
-                int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
-                int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
-                int numberofETDscansWithOxo = (int)Math.Round(numberofETDscansWithOxo_double);
-                int numberofUVPDscansWithOxo = (int)Math.Round(numberofUVPDscansWithOxo_double);
-
-                numberofMS2scansWithOxo = Math.Max(0, numberofMS2scansWithOxo);
-                numberofHCDscansWithOxo = Math.Max(0, numberofHCDscansWithOxo);
-                numberofETDscansWithOxo = Math.Max(0, numberofETDscansWithOxo);
-                numberofUVPDscansWithOxo = Math.Max(0, numberofUVPDscansWithOxo);
-
-                outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
-                outputSummary.WriteLine("MSn Scans\t" + numberOfMSnscans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
-                                        + "\t" + 100 + "\t" + percentageHCD + "\t" + percentageETD + "\t" + percentageUVPD);
-                outputSummary.WriteLine("MSn Scans with Found Ions\t" + numberofMS2scansWithOxo + "\t" + numberofHCDscansWithOxo + "\t" + numberofETDscansWithOxo + "\t" + numberofUVPDscansWithOxo
-                                        + "\t" + percentageSum + "\t" + percentageSum_hcd + "\t" + percentageSum_etd + "\t" + percentageSum_uvpd);
-                outputSummary.WriteLine("IonCount_1\t" + numberOfMS2scansWithOxo_1 + "\t" + numberOfMS2scansWithOxo_1_hcd + "\t" + numberOfMS2scansWithOxo_1_etd + "\t" + numberOfMS2scansWithOxo_1_uvpd
-                                        + "\t" + percentage1ox + "\t" + percentage1ox_hcd + "\t" + percentage1ox_etd + "\t" + percentage1ox_uvpd);
-                outputSummary.WriteLine("IonCount_2\t" + numberOfMS2scansWithOxo_2 + "\t" + numberOfMS2scansWithOxo_2_hcd + "\t" + numberOfMS2scansWithOxo_2_etd + "\t" + numberOfMS2scansWithOxo_2_uvpd
-                                        + "\t" + percentage2ox + "\t" + percentage2ox_hcd + "\t" + percentage2ox_etd + "\t" + percentage2ox_uvpd);
-                outputSummary.WriteLine("IonCount_3\t" + numberOfMS2scansWithOxo_3 + "\t" + numberOfMS2scansWithOxo_3_hcd + "\t" + numberOfMS2scansWithOxo_3_etd + "\t" + numberOfMS2scansWithOxo_3_uvpd
-                                        + "\t" + percentage3ox + "\t" + percentage3ox_hcd + "\t" + percentage3ox_etd + "\t" + percentage3ox_uvpd);
-                outputSummary.WriteLine("IonCount_4\t" + numberOfMS2scansWithOxo_4 + "\t" + numberOfMS2scansWithOxo_4_hcd + "\t" + numberOfMS2scansWithOxo_4_etd + "\t" + numberOfMS2scansWithOxo_4_uvpd
-                                        + "\t" + percentage4ox + "\t" + percentage4ox_hcd + "\t" + percentage4ox_etd + "\t" + percentage4ox_uvpd);
-                outputSummary.WriteLine("IonCount_5+\t" + numberOfMS2scansWithOxo_5plus + "\t" + numberOfMS2scansWithOxo_5plus_hcd + "\t" + numberOfMS2scansWithOxo_5plus_etd + "\t" + numberOfMS2scansWithOxo_5plus_uvpd
-                                        + "\t" + percentage5plusox + "\t" + percentage5plusox_hcd + "\t" + percentage5plusox_etd + "\t" + percentage5plusox_uvpd);
-
-                outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
-                outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
-
-                string currentSource = "";
-                foreach (Ion ion in _ionHashSet)
-                {
-                    int total = ion.hcdCount + ion.etdCount + ion.uvpdCount;
-
-                    double percentTotal = (double)total / (double)numberOfMSnscans * 100;
-                    double percentHCD = (double)ion.hcdCount / (double)numberOfHCDscans * 100;
-                    double percentETD = (double)ion.etdCount / (double)numberOfETDscans * 100;
-                    double percentUVPD = (double)ion.uvpdCount / (double)numberOfUVPDscans * 100;
-
-                    if (!currentSource.Equals(ion.ionSource))
-                    {
-                        outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\ " + ion.ionSource + @" \\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
-                        currentSource = ion.ionSource;
-                    }
-
-                    outputSummary.WriteLine(ion.description + "\t" + total + "\t" + ion.hcdCount + "\t" + ion.etdCount + "\t" + ion.uvpdCount
-                                            + "\t" + percentTotal + "\t" + percentHCD + "\t" + percentETD + "\t" + percentUVPD);
-                }
-                outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
-                //output elapsed time
-                stopwatch.Stop();
-                TimeSpan ts = stopwatch.Elapsed;
-
-                string elapsedTime = $"{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
-                outputSummary.WriteLine("Total search time: " + elapsedTime);
-
-                outputSummary.Close();
-                outputSignal.Close();
-                outputPeakDepth.Close();
-                outputIPSA?.Close();
+                });
             }
-            timer1.Stop();
-            iC_statusUpdatesLabel.Text = @"Finished";
-            iC_finishTimeLabel.Text = @"Finished at: " + DateTime.Now.ToString("HH:mm:ss");
-            MessageBox.Show(@"Finished.");
-            _ionHashSet.Clear();
+
+            finally
+            {
+                timer1.Stop();
+                iC_statusUpdatesLabel.Text = @"Finished";
+                iC_finishTimeLabel.Text = @"Finished at: " + DateTime.Now.ToString("HH:mm:ss");
+                MessageBox.Show(@"Finished.");
+                _ionHashSet.Clear();
+            }
         }
 
         private void iC_outputTB_TextChanged(object sender, EventArgs e)
