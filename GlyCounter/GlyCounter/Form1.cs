@@ -2733,7 +2733,7 @@ namespace GlyCounter
 
                     if (!_csvCustomFile.Equals("empty"))
                     {
-                        StreamReader csvFile = new StreamReader(_csvCustomFile);
+                        using StreamReader csvFile = new(_csvCustomFile);
                         using var csv = new CsvReader(csvFile, true);
                         while (csv.ReadNextRecord())
                         {
