@@ -2347,7 +2347,7 @@ namespace GlyCounter
                             //print out the headers for each Y-ion searched for, with the last column being a ratio of total TIC we will calculate
                             if (firstSpectrumInFile)
                             {
-                                outputYion.Write("ScanNumber\tPeptideNoGlycan\tPeptideWithGlycan\tTotalGlycanComposition\tPrecursorMZ\tPrecursorCharge\tRetentionTime\t#ChargeStatesConsidered\tIonsFound\tScanInjTime\tDissociationType\tParentScan\tNumYions\tScanTIC\tTotalYionSignal\tYionTICfraction\t");
+                                outputYion.Write("ScanNumber\tPeptideSequence\tTotalGlycanComposition\tPrecursorMZ\tPrecursorCharge\tRetentionTime\t#ChargeStatesConsidered\tIonsFound\tScanInjTime\tDissociationType\tParentScan\tNumYions\tScanTIC\tTotalYionSignal\tYionTICfraction\t");
                                 outputYion.WriteLine(string.Join("\t", yIonHeaderColumns));
                                 firstSpectrumInFile = false;
                             }
@@ -2375,7 +2375,7 @@ namespace GlyCounter
 
 
                             //print out information for this scan that is not Y-ions
-                            outputYion.Write(psm.spectrumNumber + "\t" + psm.peptideNoGlycanMods.SequenceWithModifications + "\t" + psm.peptide.SequenceWithModifications + "\t" +
+                            outputYion.Write(psm.spectrumNumber + "\t" + psm.peptideNoGlycanMods.SequenceWithModifications + "\t" +
                                 psm.totalGlycanComposition + "\t" + spectrum.Precursors[0].MonoisotopicMz + "\t" + psm.charge + "\t" + retentionTime + "\t" + numberOfChargeStatesConsidered + "\t" + chargeStatesFinal + "\t" +
                                 scanInjTime + "\t" + fragmentationType + "\t" + parentScan + "\t" + numberOfYions + "\t" + scanTIC + "\t" + totalYionSignal + "\t" + yIonTICfraction + "\t");
 
