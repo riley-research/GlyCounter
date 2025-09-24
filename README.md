@@ -28,6 +28,10 @@ The GlyCounter solution can also be cloned to Visual Studio and run.
 
 The Pre-ID tab is heart of GlyCounter. Here you can pick common oxonium ions seen in glycopeptide MS/MS spectra, and GlyCounter will find them in your raw data. You can also upload csv file with additional or custom ions to be considered, and scan settings are customizable per dissociation method (see below for more details). This allows you to understand what your glycoproteomics data is telling you before you ever have to decided what search algorithm to use. GlyCounter can be useful for many steps in a glycoproteomics experiment, including quick evaluations of sample prep or instrument conditions, what glycan database you might want to use for searching your data, or how to better understand what identifications your search algorithm produces. GlyCounter is designed to provide flexibility, so there are several settings you can control as the user to best understand your data.
 
+If GlyCounter is useful for your project, please cite Kothlow K, Schramm HM, Riley NM et al. Extracting informative glycan-specific ions from glycopeptide MS/MS spectra with GlyCounter. bioRxiv 2025.03.24.645139. DOI: 10.1101/2025.03.24.645139
+
+[Link to Manuscript](https://www.biorxiv.org/content/10.1101/2025.03.24.645139v1)
+
 ### Selecting Files
 
 GlyCounter accepts .raw or .mzML files. The top browse box allows you to navigate to folders that contain your data. Choose one or more raw/mzml files that you'd like to process, and the text box should update to show how many files you've chosen. You can also drag and drop MS files to automatically upload them. GlyCounter creates individual outputs for each file, and will overwrite files if a different output directory is not chosen. The bottom browse box allows you to set your output directory, which is the folder where the GlyCounter results will be stored.
