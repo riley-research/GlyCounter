@@ -2,16 +2,18 @@ using CSMSL;
 using CSMSL.Proteomics;
 using LumenWorks.Framework.IO.Csv;
 using MathNet.Numerics.Statistics;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
-using System.IO;
-using System.Text;
 using Nova.Data;
 using Nova.Io.Read;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using System.CodeDom;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 
 namespace GlyCounter
@@ -59,6 +61,7 @@ namespace GlyCounter
         bool Ynaught_condenseChargeStates = true;
         bool Ynaught_ipsa;
 
+        private bool restart = false;
         private Color normalBackColor = Color.White;
         private Color alternateBackColor = Color.Lavender;
 
@@ -78,6 +81,21 @@ namespace GlyCounter
             OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
             M6PCheckedListBox.Items.AddRange(ManPos);
             FucoseCheckedListBox.Items.AddRange(FucosePos);
+
+            if (Properties.Settings1.Default.RestoreTabOnReset)
+            {
+                int lastTabIndex = Properties.Settings1.Default.LastTabIndex;
+                if (lastTabIndex >= 0 && lastTabIndex < GlyCounter_AllTabs.TabPages.Count)
+                {
+                    GlyCounter_AllTabs.SelectedIndex = lastTabIndex;
+                }
+                Properties.Settings1.Default.RestoreTabOnReset = false;
+                Properties.Settings1.Default.Save();
+            }
+            else
+            {
+                GlyCounter_AllTabs.SelectedIndex = 0; // Default to first tab
+            }
 
             // Initialize the update manager
             _updateManager = UpdateManager.Instance;
@@ -259,7 +277,7 @@ namespace GlyCounter
                     }
                     else
                         if (CanConvertDouble(ppmTol_textBox.Text, ppmTolerance))
-                            ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
+                        ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
 
                     if (usingda)
                         tol = daTolerance;
@@ -497,7 +515,7 @@ namespace GlyCounter
                             //if ignore ms levels is checked ignore levels list
                             if (!ignoreMSLevelCB.Checked)
                                 if (!levels.Contains(spectrum.MsLevel)) continue;
-                            
+
                             numberOfMS2scans++;
                             int numberOfOxoIons = 0;
                             double totalOxoSignal = 0;
@@ -812,7 +830,7 @@ namespace GlyCounter
                             {
                                 FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
                             }
-                            
+
                         }
 
                         //all scans have been processed, get some total stats
@@ -1281,7 +1299,7 @@ namespace GlyCounter
             }
 
         }
-        
+
         //find the raw file to look for Y-ions
         private void BrowseGlycoPepRawFiles_Button_Click(object sender, EventArgs e)
         {
@@ -2643,6 +2661,26 @@ namespace GlyCounter
             FucoseCheckedListBox.Items.AddRange(FucosePos);
             SialicAcidCheckedListBox.Items.AddRange(SialicPos);
             OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
+        }
+
+        private void Gly_Reset_Click(object sender, EventArgs e)
+        {
+            restart = true;
+            Properties.Settings1.Default.LastTabIndex = GlyCounter_AllTabs.SelectedIndex;
+            Properties.Settings1.Default.RestoreTabOnReset = true;
+            Properties.Settings1.Default.Save();
+            Application.Restart();
+            Environment.Exit(0);
+        }
+
+        private void Yn_reset_Click(object sender, EventArgs e)
+        {
+            restart = true;
+            Properties.Settings1.Default.LastTabIndex = GlyCounter_AllTabs.SelectedIndex;
+            Properties.Settings1.Default.RestoreTabOnReset = true;
+            Properties.Settings1.Default.Save();
+            Application.Restart();
+            Environment.Exit(0);
         }
     }
 }
