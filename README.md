@@ -137,3 +137,7 @@ To create a new release of GlyCounter:
    ```
 
 3. The GitHub Actions workflow will automatically build and publish the release artifacts.
+
+## Known Issues
+
+1. System language settings from places that use commas instead of periods for decimals (EU etc.) will break file parsing
