@@ -13,6 +13,8 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using ThermoFisher.CommonCore.Data.Business;
+using ThermoFisher.CommonCore.RawFileReader;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 
@@ -473,10 +475,9 @@ namespace GlyCounter
                         //write headers
                         outputOxo.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
                         outputPeakDepth.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
-                        if (outputIPSA != null)
-                            outputIPSA.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
+                        outputIPSA?.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
                         outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + SNthreshold + ", IntensityThreshold=" + intensityThreshold + ", PeakDepthThreshold_HCD=" + peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + peakDepthThreshold_uvpd
-                                + ", TICfraction_HCD=" + oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + oxoTICfractionThreshold_uvpd);
+                                                + ", TICfraction_HCD=" + oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + oxoTICfractionThreshold_uvpd);
                         outputSummary.WriteLine(StartTimeLabel.Text);
                         outputSummary.WriteLine();
 
