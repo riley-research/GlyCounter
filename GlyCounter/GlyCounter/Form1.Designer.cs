@@ -130,6 +130,7 @@ namespace GlyCounter
             intensityThresholdLabel = new Label();
             intensityThresholdTextBox = new TextBox();
             YnaughtTab = new TabPage();
+            Yn_reset = new Button();
             Ynaught_intLabel = new Label();
             Ynaught_intTextBox = new TextBox();
             Ynaught_outputButton = new Button();
@@ -184,7 +185,6 @@ namespace GlyCounter
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
             timer2 = new System.Windows.Forms.Timer(components);
-            Yn_reset = new Button();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
@@ -1054,6 +1054,17 @@ namespace GlyCounter
             YnaughtTab.Text = "Ynaught";
             YnaughtTab.UseVisualStyleBackColor = true;
             // 
+            // Yn_reset
+            // 
+            Yn_reset.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Yn_reset.Location = new Point(0, 685);
+            Yn_reset.Name = "Yn_reset";
+            Yn_reset.Size = new Size(112, 23);
+            Yn_reset.TabIndex = 83;
+            Yn_reset.Text = "Restart GlyCounter";
+            Yn_reset.UseVisualStyleBackColor = true;
+            Yn_reset.Click += Yn_reset_Click;
+            // 
             // Ynaught_intLabel
             // 
             Ynaught_intLabel.AutoSize = true;
@@ -1571,21 +1582,10 @@ namespace GlyCounter
             LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Charge\", and \"Total Glycan Composition\"";
             LoadInGlycoPepIDs_TextBox.TextChanged += LoadInGlycoPepIDs_TextBox_TextChanged;
             // 
-            // Yn_reset
-            // 
-            Yn_reset.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Yn_reset.Location = new Point(0, 685);
-            Yn_reset.Name = "Yn_reset";
-            Yn_reset.Size = new Size(112, 23);
-            Yn_reset.TabIndex = 83;
-            Yn_reset.Text = "Restart GlyCounter";
-            Yn_reset.UseVisualStyleBackColor = true;
-            Yn_reset.Click += Yn_reset_Click;
-            // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(1233, 758);
             Controls.Add(GlyCounter_AllTabs);
             Icon = (Icon)resources.GetObject("$this.Icon");
