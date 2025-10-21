@@ -194,13 +194,33 @@ namespace GlyCounter
 
         private async void StartButton_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(Gly_outputTextBox.Text))
+            // If the user didn't enter an output path, default to the folder of the first uploaded raw file (no prompt).
+            string userOutput = Gly_outputTextBox.Text?.Trim();
+            if (string.IsNullOrEmpty(userOutput) || userOutput == "Select output directory")
             {
-                outputPath = Gly_outputTextBox.Text + @"\";
+                if (fileList.Count > 0)
+                    outputPath = Path.GetDirectoryName(fileList[0]) ?? defaultOutput;
+                else
+                    outputPath = defaultOutput;
+
+                outputPath = outputPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+
+                if (Gly_outputTextBox.InvokeRequired)
+                    Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = outputPath));
+                else
+                    Gly_outputTextBox.Text = outputPath;
+            }
+            else if (Directory.Exists(userOutput))
+            {
+                outputPath = userOutput;
+                if (Gly_outputTextBox.InvokeRequired)
+                    Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = outputPath));
+                else
+                    Gly_outputTextBox.Text = outputPath;
             }
             else
             {
-                outputPath = Gly_outputTextBox.Text + @"\";
+                // User provided a non-empty path that doesn't exist -> ask to create it (existing behavior)
                 DialogResult result = MessageBox.Show(
                     "Folder does not exist. Do you want to create a new one?",
                     "Create Folder",
@@ -212,9 +232,14 @@ namespace GlyCounter
                 {
                     try
                     {
-                        Directory.CreateDirectory(Gly_outputTextBox.Text);
+                        Directory.CreateDirectory(userOutput);
+                        outputPath = userOutput.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
                     }
-                    catch { }
+                    catch
+                    {
+                        // If creation fails, fall back to default behavior below (Task.Run also checks)
+                        outputPath = userOutput + Path.DirectorySeparatorChar;
+                    }
                 }
                 else
                 {
