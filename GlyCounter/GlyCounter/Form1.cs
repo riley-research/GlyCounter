@@ -22,6 +22,7 @@ namespace GlyCounter
 {
     public partial class Form1 : Form
     {
+<<<<<<< Updated upstream
         //here we build variables
         string outputPath = "";
         List<string> fileList = [];
@@ -63,6 +64,9 @@ namespace GlyCounter
         bool Ynaught_condenseChargeStates = true;
         bool Ynaught_ipsa;
 
+=======
+        private GlyCounterSettings glySettings = new GlyCounterSettings();
+>>>>>>> Stashed changes
         private bool restart = false;
         private Color normalBackColor = Color.White;
         private Color alternateBackColor = Color.Lavender;
@@ -131,7 +135,11 @@ namespace GlyCounter
 
         private void button1_Click(object sender, EventArgs e)
         {
+<<<<<<< Updated upstream
             fileList = [];
+=======
+            glySettings.fileList = [];
+>>>>>>> Stashed changes
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Multiselect = true;
             fdlg.Title = "C# Corner Open File Dialog";
@@ -146,6 +154,10 @@ namespace GlyCounter
                 fdlg.InitialDirectory = @"c:\"; // Default directory if no previous directory is found
             }
 
+<<<<<<< Updated upstream
+=======
+            //TODO add .d file upload
+>>>>>>> Stashed changes
             fdlg.Filter = "RAW and mzML files (*.raw;*.mzML)|*.raw;*.mzML|RAW files (*.raw*)|*.raw*|mzML files (*.mzML)|*.mzML";
             fdlg.FilterIndex = 1;
             fdlg.RestoreDirectory = true;
@@ -158,12 +170,20 @@ namespace GlyCounter
                 Properties.Settings1.Default.Save();
 
                 //also set a default output directory to the path of the last file saved
+<<<<<<< Updated upstream
                 defaultOutput = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
+=======
+                glySettings.defaultOutput = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
+>>>>>>> Stashed changes
             }
 
             //add file paths to file list
             foreach (string filePath in fdlg.FileNames)
+<<<<<<< Updated upstream
                 fileList.Add(filePath);
+=======
+                glySettings.fileList.Add(filePath);
+>>>>>>> Stashed changes
         }
 
         private void Gly_outputButton_Click(object sender, EventArgs e)
@@ -196,6 +216,7 @@ namespace GlyCounter
         {
             // If the user didn't enter an output path, default to the folder of the first uploaded raw file (no prompt).
             string userOutput = Gly_outputTextBox.Text?.Trim();
+<<<<<<< Updated upstream
             if (string.IsNullOrEmpty(userOutput) || userOutput == "Select output directory")
             {
                 if (fileList.Count > 0)
@@ -241,12 +262,19 @@ namespace GlyCounter
                         outputPath = userOutput + Path.DirectorySeparatorChar;
                     }
                 }
+=======
+            GlyCounterSettings? getOutput = DefaultOutput.getDefaultOutput(userOutput, glySettings);
+            //TODO check if message box shows up if you don't select a folder
+            if (getOutput != null)
+            {
+                glySettings = getOutput;
+                if (Gly_outputTextBox.InvokeRequired)
+                    Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = glySettings.outputPath));
+>>>>>>> Stashed changes
                 else
-                {
-                    return;
-                }
-
+                    Gly_outputTextBox.Text = glySettings.outputPath;
             }
+            else return;
 
             timer1.Interval = 1000;
             timer1.Tick += new EventHandler(OnTimerTick);
@@ -258,6 +286,7 @@ namespace GlyCounter
             {
                 await Task.Run(() =>
                 {
+<<<<<<< Updated upstream
                     bool usingda = false;
                     using204 = false;
 
@@ -288,21 +317,46 @@ namespace GlyCounter
                         {
                             Gly_outputTextBox.Text = outputPath;
                         }
+=======
+                    glySettings.usingda = false;
+                    glySettings.using204 = false;
+
+                    if (string.IsNullOrEmpty(glySettings.outputPath) || !Directory.Exists(glySettings.outputPath))
+                    {
+                        if (glySettings.fileList.Count > 0) 
+                            glySettings.outputPath = Path.GetDirectoryName(glySettings.fileList[0]) ?? glySettings.defaultOutput;
+                        else
+                            glySettings.outputPath = glySettings.defaultOutput;
+
+                        if (Gly_outputTextBox.InvokeRequired)
+                            Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = glySettings.outputPath));
+                        else
+                            Gly_outputTextBox.Text = glySettings.outputPath;
+>>>>>>> Stashed changes
                     }
+
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
 
                     //make sure all user inputs are in the correct format, otherwise use defaults
                     if (DaltonCheckBox.Checked)
                     {
+<<<<<<< Updated upstream
                         if (CanConvertDouble(ppmTol_textBox.Text, daTolerance))
                         {
                             daTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
                             usingda = true;
+=======
+                        if (CanConvertDouble(ppmTol_textBox.Text, glySettings.daTolerance))
+                        {
+                            glySettings.daTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
+                            glySettings.usingda = true;
+>>>>>>> Stashed changes
                         }
 
                     }
                     else
+<<<<<<< Updated upstream
                         if (CanConvertDouble(ppmTol_textBox.Text, ppmTolerance))
                         ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
 
@@ -343,12 +397,56 @@ namespace GlyCounter
 
                     if (CanConvertDouble(intensityThresholdTextBox.Text, intensityThreshold))
                         intensityThreshold = Convert.ToDouble(intensityThresholdTextBox.Text, CultureInfo.InvariantCulture);
+=======
+                        if (CanConvertDouble(ppmTol_textBox.Text, glySettings.ppmTolerance))
+                        glySettings.ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
+
+                    glySettings.tol = glySettings.usingda ? glySettings.daTolerance : glySettings.ppmTolerance;
+
+                    if (CanConvertDouble(SN_textBox.Text, glySettings.SNthreshold))
+                        glySettings.SNthreshold = Convert.ToDouble(SN_textBox.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(PeakDepth_Box_HCD.Text, glySettings.peakDepthThreshold_hcd))
+                        glySettings.peakDepthThreshold_hcd = Convert.ToDouble(PeakDepth_Box_HCD.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(PeakDepth_Box_ETD.Text, glySettings.peakDepthThreshold_etd))
+                        glySettings.peakDepthThreshold_etd = Convert.ToDouble(PeakDepth_Box_ETD.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(PeakDepth_Box_UVPD.Text, glySettings.peakDepthThreshold_uvpd))
+                        glySettings.peakDepthThreshold_uvpd = Convert.ToDouble(PeakDepth_Box_UVPD.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(hcdTICfraction.Text, glySettings.oxoTICfractionThreshold_hcd))
+                        glySettings.oxoTICfractionThreshold_hcd = Convert.ToDouble(hcdTICfraction.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(etdTICfraction.Text, glySettings.oxoTICfractionThreshold_etd))
+                        glySettings.oxoTICfractionThreshold_etd = Convert.ToDouble(etdTICfraction.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(uvpdTICfraction.Text, glySettings.oxoTICfractionThreshold_uvpd))
+                        glySettings.oxoTICfractionThreshold_uvpd = Convert.ToDouble(uvpdTICfraction.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(OxoCountRequireBox_hcd.Text, glySettings.oxoCountRequirement_hcd_user))
+                        glySettings.oxoCountRequirement_hcd_user = Convert.ToDouble(OxoCountRequireBox_hcd.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(OxoCountRequireBox_etd.Text, glySettings.oxoCountRequirement_etd_user))
+                        glySettings.oxoCountRequirement_etd_user = Convert.ToDouble(OxoCountRequireBox_etd.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(OxoCountRequireBox_uvpd.Text, glySettings.oxoCountRequirement_uvpd_user))
+                        glySettings.oxoCountRequirement_uvpd_user = Convert.ToDouble(OxoCountRequireBox_uvpd.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(intensityThresholdTextBox.Text, glySettings.intensityThreshold))
+                        glySettings.intensityThreshold = Convert.ToDouble(intensityThresholdTextBox.Text, CultureInfo.InvariantCulture);
+
+                    glySettings.msLevelLB = MSLevelLB.Value;
+                    glySettings.msLevelUB = MSLevelUB.Value;
+                    glySettings.ignoreMSLevel = ignoreMSLevelCB.Checked;
+>>>>>>> Stashed changes
 
                     string toleranceString = "ppmTol: ";
-                    if (usingda)
+                    if (glySettings.usingda)
                         toleranceString = "DaTol: ";
 
                     //popup with settings to user
+<<<<<<< Updated upstream
                     MessageBox.Show("You are using these settings:\r\n" + toleranceString + tol + "\r\nSNthreshold: " + SNthreshold + "\r\nIntensityTheshold: " + intensityThreshold
                         + "\r\nPeakDepthThreshold_HCD: " + peakDepthThreshold_hcd + "\r\nPeakDepthThreshold_ETD: " + peakDepthThreshold_etd + "\r\nPeakDepthThreshold_UVPD: " + peakDepthThreshold_uvpd
                         + "\r\nTICfraction_HCD: " + oxoTICfractionThreshold_hcd + "\r\nTICfraction_ETD: " + oxoTICfractionThreshold_etd + "\r\nTICfraction_UVPD: " + oxoTICfractionThreshold_uvpd);
@@ -375,6 +473,34 @@ namespace GlyCounter
                     if (!csvCustomFile.Equals("empty"))
                     {
                         using StreamReader csvFile = new StreamReader(csvCustomFile);
+=======
+                    MessageBox.Show("You are using these settings:\r\n" + toleranceString + glySettings.tol + "\r\nSNthreshold: " + glySettings.SNthreshold + "\r\nIntensityTheshold: " + glySettings.intensityThreshold
+                        + "\r\nPeakDepthThreshold_HCD: " + glySettings.peakDepthThreshold_hcd + "\r\nPeakDepthThreshold_ETD: " + glySettings.peakDepthThreshold_etd + "\r\nPeakDepthThreshold_UVPD: " + glySettings.peakDepthThreshold_uvpd
+                        + "\r\nTICfraction_HCD: " + glySettings.oxoTICfractionThreshold_hcd + "\r\nTICfraction_ETD: " + glySettings.oxoTICfractionThreshold_etd + "\r\nTICfraction_UVPD: " + glySettings.oxoTICfractionThreshold_uvpd);
+
+
+                    foreach (var item in HexNAcCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "HexNAc", true));
+
+                    foreach (var item in HexCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "Hex"));
+
+                    foreach (var item in SialicAcidCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "Sialic"));
+
+                    foreach (var item in M6PCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "M6P"));
+
+                    foreach (var item in OligosaccharideCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "Oligo"));
+
+                    foreach (var item in FucoseCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "Fucose"));
+
+                    if (!glySettings.csvCustomFile.Equals("empty"))
+                    {
+                        using StreamReader csvFile = new StreamReader(glySettings.csvCustomFile);
+>>>>>>> Stashed changes
                         using var csv = new CsvReader(csvFile, true);
                         while (csv.ReadNextRecord())
                         {
@@ -386,16 +512,25 @@ namespace GlyCounter
                             oxoIon.hcdCount = 0;
                             oxoIon.etdCount = 0;
                             oxoIon.uvpdCount = 0;
+<<<<<<< Updated upstream
                             oxoIon.peakDepth = arbitraryPeakDepthIfNotFound;
 
                             //If an oxonium ion with the same theoretical m/z value exists, replace it with the one from the custom csv
                             List<OxoniumIon> ionsToRemove = new List<OxoniumIon>();
                             foreach (OxoniumIon ion in oxoniumIonHashSet)
+=======
+                            oxoIon.peakDepth = glySettings.arbitraryPeakDepthIfNotFound;
+
+                            //If an oxonium ion with the same theoretical m/z value exists, replace it with the one from the custom csv
+                            List<OxoniumIon> ionsToRemove = new List<OxoniumIon>();
+                            foreach (OxoniumIon ion in glySettings.oxoniumIonHashSet)
+>>>>>>> Stashed changes
                             {
                                 if (ion.Equals(oxoIon))
                                     ionsToRemove.Add(ion);
                             }
                             foreach (OxoniumIon ion in ionsToRemove)
+<<<<<<< Updated upstream
                             {
                                 Console.WriteLine(ion.ToString());
                                 oxoniumIonHashSet.Remove(ion);
@@ -405,10 +540,19 @@ namespace GlyCounter
 
                             if (oxoIon.theoMZ == 204.0867 || oxoIon.description == "HexNAc")
                                 using204 = true;
+=======
+                                glySettings.oxoniumIonHashSet.Remove(ion);
+
+                            glySettings.oxoniumIonHashSet.Add(oxoIon);
+
+                            if (oxoIon.theoMZ == 204.0867 || oxoIon.description == "HexNAc")
+                                glySettings.using204 = true;
+>>>>>>> Stashed changes
                         }
                     }
 
                     if (ipsaCheckBox.Checked)
+<<<<<<< Updated upstream
                         ipsa = true;
 
                     foreach (var fileName in fileList)
@@ -418,12 +562,24 @@ namespace GlyCounter
                         {
                             oxoIon.intensity = 0;
                             oxoIon.peakDepth = arbitraryPeakDepthIfNotFound;
+=======
+                        glySettings.ipsa = true;
+
+                    foreach (var fileName in glySettings.fileList)
+                    {
+                        //reset oxonium ions
+                        foreach (OxoniumIon oxoIon in glySettings.oxoniumIonHashSet)
+                        {
+                            oxoIon.intensity = 0;
+                            oxoIon.peakDepth = glySettings.arbitraryPeakDepthIfNotFound;
+>>>>>>> Stashed changes
                             oxoIon.hcdCount = 0;
                             oxoIon.etdCount = 0;
                             oxoIon.uvpdCount = 0;
                             oxoIon.measuredMZ = 0;
                         }
 
+<<<<<<< Updated upstream
                         FileReader rawFile = new FileReader(fileName);
                         FileReader typeCheck = new FileReader();
                         string fileType = typeCheck.CheckFileFormat(fileName).ToString(); //either "ThermoRaw" or "MzML"
@@ -439,6 +595,16 @@ namespace GlyCounter
                         {
                             StatusLabel.Text = "Current file: " + fileName;
 
+=======
+                        if (StatusLabel.InvokeRequired)
+                        {
+                            StatusLabel.Invoke(new Action(() => StatusLabel.Text = "Current file: " + fileName));
+                        }
+                        else
+                        {
+                            StatusLabel.Text = "Current file: " + fileName;
+
+>>>>>>> Stashed changes
                         }
 
                         if (FinishTimeLabel.InvokeRequired)
@@ -452,6 +618,7 @@ namespace GlyCounter
                         }
 
                         //set vars
+<<<<<<< Updated upstream
                         int numberOfMS2scansWithOxo_1 = 0;
                         int numberOfMS2scansWithOxo_2 = 0;
                         int numberOfMS2scansWithOxo_3 = 0;
@@ -489,26 +656,50 @@ namespace GlyCounter
                         string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
                         StreamWriter outputOxo = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_GlyCounter_OxoSignal.txt"));
                         StreamWriter outputPeakDepth = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_GlyCounter_OxoPeakDepth.txt"));
+=======
+                        RawFileInfo rawFileInfo = new RawFileInfo
+                        {
+                            halfTotalList = (double)glySettings.oxoniumIonHashSet.Count / 2.0
+                        };
+
+                        //initialize streamwriter output files
+                        string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
+                        StreamWriter outputOxo = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoSignal.txt"));
+                        StreamWriter outputPeakDepth = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoPeakDepth.txt"));
+>>>>>>> Stashed changes
                         StreamWriter outputIPSA = null;
 
                         if (ipsaCheckBox.Checked)
                         {
+<<<<<<< Updated upstream
                             outputIPSA = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_Glycounter_IPSA.txt"));
                         }
                         StreamWriter outputSummary = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt"));
+=======
+                            outputIPSA = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_Glycounter_IPSA.txt"));
+                        }
+                        StreamWriter outputSummary = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt"));
+>>>>>>> Stashed changes
 
                         //write headers
                         outputOxo.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
                         outputPeakDepth.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
                         outputIPSA?.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
+<<<<<<< Updated upstream
                         outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + SNthreshold + ", IntensityThreshold=" + intensityThreshold + ", PeakDepthThreshold_HCD=" + peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + peakDepthThreshold_uvpd
                                                 + ", TICfraction_HCD=" + oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + oxoTICfractionThreshold_uvpd);
+=======
+                        outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
+                                                + ", TICfraction_HCD=" + glySettings.oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + glySettings.oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + glySettings.oxoTICfractionThreshold_uvpd);
+>>>>>>> Stashed changes
                         outputSummary.WriteLine(StartTimeLabel.Text);
                         outputSummary.WriteLine();
 
                         //start processing file
-                        for (int i = rawFile.FirstScan; i <= rawFile.LastScan; i++)
+                        object output = new object();
+                        if (fileName.EndsWith(".d"))
                         {
+<<<<<<< Updated upstream
                             SpectrumEx spectrum = rawFile.ReadSpectrumEx(scanNumber: i);
                             bool IT = spectrum.Analyzer.ToString().Contains("ITMS");
 
@@ -857,91 +1048,56 @@ namespace GlyCounter
                                 FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
                             }
 
+=======
+                            output = ProcessTimsTOF.processTimsTOF(fileName, glySettings, rawFileInfo); //TODO fix this and figure out what type should be output
+                        }
+                        else
+                        {
+                            output = ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo); //TODO same as above
+>>>>>>> Stashed changes
                         }
 
                         //all scans have been processed, get some total stats
-                        double percentage1ox = (double)numberOfMS2scansWithOxo_1 / (double)numberOfMS2scans * 100;
-                        double percentage2ox = (double)numberOfMS2scansWithOxo_2 / (double)numberOfMS2scans * 100;
-                        double percentage3ox = (double)numberOfMS2scansWithOxo_3 / (double)numberOfMS2scans * 100;
-                        double percentage4ox = (double)numberOfMS2scansWithOxo_4 / (double)numberOfMS2scans * 100;
-                        double percentage5plusox = (double)numberOfMS2scansWithOxo_5plus / (double)numberOfMS2scans * 100;
-                        double percentageSum = percentage1ox + percentage2ox + percentage3ox + percentage4ox + percentage5plusox;
-                        double numberofMS2scansWithOxo_double = (double)percentageSum / 100 * numberOfMS2scans;
-
-                        double percentage1ox_hcd = (double)numberOfMS2scansWithOxo_1_hcd / (double)numberOfHCDscans * 100;
-                        double percentage2ox_hcd = (double)numberOfMS2scansWithOxo_2_hcd / (double)numberOfHCDscans * 100;
-                        double percentage3ox_hcd = (double)numberOfMS2scansWithOxo_3_hcd / (double)numberOfHCDscans * 100;
-                        double percentage4ox_hcd = (double)numberOfMS2scansWithOxo_4_hcd / (double)numberOfHCDscans * 100;
-                        double percentage5plusox_hcd = (double)numberOfMS2scansWithOxo_5plus_hcd / (double)numberOfHCDscans * 100;
-                        double percentageSum_hcd = percentage1ox_hcd + percentage2ox_hcd + percentage3ox_hcd + percentage4ox_hcd + percentage5plusox_hcd;
-                        double numberofHCDscansWithOxo_double = percentageSum_hcd / 100 * numberOfHCDscans;
-
-                        double percentage1ox_etd = (double)numberOfMS2scansWithOxo_1_etd / (double)numberOfETDscans * 100;
-                        double percentage2ox_etd = (double)numberOfMS2scansWithOxo_2_etd / (double)numberOfETDscans * 100;
-                        double percentage3ox_etd = (double)numberOfMS2scansWithOxo_3_etd / (double)numberOfETDscans * 100;
-                        double percentage4ox_etd = (double)numberOfMS2scansWithOxo_4_etd / (double)numberOfETDscans * 100;
-                        double percentage5plusox_etd = (double)numberOfMS2scansWithOxo_5plus_etd / (double)numberOfETDscans * 100;
-                        double percentageSum_etd = percentage1ox_etd + percentage2ox_etd + percentage3ox_etd + percentage4ox_etd + percentage5plusox_etd;
-                        double numberofETDscansWithOxo_double = percentageSum_etd / 100 * numberOfETDscans;
-
-                        double percentage1ox_uvpd = (double)numberOfMS2scansWithOxo_1_uvpd / (double)numberOfUVPDscans * 100;
-                        double percentage2ox_uvpd = (double)numberOfMS2scansWithOxo_2_uvpd / (double)numberOfUVPDscans * 100;
-                        double percentage3ox_uvpd = (double)numberOfMS2scansWithOxo_3_uvpd / (double)numberOfUVPDscans * 100;
-                        double percentage4ox_uvpd = (double)numberOfMS2scansWithOxo_4_uvpd / (double)numberOfUVPDscans * 100;
-                        double percentage5plusox_uvpd = (double)numberOfMS2scansWithOxo_5plus_uvpd / (double)numberOfUVPDscans * 100;
-                        double percentageSum_uvpd = percentage1ox_uvpd + percentage2ox_uvpd + percentage3ox_uvpd + percentage4ox_uvpd + percentage5plusox_uvpd;
-                        double numberofUVPDscansWithOxo_double = percentageSum_uvpd / 100 * numberOfUVPDscans;
-
-                        numberScansCountedLikelyGlyco_total = numberScansCountedLikelyGlyco_hcd + numberScansCountedLikelyGlyco_etd + numberScansCountedLikelyGlyco_uvpd;
-                        double percentageLikelyGlyco_total = (double)numberScansCountedLikelyGlyco_total / (double)numberOfMS2scans * 100;
-                        double percentageLikelyGlyco_hcd = (double)numberScansCountedLikelyGlyco_hcd / (double)numberOfHCDscans * 100;
-                        double percentageLikelyGlyco_etd = (double)numberScansCountedLikelyGlyco_etd / (double)numberOfETDscans * 100;
-                        double percentageLikelyGlyco_uvpd = (double)numberScansCountedLikelyGlyco_uvpd / (double)numberOfUVPDscans * 100;
-
-                        double percentageHCD = (double)numberOfHCDscans / numberOfMS2scans * 100;
-                        double percentageETD = (double)numberOfETDscans / numberOfMS2scans * 100;
-                        double percentageUVPD = (double)numberOfUVPDscans / numberOfMS2scans * 100;
-
-                        int numberofMS2scansWithOxo = (int)Math.Round(numberofMS2scansWithOxo_double);
-                        int numberofHCDscansWithOxo = (int)Math.Round(numberofHCDscansWithOxo_double);
-                        int numberofETDscansWithOxo = (int)Math.Round(numberofETDscansWithOxo_double);
-                        int numberofUVPDscansWithOxo = (int)Math.Round(numberofUVPDscansWithOxo_double);
-
-                        numberofMS2scansWithOxo = Math.Max(0, numberofMS2scansWithOxo);
-                        numberofHCDscansWithOxo = Math.Max(0, numberofHCDscansWithOxo);
-                        numberofETDscansWithOxo = Math.Max(0, numberofETDscansWithOxo);
-                        numberofUVPDscansWithOxo = Math.Max(0, numberofUVPDscansWithOxo);
+                        CalculatedRawFileInfo cRawFileInfo = new CalculatedRawFileInfo(rawFileInfo); //todo make sure rawfile info is updated
+                        cRawFileInfo.numberofMS2scansWithOxo = Math.Max(0, cRawFileInfo.numberofMS2scansWithOxo);
+                        cRawFileInfo.numberofHCDscansWithOxo = Math.Max(0, cRawFileInfo.numberofHCDscansWithOxo);
+                        cRawFileInfo.numberofETDscansWithOxo = Math.Max(0, cRawFileInfo.numberofETDscansWithOxo);
+                        cRawFileInfo.numberofUVPDscansWithOxo = Math.Max(0, cRawFileInfo.numberofUVPDscansWithOxo);
 
                         outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
-                        outputSummary.WriteLine("MS/MS Scans\t" + numberOfMS2scans + "\t" + numberOfHCDscans + "\t" + numberOfETDscans + "\t" + numberOfUVPDscans
-                            + "\t" + 100 + "\t" + percentageHCD + "\t" + percentageETD + "\t" + percentageUVPD);
-                        outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + numberofMS2scansWithOxo + "\t" + numberofHCDscansWithOxo + "\t" + numberofETDscansWithOxo + "\t" + numberofUVPDscansWithOxo
-                            + "\t" + percentageSum + "\t" + percentageSum_hcd + "\t" + percentageSum_etd + "\t" + percentageSum_uvpd);
-                        outputSummary.WriteLine("Likely Glyco\t" + numberScansCountedLikelyGlyco_total + "\t" + numberScansCountedLikelyGlyco_hcd + "\t" + numberScansCountedLikelyGlyco_etd + "\t" + numberScansCountedLikelyGlyco_uvpd
-                            + "\t" + percentageLikelyGlyco_total + "\t" + percentageLikelyGlyco_hcd + "\t" + percentageLikelyGlyco_etd + "\t" + percentageLikelyGlyco_uvpd);
-                        outputSummary.WriteLine("OxoCount_1\t" + numberOfMS2scansWithOxo_1 + "\t" + numberOfMS2scansWithOxo_1_hcd + "\t" + numberOfMS2scansWithOxo_1_etd + "\t" + numberOfMS2scansWithOxo_1_uvpd
-                            + "\t" + percentage1ox + "\t" + percentage1ox_hcd + "\t" + percentage1ox_etd + "\t" + percentage1ox_uvpd);
-                        outputSummary.WriteLine("OxoCount_2\t" + numberOfMS2scansWithOxo_2 + "\t" + numberOfMS2scansWithOxo_2_hcd + "\t" + numberOfMS2scansWithOxo_2_etd + "\t" + numberOfMS2scansWithOxo_2_uvpd
-                            + "\t" + percentage2ox + "\t" + percentage2ox_hcd + "\t" + percentage2ox_etd + "\t" + percentage2ox_uvpd);
-                        outputSummary.WriteLine("OxoCount_3\t" + numberOfMS2scansWithOxo_3 + "\t" + numberOfMS2scansWithOxo_3_hcd + "\t" + numberOfMS2scansWithOxo_3_etd + "\t" + numberOfMS2scansWithOxo_3_uvpd
-                            + "\t" + percentage3ox + "\t" + percentage3ox_hcd + "\t" + percentage3ox_etd + "\t" + percentage3ox_uvpd);
-                        outputSummary.WriteLine("OxoCount_4\t" + numberOfMS2scansWithOxo_4 + "\t" + numberOfMS2scansWithOxo_4_hcd + "\t" + numberOfMS2scansWithOxo_4_etd + "\t" + numberOfMS2scansWithOxo_4_uvpd
-                            + "\t" + percentage4ox + "\t" + percentage4ox_hcd + "\t" + percentage4ox_etd + "\t" + percentage4ox_uvpd);
-                        outputSummary.WriteLine("OxoCount_5+\t" + numberOfMS2scansWithOxo_5plus + "\t" + numberOfMS2scansWithOxo_5plus_hcd + "\t" + numberOfMS2scansWithOxo_5plus_etd + "\t" + numberOfMS2scansWithOxo_5plus_uvpd
-                            + "\t" + percentage5plusox + "\t" + percentage5plusox_hcd + "\t" + percentage5plusox_etd + "\t" + percentage5plusox_uvpd);
+                        outputSummary.WriteLine("MS/MS Scans\t" + rawFileInfo.numberOfMS2scans + "\t" + rawFileInfo.numberOfHCDscans + "\t" + rawFileInfo.numberOfETDscans + "\t" + rawFileInfo.numberOfUVPDscans
+                            + "\t" + 100 + "\t" + cRawFileInfo.percentageHCD + "\t" + cRawFileInfo.percentageETD + "\t" + cRawFileInfo.percentageUVPD);
+                        outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + cRawFileInfo.numberofMS2scansWithOxo + "\t" + cRawFileInfo.numberofHCDscansWithOxo + "\t" + cRawFileInfo.numberofETDscansWithOxo + "\t" + cRawFileInfo.numberofUVPDscansWithOxo
+                            + "\t" + cRawFileInfo.percentageSum + "\t" + cRawFileInfo.percentageSum_hcd + "\t" + cRawFileInfo.percentageSum_etd + "\t" + cRawFileInfo.percentageSum_uvpd);
+                        outputSummary.WriteLine("Likely Glyco\t" + cRawFileInfo.numberScansCountedLikelyGlyco_total + "\t" + rawFileInfo.numberScansCountedLikelyGlyco_hcd + "\t" + rawFileInfo.numberScansCountedLikelyGlyco_etd + "\t" + rawFileInfo.numberScansCountedLikelyGlyco_uvpd
+                            + "\t" + cRawFileInfo.percentageLikelyGlyco_total + "\t" + cRawFileInfo.percentageLikelyGlyco_hcd + "\t" + cRawFileInfo.percentageLikelyGlyco_etd + "\t" + cRawFileInfo.percentageLikelyGlyco_uvpd);
+                        outputSummary.WriteLine("OxoCount_1\t" + rawFileInfo.numberOfMS2scansWithOxo_1 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_1_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_1_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_1_uvpd
+                            + "\t" + cRawFileInfo.percentage1ox + "\t" + cRawFileInfo.percentage1ox_hcd + "\t" + cRawFileInfo.percentage1ox_etd + "\t" + cRawFileInfo.percentage1ox_uvpd);
+                        outputSummary.WriteLine("OxoCount_2\t" + rawFileInfo.numberOfMS2scansWithOxo_2 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_2_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_2_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_2_uvpd
+                            + "\t" + cRawFileInfo.percentage2ox + "\t" + cRawFileInfo.percentage2ox_hcd + "\t" + cRawFileInfo.percentage2ox_etd + "\t" + cRawFileInfo.percentage2ox_uvpd);
+                        outputSummary.WriteLine("OxoCount_3\t" + rawFileInfo.numberOfMS2scansWithOxo_3 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_3_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_3_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_3_uvpd
+                            + "\t" + cRawFileInfo.percentage3ox + "\t" + cRawFileInfo.percentage3ox_hcd + "\t" + cRawFileInfo.percentage3ox_etd + "\t" + cRawFileInfo.percentage3ox_uvpd);
+                        outputSummary.WriteLine("OxoCount_4\t" + rawFileInfo.numberOfMS2scansWithOxo_4 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_4_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_4_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_4_uvpd
+                            + "\t" + cRawFileInfo.percentage4ox + "\t" + cRawFileInfo.percentage4ox_hcd + "\t" + cRawFileInfo.percentage4ox_etd + "\t" + cRawFileInfo.percentage4ox_uvpd);
+                        outputSummary.WriteLine("OxoCount_5+\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_uvpd
+                            + "\t" + cRawFileInfo.percentage5plusox + "\t" + cRawFileInfo.percentage5plusox_hcd + "\t" + cRawFileInfo.percentage5plusox_etd + "\t" + cRawFileInfo.percentage5plusox_uvpd);
 
                         outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
                         outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
 
                         string currentGlycanSource = "";
+<<<<<<< Updated upstream
                         foreach (OxoniumIon oxoIon in oxoniumIonHashSet)
+=======
+                        foreach (OxoniumIon oxoIon in glySettings.oxoniumIonHashSet)
+>>>>>>> Stashed changes
                         {
                             int total = oxoIon.hcdCount + oxoIon.etdCount + oxoIon.uvpdCount;
 
-                            double percentTotal = (double)total / (double)numberOfMS2scans * 100;
-                            double percentHCD = (double)oxoIon.hcdCount / (double)numberOfHCDscans * 100;
-                            double percentETD = (double)oxoIon.etdCount / (double)numberOfETDscans * 100;
-                            double percentUVPD = (double)oxoIon.uvpdCount / (double)numberOfUVPDscans * 100;
+                            double percentTotal = (double)total / (double)rawFileInfo.numberOfMS2scans * 100;
+                            double percentHCD = (double)oxoIon.hcdCount / (double)rawFileInfo.numberOfHCDscans * 100;
+                            double percentETD = (double)oxoIon.etdCount / (double)rawFileInfo.numberOfETDscans * 100;
+                            double percentUVPD = (double)oxoIon.uvpdCount / (double)rawFileInfo.numberOfUVPDscans * 100;
 
                             if (!currentGlycanSource.Equals(oxoIon.glycanSource))
                             {
