@@ -24,6 +24,7 @@ namespace GlyCounter
     {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         //here we build variables
         string outputPath = "";
         List<string> fileList = [];
@@ -65,6 +66,9 @@ namespace GlyCounter
         bool Ynaught_condenseChargeStates = true;
         bool Ynaught_ipsa;
 
+=======
+        private GlyCounterSettings glySettings = new GlyCounterSettings();
+>>>>>>> Stashed changes
 =======
         private GlyCounterSettings glySettings = new GlyCounterSettings();
 >>>>>>> Stashed changes
@@ -141,7 +145,11 @@ namespace GlyCounter
         {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             fileList = [];
+=======
+            glySettings.fileList = [];
+>>>>>>> Stashed changes
 =======
             glySettings.fileList = [];
 >>>>>>> Stashed changes
@@ -164,6 +172,10 @@ namespace GlyCounter
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+            //TODO add .d file upload
+>>>>>>> Stashed changes
 =======
             //TODO add .d file upload
 >>>>>>> Stashed changes
@@ -184,7 +196,11 @@ namespace GlyCounter
                 //also set a default output directory to the path of the last file saved
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 defaultOutput = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
+=======
+                glySettings.defaultOutput = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
+>>>>>>> Stashed changes
 =======
                 glySettings.defaultOutput = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
 >>>>>>> Stashed changes
@@ -197,7 +213,11 @@ namespace GlyCounter
             foreach (string filePath in fdlg.FileNames)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 fileList.Add(filePath);
+=======
+                glySettings.fileList.Add(filePath);
+>>>>>>> Stashed changes
 =======
                 glySettings.fileList.Add(filePath);
 >>>>>>> Stashed changes
@@ -236,6 +256,7 @@ namespace GlyCounter
         {
             // If the user didn't enter an output path, default to the folder of the first uploaded raw file (no prompt).
             string userOutput = Gly_outputTextBox.Text?.Trim();
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
             if (string.IsNullOrEmpty(userOutput) || userOutput == "Select output directory")
@@ -301,6 +322,15 @@ namespace GlyCounter
                 if (Gly_outputTextBox.InvokeRequired)
                     Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = glySettings.outputPath));
 >>>>>>> Stashed changes
+=======
+            GlyCounterSettings? getOutput = DefaultOutput.getDefaultOutput(userOutput, glySettings);
+            //TODO check if message box shows up if you don't select a folder
+            if (getOutput != null)
+            {
+                glySettings = getOutput;
+                if (Gly_outputTextBox.InvokeRequired)
+                    Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = glySettings.outputPath));
+>>>>>>> Stashed changes
                 else
                     Gly_outputTextBox.Text = glySettings.outputPath;
             }
@@ -316,6 +346,7 @@ namespace GlyCounter
             {
                 await Task.Run(() =>
                 {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     bool usingda = false;
@@ -380,6 +411,22 @@ namespace GlyCounter
                         else
                             Gly_outputTextBox.Text = glySettings.outputPath;
 >>>>>>> Stashed changes
+=======
+                    glySettings.usingda = false;
+                    glySettings.using204 = false;
+
+                    if (string.IsNullOrEmpty(glySettings.outputPath) || !Directory.Exists(glySettings.outputPath))
+                    {
+                        if (glySettings.fileList.Count > 0) 
+                            glySettings.outputPath = Path.GetDirectoryName(glySettings.fileList[0]) ?? glySettings.defaultOutput;
+                        else
+                            glySettings.outputPath = glySettings.defaultOutput;
+
+                        if (Gly_outputTextBox.InvokeRequired)
+                            Gly_outputTextBox.Invoke(new Action(() => Gly_outputTextBox.Text = glySettings.outputPath));
+                        else
+                            Gly_outputTextBox.Text = glySettings.outputPath;
+>>>>>>> Stashed changes
                     }
 
                     Stopwatch stopwatch = new Stopwatch();
@@ -388,6 +435,7 @@ namespace GlyCounter
                     //make sure all user inputs are in the correct format, otherwise use defaults
                     if (DaltonCheckBox.Checked)
                     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         if (CanConvertDouble(ppmTol_textBox.Text, daTolerance))
@@ -406,10 +454,17 @@ namespace GlyCounter
                             glySettings.daTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
                             glySettings.usingda = true;
 >>>>>>> Stashed changes
+=======
+                        if (CanConvertDouble(ppmTol_textBox.Text, glySettings.daTolerance))
+                        {
+                            glySettings.daTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
+                            glySettings.usingda = true;
+>>>>>>> Stashed changes
                         }
 
                     }
                     else
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         if (CanConvertDouble(ppmTol_textBox.Text, ppmTolerance))
@@ -525,6 +580,43 @@ namespace GlyCounter
                         glySettings.oxoCountRequirement_uvpd_user = Convert.ToDouble(OxoCountRequireBox_uvpd.Text, CultureInfo.InvariantCulture);
 
 >>>>>>> Stashed changes
+=======
+                        if (CanConvertDouble(ppmTol_textBox.Text, glySettings.ppmTolerance))
+                        glySettings.ppmTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
+
+                    glySettings.tol = glySettings.usingda ? glySettings.daTolerance : glySettings.ppmTolerance;
+
+                    if (CanConvertDouble(SN_textBox.Text, glySettings.SNthreshold))
+                        glySettings.SNthreshold = Convert.ToDouble(SN_textBox.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(PeakDepth_Box_HCD.Text, glySettings.peakDepthThreshold_hcd))
+                        glySettings.peakDepthThreshold_hcd = Convert.ToDouble(PeakDepth_Box_HCD.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(PeakDepth_Box_ETD.Text, glySettings.peakDepthThreshold_etd))
+                        glySettings.peakDepthThreshold_etd = Convert.ToDouble(PeakDepth_Box_ETD.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(PeakDepth_Box_UVPD.Text, glySettings.peakDepthThreshold_uvpd))
+                        glySettings.peakDepthThreshold_uvpd = Convert.ToDouble(PeakDepth_Box_UVPD.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(hcdTICfraction.Text, glySettings.oxoTICfractionThreshold_hcd))
+                        glySettings.oxoTICfractionThreshold_hcd = Convert.ToDouble(hcdTICfraction.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(etdTICfraction.Text, glySettings.oxoTICfractionThreshold_etd))
+                        glySettings.oxoTICfractionThreshold_etd = Convert.ToDouble(etdTICfraction.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(uvpdTICfraction.Text, glySettings.oxoTICfractionThreshold_uvpd))
+                        glySettings.oxoTICfractionThreshold_uvpd = Convert.ToDouble(uvpdTICfraction.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(OxoCountRequireBox_hcd.Text, glySettings.oxoCountRequirement_hcd_user))
+                        glySettings.oxoCountRequirement_hcd_user = Convert.ToDouble(OxoCountRequireBox_hcd.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(OxoCountRequireBox_etd.Text, glySettings.oxoCountRequirement_etd_user))
+                        glySettings.oxoCountRequirement_etd_user = Convert.ToDouble(OxoCountRequireBox_etd.Text, CultureInfo.InvariantCulture);
+
+                    if (CanConvertDouble(OxoCountRequireBox_uvpd.Text, glySettings.oxoCountRequirement_uvpd_user))
+                        glySettings.oxoCountRequirement_uvpd_user = Convert.ToDouble(OxoCountRequireBox_uvpd.Text, CultureInfo.InvariantCulture);
+
+>>>>>>> Stashed changes
                     if (CanConvertDouble(intensityThresholdTextBox.Text, glySettings.intensityThreshold))
                         glySettings.intensityThreshold = Convert.ToDouble(intensityThresholdTextBox.Text, CultureInfo.InvariantCulture);
 
@@ -532,6 +624,9 @@ namespace GlyCounter
                     glySettings.msLevelUB = MSLevelUB.Value;
                     glySettings.ignoreMSLevel = ignoreMSLevelCB.Checked;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -541,6 +636,7 @@ namespace GlyCounter
                         toleranceString = "DaTol: ";
 
                     //popup with settings to user
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     MessageBox.Show("You are using these settings:\r\n" + toleranceString + tol + "\r\nSNthreshold: " + SNthreshold + "\r\nIntensityTheshold: " + intensityThreshold
@@ -625,6 +721,34 @@ namespace GlyCounter
                     {
                         using StreamReader csvFile = new StreamReader(glySettings.csvCustomFile);
 >>>>>>> Stashed changes
+=======
+                    MessageBox.Show("You are using these settings:\r\n" + toleranceString + glySettings.tol + "\r\nSNthreshold: " + glySettings.SNthreshold + "\r\nIntensityTheshold: " + glySettings.intensityThreshold
+                        + "\r\nPeakDepthThreshold_HCD: " + glySettings.peakDepthThreshold_hcd + "\r\nPeakDepthThreshold_ETD: " + glySettings.peakDepthThreshold_etd + "\r\nPeakDepthThreshold_UVPD: " + glySettings.peakDepthThreshold_uvpd
+                        + "\r\nTICfraction_HCD: " + glySettings.oxoTICfractionThreshold_hcd + "\r\nTICfraction_ETD: " + glySettings.oxoTICfractionThreshold_etd + "\r\nTICfraction_UVPD: " + glySettings.oxoTICfractionThreshold_uvpd);
+
+
+                    foreach (var item in HexNAcCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "HexNAc", true));
+
+                    foreach (var item in HexCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "Hex"));
+
+                    foreach (var item in SialicAcidCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "Sialic"));
+
+                    foreach (var item in M6PCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "M6P"));
+
+                    foreach (var item in OligosaccharideCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "Oligo"));
+
+                    foreach (var item in FucoseCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(ProcessOxoIon(item, glycanSource: "Fucose"));
+
+                    if (!glySettings.csvCustomFile.Equals("empty"))
+                    {
+                        using StreamReader csvFile = new StreamReader(glySettings.csvCustomFile);
+>>>>>>> Stashed changes
                         using var csv = new CsvReader(csvFile, true);
                         while (csv.ReadNextRecord())
                         {
@@ -636,6 +760,7 @@ namespace GlyCounter
                             oxoIon.hcdCount = 0;
                             oxoIon.etdCount = 0;
                             oxoIon.uvpdCount = 0;
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                             oxoIon.peakDepth = arbitraryPeakDepthIfNotFound;
@@ -657,11 +782,19 @@ namespace GlyCounter
                             List<OxoniumIon> ionsToRemove = new List<OxoniumIon>();
                             foreach (OxoniumIon ion in glySettings.oxoniumIonHashSet)
 >>>>>>> Stashed changes
+=======
+                            oxoIon.peakDepth = glySettings.arbitraryPeakDepthIfNotFound;
+
+                            //If an oxonium ion with the same theoretical m/z value exists, replace it with the one from the custom csv
+                            List<OxoniumIon> ionsToRemove = new List<OxoniumIon>();
+                            foreach (OxoniumIon ion in glySettings.oxoniumIonHashSet)
+>>>>>>> Stashed changes
                             {
                                 if (ion.Equals(oxoIon))
                                     ionsToRemove.Add(ion);
                             }
                             foreach (OxoniumIon ion in ionsToRemove)
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                             {
@@ -689,10 +822,19 @@ namespace GlyCounter
                             if (oxoIon.theoMZ == 204.0867 || oxoIon.description == "HexNAc")
                                 glySettings.using204 = true;
 >>>>>>> Stashed changes
+=======
+                                glySettings.oxoniumIonHashSet.Remove(ion);
+
+                            glySettings.oxoniumIonHashSet.Add(oxoIon);
+
+                            if (oxoIon.theoMZ == 204.0867 || oxoIon.description == "HexNAc")
+                                glySettings.using204 = true;
+>>>>>>> Stashed changes
                         }
                     }
 
                     if (ipsaCheckBox.Checked)
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         ipsa = true;
@@ -726,12 +868,24 @@ namespace GlyCounter
                             oxoIon.intensity = 0;
                             oxoIon.peakDepth = glySettings.arbitraryPeakDepthIfNotFound;
 >>>>>>> Stashed changes
+=======
+                        glySettings.ipsa = true;
+
+                    foreach (var fileName in glySettings.fileList)
+                    {
+                        //reset oxonium ions
+                        foreach (OxoniumIon oxoIon in glySettings.oxoniumIonHashSet)
+                        {
+                            oxoIon.intensity = 0;
+                            oxoIon.peakDepth = glySettings.arbitraryPeakDepthIfNotFound;
+>>>>>>> Stashed changes
                             oxoIon.hcdCount = 0;
                             oxoIon.etdCount = 0;
                             oxoIon.uvpdCount = 0;
                             oxoIon.measuredMZ = 0;
                         }
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         FileReader rawFile = new FileReader(fileName);
@@ -769,6 +923,16 @@ namespace GlyCounter
                             StatusLabel.Text = "Current file: " + fileName;
 
 >>>>>>> Stashed changes
+=======
+                        if (StatusLabel.InvokeRequired)
+                        {
+                            StatusLabel.Invoke(new Action(() => StatusLabel.Text = "Current file: " + fileName));
+                        }
+                        else
+                        {
+                            StatusLabel.Text = "Current file: " + fileName;
+
+>>>>>>> Stashed changes
                         }
 
                         if (FinishTimeLabel.InvokeRequired)
@@ -782,6 +946,7 @@ namespace GlyCounter
                         }
 
                         //set vars
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                         int numberOfMS2scansWithOxo_1 = 0;
@@ -843,15 +1008,32 @@ namespace GlyCounter
                         StreamWriter outputOxo = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoSignal.txt"));
                         StreamWriter outputPeakDepth = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoPeakDepth.txt"));
 >>>>>>> Stashed changes
+=======
+                        RawFileInfo rawFileInfo = new RawFileInfo
+                        {
+                            halfTotalList = (double)glySettings.oxoniumIonHashSet.Count / 2.0
+                        };
+
+                        //initialize streamwriter output files
+                        string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
+                        StreamWriter outputOxo = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoSignal.txt"));
+                        StreamWriter outputPeakDepth = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoPeakDepth.txt"));
+>>>>>>> Stashed changes
                         StreamWriter outputIPSA = null;
 
                         if (ipsaCheckBox.Checked)
                         {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                             outputIPSA = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_Glycounter_IPSA.txt"));
                         }
                         StreamWriter outputSummary = new StreamWriter(Path.Combine(outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt"));
+=======
+                            outputIPSA = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_Glycounter_IPSA.txt"));
+                        }
+                        StreamWriter outputSummary = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt"));
+>>>>>>> Stashed changes
 =======
                             outputIPSA = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_Glycounter_IPSA.txt"));
                         }
@@ -869,8 +1051,13 @@ namespace GlyCounter
                         outputIPSA?.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + SNthreshold + ", IntensityThreshold=" + intensityThreshold + ", PeakDepthThreshold_HCD=" + peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + peakDepthThreshold_uvpd
                                                 + ", TICfraction_HCD=" + oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + oxoTICfractionThreshold_uvpd);
+=======
+                        outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
+                                                + ", TICfraction_HCD=" + glySettings.oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + glySettings.oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + glySettings.oxoTICfractionThreshold_uvpd);
+>>>>>>> Stashed changes
 =======
                         outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
                                                 + ", TICfraction_HCD=" + glySettings.oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + glySettings.oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + glySettings.oxoTICfractionThreshold_uvpd);
@@ -886,6 +1073,7 @@ namespace GlyCounter
                         object output = new object();
                         if (fileName.EndsWith(".d"))
                         {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                             SpectrumEx spectrum = rawFile.ReadSpectrumEx(scanNumber: i);
@@ -1239,12 +1427,17 @@ namespace GlyCounter
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                             output = ProcessTimsTOF.processTimsTOF(fileName, glySettings, rawFileInfo); //TODO fix this and figure out what type should be output
                         }
                         else
                         {
                             output = ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo); //TODO same as above
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -1281,7 +1474,11 @@ namespace GlyCounter
                         string currentGlycanSource = "";
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         foreach (OxoniumIon oxoIon in oxoniumIonHashSet)
+=======
+                        foreach (OxoniumIon oxoIon in glySettings.oxoniumIonHashSet)
+>>>>>>> Stashed changes
 =======
                         foreach (OxoniumIon oxoIon in glySettings.oxoniumIonHashSet)
 >>>>>>> Stashed changes
