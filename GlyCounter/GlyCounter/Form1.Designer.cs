@@ -206,7 +206,7 @@ namespace GlyCounter
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(893, 25);
             textBox1.TabIndex = 0;
-            textBox1.Text = "Upload .raw or .mzML files";
+            textBox1.Text = "Upload .raw, .mzML, or .d files";
             // 
             // browseButton
             // 
