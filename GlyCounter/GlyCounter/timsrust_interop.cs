@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nova.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,5 +37,7 @@ namespace GlyCounter
         public byte ms_level { get; set; }
         public string id { get; set; }
         public float[] intensity { get; set; }
+        public List<SpecDataPointEx> peaks { get; set; } = [];
     }
+
 }

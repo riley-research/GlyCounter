@@ -41,7 +41,7 @@ namespace GlyCounter
                 // Log the failure and create a disabled manager
                 Debug.WriteLine($"Failed to initialize Velopack UpdateManager: {ex}");
                 // Create a disabled manager by explicitly casting null to the IUpdateSource interface
-                _updateManager = new Velopack.UpdateManager((Velopack.Sources.IUpdateSource?)null);
+                _updateManager = new Velopack.UpdateManager((IUpdateSource?)null);
             }
         }
 
@@ -140,6 +140,28 @@ namespace GlyCounter
                 if (!silent)
                 {
                     MessageBox.Show(errorMessage, errorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+    }
+
+    public partial class Form1 : Form
+    {
+        private async void CheckForUpdatesAsync(bool silent = false)
+        {
+            try
+            {
+                // Call the method in your GlyCounter.UpdateManager class
+                await _updateManager.CheckForUpdatesAsync(silent);
+            }
+            catch (Exception ex)
+            {
+                // Optional: Log or show error if the check itself fails unexpectedly
+                Debug.WriteLine($"Error during update check process: {ex}");
+                if (!silent)
+                {
+                    MessageBox.Show($"Failed to initiate update check: {ex.Message}",
+                                    "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GlyCounter
 {
-    internal class Yion
+    public class Yion
     {
         public double theoMass { get; set; }
         public string description { get; set; }
