@@ -1,4 +1,6 @@
-﻿namespace GlyCounter
+﻿using System.Globalization;
+
+namespace GlyCounter
 {
     public class Ion : IEquatable<Ion>
     {
@@ -28,5 +30,23 @@
         {
             return theoMZ.GetHashCode();
         }
+
+        public static Ion ProcessIon(object item, string source, GlyCounterSettings glySettings)
+        {
+            string[] ionArray = item.ToString().Split(',');
+            Ion ion = new Ion
+            {
+                theoMZ = Convert.ToDouble(ionArray[0], CultureInfo.InvariantCulture), 
+                description = item.ToString(),
+                ionSource = source,
+                hcdCount = 0,
+                etdCount = 0,
+                uvpdCount = 0,
+                peakDepth = glySettings.arbitraryPeakDepthIfNotFound,
+            };
+
+            return ion;
+        }
+
     }
 }

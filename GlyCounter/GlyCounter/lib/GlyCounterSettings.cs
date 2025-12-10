@@ -57,4 +57,10 @@ namespace GlyCounter
         public bool firstIsotope { get; set; } = false;
         public bool secondIsotope { get; set; } = false;
     }
+
+    public class iCounterSettings
+    {
+        public HashSet<Ion> _ionHashSet { get; set; } = [];
+        public double singleIonMz { get; set; }
+    }
 }

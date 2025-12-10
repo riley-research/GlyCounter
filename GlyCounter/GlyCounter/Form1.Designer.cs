@@ -108,13 +108,13 @@ namespace GlyCounter
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
+            glyMSLevelsToSearchLabel = new Label();
             FileCounter = new Label();
             ClearFilesButton = new Button();
             Gly_AddFolderButton = new Button();
             Gly_Reset = new Button();
             ignoreMSLevelCB = new CheckBox();
             label3 = new Label();
-            label2 = new Label();
             MSLevelUB = new NumericUpDown();
             MSLevelLB = new NumericUpDown();
             polarityCB = new CheckBox();
@@ -188,6 +188,9 @@ namespace GlyCounter
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
             tabPage1 = new TabPage();
+            iC_ClearFileButton = new Button();
+            iC_AddFolderButton = new Button();
+            iC_BrowseFileButton = new Button();
             iC_ipsaCB = new CheckBox();
             label21 = new Label();
             iC_msLevelHigh = new NumericUpDown();
@@ -229,8 +232,8 @@ namespace GlyCounter
             label2 = new Label();
             iC_clearButton = new Button();
             iC_uploadTB = new TextBox();
-            iC_uploadButton = new Button();
             timer2 = new System.Windows.Forms.Timer(components);
+            iC_FileCounter = new Label();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
@@ -759,13 +762,13 @@ namespace GlyCounter
             // 
             // GlyCounter_Tab
             // 
+            GlyCounter_Tab.Controls.Add(glyMSLevelsToSearchLabel);
             GlyCounter_Tab.Controls.Add(FileCounter);
             GlyCounter_Tab.Controls.Add(ClearFilesButton);
             GlyCounter_Tab.Controls.Add(Gly_AddFolderButton);
             GlyCounter_Tab.Controls.Add(Gly_Reset);
             GlyCounter_Tab.Controls.Add(ignoreMSLevelCB);
             GlyCounter_Tab.Controls.Add(label3);
-            GlyCounter_Tab.Controls.Add(label2);
             GlyCounter_Tab.Controls.Add(MSLevelUB);
             GlyCounter_Tab.Controls.Add(MSLevelLB);
             GlyCounter_Tab.Controls.Add(polarityCB);
@@ -839,6 +842,17 @@ namespace GlyCounter
             GlyCounter_Tab.Text = "Pre-ID";
             GlyCounter_Tab.UseVisualStyleBackColor = true;
             // 
+            // glyMSLevelsToSearchLabel
+            // 
+            glyMSLevelsToSearchLabel.AutoSize = true;
+            glyMSLevelsToSearchLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            glyMSLevelsToSearchLabel.Location = new Point(960, 574);
+            glyMSLevelsToSearchLabel.Margin = new Padding(4, 0, 4, 0);
+            glyMSLevelsToSearchLabel.Name = "glyMSLevelsToSearchLabel";
+            glyMSLevelsToSearchLabel.Size = new Size(126, 17);
+            glyMSLevelsToSearchLabel.TabIndex = 126;
+            glyMSLevelsToSearchLabel.Text = "MS levels to search";
+            // 
             // FileCounter
             // 
             FileCounter.AutoSize = true;
@@ -899,15 +913,6 @@ namespace GlyCounter
             label3.Size = new Size(18, 15);
             label3.TabIndex = 74;
             label3.Text = "to";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(962, 576);
-            label2.Name = "label2";
-            label2.Size = new Size(111, 15);
-            label2.TabIndex = 73;
-            label2.Text = "MS Levels to Search";
             // 
             // MSLevelUB
             // 
@@ -1055,7 +1060,7 @@ namespace GlyCounter
             label1.Font = new Font("Segoe UI", 8F);
             label1.Location = new Point(986, 180);
             label1.Name = "label1";
-            label1.Size = new Size(208, 13);
+            label1.Size = new Size(161, 13);
             label1.TabIndex = 57;
             label1.Text = "used if data does not have SN";
             // 
@@ -1241,7 +1246,6 @@ namespace GlyCounter
             UpperBoundTextBox.Size = new Size(79, 23);
             UpperBoundTextBox.TabIndex = 73;
             UpperBoundTextBox.Text = "P";
-            UpperBoundTextBox.TextChanged += UpperBoundTextBox_TextChanged;
             // 
             // LowerBoundTextBox
             // 
@@ -1250,7 +1254,6 @@ namespace GlyCounter
             LowerBoundTextBox.Size = new Size(79, 23);
             LowerBoundTextBox.TabIndex = 72;
             LowerBoundTextBox.Text = "1";
-            LowerBoundTextBox.TextChanged += LowerBoundTextBox_TextChanged;
             // 
             // panel1
             // 
@@ -1666,6 +1669,10 @@ namespace GlyCounter
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(iC_FileCounter);
+            tabPage1.Controls.Add(iC_ClearFileButton);
+            tabPage1.Controls.Add(iC_AddFolderButton);
+            tabPage1.Controls.Add(iC_BrowseFileButton);
             tabPage1.Controls.Add(iC_ipsaCB);
             tabPage1.Controls.Add(label21);
             tabPage1.Controls.Add(iC_msLevelHigh);
@@ -1707,7 +1714,6 @@ namespace GlyCounter
             tabPage1.Controls.Add(label2);
             tabPage1.Controls.Add(iC_clearButton);
             tabPage1.Controls.Add(iC_uploadTB);
-            tabPage1.Controls.Add(iC_uploadButton);
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
@@ -1715,6 +1721,39 @@ namespace GlyCounter
             tabPage1.TabIndex = 2;
             tabPage1.Text = "iCounter";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // iC_ClearFileButton
+            // 
+            iC_ClearFileButton.Location = new Point(1101, 6);
+            iC_ClearFileButton.Margin = new Padding(4, 3, 4, 3);
+            iC_ClearFileButton.Name = "iC_ClearFileButton";
+            iC_ClearFileButton.Size = new Size(88, 25);
+            iC_ClearFileButton.TabIndex = 134;
+            iC_ClearFileButton.Text = "Clear Files";
+            iC_ClearFileButton.UseVisualStyleBackColor = true;
+            iC_ClearFileButton.Click += ClearFiles_Click;
+            // 
+            // iC_AddFolderButton
+            // 
+            iC_AddFolderButton.Location = new Point(1008, 6);
+            iC_AddFolderButton.Margin = new Padding(4, 3, 4, 3);
+            iC_AddFolderButton.Name = "iC_AddFolderButton";
+            iC_AddFolderButton.Size = new Size(88, 25);
+            iC_AddFolderButton.TabIndex = 133;
+            iC_AddFolderButton.Text = "Add Folder";
+            iC_AddFolderButton.UseVisualStyleBackColor = true;
+            iC_AddFolderButton.Click += ButtonAddFolder_Click;
+            // 
+            // iC_BrowseFileButton
+            // 
+            iC_BrowseFileButton.Location = new Point(912, 6);
+            iC_BrowseFileButton.Margin = new Padding(4, 3, 4, 3);
+            iC_BrowseFileButton.Name = "iC_BrowseFileButton";
+            iC_BrowseFileButton.Size = new Size(88, 25);
+            iC_BrowseFileButton.TabIndex = 132;
+            iC_BrowseFileButton.Text = "Browse";
+            iC_BrowseFileButton.UseVisualStyleBackColor = true;
+            iC_BrowseFileButton.Click += Button1_Click;
             // 
             // iC_ipsaCB
             // 
@@ -1789,7 +1828,7 @@ namespace GlyCounter
             iC_outputButton.TabIndex = 122;
             iC_outputButton.Text = "Browse";
             iC_outputButton.UseVisualStyleBackColor = true;
-            iC_outputButton.Click += iC_outputButton_Click;
+            iC_outputButton.Click += Gly_outputButton_Click;
             // 
             // iC_outputTB
             // 
@@ -1798,7 +1837,6 @@ namespace GlyCounter
             iC_outputTB.Size = new Size(1085, 23);
             iC_outputTB.TabIndex = 121;
             iC_outputTB.Text = "Select output directory";
-            iC_outputTB.TextChanged += iC_outputTB_TextChanged;
             // 
             // label27
             // 
@@ -1826,7 +1864,6 @@ namespace GlyCounter
             iC_singleIonMZ.Name = "iC_singleIonMZ";
             iC_singleIonMZ.Size = new Size(99, 23);
             iC_singleIonMZ.TabIndex = 115;
-            iC_singleIonMZ.TextChanged += iC_singleIonMZ_TextChanged;
             // 
             // iC_singleIonDesc
             // 
@@ -1834,7 +1871,6 @@ namespace GlyCounter
             iC_singleIonDesc.Name = "iC_singleIonDesc";
             iC_singleIonDesc.Size = new Size(198, 23);
             iC_singleIonDesc.TabIndex = 114;
-            iC_singleIonDesc.TextChanged += iC_singleIonDesc_TextChanged;
             // 
             // label25
             // 
@@ -1921,7 +1957,7 @@ namespace GlyCounter
             iC_customIonUploadButton.TabIndex = 102;
             iC_customIonUploadButton.Text = "Browse";
             iC_customIonUploadButton.UseVisualStyleBackColor = true;
-            iC_customIonUploadButton.Click += iC_customIonUploadButton_Click;
+            iC_customIonUploadButton.Click += UploadCustomBrowseButton_Click;
             // 
             // iC_statusUpdatesLabel
             // 
@@ -1943,7 +1979,6 @@ namespace GlyCounter
             iC_customIonUploadTB.Size = new Size(1085, 25);
             iC_customIonUploadTB.TabIndex = 101;
             iC_customIonUploadTB.Text = "Upload custom ions here - csv with headers \"m/z\" and \"Description\"";
-            iC_customIonUploadTB.TextChanged += iC_customIonUploadTB_TextChanged;
             // 
             // iC_finishTimeLabel
             // 
@@ -2132,24 +2167,22 @@ namespace GlyCounter
             // 
             // iC_uploadTB
             // 
-            iC_uploadTB.Location = new Point(9, 19);
+            iC_uploadTB.Location = new Point(9, 6);
             iC_uploadTB.Margin = new Padding(4, 3, 4, 3);
             iC_uploadTB.Multiline = true;
             iC_uploadTB.Name = "iC_uploadTB";
-            iC_uploadTB.Size = new Size(1085, 25);
+            iC_uploadTB.Size = new Size(896, 25);
             iC_uploadTB.TabIndex = 6;
             iC_uploadTB.Text = "Upload .raw or .mzML Files Here";
             // 
-            // iC_uploadButton
+            // iC_FileCounter
             // 
-            iC_uploadButton.Location = new Point(1102, 19);
-            iC_uploadButton.Margin = new Padding(4, 3, 4, 3);
-            iC_uploadButton.Name = "iC_uploadButton";
-            iC_uploadButton.Size = new Size(88, 25);
-            iC_uploadButton.TabIndex = 7;
-            iC_uploadButton.Text = "Browse";
-            iC_uploadButton.UseVisualStyleBackColor = true;
-            iC_uploadButton.Click += iC_uploadButton_Click;
+            iC_FileCounter.AutoSize = true;
+            iC_FileCounter.Location = new Point(25, 32);
+            iC_FileCounter.Name = "iC_FileCounter";
+            iC_FileCounter.Size = new Size(125, 15);
+            iC_FileCounter.TabIndex = 135;
+            iC_FileCounter.Text = "Total Files Uploaded: 0";
             // 
             // Form1
             // 
@@ -2299,7 +2332,6 @@ namespace GlyCounter
         private TabPage tabPage1;
         private Button iC_clearButton;
         private TextBox iC_uploadTB;
-        private Button iC_uploadButton;
         private CheckBox iC_daCB;
         private Label label7;
         private Label label8;
@@ -2356,7 +2388,7 @@ namespace GlyCounter
         private NumericUpDown iC_msLevelHigh;
         private CheckBox iC_ipsaCB;
         private Label label3;
-        private Label label2;
+        private Label iC_TMT;
         private NumericUpDown MSLevelUB;
         private NumericUpDown MSLevelLB;
         private CheckBox polarityCB;
@@ -2368,5 +2400,10 @@ namespace GlyCounter
         private Button Gly_AddFolderButton;
         private Button ClearFilesButton;
         private Label FileCounter;
+        private Label glyMSLevelsToSearchLabel;
+        private Button iC_ClearFileButton;
+        private Button iC_AddFolderButton;
+        private Button iC_BrowseFileButton;
+        private Label iC_FileCounter;
     }
 }

@@ -11,10 +11,12 @@ namespace GlyCounter
 {
     public partial class Form1
     {
+        //All buttons are used for both GlyCounter and iCounter since they share the same file list
         public void ClearFiles_Click(object sender, EventArgs e)
         {
             glySettings.fileList = new ObservableCollection<string>();
             textBox1.Text = "Cleared Files";
+            iC_uploadTB.Text = "Cleared Files";
         }
         public void Button1_Click(object sender, EventArgs e)
         {
@@ -38,6 +40,7 @@ namespace GlyCounter
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
                 textBox1.Text = "Successfully uploaded " + fdlg.FileNames.Count() + " file(s)";
+                iC_uploadTB.Text = "Successfully uploaded " + fdlg.FileNames.Count() + " file(s)";
 
                 //set the most recent folder to the path of the last file selected
                 Properties.Settings1.Default.LastOpenFolder = Path.GetDirectoryName(fdlg.FileNames.LastOrDefault());
@@ -77,6 +80,7 @@ namespace GlyCounter
                     {
                         glySettings.fileList.Add(selected);
                         textBox1.Text = $"Added folder: {selected.Split('\\').Last()}";
+                        iC_uploadTB.Text = $"Added folder: {selected.Split('\\').Last()}";
                     }
                     else
                     {
@@ -86,6 +90,7 @@ namespace GlyCounter
                         foreach (var f in files) glySettings.fileList.Add(f);
 
                         textBox1.Text = $"Added {files.Count()} file(s) from folder";
+                        iC_uploadTB.Text = $"Added {files.Count()} file(s) from folder";
                     }
 
                     Properties.Settings1.Default.LastOpenFolder = selected;
@@ -114,6 +119,7 @@ namespace GlyCounter
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     Gly_outputTextBox.Text = dialog.SelectedPath;
+                    iC_outputTB.Text = dialog.SelectedPath;
                     Properties.Settings1.Default.LastOpenFolder = Path.GetDirectoryName(dialog.SelectedPath);
                     Properties.Settings1.Default.Save();
                 }
@@ -123,6 +129,7 @@ namespace GlyCounter
         private void FileList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             FileCounter.Text = "Total Files Uploaded: " + glySettings.fileList.Count;
+            iC_FileCounter.Text = "Total Files Uploaded: " + glySettings.fileList.Count;
         }
 
         //set up upload custom oxonium ions
@@ -144,6 +151,7 @@ namespace GlyCounter
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
                 uploadCustomTextBox.Text = fdlg.FileName;
+                iC_customIonUploadTB.Text = fdlg.FileName;
                 glySettings.csvCustomFile = fdlg.FileName;
 
                 Properties.Settings1.Default.LastOpenFolder = Path.GetDirectoryName(fdlg.FileName);
@@ -151,6 +159,7 @@ namespace GlyCounter
             }
         }
 
+        //drag and drop works for GlyCounter and iCounter, not for Ynaught (Ynaught is only a single file upload so we shouldn't need it)
         private void Form1_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -198,6 +207,7 @@ namespace GlyCounter
             if (added > 0)
             {
                 textBox1.Text = $"Added {added} item(s) via drag-and-drop";
+                iC_uploadTB.Text = $"Added {added} item(s) via drag-and-drop";
                 // Update last folder
                 var first = paths.First();
                 Properties.Settings1.Default.LastOpenFolder = Directory.Exists(first) ? first : Path.GetDirectoryName(first);
