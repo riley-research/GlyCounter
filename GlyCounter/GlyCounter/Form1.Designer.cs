@@ -108,6 +108,10 @@ namespace GlyCounter
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
+            FileCounter = new Label();
+            ClearFilesButton = new Button();
+            Gly_AddFolderButton = new Button();
+            Gly_Reset = new Button();
             ignoreMSLevelCB = new CheckBox();
             label3 = new Label();
             label2 = new Label();
@@ -129,6 +133,7 @@ namespace GlyCounter
             intensityThresholdLabel = new Label();
             intensityThresholdTextBox = new TextBox();
             YnaughtTab = new TabPage();
+            Yn_reset = new Button();
             Ynaught_intLabel = new Label();
             Ynaught_intTextBox = new TextBox();
             Ynaught_outputButton = new Button();
@@ -242,24 +247,24 @@ namespace GlyCounter
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(16, 18);
+            textBox1.Location = new Point(16, 6);
             textBox1.Margin = new Padding(4, 3, 4, 3);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(1085, 25);
+            textBox1.Size = new Size(893, 25);
             textBox1.TabIndex = 0;
-            textBox1.Text = "Upload .raw or .mzML files";
+            textBox1.Text = "Upload .raw, .mzML, or .d files";
             // 
             // browseButton
             // 
-            browseButton.Location = new Point(1109, 18);
+            browseButton.Location = new Point(917, 6);
             browseButton.Margin = new Padding(4, 3, 4, 3);
             browseButton.Name = "browseButton";
             browseButton.Size = new Size(88, 25);
             browseButton.TabIndex = 3;
             browseButton.Text = "Browse";
             browseButton.UseVisualStyleBackColor = true;
-            browseButton.Click += button1_Click;
+            browseButton.Click += Button1_Click;
             // 
             // HexNAcCheckedListBox
             // 
@@ -270,7 +275,6 @@ namespace GlyCounter
             HexNAcCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             HexNAcCheckedListBox.Name = "HexNAcCheckedListBox";
             HexNAcCheckedListBox.Size = new Size(276, 130);
-            HexNAcCheckedListBox.Items.AddRange(HexNAcPos);
             HexNAcCheckedListBox.TabIndex = 1;
             HexNAcCheckedListBox.SelectedIndexChanged += HexNAcCheckedListBox_SelectedIndexChanged;
             // 
@@ -282,7 +286,6 @@ namespace GlyCounter
             HexCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             HexCheckedListBox.Name = "HexCheckedListBox";
             HexCheckedListBox.Size = new Size(276, 94);
-            HexCheckedListBox.Items.AddRange(HexPos);
             HexCheckedListBox.TabIndex = 4;
             HexCheckedListBox.SelectedIndexChanged += HexCheckedListBox_SelectedIndexChanged;
             // 
@@ -294,7 +297,6 @@ namespace GlyCounter
             SialicAcidCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             SialicAcidCheckedListBox.Name = "SialicAcidCheckedListBox";
             SialicAcidCheckedListBox.Size = new Size(278, 130);
-            SialicAcidCheckedListBox.Items.AddRange(SialicPos);
             SialicAcidCheckedListBox.TabIndex = 2;
             SialicAcidCheckedListBox.SelectedIndexChanged += SialicAcidCheckedListBox_SelectedIndexChanged;
             // 
@@ -306,7 +308,6 @@ namespace GlyCounter
             OligosaccharideCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             OligosaccharideCheckedListBox.Name = "OligosaccharideCheckedListBox";
             OligosaccharideCheckedListBox.Size = new Size(278, 346);
-            OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
             OligosaccharideCheckedListBox.TabIndex = 3;
             OligosaccharideCheckedListBox.SelectedIndexChanged += OligosaccharideCheckedListBox_SelectedIndexChanged;
             // 
@@ -362,7 +363,6 @@ namespace GlyCounter
             M6PCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             M6PCheckedListBox.Name = "M6PCheckedListBox";
             M6PCheckedListBox.Size = new Size(276, 40);
-            M6PCheckedListBox.Items.AddRange(ManPos);
             M6PCheckedListBox.TabIndex = 5;
             M6PCheckedListBox.SelectedIndexChanged += M6PCheckedListBox_SelectedIndexChanged;
             // 
@@ -476,10 +476,10 @@ namespace GlyCounter
             // 
             // CheckAll_Oligo_Button
             // 
-            CheckAll_Oligo_Button.Location = new Point(755, 116);
+            CheckAll_Oligo_Button.Location = new Point(776, 116);
             CheckAll_Oligo_Button.Margin = new Padding(2);
             CheckAll_Oligo_Button.Name = "CheckAll_Oligo_Button";
-            CheckAll_Oligo_Button.Size = new Size(142, 36);
+            CheckAll_Oligo_Button.Size = new Size(121, 36);
             CheckAll_Oligo_Button.TabIndex = 27;
             CheckAll_Oligo_Button.Text = "Check all Oligo ions";
             CheckAll_Oligo_Button.UseVisualStyleBackColor = true;
@@ -621,7 +621,6 @@ namespace GlyCounter
             FucoseCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             FucoseCheckedListBox.Name = "FucoseCheckedListBox";
             FucoseCheckedListBox.Size = new Size(278, 94);
-            FucoseCheckedListBox.Items.AddRange(FucosePos);
             FucoseCheckedListBox.TabIndex = 41;
             FucoseCheckedListBox.SelectedIndexChanged += FucoseCheckedListBox_SelectedIndexChanged;
             // 
@@ -687,18 +686,17 @@ namespace GlyCounter
             // 
             // uploadCustomTextBox
             // 
-            uploadCustomTextBox.Location = new Point(16, 663);
+            uploadCustomTextBox.Location = new Point(16, 656);
             uploadCustomTextBox.Margin = new Padding(4, 3, 4, 3);
             uploadCustomTextBox.Multiline = true;
             uploadCustomTextBox.Name = "uploadCustomTextBox";
             uploadCustomTextBox.Size = new Size(1085, 25);
             uploadCustomTextBox.TabIndex = 48;
             uploadCustomTextBox.Text = "Upload custom ions here - csv with headers \"m/z\" and \"Description\"";
-            uploadCustomTextBox.TextChanged += uploadCustomTextBox_TextChanged_1;
             // 
             // UploadCustomBrowseButton
             // 
-            UploadCustomBrowseButton.Location = new Point(1106, 663);
+            UploadCustomBrowseButton.Location = new Point(1106, 656);
             UploadCustomBrowseButton.Margin = new Padding(4, 3, 4, 3);
             UploadCustomBrowseButton.Name = "UploadCustomBrowseButton";
             UploadCustomBrowseButton.Size = new Size(88, 25);
@@ -761,6 +759,10 @@ namespace GlyCounter
             // 
             // GlyCounter_Tab
             // 
+            GlyCounter_Tab.Controls.Add(FileCounter);
+            GlyCounter_Tab.Controls.Add(ClearFilesButton);
+            GlyCounter_Tab.Controls.Add(Gly_AddFolderButton);
+            GlyCounter_Tab.Controls.Add(Gly_Reset);
             GlyCounter_Tab.Controls.Add(ignoreMSLevelCB);
             GlyCounter_Tab.Controls.Add(label3);
             GlyCounter_Tab.Controls.Add(label2);
@@ -836,6 +838,48 @@ namespace GlyCounter
             GlyCounter_Tab.TabIndex = 0;
             GlyCounter_Tab.Text = "Pre-ID";
             GlyCounter_Tab.UseVisualStyleBackColor = true;
+            // 
+            // FileCounter
+            // 
+            FileCounter.AutoSize = true;
+            FileCounter.Location = new Point(35, 32);
+            FileCounter.Name = "FileCounter";
+            FileCounter.Size = new Size(125, 15);
+            FileCounter.TabIndex = 79;
+            FileCounter.Text = "Total Files Uploaded: 0";
+            // 
+            // ClearFilesButton
+            // 
+            ClearFilesButton.Location = new Point(1106, 6);
+            ClearFilesButton.Margin = new Padding(4, 3, 4, 3);
+            ClearFilesButton.Name = "ClearFilesButton";
+            ClearFilesButton.Size = new Size(88, 25);
+            ClearFilesButton.TabIndex = 78;
+            ClearFilesButton.Text = "Clear Files";
+            ClearFilesButton.UseVisualStyleBackColor = true;
+            ClearFilesButton.Click += ClearFiles_Click;
+            // 
+            // Gly_AddFolderButton
+            // 
+            Gly_AddFolderButton.Location = new Point(1013, 6);
+            Gly_AddFolderButton.Margin = new Padding(4, 3, 4, 3);
+            Gly_AddFolderButton.Name = "Gly_AddFolderButton";
+            Gly_AddFolderButton.Size = new Size(88, 25);
+            Gly_AddFolderButton.TabIndex = 77;
+            Gly_AddFolderButton.Text = "Add Folder";
+            Gly_AddFolderButton.UseVisualStyleBackColor = true;
+            Gly_AddFolderButton.Click += ButtonAddFolder_Click;
+            // 
+            // Gly_Reset
+            // 
+            Gly_Reset.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Gly_Reset.Location = new Point(0, 685);
+            Gly_Reset.Name = "Gly_Reset";
+            Gly_Reset.Size = new Size(114, 23);
+            Gly_Reset.TabIndex = 76;
+            Gly_Reset.Text = "Restart GlyCounter";
+            Gly_Reset.UseVisualStyleBackColor = true;
+            Gly_Reset.Click += Gly_Reset_Click;
             // 
             // ignoreMSLevelCB
             // 
@@ -1008,16 +1052,17 @@ namespace GlyCounter
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(981, 175);
+            label1.Font = new Font("Segoe UI", 8F);
+            label1.Location = new Point(986, 180);
             label1.Name = "label1";
-            label1.Size = new Size(163, 15);
+            label1.Size = new Size(208, 13);
             label1.TabIndex = 57;
             label1.Text = "used if data does not have SN";
             // 
             // intensityThresholdLabel
             // 
             intensityThresholdLabel.AutoSize = true;
-            intensityThresholdLabel.Location = new Point(982, 160);
+            intensityThresholdLabel.Location = new Point(986, 165);
             intensityThresholdLabel.Name = "intensityThresholdLabel";
             intensityThresholdLabel.Size = new Size(108, 15);
             intensityThresholdLabel.TabIndex = 56;
@@ -1033,6 +1078,7 @@ namespace GlyCounter
             // 
             // YnaughtTab
             // 
+            YnaughtTab.Controls.Add(Yn_reset);
             YnaughtTab.Controls.Add(Ynaught_intLabel);
             YnaughtTab.Controls.Add(Ynaught_intTextBox);
             YnaughtTab.Controls.Add(Ynaught_outputButton);
@@ -1091,6 +1137,17 @@ namespace GlyCounter
             YnaughtTab.TabIndex = 1;
             YnaughtTab.Text = "Ynaught";
             YnaughtTab.UseVisualStyleBackColor = true;
+            // 
+            // Yn_reset
+            // 
+            Yn_reset.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Yn_reset.Location = new Point(0, 685);
+            Yn_reset.Name = "Yn_reset";
+            Yn_reset.Size = new Size(112, 23);
+            Yn_reset.TabIndex = 83;
+            Yn_reset.Text = "Restart GlyCounter";
+            Yn_reset.UseVisualStyleBackColor = true;
+            Yn_reset.Click += Yn_reset_Click;
             // 
             // Ynaught_intLabel
             // 
@@ -1476,7 +1533,7 @@ namespace GlyCounter
             // 
             // BrowseCustomSubtractions_Button
             // 
-            BrowseCustomSubtractions_Button.Location = new Point(1095, 674);
+            BrowseCustomSubtractions_Button.Location = new Point(1092, 659);
             BrowseCustomSubtractions_Button.Name = "BrowseCustomSubtractions_Button";
             BrowseCustomSubtractions_Button.Size = new Size(90, 23);
             BrowseCustomSubtractions_Button.TabIndex = 13;
@@ -1486,7 +1543,7 @@ namespace GlyCounter
             // 
             // BrowseCustomAdditions_Button
             // 
-            BrowseCustomAdditions_Button.Location = new Point(1095, 644);
+            BrowseCustomAdditions_Button.Location = new Point(1092, 631);
             BrowseCustomAdditions_Button.Name = "BrowseCustomAdditions_Button";
             BrowseCustomAdditions_Button.Size = new Size(90, 23);
             BrowseCustomAdditions_Button.TabIndex = 12;
@@ -1496,21 +1553,19 @@ namespace GlyCounter
             // 
             // Ynaught_CustomSubtractions_TextBox
             // 
-            Ynaught_CustomSubtractions_TextBox.Location = new Point(15, 674);
+            Ynaught_CustomSubtractions_TextBox.Location = new Point(15, 660);
             Ynaught_CustomSubtractions_TextBox.Name = "Ynaught_CustomSubtractions_TextBox";
             Ynaught_CustomSubtractions_TextBox.Size = new Size(1074, 23);
             Ynaught_CustomSubtractions_TextBox.TabIndex = 11;
             Ynaught_CustomSubtractions_TextBox.Text = "(Optional) Upload custom Y-ion masses to subtract from intact glycopeptide mass here: csv with headers \"Mass\" and \"Description\"";
-            Ynaught_CustomSubtractions_TextBox.TextChanged += Ynaught_CustomSubtractions_TextBox_TextChanged;
             // 
             // Ynaught_CustomAdditions_TextBox
             // 
-            Ynaught_CustomAdditions_TextBox.Location = new Point(15, 645);
+            Ynaught_CustomAdditions_TextBox.Location = new Point(15, 631);
             Ynaught_CustomAdditions_TextBox.Name = "Ynaught_CustomAdditions_TextBox";
             Ynaught_CustomAdditions_TextBox.Size = new Size(1074, 23);
             Ynaught_CustomAdditions_TextBox.TabIndex = 10;
             Ynaught_CustomAdditions_TextBox.Text = "(Optional) Upload custom Y-ion masses to add to unmodified peptide mass here: csv with headers \"Mass\" and \"Description\"";
-            Ynaught_CustomAdditions_TextBox.TextChanged += Ynaught_CustomAdditions_TextBox_TextChanged;
             // 
             // LoadInGlycoPepRawFile_TextBox
             // 
@@ -1519,7 +1574,6 @@ namespace GlyCounter
             LoadInGlycoPepRawFile_TextBox.Size = new Size(1074, 23);
             LoadInGlycoPepRawFile_TextBox.TabIndex = 9;
             LoadInGlycoPepRawFile_TextBox.Text = "Upload .raw or .mzML file here";
-            LoadInGlycoPepRawFile_TextBox.TextChanged += LoadInGlycoPepRawFile_TextBox_TextChanged;
             // 
             // BrowseGlycoPepRawFiles_Button
             // 
@@ -1609,7 +1663,6 @@ namespace GlyCounter
             LoadInGlycoPepIDs_TextBox.Size = new Size(1074, 23);
             LoadInGlycoPepIDs_TextBox.TabIndex = 0;
             LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Charge\", and \"Total Glycan Composition\"";
-            LoadInGlycoPepIDs_TextBox.TextChanged += LoadInGlycoPepIDs_TextBox_TextChanged;
             // 
             // tabPage1
             // 
@@ -2100,14 +2153,18 @@ namespace GlyCounter
             // 
             // Form1
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             ClientSize = new Size(1233, 758);
             Controls.Add(GlyCounter_AllTabs);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 3, 4, 3);
             Name = "Form1";
             Text = "RRG GlyCounter";
+            DragDrop += Form1_DragDrop;
+            DragEnter += Form1_DragEnter;
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).EndInit();
             GlyCounter_AllTabs.ResumeLayout(false);
             GlyCounter_Tab.ResumeLayout(false);
@@ -2183,7 +2240,6 @@ namespace GlyCounter
         private System.Windows.Forms.Button UploadCustomBrowseButton;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label StatusLabel;
-        private System.Windows.Forms.Label FinishTimeLabel;
         private Label StartTimeLabel;
         private PictureBox GlyCounterLogo;
         private TabControl GlyCounter_AllTabs;
@@ -2223,7 +2279,6 @@ namespace GlyCounter
         private Label Ynaught_SNlabel;
         private TextBox Ynaught_SNthresholdTextBox;
         private Label NeutralLosses_Label;
-        private Label Ynaught_FinishTimeLabel;
         private Label Ynaught_startTimeLabel;
         private Button Ynaught_StartButton;
         private System.Windows.Forms.Timer timer2;
@@ -2306,5 +2361,12 @@ namespace GlyCounter
         private NumericUpDown MSLevelLB;
         private CheckBox polarityCB;
         private CheckBox ignoreMSLevelCB;
+        private Button Gly_Reset;
+        private Button Yn_reset;
+        private Label FinishTimeLabel;
+        private Label Ynaught_FinishTimeLabel;
+        private Button Gly_AddFolderButton;
+        private Button ClearFilesButton;
+        private Label FileCounter;
     }
 }

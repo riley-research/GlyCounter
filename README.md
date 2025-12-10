@@ -17,6 +17,7 @@
   - [Variables](#variables-1)
 - [Example Files](#example-files)
 - [Release Process](#release-process)
+- [Additional Information](#additional-information)
 
 ## Download Instructions
 
@@ -28,9 +29,14 @@ The GlyCounter solution can also be cloned to Visual Studio and run.
 
 The Pre-ID tab is heart of GlyCounter. Here you can pick common oxonium ions seen in glycopeptide MS/MS spectra, and GlyCounter will find them in your raw data. You can also upload csv file with additional or custom ions to be considered, and scan settings are customizable per dissociation method (see below for more details). This allows you to understand what your glycoproteomics data is telling you before you ever have to decided what search algorithm to use. GlyCounter can be useful for many steps in a glycoproteomics experiment, including quick evaluations of sample prep or instrument conditions, what glycan database you might want to use for searching your data, or how to better understand what identifications your search algorithm produces. GlyCounter is designed to provide flexibility, so there are several settings you can control as the user to best understand your data.
 
+If GlyCounter is useful for your project, please cite Kothlow, K.; Schramm, H. M.; Markuson, K. A.; Russell, J. H.; Sutherland, E.; Veth, T. S.; Zhang, R.; Duboff, A. G.; Tejus, V. R.; McDermott, L. E.; Dräger, L. S.; Riley, N. M. Extracting Informative Glycan-Specific Ions from Glycopeptide MS/MS Spectra with GlyCounter. Molecular & Cellular Proteomics 2025, 24 (12), 101085–101085. https://doi.org/10.1016/j.mcpro.2025.101085.
+‌
+
+[Link to Manuscript](https://www.sciencedirect.com/science/article/pii/S1535947625001847)
+
 ### Selecting Files
 
-GlyCounter accepts .raw or .mzML files. The top browse box allows you to navigate to folders that contain your data. Choose one or more raw/mzml files that you'd like to process, and the text box should update to show how many files you've chosen. You can also drag and drop MS files to automatically upload them. GlyCounter creates individual outputs for each file, and will overwrite files if a different output directory is not chosen. The bottom browse box allows you to set your output directory, which is the folder where the GlyCounter results will be stored.
+GlyCounter accepts .raw or .mzML files as individual file uploads or timsTOF .d files as folder uploads. The top browse button allows you to navigate to folders that contain your data. Choose one or more files that you'd like to process, and the text should update to show how many files you've chosen. You can also drag and drop MS files to automatically upload them. GlyCounter creates individual outputs for each file, and will overwrite files if a different output directory is not chosen. The bottom browse button allows you to set your output directory, which is the folder where the GlyCounter results will be stored.
 
 ### Variables
 
@@ -38,7 +44,7 @@ GlyCounter accepts .raw or .mzML files. The top browse box allows you to navigat
 
 **Signal-to-Noise Requirement**: S/N ratio needed for oxonium ions
 
-**Intensity Threshold**: If S/N is not available in the file, an intensity threshold is used instead. This will always be the case for ion trap .raw files and all .mzML files.
+**Intensity Threshold**: If S/N is not available in the file, an intensity threshold is used instead. This will always be the case for ion trap .raw files, all .mzML files, and all .d files. (Note: for timsTOF files it is especially important that the intensity threshold is changed to an accurate value before running since the default is based off Orbitrap and ion trap intensity values)
 
 **Scan Settings - Peak Depth (Must be within N most intense peaks)**: number of peaks which are checked for the Oxonium Count Requirement
 
@@ -133,3 +139,9 @@ To create a new release of GlyCounter:
    ```
 
 3. The GitHub Actions workflow will automatically build and publish the release artifacts.
+
+## Additional Information
+
+TimsTOF notes: Some information that is available in .raw and .mzml files is not available in timsTOF files. Specifically, all scans are assumed to be CID (which is reported as HCD in the output files). There are no NCE values. There is also no functionality for choosing MS levels as it will always search MS2 scans.
+
+GlyCounter utilizes multiple file parsing tools. For .raw and .mzml files, the [Nova](https://github.com/SchweppeLab/Nova) NuGet package allows for parallel logic between the two file types. For timsTOF .d files, [timsRust](https://github.com/MannLabs/timsrust) was packaged into a C-parsable dll and accessed using a function similar to the MS2 reader in [Sage](https://github.com/lazear/sage).

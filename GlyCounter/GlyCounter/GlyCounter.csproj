@@ -31,18 +31,15 @@
   <ItemGroup>
     <PackageReference Include="LumenWorks.Framework.IO" Version="3.8.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageReference Include="Nova" Version="1.0.0.7" />
-    <PackageReference Include="Nova.IO" Version="1.0.0.7" />
+    <PackageReference Include="Nova" Version="1.0.0.13" />
+    <PackageReference Include="Nova.IO" Version="1.0.0.13" />
+    <PackageReference Include="PSI_Interface" Version="2.6.4" />
     
     <PackageReference Include="NuGet.Core" Version="2.14.0" /> 
     <PackageReference Include="NuGet.CommandLine" Version="6.7.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference> 
-    <PackageReference Include="ThermoFisher.CommonCore.BackgroundSubtraction" Version="8.0.6" /> 
-    <PackageReference Include="ThermoFisher.CommonCore.Data" Version="8.0.6" /> 
-    <PackageReference Include="ThermoFisher.CommonCore.MassPrecisionEstimator" Version="8.0.6" /> 
-    <PackageReference Include="ThermoFisher.CommonCore.RandomAccessReaderPlugin" Version="8.0.6" /> 
     <PackageReference Include="ThermoFisher.CommonCore.RawFileReader" Version="8.0.6" />
 
     <PackageReference Include="Velopack" Version="0.0.761" /> 
@@ -79,6 +76,9 @@
     <None Update="Properties\Settings1.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="timsrust.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
