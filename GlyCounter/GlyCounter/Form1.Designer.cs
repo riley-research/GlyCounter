@@ -188,6 +188,10 @@ namespace GlyCounter
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
             tabPage1 = new TabPage();
+            iC_biotinCLB = new CheckedListBox();
+            SelectAllBiotinButton = new Button();
+            iC_biotinLabel = new Label();
+            iC_FileCounter = new Label();
             iC_ClearFileButton = new Button();
             iC_AddFolderButton = new Button();
             iC_BrowseFileButton = new Button();
@@ -206,7 +210,7 @@ namespace GlyCounter
             label25 = new Label();
             iC_logo = new PictureBox();
             iC_miscIonsCBList = new CheckedListBox();
-            label24 = new Label();
+            iC_miscIonsLabel = new Label();
             iC_acylCBList = new CheckedListBox();
             iC_acylButton = new Button();
             label23 = new Label();
@@ -233,7 +237,6 @@ namespace GlyCounter
             iC_clearButton = new Button();
             iC_uploadTB = new TextBox();
             timer2 = new System.Windows.Forms.Timer(components);
-            iC_FileCounter = new Label();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
@@ -1669,6 +1672,9 @@ namespace GlyCounter
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(iC_biotinCLB);
+            tabPage1.Controls.Add(SelectAllBiotinButton);
+            tabPage1.Controls.Add(iC_biotinLabel);
             tabPage1.Controls.Add(iC_FileCounter);
             tabPage1.Controls.Add(iC_ClearFileButton);
             tabPage1.Controls.Add(iC_AddFolderButton);
@@ -1688,7 +1694,7 @@ namespace GlyCounter
             tabPage1.Controls.Add(label25);
             tabPage1.Controls.Add(iC_logo);
             tabPage1.Controls.Add(iC_miscIonsCBList);
-            tabPage1.Controls.Add(label24);
+            tabPage1.Controls.Add(iC_miscIonsLabel);
             tabPage1.Controls.Add(iC_acylCBList);
             tabPage1.Controls.Add(iC_acylButton);
             tabPage1.Controls.Add(label23);
@@ -1721,6 +1727,48 @@ namespace GlyCounter
             tabPage1.TabIndex = 2;
             tabPage1.Text = "iCounter";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // iC_biotinCLB
+            // 
+            iC_biotinCLB.CheckOnClick = true;
+            iC_biotinCLB.FormattingEnabled = true;
+            iC_biotinCLB.Items.AddRange(new object[] { "227.085, Dehydrobiotin", "310.1584, Biotin lysine (ImKbiotin-NH3)", "327.185, Biotin lysine (ImKbiotin)", "480.19515, Biotin phenol -CONH3 (tyrosine)", "497.22170, Biotin phenol -CO (tyrosine)" });
+            iC_biotinCLB.Location = new Point(11, 420);
+            iC_biotinCLB.Margin = new Padding(4, 3, 4, 3);
+            iC_biotinCLB.Name = "iC_biotinCLB";
+            iC_biotinCLB.Size = new Size(278, 112);
+            iC_biotinCLB.TabIndex = 136;
+            // 
+            // SelectAllBiotinButton
+            // 
+            SelectAllBiotinButton.Location = new Point(147, 379);
+            SelectAllBiotinButton.Margin = new Padding(2);
+            SelectAllBiotinButton.Name = "SelectAllBiotinButton";
+            SelectAllBiotinButton.Size = new Size(142, 36);
+            SelectAllBiotinButton.TabIndex = 138;
+            SelectAllBiotinButton.Text = "Check all biotin ions";
+            SelectAllBiotinButton.UseVisualStyleBackColor = true;
+            SelectAllBiotinButton.Click += SelectAllBiotin_Click;
+            // 
+            // iC_biotinLabel
+            // 
+            iC_biotinLabel.AutoSize = true;
+            iC_biotinLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            iC_biotinLabel.Location = new Point(11, 388);
+            iC_biotinLabel.Margin = new Padding(4, 0, 4, 0);
+            iC_biotinLabel.Name = "iC_biotinLabel";
+            iC_biotinLabel.Size = new Size(75, 17);
+            iC_biotinLabel.TabIndex = 137;
+            iC_biotinLabel.Text = "Biotin ions";
+            // 
+            // iC_FileCounter
+            // 
+            iC_FileCounter.AutoSize = true;
+            iC_FileCounter.Location = new Point(25, 32);
+            iC_FileCounter.Name = "iC_FileCounter";
+            iC_FileCounter.Size = new Size(125, 15);
+            iC_FileCounter.TabIndex = 135;
+            iC_FileCounter.Text = "Total Files Uploaded: 0";
             // 
             // iC_ClearFileButton
             // 
@@ -1768,7 +1816,7 @@ namespace GlyCounter
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(1030, 373);
+            label21.Location = new Point(1039, 476);
             label21.Name = "label21";
             label21.Size = new Size(18, 15);
             label21.TabIndex = 130;
@@ -1776,7 +1824,7 @@ namespace GlyCounter
             // 
             // iC_msLevelHigh
             // 
-            iC_msLevelHigh.Location = new Point(1054, 371);
+            iC_msLevelHigh.Location = new Point(1063, 474);
             iC_msLevelHigh.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             iC_msLevelHigh.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             iC_msLevelHigh.Name = "iC_msLevelHigh";
@@ -1787,7 +1835,7 @@ namespace GlyCounter
             // 
             // iC_msLevelLow
             // 
-            iC_msLevelLow.Location = new Point(981, 371);
+            iC_msLevelLow.Location = new Point(990, 474);
             iC_msLevelLow.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             iC_msLevelLow.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             iC_msLevelLow.Name = "iC_msLevelLow";
@@ -1800,7 +1848,7 @@ namespace GlyCounter
             // 
             iC_noMSnFilterCB.AutoSize = true;
             iC_noMSnFilterCB.CheckAlign = ContentAlignment.TopLeft;
-            iC_noMSnFilterCB.Location = new Point(981, 417);
+            iC_noMSnFilterCB.Location = new Point(990, 520);
             iC_noMSnFilterCB.Name = "iC_noMSnFilterCB";
             iC_noMSnFilterCB.Size = new Size(133, 34);
             iC_noMSnFilterCB.TabIndex = 127;
@@ -1812,7 +1860,7 @@ namespace GlyCounter
             // 
             label20.AutoSize = true;
             label20.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label20.Location = new Point(981, 348);
+            label20.Location = new Point(990, 451);
             label20.Margin = new Padding(4, 0, 4, 0);
             label20.Name = "label20";
             label20.Size = new Size(126, 17);
@@ -1841,7 +1889,7 @@ namespace GlyCounter
             // label27
             // 
             label27.AutoSize = true;
-            label27.Location = new Point(618, 350);
+            label27.Location = new Point(944, 335);
             label27.Margin = new Padding(4, 0, 4, 0);
             label27.Name = "label27";
             label27.Size = new Size(67, 15);
@@ -1851,7 +1899,7 @@ namespace GlyCounter
             // label26
             // 
             label26.AutoSize = true;
-            label26.Location = new Point(618, 402);
+            label26.Location = new Point(944, 385);
             label26.Margin = new Padding(4, 0, 4, 0);
             label26.Name = "label26";
             label26.Size = new Size(28, 15);
@@ -1860,14 +1908,14 @@ namespace GlyCounter
             // 
             // iC_singleIonMZ
             // 
-            iC_singleIonMZ.Location = new Point(618, 423);
+            iC_singleIonMZ.Location = new Point(944, 403);
             iC_singleIonMZ.Name = "iC_singleIonMZ";
             iC_singleIonMZ.Size = new Size(99, 23);
             iC_singleIonMZ.TabIndex = 115;
             // 
             // iC_singleIonDesc
             // 
-            iC_singleIonDesc.Location = new Point(618, 370);
+            iC_singleIonDesc.Location = new Point(944, 355);
             iC_singleIonDesc.Name = "iC_singleIonDesc";
             iC_singleIonDesc.Size = new Size(198, 23);
             iC_singleIonDesc.TabIndex = 114;
@@ -1876,7 +1924,7 @@ namespace GlyCounter
             // 
             label25.AutoSize = true;
             label25.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label25.Location = new Point(618, 325);
+            label25.Location = new Point(944, 310);
             label25.Margin = new Padding(4, 0, 4, 0);
             label25.Name = "label25";
             label25.Size = new Size(198, 17);
@@ -1897,38 +1945,38 @@ namespace GlyCounter
             // 
             iC_miscIonsCBList.CheckOnClick = true;
             iC_miscIonsCBList.FormattingEnabled = true;
-            iC_miscIonsCBList.Items.AddRange(new object[] { "216.0424, pTyr ", "__?__,  pSer ", "__?__, pThr" });
-            iC_miscIonsCBList.Location = new Point(618, 139);
+            iC_miscIonsCBList.Items.AddRange(new object[] { "115.0502, Glyglycated lysine (K-GG, ubiquitin)", "130.0975, Arginine citrullination", "171.0764, Hydroxyproline", "181.0608, Nitrotyrosine", "216.0424, Phosphotyrosine (pTyr)", "136.0618, ADP_136 (adenine)", "137.0458, ADP_137 (deamid. adenine)", "232.0829, ADP_232 (H2O loss from 250)", "250.0935, ADP_250", "330.0597, ADP_330 (H2O loss from 348)", "348.0703, ADP_348", "428.0367, ADP_428", "444.0316, ADP_444 (oxidized 428)", "524.0578, ADP_524 (H2O loss from 542)", "542.0684, ADP_542" });
+            iC_miscIonsCBList.Location = new Point(618, 402);
             iC_miscIonsCBList.Margin = new Padding(4, 3, 4, 3);
             iC_miscIonsCBList.Name = "iC_miscIonsCBList";
-            iC_miscIonsCBList.Size = new Size(278, 166);
+            iC_miscIonsCBList.Size = new Size(278, 238);
             iC_miscIonsCBList.TabIndex = 110;
             // 
-            // label24
+            // iC_miscIonsLabel
             // 
-            label24.AutoSize = true;
-            label24.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label24.Location = new Point(618, 107);
-            label24.Margin = new Padding(4, 0, 4, 0);
-            label24.Name = "label24";
-            label24.Size = new Size(92, 17);
-            label24.TabIndex = 111;
-            label24.Text = "Phospho ions";
+            iC_miscIonsLabel.AutoSize = true;
+            iC_miscIonsLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            iC_miscIonsLabel.Location = new Point(618, 379);
+            iC_miscIonsLabel.Margin = new Padding(4, 0, 4, 0);
+            iC_miscIonsLabel.Name = "iC_miscIonsLabel";
+            iC_miscIonsLabel.Size = new Size(125, 17);
+            iC_miscIonsLabel.TabIndex = 111;
+            iC_miscIonsLabel.Text = "Miscellaneous ions";
             // 
             // iC_acylCBList
             // 
             iC_acylCBList.CheckOnClick = true;
             iC_acylCBList.FormattingEnabled = true;
-            iC_acylCBList.Items.AddRange(new object[] { "101.1079, Lysine immonium", "126.0913, Cyclic acyl derivative", "129.1023, Unmodified lysine diagnostic", "143.1179, Acetyl lysine", "152.107, Crotonyl lysine", "154.1232, Butyrylated lysine", "156.1025, Cyclic lactyllysine ", "173.1290, Linear lactyllysine " });
-            iC_acylCBList.Location = new Point(11, 427);
+            iC_acylCBList.Items.AddRange(new object[] { "101.1079, Lysine immonium", "112.0757, Formylated lysine", "126.0913, Cyclic acyl-K derivative", "129.102, Unmodified lysine diagnostic", "140.1070: Propionyl lysine", "143.1179, Acetyl lysine", "152.1070, Crotonyl lysine", "154.1232, Butyryl lysine", "156.1025, Cyclic lactyl lysine", "182.1176, Glutaryl lysine", "170.0812, Malonyl lysine", "170.1176, Hydroxyisobutyryl lysine", "173.1290 Linear lactyl lysine", "184.0968, Succinyl lysine" });
+            iC_acylCBList.Location = new Point(618, 141);
             iC_acylCBList.Margin = new Padding(4, 3, 4, 3);
             iC_acylCBList.Name = "iC_acylCBList";
-            iC_acylCBList.Size = new Size(278, 166);
+            iC_acylCBList.Size = new Size(278, 220);
             iC_acylCBList.TabIndex = 106;
             // 
             // iC_acylButton
             // 
-            iC_acylButton.Location = new Point(147, 385);
+            iC_acylButton.Location = new Point(754, 100);
             iC_acylButton.Margin = new Padding(2);
             iC_acylButton.Name = "iC_acylButton";
             iC_acylButton.Size = new Size(142, 36);
@@ -1941,7 +1989,7 @@ namespace GlyCounter
             // 
             label23.AutoSize = true;
             label23.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label23.Location = new Point(11, 395);
+            label23.Location = new Point(618, 109);
             label23.Margin = new Padding(4, 0, 4, 0);
             label23.Name = "label23";
             label23.Size = new Size(105, 17);
@@ -2133,7 +2181,7 @@ namespace GlyCounter
             // 
             // iC_tmt16Button
             // 
-            iC_tmt16Button.Location = new Point(451, 98);
+            iC_tmt16Button.Location = new Point(452, 99);
             iC_tmt16Button.Margin = new Padding(2);
             iC_tmt16Button.Name = "iC_tmt16Button";
             iC_tmt16Button.Size = new Size(142, 36);
@@ -2146,7 +2194,7 @@ namespace GlyCounter
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(315, 108);
+            label2.Location = new Point(307, 109);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(130, 17);
@@ -2174,15 +2222,6 @@ namespace GlyCounter
             iC_uploadTB.Size = new Size(896, 25);
             iC_uploadTB.TabIndex = 6;
             iC_uploadTB.Text = "Upload .raw or .mzML Files Here";
-            // 
-            // iC_FileCounter
-            // 
-            iC_FileCounter.AutoSize = true;
-            iC_FileCounter.Location = new Point(25, 32);
-            iC_FileCounter.Name = "iC_FileCounter";
-            iC_FileCounter.Size = new Size(125, 15);
-            iC_FileCounter.TabIndex = 135;
-            iC_FileCounter.Text = "Total Files Uploaded: 0";
             // 
             // Form1
             // 
@@ -2356,7 +2395,7 @@ namespace GlyCounter
         private Button iC_acylButton;
         private Label label23;
         private CheckedListBox iC_miscIonsCBList;
-        private Label label24;
+        private Label iC_miscIonsLabel;
         private PictureBox iC_logo;
         private Label label26;
         private TextBox iC_singleIonMZ;
@@ -2405,5 +2444,8 @@ namespace GlyCounter
         private Button iC_AddFolderButton;
         private Button iC_BrowseFileButton;
         private Label iC_FileCounter;
+        private CheckedListBox iC_biotinCLB;
+        private Button SelectAllBiotinButton;
+        private Label iC_biotinLabel;
     }
 }

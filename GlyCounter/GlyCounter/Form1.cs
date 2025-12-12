@@ -56,6 +56,7 @@ namespace GlyCounter
                 {
                     GlyCounter_AllTabs.SelectedIndex = lastTabIndex;
                 }
+
                 Properties.Settings1.Default.RestoreTabOnReset = false;
                 Properties.Settings1.Default.Save();
             }
@@ -126,42 +127,6 @@ namespace GlyCounter
             Properties.Settings1.Default.Save();
             Application.Restart();
             Environment.Exit(0);
-        }
-
-        /////////////////////////////////////////////////////
-        /// This starts the code for iCounter
-        /////////////////////////////////////////////////////
-
-
-        private void iC_tmt11Button_Click(object sender, EventArgs e)
-        {
-            SelectAllItems_CheckedBox(iC_tmt11CBList);
-        }
-
-        private void iC_acylButton_Click(object sender, EventArgs e)
-        {
-            SelectAllItems_CheckedBox(iC_acylCBList);
-        }
-
-        private void iC_tmt16Button_Click(object sender, EventArgs e)
-        {
-            SelectAllItems_CheckedBox(iC_tmt16CBList);
-        }
-
-        private void iC_clearButton_Click(object sender, EventArgs e)
-        {
-            while (iC_tmt16CBList.CheckedIndices.Count > 0)
-                iC_tmt16CBList.SetItemChecked(iC_tmt16CBList.CheckedIndices[0], false);
-
-            while (iC_acylCBList.CheckedIndices.Count > 0)
-                iC_acylCBList.SetItemChecked(iC_acylCBList.CheckedIndices[0], false);
-
-            while (iC_tmt11CBList.CheckedIndices.Count > 0)
-                iC_tmt11CBList.SetItemChecked(iC_tmt11CBList.CheckedIndices[0], false);
-
-            iC_tmt16CBList.ClearSelected();
-            iC_acylCBList.ClearSelected();
-            iC_tmt11CBList.ClearSelected();
         }
     }
 }
