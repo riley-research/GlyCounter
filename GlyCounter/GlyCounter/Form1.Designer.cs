@@ -1967,7 +1967,7 @@ namespace GlyCounter
             // 
             iC_acylCBList.CheckOnClick = true;
             iC_acylCBList.FormattingEnabled = true;
-            iC_acylCBList.Items.AddRange(new object[] { "101.1079, Lysine immonium", "112.0757, Formylated lysine", "126.0913, Cyclic acyl-K derivative", "129.102, Unmodified lysine diagnostic", "140.1070: Propionyl lysine", "143.1179, Acetyl lysine", "152.1070, Crotonyl lysine", "154.1232, Butyryl lysine", "156.1025, Cyclic lactyl lysine", "182.1176, Glutaryl lysine", "170.0812, Malonyl lysine", "170.1176, Hydroxyisobutyryl lysine", "173.1290 Linear lactyl lysine", "184.0968, Succinyl lysine" });
+            iC_acylCBList.Items.AddRange(new object[] { "101.1079, Lysine immonium", "112.0757, Formylated lysine", "126.0913, Cyclic acyl-K derivative", "129.102, Unmodified lysine diagnostic", "140.1070, Propionyl lysine", "143.1179, Acetyl lysine", "152.1070, Crotonyl lysine", "154.1232, Butyryl lysine", "156.1025, Cyclic lactyl lysine", "182.1176, Glutaryl lysine", "170.0812, Malonyl lysine", "170.1176, Hydroxyisobutyryl lysine", "173.1290, Linear lactyl lysine", "184.0968, Succinyl lysine" });
             iC_acylCBList.Location = new Point(618, 141);
             iC_acylCBList.Margin = new Padding(4, 3, 4, 3);
             iC_acylCBList.Name = "iC_acylCBList";

@@ -2,6 +2,7 @@
 using Nova.Io.Read;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace GlyCounter
 {
     public class iC_ProcessRaw_MzML
     {
+        static Form1 update = new Form1();
+
         public static (GlyCounterSettings, RawFileInfo) processRaw_MzML(string fileName, GlyCounterSettings glySettings, iCounterSettings iCsettings,
             RawFileInfo rawFileInfo, StreamWriter outputSignal, StreamWriter outputPeakDepth, StreamWriter? outputIPSA)
         {
@@ -20,8 +23,6 @@ namespace GlyCounter
             bool thermo = true;
             if (fileType == "MzML")
                 thermo = false;
-
-            var update = new Form1();
 
             for (int i = rawFile.FirstScan; i <= rawFile.LastScan; i++)
             {
@@ -121,14 +122,16 @@ namespace GlyCounter
 
                     if (thermo)
                     {
-                        string scanFilter = spectrum.ScanFilter;
-                        string[] hcdHeader = scanFilter.Split('@');
-                        string[] splitHCDheader = [];
-                        splitHCDheader = hcdHeader[1].Contains("ptr")
-                            ? hcdHeader[2].Split('d')
-                            : hcdHeader[1].Split('d');
-                        string[] collisionEnergyArray = splitHCDheader[1].Split('.');
-                        rawFileInfo.nce = Convert.ToDouble(collisionEnergyArray[0]);
+                        string scanFilter = spectrum.ScanFilter ?? "";
+                        string[] hcdHeader = scanFilter.Split('@', StringSplitOptions.RemoveEmptyEntries);
+                        rawFileInfo.nce = double.NaN;
+                        if (hcdHeader.Length >= 2)
+                        {
+                            string candidate = hcdHeader.Length >= 3 && hcdHeader[1].Contains("ptr") ? hcdHeader[2] : hcdHeader[1];
+                            var m = System.Text.RegularExpressions.Regex.Match(candidate, @"(\d+(\.\d+)?)");
+                            if (m.Success && double.TryParse(m.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double parsed))
+                                rawFileInfo.nce = parsed;
+                        }
                     }
                     else rawFileInfo.nce = spectrum.Precursors[0].CollisionEnergy;
 
@@ -263,7 +266,14 @@ namespace GlyCounter
                     if (etdTrue) fragmentationType = "ETD";
                     if (uvpdTrue) fragmentationType = "UVPD";
                     double retentionTime = spectrum.RetentionTime;
-                    double precursormz = spectrum.Precursors[0].IsolationMz;
+                    double precursormz = double.NaN;
+                    if (spectrum.Precursors != null && spectrum.Precursors.Count > 0)
+                    {
+                        var precursor = spectrum.Precursors.Last();
+                        precursormz = precursor.IsolationMz;
+                    }
+
+
                     string peakString = "";
                     foreach (double theoMZ in ionFoundPeaks)
                         peakString = peakString + theoMZ.ToString() + "; ";
