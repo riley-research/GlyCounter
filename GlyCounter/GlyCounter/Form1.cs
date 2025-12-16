@@ -13,8 +13,6 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using ThermoFisher.CommonCore.Data.Business;
-using ThermoFisher.CommonCore.RawFileReader;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 
