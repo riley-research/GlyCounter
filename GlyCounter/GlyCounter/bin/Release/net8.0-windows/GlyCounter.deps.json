@@ -1,0 +1,430 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "GlyCounter/0.0.15": {
+        "dependencies": {
+          "Coon.CSMSL.NET": "0.1.0",
+          "MathNet.Numerics": "5.0.0",
+          "Nova": "1.0.0.13",
+          "Nova.IO": "1.0.0.13",
+          "NuGet.Core": "2.14.0",
+          "PSI_Interface": "2.6.4",
+          "Velopack": "0.0.869",
+          "CSMSL": "0.1.0.0"
+        },
+        "runtime": {
+          "GlyCounter.dll": {}
+        }
+      },
+      "CommandLineParser/2.9.1": {
+        "runtime": {
+          "lib/netstandard2.0/CommandLine.dll": {
+            "assemblyVersion": "2.9.1.0",
+            "fileVersion": "2.9.1.0"
+          }
+        }
+      },
+      "LumenWorksCsvReader/4.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/LumenWorks.Framework.IO.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "MathNet.Numerics/5.0.0": {
+        "runtime": {
+          "lib/net6.0/MathNet.Numerics.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.0.0"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.JsonPatch/8.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.JsonPatch.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53112"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Mvc.NewtonsoftJson/8.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.JsonPatch": "8.0.0",
+          "Newtonsoft.Json": "13.0.3",
+          "Newtonsoft.Json.Bson": "1.0.2"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53112"
+          }
+        }
+      },
+      "Microsoft.Web.Xdt/2.1.0": {
+        "runtime": {
+          "lib/net40/Microsoft.Web.XmlTransform.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.50413.0"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.3": {
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.3.27908"
+          }
+        }
+      },
+      "Newtonsoft.Json.Bson/1.0.2": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.Bson.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.2.22727"
+          }
+        }
+      },
+      "Nova/1.0.0.13": {
+        "runtime": {
+          "lib/net48/Nova.dll": {
+            "assemblyVersion": "1.0.0.13",
+            "fileVersion": "1.0.0.13"
+          }
+        }
+      },
+      "Nova.IO/1.0.0.13": {
+        "dependencies": {
+          "Nova": "1.0.0.13",
+          "SharpZipLib": "1.4.2",
+          "ThermoFisher.CommonCore.Data": "8.0.6",
+          "ThermoFisher.CommonCore.RawFileReader": "8.0.6"
+        },
+        "runtime": {
+          "lib/net8.0/NovaIO.dll": {
+            "assemblyVersion": "1.0.0.10",
+            "fileVersion": "1.0.0.10"
+          }
+        }
+      },
+      "NuGet.Core/2.14.0": {
+        "dependencies": {
+          "Microsoft.Web.Xdt": "2.1.0"
+        },
+        "runtime": {
+          "lib/net40-Client/NuGet.Core.dll": {
+            "assemblyVersion": "2.14.0.832",
+            "fileVersion": "2.14.0.832"
+          }
+        }
+      },
+      "NuGet.Versioning/6.11.1": {
+        "runtime": {
+          "lib/netstandard2.0/NuGet.Versioning.dll": {
+            "assemblyVersion": "6.11.1.2",
+            "fileVersion": "6.11.1.2"
+          }
+        }
+      },
+      "OpenMcdf/2.3.0": {
+        "runtime": {
+          "lib/netstandard2.0/OpenMcdf.dll": {
+            "assemblyVersion": "2.3.0.0",
+            "fileVersion": "2.3.0.0"
+          }
+        }
+      },
+      "OpenMcdf.Extensions/2.3.0.1": {
+        "dependencies": {
+          "OpenMcdf": "2.3.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/OpenMcdf.Extensions.dll": {
+            "assemblyVersion": "2.3.0.1",
+            "fileVersion": "2.3.0.1"
+          }
+        }
+      },
+      "PSI_Interface/2.6.4": {
+        "runtime": {
+          "lib/net8.0/PSI_Interface.dll": {
+            "assemblyVersion": "2.6.4.65013",
+            "fileVersion": "2.6.4.65013"
+          }
+        }
+      },
+      "SharpZipLib/1.4.2": {
+        "runtime": {
+          "lib/net6.0/ICSharpCode.SharpZipLib.dll": {
+            "assemblyVersion": "1.4.2.13",
+            "fileVersion": "1.4.2.13"
+          }
+        }
+      },
+      "ThermoFisher.CommonCore.BackgroundSubtraction/8.0.6": {
+        "dependencies": {
+          "CommandLineParser": "2.9.1",
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "8.0.0",
+          "ThermoFisher.CommonCore.Data": "8.0.6"
+        },
+        "runtime": {
+          "lib/net8.0/ThermoFisher.CommonCore.BackgroundSubtraction.dll": {
+            "assemblyVersion": "8.0.6.0",
+            "fileVersion": "8.0.6.0"
+          }
+        }
+      },
+      "ThermoFisher.CommonCore.Data/8.0.6": {
+        "dependencies": {
+          "CommandLineParser": "2.9.1",
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/ThermoFisher.CommonCore.Data.dll": {
+            "assemblyVersion": "8.0.6.0",
+            "fileVersion": "8.0.6.0"
+          }
+        }
+      },
+      "ThermoFisher.CommonCore.MassPrecisionEstimator/8.0.6": {
+        "dependencies": {
+          "CommandLineParser": "2.9.1",
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "8.0.0",
+          "ThermoFisher.CommonCore.Data": "8.0.6",
+          "ThermoFisher.CommonCore.RawFileReader": "8.0.6"
+        },
+        "runtime": {
+          "lib/net8.0/ThermoFisher.CommonCore.MassPrecisionEstimator.dll": {
+            "assemblyVersion": "8.0.6.0",
+            "fileVersion": "8.0.6.0"
+          }
+        }
+      },
+      "ThermoFisher.CommonCore.RawFileReader/8.0.6": {
+        "dependencies": {
+          "CommandLineParser": "2.9.1",
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "8.0.0",
+          "OpenMcdf": "2.3.0",
+          "OpenMcdf.Extensions": "2.3.0.1",
+          "ThermoFisher.CommonCore.Data": "8.0.6"
+        },
+        "runtime": {
+          "lib/net8.0/ThermoFisher.CommonCore.RawFileReader.dll": {
+            "assemblyVersion": "8.0.6.0",
+            "fileVersion": "8.0.6.0"
+          }
+        }
+      },
+      "Velopack/0.0.869": {
+        "dependencies": {
+          "NuGet.Versioning": "6.11.1"
+        },
+        "runtime": {
+          "lib/net8.0/Velopack.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.869.57131"
+          }
+        }
+      },
+      "Coon.CSMSL.NET/0.1.0": {
+        "dependencies": {
+          "LumenWorksCsvReader": "4.0.0",
+          "MathNet.Numerics": "5.0.0",
+          "ThermoFisher.CommonCore.BackgroundSubtraction": "8.0.6",
+          "ThermoFisher.CommonCore.Data": "8.0.6",
+          "ThermoFisher.CommonCore.MassPrecisionEstimator": "8.0.6",
+          "ThermoFisher.CommonCore.RawFileReader": "8.0.6"
+        },
+        "runtime": {
+          "CSMSL.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.1.0.0"
+          }
+        }
+      },
+      "CSMSL/0.1.0.0": {
+        "runtime": {
+          "CSMSL.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.1.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GlyCounter/0.0.15": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CommandLineParser/2.9.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OE0sl1/sQ37bjVsPKKtwQlWDgqaxWgtme3xZz7JssWUzg5JpMIyHgCTY9MVMxOg48fJ1AgGT3tgdH5m/kQ5xhA==",
+      "path": "commandlineparser/2.9.1",
+      "hashPath": "commandlineparser.2.9.1.nupkg.sha512"
+    },
+    "LumenWorksCsvReader/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CP6bPmDbmV5yT7YwfGxN8Agrdj0nB82b2UitfrnTghqyfF4DXD4UXl8MoCXBz4Ja17bUYqpEDd+qaavh7lwUxg==",
+      "path": "lumenworkscsvreader/4.0.0",
+      "hashPath": "lumenworkscsvreader.4.0.0.nupkg.sha512"
+    },
+    "MathNet.Numerics/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pg1W2VwaEQMAiTpGK840hZgzavnqjlCMTVSbtVCXVyT+7AX4mc1o89SPv4TBlAjhgCOo9c1Y+jZ5m3ti2YgGgA==",
+      "path": "mathnet.numerics/5.0.0",
+      "hashPath": "mathnet.numerics.5.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.JsonPatch/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-klQdb/9+j0u8MDjoqHEgDCPz8GRhfsbRVvZIM3glFqjs8uY7S1hS9RvKZuz8o4dS9NsEpFp4Jccd8CQuIYHK0g==",
+      "path": "microsoft.aspnetcore.jsonpatch/8.0.0",
+      "hashPath": "microsoft.aspnetcore.jsonpatch.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Mvc.NewtonsoftJson/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/e5+eBvY759xiZJO+y1lHi4VzXqbDzTJSyCtKpaj3Ko2JAFQjiCOJ0ZHk2i4g4HpoSdXmzEXQsjr6dUX9U0/JA==",
+      "path": "microsoft.aspnetcore.mvc.newtonsoftjson/8.0.0",
+      "hashPath": "microsoft.aspnetcore.mvc.newtonsoftjson.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Web.Xdt/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/ieJ02r4MEJM21Eyl+c5kwoJWPhy+qEEcN68JaqDoamabgxJI1jGi/kNLuKvHUCl6tU7E0rMvaR6FmEnDWtS4A==",
+      "path": "microsoft.web.xdt/2.1.0",
+      "hashPath": "microsoft.web.xdt.2.1.0.nupkg.sha512"
+    },
+    "Newtonsoft.Json/13.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "path": "newtonsoft.json/13.0.3",
+      "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
+    },
+    "Newtonsoft.Json.Bson/1.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QYFyxhaABwmq3p/21VrZNYvCg3DaEoN/wUuw5nmfAf0X3HLjgupwhkEWdgfb9nvGAUIv3osmZoD3kKl4jxEmYQ==",
+      "path": "newtonsoft.json.bson/1.0.2",
+      "hashPath": "newtonsoft.json.bson.1.0.2.nupkg.sha512"
+    },
+    "Nova/1.0.0.13": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-S33yvM7zphTHJmsp9NniQ6AoZcIbGjTv/EGmnB29Ky6Vqign9UV4X5ISNkmRqyHQa1PZfycmdXP8SdnIOaXh4w==",
+      "path": "nova/1.0.0.13",
+      "hashPath": "nova.1.0.0.13.nupkg.sha512"
+    },
+    "Nova.IO/1.0.0.13": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aKS27sy1NCr4pI1e8IDj/yGDFu5GEdfvIKY6IH4FKdCwgUcVH5H+5RjyxK3AB9TZye2Ahl3AFQlW5hGR1vjaPQ==",
+      "path": "nova.io/1.0.0.13",
+      "hashPath": "nova.io.1.0.0.13.nupkg.sha512"
+    },
+    "NuGet.Core/2.14.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UDXFLVRDepqVqyYxQuxujfaAc7XePdw+Lsey+q36iqTm0nuSU1n9laIGqjokvBl0unifYtjSai7fqBQKKd9BUg==",
+      "path": "nuget.core/2.14.0",
+      "hashPath": "nuget.core.2.14.0.nupkg.sha512"
+    },
+    "NuGet.Versioning/6.11.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YNn3BB71F+guJW42TbAhGcMh3gpyqFMZcPVD9pm5vcvGivTALtRely/VCPWQQ6JQ5PfwIrjPaJMO7VnqyeK3rg==",
+      "path": "nuget.versioning/6.11.1",
+      "hashPath": "nuget.versioning.6.11.1.nupkg.sha512"
+    },
+    "OpenMcdf/2.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4KVqjDt8av6LiscYlIOKdWQe9ILoMIFs1YI/Le11wqR7SA32IWumqxagu7OzyRCyDZ2zL01WanHMycCmOnDuVw==",
+      "path": "openmcdf/2.3.0",
+      "hashPath": "openmcdf.2.3.0.nupkg.sha512"
+    },
+    "OpenMcdf.Extensions/2.3.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-w7Ig8lUoKRtHz0GL9zY0C5sgUTamLagRpNkQyTZ4Qx9NflrGr7SJQfQd68MbK0lGAczNhNHirroHOgMIHei+Mg==",
+      "path": "openmcdf.extensions/2.3.0.1",
+      "hashPath": "openmcdf.extensions.2.3.0.1.nupkg.sha512"
+    },
+    "PSI_Interface/2.6.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wDaKSXle8eLLjKM6sg6cXBrgIBO1tUMmqLc60/F52HkXoIea3u9I6rJ9tlT1amFQ8Ly58XJ+7BCgn2N1+JMXog==",
+      "path": "psi_interface/2.6.4",
+      "hashPath": "psi_interface.2.6.4.nupkg.sha512"
+    },
+    "SharpZipLib/1.4.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yjj+3zgz8zgXpiiC3ZdF/iyTBbz2fFvMxZFEBPUcwZjIvXOf37Ylm+K58hqMfIBt5JgU/Z2uoUS67JmTLe973A==",
+      "path": "sharpziplib/1.4.2",
+      "hashPath": "sharpziplib.1.4.2.nupkg.sha512"
+    },
+    "ThermoFisher.CommonCore.BackgroundSubtraction/8.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9wfM5TGEFNA4F0bq+hFOa7WvfgixRIymgA3oi/ls4+wDl+RIl/FRC6jqLlDMrcAAbLaXvY7frl0sEA3O0AgS9g==",
+      "path": "thermofisher.commoncore.backgroundsubtraction/8.0.6",
+      "hashPath": "thermofisher.commoncore.backgroundsubtraction.8.0.6.nupkg.sha512"
+    },
+    "ThermoFisher.CommonCore.Data/8.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EBvAcYAH/lj26488iPhrFF5vbAiNmdks2ZQEJjOZUszMOBbJlQirj+SQmAgL5lbKpVBVz3QACJwKuboPvjUULQ==",
+      "path": "thermofisher.commoncore.data/8.0.6",
+      "hashPath": "thermofisher.commoncore.data.8.0.6.nupkg.sha512"
+    },
+    "ThermoFisher.CommonCore.MassPrecisionEstimator/8.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mRZchvbiy1anSL4fqyjeRvTMOjWDzjVvSsyHe2++pM0Ha2MaelrDUFeBSuEKEg2GLc/zC4b0Rhvo+FfU2zrVcA==",
+      "path": "thermofisher.commoncore.massprecisionestimator/8.0.6",
+      "hashPath": "thermofisher.commoncore.massprecisionestimator.8.0.6.nupkg.sha512"
+    },
+    "ThermoFisher.CommonCore.RawFileReader/8.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xCbV3eWA3t+h8MUTx539DHOPidLIDrArpDuMTwPFSpQ1OL5ClNlp9uFb4I3LRyvbny22fxG5d2wexU+l3aqhtg==",
+      "path": "thermofisher.commoncore.rawfilereader/8.0.6",
+      "hashPath": "thermofisher.commoncore.rawfilereader.8.0.6.nupkg.sha512"
+    },
+    "Velopack/0.0.869": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oGk+2xphxXDm2rsj4z5JTOnfE7CydgEmsbadubkJOUAbLcaAnuLZQF+3EgVZEiuEFLgtdtl7BBhZ8GrDs41l1g==",
+      "path": "velopack/0.0.869",
+      "hashPath": "velopack.0.0.869.nupkg.sha512"
+    },
+    "Coon.CSMSL.NET/0.1.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CSMSL/0.1.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

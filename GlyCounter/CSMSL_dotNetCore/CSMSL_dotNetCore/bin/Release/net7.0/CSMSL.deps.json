@@ -1,0 +1,141 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "CSMSL/0.1.0": {
+        "dependencies": {
+          "LumenWorksCsvReader": "4.0.0",
+          "MathNet.Numerics": "5.0.0",
+          "OpenMcdf": "2.1.6.28924",
+          "OpenMcdf.Extensions": "2.1.6.28924",
+          "ThermoFisher.CommonCore.BackgroundSubtraction": "5.0.0.88",
+          "ThermoFisher.CommonCore.Data": "5.0.0.88",
+          "ThermoFisher.CommonCore.MassPrecisionEstimator": "5.0.0.88",
+          "ThermoFisher.CommonCore.RawFileReader": "5.0.0.88"
+        },
+        "runtime": {
+          "CSMSL.dll": {}
+        }
+      },
+      "LumenWorksCsvReader/4.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/LumenWorks.Framework.IO.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "MathNet.Numerics/5.0.0": {
+        "runtime": {
+          "lib/net6.0/MathNet.Numerics.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.0.0"
+          }
+        }
+      },
+      "OpenMcdf/2.1.6.28924": {
+        "runtime": {
+          "OpenMcdf.dll": {
+            "assemblyVersion": "2.1.6.28924",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "OpenMcdf.Extensions/2.1.6.28924": {
+        "runtime": {
+          "OpenMcdf.Extensions.dll": {
+            "assemblyVersion": "2.1.6.28924",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ThermoFisher.CommonCore.BackgroundSubtraction/5.0.0.88": {
+        "runtime": {
+          "ThermoFisher.CommonCore.BackgroundSubtraction.dll": {
+            "assemblyVersion": "5.0.0.88",
+            "fileVersion": "5.0.0.88"
+          }
+        }
+      },
+      "ThermoFisher.CommonCore.Data/5.0.0.88": {
+        "runtime": {
+          "ThermoFisher.CommonCore.Data.dll": {
+            "assemblyVersion": "5.0.0.88",
+            "fileVersion": "5.0.0.88"
+          }
+        }
+      },
+      "ThermoFisher.CommonCore.MassPrecisionEstimator/5.0.0.88": {
+        "runtime": {
+          "ThermoFisher.CommonCore.MassPrecisionEstimator.dll": {
+            "assemblyVersion": "5.0.0.88",
+            "fileVersion": "5.0.0.88"
+          }
+        }
+      },
+      "ThermoFisher.CommonCore.RawFileReader/5.0.0.88": {
+        "runtime": {
+          "ThermoFisher.CommonCore.RawFileReader.dll": {
+            "assemblyVersion": "5.0.0.88",
+            "fileVersion": "5.0.0.88"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CSMSL/0.1.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LumenWorksCsvReader/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CP6bPmDbmV5yT7YwfGxN8Agrdj0nB82b2UitfrnTghqyfF4DXD4UXl8MoCXBz4Ja17bUYqpEDd+qaavh7lwUxg==",
+      "path": "lumenworkscsvreader/4.0.0",
+      "hashPath": "lumenworkscsvreader.4.0.0.nupkg.sha512"
+    },
+    "MathNet.Numerics/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pg1W2VwaEQMAiTpGK840hZgzavnqjlCMTVSbtVCXVyT+7AX4mc1o89SPv4TBlAjhgCOo9c1Y+jZ5m3ti2YgGgA==",
+      "path": "mathnet.numerics/5.0.0",
+      "hashPath": "mathnet.numerics.5.0.0.nupkg.sha512"
+    },
+    "OpenMcdf/2.1.6.28924": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "OpenMcdf.Extensions/2.1.6.28924": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ThermoFisher.CommonCore.BackgroundSubtraction/5.0.0.88": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ThermoFisher.CommonCore.Data/5.0.0.88": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ThermoFisher.CommonCore.MassPrecisionEstimator/5.0.0.88": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ThermoFisher.CommonCore.RawFileReader/5.0.0.88": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
