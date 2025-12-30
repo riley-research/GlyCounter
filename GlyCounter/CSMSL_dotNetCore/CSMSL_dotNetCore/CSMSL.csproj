@@ -23,6 +23,7 @@
     <Version>0.1.0</Version>
     <Copyright>2012-14 Derek J Bailey; 2020-23 Dain R Brademan</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

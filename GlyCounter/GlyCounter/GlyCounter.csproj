@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -40,6 +41,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference> 
+    <PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" /> 
     <PackageReference Include="ThermoFisher.CommonCore.RawFileReader" Version="8.0.6" />
 
     <PackageReference Include="Velopack" Version="0.0.761" /> 
@@ -77,16 +79,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
     </None>
-    <None Update="timsrust.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="timsrust.dll">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="ThermoFisher.CommonCore.RawFileReader">
-			<HintPath>path\to\ThermoFisher.CommonCore.RawFileReader.dll</HintPath>
-			<Private>true</Private>
-		</Reference>
-	</ItemGroup>
 
 </Project>
