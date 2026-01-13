@@ -188,6 +188,8 @@ namespace GlyCounter
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
             tabPage1 = new TabPage();
+            iC_NegativeModeLabel = new Label();
+            checkBox1 = new CheckBox();
             iC_biotinCLB = new CheckedListBox();
             SelectAllBiotinButton = new Button();
             iC_biotinLabel = new Label();
@@ -1672,6 +1674,8 @@ namespace GlyCounter
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(iC_NegativeModeLabel);
+            tabPage1.Controls.Add(checkBox1);
             tabPage1.Controls.Add(iC_biotinCLB);
             tabPage1.Controls.Add(SelectAllBiotinButton);
             tabPage1.Controls.Add(iC_biotinLabel);
@@ -1727,6 +1731,27 @@ namespace GlyCounter
             tabPage1.TabIndex = 2;
             tabPage1.Text = "iCounter";
             tabPage1.UseVisualStyleBackColor = true;
+            tabPage1.Click += this.iC_polarityCB_CheckedChanged;
+            // 
+            // iC_NegativeModeLabel
+            // 
+            iC_NegativeModeLabel.AutoSize = true;
+            iC_NegativeModeLabel.Location = new Point(9, 549);
+            iC_NegativeModeLabel.Name = "iC_NegativeModeLabel";
+            iC_NegativeModeLabel.Size = new Size(205, 60);
+            iC_NegativeModeLabel.TabIndex = 140;
+            iC_NegativeModeLabel.Text = "Note: negative mode is on. \r\nDisplayed ion m/z values are not the \r\nones that will be searched for, instead\r\nthe M-H ions will be calculated";
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(944, 528);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(201, 19);
+            checkBox1.TabIndex = 139;
+            checkBox1.Text = "Negative Mode (auto-calculated)";
+            checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += this.iC_polarityCB_CheckedChanged;
             // 
             // iC_biotinCLB
             // 
@@ -1848,11 +1873,11 @@ namespace GlyCounter
             // 
             iC_noMSnFilterCB.AutoSize = true;
             iC_noMSnFilterCB.CheckAlign = ContentAlignment.TopLeft;
-            iC_noMSnFilterCB.Location = new Point(990, 520);
+            iC_noMSnFilterCB.Location = new Point(944, 503);
             iC_noMSnFilterCB.Name = "iC_noMSnFilterCB";
-            iC_noMSnFilterCB.Size = new Size(133, 34);
+            iC_noMSnFilterCB.Size = new Size(221, 19);
             iC_noMSnFilterCB.TabIndex = 127;
-            iC_noMSnFilterCB.Text = "Ignore MS Level and\r\nSearch All Scans\r\n";
+            iC_noMSnFilterCB.Text = "Ignore MS Level and Search All Scans\r\n";
             iC_noMSnFilterCB.TextAlign = ContentAlignment.MiddleCenter;
             iC_noMSnFilterCB.UseVisualStyleBackColor = true;
             // 
@@ -2447,5 +2472,7 @@ namespace GlyCounter
         private CheckedListBox iC_biotinCLB;
         private Button SelectAllBiotinButton;
         private Label iC_biotinLabel;
+        private CheckBox checkBox1;
+        private Label iC_NegativeModeLabel;
     }
 }

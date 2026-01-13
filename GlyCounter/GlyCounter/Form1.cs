@@ -39,6 +39,8 @@ namespace GlyCounter
             this.DragEnter += new DragEventHandler(Form1_DragEnter);
             this.DragDrop += new DragEventHandler(Form1_DragDrop);
 
+            iC_NegativeModeLabel.Hide();
+
             HexNAcCheckedListBox.Items.AddRange(HexNAcPos);
             HexCheckedListBox.Items.AddRange(HexPos);
             SialicAcidCheckedListBox.Items.AddRange(SialicPos);

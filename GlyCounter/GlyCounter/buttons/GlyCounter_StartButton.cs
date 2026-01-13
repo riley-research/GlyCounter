@@ -18,6 +18,7 @@ namespace GlyCounter
             string userOutput = Gly_outputTextBox.Text?.Trim();
 
             GlyCounterSettings? getOutput = DefaultOutput.getDefaultOutput(userOutput, glySettings);
+            //TODO check if message box shows up if you don't select a folder
             if (getOutput != null)
             {
                 glySettings = getOutput;
@@ -60,10 +61,10 @@ namespace GlyCounter
                     //make sure all user inputs are in the correct format, otherwise use defaults
                     if (DaltonCheckBox.Checked)
                     {
-                        glySettings.usingda = true;
                         if (CanConvertDouble(ppmTol_textBox.Text, glySettings.daTolerance))
                         {
                             glySettings.daTolerance = Convert.ToDouble(ppmTol_textBox.Text, CultureInfo.InvariantCulture);
+                            glySettings.usingda = true;
                         }
 
                     }

@@ -49,6 +49,41 @@ namespace GlyCounter
             iC_acylCBList.ClearSelected();
             iC_tmt11CBList.ClearSelected();
             iC_miscIonsCBList.ClearSelected();
+            iC_biotinCLB.ClearSelected();
+        }
+
+        private void iC_SetNegativeMode()
+        {
+            iC_tmt16CBList.BackColor = alternateBackColor;
+            iC_acylCBList.BackColor = alternateBackColor;
+            iC_tmt11CBList.BackColor = alternateBackColor;
+            iC_miscIonsCBList.BackColor = alternateBackColor;
+            iC_biotinCLB.BackColor = alternateBackColor;
+        }
+
+        private void iC_SetPositiveMode()
+        {
+            iC_tmt16CBList.BackColor = normalBackColor;
+            iC_acylCBList.BackColor = normalBackColor;
+            iC_tmt11CBList.BackColor = normalBackColor;
+            iC_miscIonsCBList.BackColor = normalBackColor;
+            iC_biotinCLB.BackColor = normalBackColor;
+        }
+
+        private void iC_polarityCB_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox toggle = sender as CheckBox;
+
+            if (toggle.Checked)
+            {
+                iC_SetNegativeMode();
+                iC_NegativeModeLabel.Show();
+            }
+            else
+            {
+                iC_SetPositiveMode();
+                iC_NegativeModeLabel.Hide();
+            }
         }
 
     }

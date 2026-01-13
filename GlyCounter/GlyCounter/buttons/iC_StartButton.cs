@@ -37,7 +37,7 @@ namespace GlyCounter
 
             try
             {
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
                     glySettings.usingda = false;
 
@@ -232,10 +232,11 @@ namespace GlyCounter
                         outputSummary.WriteLine();
 
                         //start processing file
+                        var progress = new Progress<DateTime>(_ => UpdateTimer()); //for timer updates on the UI thread
                         if (fileName.EndsWith(".d"))
                         {
-                            (glySettings, rawFileInfo) = iC_ProcessTimsTOF.processTimsTOF(fileName, glySettings, iCsettings,
-                                rawFileInfo, outputSignal, outputPeakDepth, outputIPSA);
+                            (glySettings, rawFileInfo) = await iC_ProcessTimsTOF.iC_processTimsTOFAsync(fileName, glySettings, iCsettings,
+                                rawFileInfo, outputSignal, outputPeakDepth, outputIPSA, progress);
                         }
                         else
                         {
