@@ -80,7 +80,7 @@
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
     </None>
     <None Include="timsrust.dll">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
