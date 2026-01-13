@@ -26,22 +26,6 @@ namespace GlyCounter
             StreamWriter? outputIPSA,
             IProgress<DateTime>? progress = null)
         {
-            // diagnostics log path (durable location)
-            string logFile = Path.Combine(Path.GetTempPath(), "glycounter_exceptions.log");
-
-            void SafeLog(string tag, Exception ex)
-            {
-                try
-                {
-                    var msg = $"{DateTime.Now:O}\t{tag}\tFile:{fileName}\tException: {ex}\n";
-                    File.AppendAllText(logFile, msg);
-                }
-                catch
-                {
-                    // swallow - logging must not throw
-                }
-            }
-
             // Configure parallelism and bounded memory
             int workerCount = Math.Max(1, Environment.ProcessorCount - 1);
             int boundedCapacity = Math.Max(4, workerCount * 4);
@@ -104,7 +88,6 @@ namespace GlyCounter
                 catch (Exception ex)
                 {
                     writerException = ex;
-                    SafeLog("writerTask-catch", ex);
                     // propagate by cancelling producers/workers
                     cts.Cancel();
                     throw;
@@ -128,7 +111,6 @@ namespace GlyCounter
                 catch (Exception ex)
                 {
                     producerException = ex;
-                    SafeLog("producerTask-catch", ex);
                     spectraChannel.Writer.TryComplete(ex);
                     // also stop other tasks
                     cts.Cancel();
@@ -404,7 +386,6 @@ namespace GlyCounter
                     catch (Exception ex)
                     {
                         workerException = ex;
-                        SafeLog("workerTask-catch", ex);
                         spectraChannel.Reader.Completion.ContinueWith(_ => { }, TaskScheduler.Default);
                         cts.Cancel();
                         throw;
@@ -425,7 +406,6 @@ namespace GlyCounter
                 catch (Exception ex)
                 {
                     // If workers faulted, surface exception
-                    SafeLog("finishTask-catch", ex);
                     writeChannel.Writer.TryComplete(ex);
                     throw;
                 }
@@ -441,17 +421,14 @@ namespace GlyCounter
                 // Prefer to throw original exceptions if present
                 if (producerException != null)
                 {
-                    SafeLog("rethrow-producerException", producerException);
                     throw producerException;
                 }
                 if (workerException != null)
                 {
-                    SafeLog("rethrow-workerException", workerException);
                     throw workerException;
                 }
                 if (writerException != null)
                 {
-                    SafeLog("rethrow-writerException", writerException);
                     throw writerException;
                 }
                 throw;

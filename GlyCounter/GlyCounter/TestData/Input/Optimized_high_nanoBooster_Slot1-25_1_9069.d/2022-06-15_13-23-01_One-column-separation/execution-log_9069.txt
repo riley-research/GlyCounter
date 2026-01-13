@@ -1,0 +1,833 @@
+Path: 2022-06-15_13-23-01_One-column-separation
+Procedure: One column separation
+Argument list:
+uses_trap = False
+uses_separator = True
+is_isocratic = False
+analysis_time = 1800
+is_use_oven_temperature = False
+oven_temperature = 45
+sample_volume = 3
+sample_position = Slot1:25
+presample_solvent_volume = 2
+presample_air_volume = 0.5
+postsample_air_volume = 1
+postsample_solvent_volume = 2
+sample_aspirate_speed = 5
+sample_postaspirate_delay = 500
+sample_inject_speed = 1
+calibrant_volume = 0.6
+calibrantTime = 10
+penetration_depth = 30
+is_bottom_sense = True
+injection_method = uLPickup
+trap = Name: None, Func: Separator, ColDia: 0.2 mm, Len: 1 mm, PartDia: 2 µm, Porosity: 42 %
+separator = Name: nanoElute FIFTEEN, Func: Separator, ColDia: 0.075 mm, Len: 150 mm, PartDia: 1.9 µm, Porosity: 42 %
+separator_volume = 0.278325474153971
+separator_unityflow = 0.00127638643751896
+separator_equilibration_volumemultiplier = 2
+separator_equilibration_pressure = 800
+column_load_volumemultiplier = 1
+column_load_pressure = 800
+separator_equil_time = 0.574075395754671
+column_load_time = 3.0939068594046
+gradient = (0 sec,0.5 µL/min,1.00 %), (60 sec,0.5 µL/min,7.00 %), (1860 sec,0.5 µL/min,45.00 %), (1920 sec,0.5 µL/min,90.00 %), (2040 sec,0.5 µL/min,90.00 %)
+Additional Loading Volume = 0
+Pre Sample Air Gap = 0.5
+Post Sample Air Gap = 1
+MS Calibrant Injection = False
+Extended Wash = False
+6/15/2022 1:23:01 PM - 000.00:00:00.0	STARTED
+6/15/2022 1:23:01 PM - 000.00:00:00.1	ValveA counter: 0; position: 240
+6/15/2022 1:23:01 PM - 000.00:00:00.1	ValveB counter: 0; position: 240
+6/15/2022 1:23:01 PM - 000.00:00:00.1	ValveI counter: 0; position: 60
+6/15/2022 1:23:01 PM - 000.00:00:00.1	ValveT counter: 0; position: 120
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetSettings() --> PumpSettings
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Log instrument settings called from: settings
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- HomeSpeed: 2000; PurgeSpeed: 2000
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- PressureTrackingExcessFactor: 96
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- FlowResistanceA: 300; FlowResistanceB: 100; FlowResistanceOut: 150
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- FC_FlowFilterDepth: 5; FC_PressureFilterDepth: 0
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- PC_OutputFilterDepth: 0
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- CompressibilityFactorB: 2.29999995231628; PressurePIDNegativeResultDivisor: 1
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- ExternalZeroPressureOffsetA: 114.955764770508; ExternalZeroPressureOffsetB: 117.57063293457
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- ExternalPressureScalingFactorA: 0.0197199992835522; ExternalPressureScalingFactorB: 0.0197199992835522
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.3	Lua date:			2021/10/28
+6/15/2022 1:23:01 PM - 000.00:00:00.3	BusinessLogic:     Four Valve
+6/15/2022 1:23:01 PM - 000.00:00:00.3	Sample:            Standard
+6/15/2022 1:23:01 PM - 000.00:00:00.3	Special:           Std Diag
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Experiment:    Description
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Trap Column:              None
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Manufacturer:          N/A
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Part Number:           N/A
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Serial Number:         N/A
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Type/Material:         N/A
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Length:                1 mm
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Inner Diameter:        0.2 mm
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Particle Diameter:     2 um
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Particle Pore Size: True
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Particle Pore Size:    120
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Column Porosity:    True
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Column Porosity:       0.42 (0.0-1.0)
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Max Temperature:    True
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    max Temperature:       100 C
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Max Pressure:       True
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    max Pressure:          1000 bar
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Max Flow:           True
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    max Flow:              10 uL/min
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Advanced Settings:     True
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Column Volume:         0.001 uL
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Unity Flow:            0.01 uL/min/bar
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Column Comments:       No column option
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Separation Column:        nanoElute FIFTEEN
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Manufacturer:          Bruker Daltonics
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Part Number:           1842621
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Serial Number:         
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Type/Material:         nano Separation Column / ReproSil C18 beads
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Length:                150 mm
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Inner Diameter:        0.075 mm
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Particle Diameter:     1.9 um
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Particle Pore Size: True
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Particle Pore Size:    120
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Column Porosity:    False
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Column Porosity:       0.42 (0.0-1.0)
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Max Temperature:    False
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    max Temperature:       60 C
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Max Pressure:       False
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    max Pressure:          1000 bar
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Is Max Flow:           False
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    max Flow:              9 uL/min
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Advanced Settings:     False
+6/15/2022 1:23:01 PM - 000.00:00:00.3	---    Column Comments:           
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.3	'Valve Drive 1' is 'ILcInjectorValve'
+6/15/2022 1:23:01 PM - 000.00:00:00.3	'Valve Drive 2' is 'ISelectorValve'
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Seperator equil time:      0.57
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Column loading time:       3.09
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Sep.Length:                150
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Sep.ColumnDiameter:        0.075
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Sep.IsColumnPorosity:      False
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Sep.ParticleDiameter:      1.9
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- oven_temperature:          45
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Column viscoMix:           0.00611528637349969
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Column flow @ 1020 bar:    1.27638643751896
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Column unity flow:         0.00127638643751896
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetSettings() --> PumpSettings
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Log instrument settings called from: Four Valves Separation
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- HomeSpeed: 2000; PurgeSpeed: 2000
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- PressureTrackingExcessFactor: 96
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- FlowResistanceA: 300; FlowResistanceB: 100; FlowResistanceOut: 150
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- FC_FlowFilterDepth: 5; FC_PressureFilterDepth: 0
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- PC_OutputFilterDepth: 0
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- CompressibilityFactorB: 2.29999995231628; PressurePIDNegativeResultDivisor: 1
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- ExternalZeroPressureOffsetA: 114.955764770508; ExternalZeroPressureOffsetB: 117.57063293457
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- ExternalPressureScalingFactorA: 0.0197199992835522; ExternalPressureScalingFactorB: 0.0197199992835522
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Column oven set temperature: 45
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Separator: Name: nanoElute FIFTEEN, Func: Separator, ColDia: 0.075 mm, Len: 150 mm, PartDia: 1.9 µm, Porosity: 42 % ---
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- MaxPressureLimitAB: 1000 bar ---
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetSetManualValvePosition(A) --> 240
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetCurrentPressure(A) --> 4.685471
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetCurrentPressure(B) --> 12.4236
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetSettings() --> PumpSettings
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetSetManualValvePosition(A) --> 240
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetSetManualValvePosition(B) --> 240
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Reduce pressure ---
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Pressure channel A: 4.68547105789185
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--- Pressure channel B: 12.423602104187
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: Manualmode_Pump_constantSpeed(A, 0)
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetSetPistonSpeed(A) --> 0
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: Manualmode_Pump_constantSpeed(B, 0)
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetSetPistonSpeed(B) --> 0
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: IsIdle() --> True
+6/15/2022 1:23:01 PM - 000.00:00:00.3	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetCurrentPressure(A) --> 4.685471
+6/15/2022 1:23:01 PM - 000.00:00:00.3	pump: GetCurrentPressure(B) --> 12.4236
+6/15/2022 1:23:01 PM - 000.00:00:00.4	pump: SetMaxPressureLimit(A, 1020)
+6/15/2022 1:23:01 PM - 000.00:00:00.4	pump: GetMaxPressureLimit(A) --> 1020
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: SetMaxPressureLimit(B, 1020)
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetMaxPressureLimit(B) --> 1020
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetSettings() --> PumpSettings
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.5	PID settings changed:
+6/15/2022 1:23:01 PM - 000.00:00:00.5	P: 175 : True; Pmin: -5000 : True; Pmax: 5000 : True
+6/15/2022 1:23:01 PM - 000.00:00:00.5	I: 5 : True; Imin: -200 : True; Imax: 1000 : True; IWindow: 10 : True
+6/15/2022 1:23:01 PM - 000.00:00:00.5	D: 0 : True; Dmin: -1000 : True; Dmax: 1000 : True
+6/15/2022 1:23:01 PM - 000.00:00:00.5	Result min: -6000 : True; Result max: 8000 : True
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: SetSettings(PumpSettings)
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetPumpSideState(A) --> manualMode
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetPumpSideState(B) --> manualMode
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetPistonPosition(A) --> 954.332491235504
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetPistonPosition(B) --> 657.421616742284
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--- Optional Refill of Pump Heads:
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--- initiated by channel A:     False, B: False
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetPistonPosition(A) --> 954.332491235504
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetPistonPosition(B) --> 657.421616742284
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--- Piston position channel A:  954.332491235504, B: 657.421616742284
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetSetManualValvePosition(A) --> 240
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetCurrentPressure(A) --> 4.547431
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetCurrentPressure(B) --> 12.38416
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetSettings() --> PumpSettings
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetSetManualValvePosition(A) --> 240
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetSetManualValvePosition(B) --> 240
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--- Reduce pressure ---
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--- Pressure channel A: 4.54743099212646
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--- Pressure channel B: 12.3841619491577
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: GetSettings() --> PumpSettings
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.5	PID settings changed:
+6/15/2022 1:23:01 PM - 000.00:00:00.5	P: 250 : True; Pmin: -5500 : True; Pmax: 32000 : True
+6/15/2022 1:23:01 PM - 000.00:00:00.5	I: 50 : True; Imin: -20000 : True; Imax: 20000 : True; IWindow: 50 : True
+6/15/2022 1:23:01 PM - 000.00:00:00.5	D: 1500 : True; Dmin: -10000 : True; Dmax: 10000 : True
+6/15/2022 1:23:01 PM - 000.00:00:00.5	Result min: -32000 : True; Result max: 32000 : True
+6/15/2022 1:23:01 PM - 000.00:00:00.5	pump: SetSettings(PumpSettings)
+6/15/2022 1:23:01 PM - 000.00:00:00.5	--------------------------------------------------------
+6/15/2022 1:23:01 PM - 000.00:00:00.8	--- Set pressure channel A:          10
+6/15/2022 1:23:01 PM - 000.00:00:00.8	--- Set pressure channel B:          5
+6/15/2022 1:23:01 PM - 000.00:00:00.8	--- Reduce pressure flow controlled: True
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--------------------------------------------------------
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- Log PID parameter called from: reducePressure
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- P: 175; Pmin: -5000; Pmax: 5000
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- I: 5; Imin: -200; Imax: 1000; IWindow: 10
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- D: 0; Dmin: -1000; Dmax: 1000
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- Result min: -6000; Result max: 8000
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--------------------------------------------------------
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--------------------------------------------------------
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- Log instrument settings called from: reducePressure
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- HomeSpeed: 2000; PurgeSpeed: 2000
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- PressureTrackingExcessFactor: 96
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- FlowResistanceA: 300; FlowResistanceB: 100; FlowResistanceOut: 150
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- FC_FlowFilterDepth: 5; FC_PressureFilterDepth: 0
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- PC_OutputFilterDepth: 0
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- CompressibilityFactorB: 2.29999995231628; PressurePIDNegativeResultDivisor: 1
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- ExternalZeroPressureOffsetA: 114.955764770508; ExternalZeroPressureOffsetB: 117.57063293457
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- ExternalPressureScalingFactorA: 0.0197199992835522; ExternalPressureScalingFactorB: 0.0197199992835522
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--------------------------------------------------------
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- Final pressure channel A: 4.70519065856934
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--- Final pressure channel B: 8.55848217010498
+6/15/2022 1:23:03 PM - 000.00:00:02.0	--------------------------------------------------------
+6/15/2022 1:23:03 PM - 000.00:00:02.2	autosampler-none: MoveValveDrive(Valve Drive 1, 60 deg)
+6/15/2022 1:23:03 PM - 000.00:00:02.3	autosampler-none: MoveValveDrive(Valve Drive 2, 180 deg)
+6/15/2022 1:23:03 PM - 000.00:00:02.3	pump: GetSetManualValvePosition(A) --> 240
+6/15/2022 1:23:03 PM - 000.00:00:02.3	pump: GetCurrentPressure(A) --> 4.685471
+6/15/2022 1:23:03 PM - 000.00:00:02.3	pump: GetSetManualValvePosition(A) --> 240
+6/15/2022 1:23:03 PM - 000.00:00:02.3	pump: SetManualValvePosition(A, 0, True)
+6/15/2022 1:23:04 PM - 000.00:00:02.9	pump: GetSetManualValvePosition(B) --> 240
+6/15/2022 1:23:04 PM - 000.00:00:02.9	pump: GetCurrentPressure(B) --> 5.225802
+6/15/2022 1:23:04 PM - 000.00:00:02.9	pump: GetSetManualValvePosition(B) --> 240
+6/15/2022 1:23:04 PM - 000.00:00:02.9	pump: SetManualValvePosition(B, 180, False)
+6/15/2022 1:23:04 PM - 000.00:00:03.3	pump: GetSettings() --> PumpSettings
+6/15/2022 1:23:04 PM - 000.00:00:03.3	--------------------------------------------------------
+6/15/2022 1:23:04 PM - 000.00:00:03.3	PID settings changed:
+6/15/2022 1:23:04 PM - 000.00:00:03.3	P: 250 : True; Pmin: -10000 : True; Pmax: 10000 : True
+6/15/2022 1:23:04 PM - 000.00:00:03.3	I: 20 : True; Imin: -10000 : True; Imax: 20000 : True; IWindow: 10 : True
+6/15/2022 1:23:04 PM - 000.00:00:03.3	D: 1500 : True; Dmin: -10000 : True; Dmax: 10000 : True
+6/15/2022 1:23:04 PM - 000.00:00:03.3	Result min: -10000 : True; Result max: 32000 : True
+6/15/2022 1:23:04 PM - 000.00:00:03.3	pump: SetSettings(PumpSettings)
+6/15/2022 1:23:04 PM - 000.00:00:03.3	--------------------------------------------------------
+6/15/2022 1:23:04 PM - 000.00:00:03.3	status: SetStatus(equilibrate separation-column, this finishes at about: 1.51 min., )
+6/15/2022 1:23:04 PM - 000.00:00:03.5	autosampler-none: MoveValveDrive(Valve Drive 2, 60 deg)
+6/15/2022 1:23:04 PM - 000.00:00:03.6	pump: Manualmode_Pump_constantPressure(A, 214)
+6/15/2022 1:23:04 PM - 000.00:00:03.6	pump: GetTargetPressure(A) --> 214
+6/15/2022 1:23:24 PM - 000.00:00:23.6	status: SetStatus(aspirate & inject, )
+6/15/2022 1:23:24 PM - 000.00:00:23.8	autosampler-left: LeaveObject()
+6/15/2022 1:23:29 PM - 000.00:00:28.3	autosampler-left: MoveToObject(LCMS Wash 1, 3)
+6/15/2022 1:23:30 PM - 000.00:00:29.0	autosampler-left: PenetrateObject(LCMS Wash 1, 3, 20 mm)
+6/15/2022 1:23:30 PM - 000.00:00:29.0	autosampler-left: EmptySyringe()
+6/15/2022 1:23:30 PM - 000.00:00:29.8	autosampler-left: LeaveObject()
+6/15/2022 1:23:31 PM - 000.00:00:30.6	Cleaning syringe and needle exterior
+6/15/2022 1:23:34 PM - 000.00:00:33.7	pump: Manualmode_Pump_constantSpeed(A, 0)
+6/15/2022 1:23:34 PM - 000.00:00:33.7	pump: GetSetPistonSpeed(A) --> 0
+6/15/2022 1:23:35 PM - 000.00:00:34.1	autosampler-none: MoveValveDrive(Valve Drive 2, 180 deg)
+6/15/2022 1:23:35 PM - 000.00:00:34.1	--- MaxPressureLimitA: 800 bar ---
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: GetSetManualValvePosition(A) --> 0
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: GetCurrentPressure(A) --> 213.5203
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: GetCurrentPressure(A) --> 213.5203
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: GetCurrentPressure(B) --> 0.8479627
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: GetSettings() --> PumpSettings
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: GetSetManualValvePosition(A) --> 0
+6/15/2022 1:23:35 PM - 000.00:00:34.1	--------------------------------------------------------
+6/15/2022 1:23:35 PM - 000.00:00:34.1	--- Reduce pressure ---
+6/15/2022 1:23:35 PM - 000.00:00:34.1	--- Pressure channel A: 213.520263671875
+6/15/2022 1:23:35 PM - 000.00:00:34.1	--- Pressure channel B: 0.847962737083435
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: Manualmode_Pump_constantSpeed(A, 0)
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: GetSetPistonSpeed(A) --> 0
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: Manualmode_Pump_constantSpeed(, 0)
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: GetSetPistonSpeed() --> 0
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: IsIdle() --> True
+6/15/2022 1:23:35 PM - 000.00:00:34.1	--------------------------------------------------------
+6/15/2022 1:23:35 PM - 000.00:00:34.1	pump: GetCurrentPressure(A) --> 213.5203
+6/15/2022 1:23:35 PM - 000.00:00:34.2	pump: SetMaxPressureLimit(A, 820)
+6/15/2022 1:23:35 PM - 000.00:00:34.2	pump: GetMaxPressureLimit(A) --> 820
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--------------------------------------------------------
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- Separation Column Equilibration:
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- ovenTemp [C]:                                 45
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- Separator Unity-Flow @ ovenTemp [ul/min/bar]: 0.00127638643751896
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- Separator Volume [ul]:                        0.278325474153971
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- Separator Equilibration Volume Multiplier:    2
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- Separator Equilibration Pressure [bar]:       800
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- Separator Equilibration Flow [ul/min]:        0.969647806585014
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- Separator Equilibration Volume [ul]:          0.556650948307941
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- Separator Equilibration Time [min]:           0.574075395754672
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- max. Volume (10*V+2ul/min*t) [ul]:            6.71466027458876
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--- Separator Equilibration Time Out [min]:       5.74075395754672
+6/15/2022 1:23:35 PM - 000.00:00:34.2	--------------------------------------------------------
+6/15/2022 1:23:35 PM - 000.00:00:34.2	pump: Manualmode_Pump_constantPressure(A, 800)
+6/15/2022 1:23:35 PM - 000.00:00:34.2	pump: GetPistonPosition(A) --> 974.811695986215
+6/15/2022 1:23:47 PM - 000.00:00:46.2	autosampler-left: CleanSyringe(LCMS Wash 1, 1, 30 mm, 40 uL/s, 500 ms, 30 mm, 40 uL/s, 80 %, 2)
+6/15/2022 1:23:47 PM - 000.00:00:46.4	autosampler-left: ChangeTool(LCP 1) --> False
+6/15/2022 1:23:49 PM - 000.00:00:48.2	pump: GetPistonPosition(A) --> 1017.10884283709
+6/15/2022 1:23:49 PM - 000.00:00:48.2	pump: GetPistonPosition(A) --> 1017.10884283709
+6/15/2022 1:23:49 PM - 000.00:00:48.2	pump: GetPistonPosition(A) --> 1017.10884283709
+6/15/2022 1:23:50 PM - 000.00:00:49.6	autosampler-left: MoveToObject(Item Position 3, 1, True, True, True)
+6/15/2022 1:23:54 PM - 000.00:00:53.0	autosampler-left: PenetrateWithBottomSense(Item Position 3, 1, 1 mm)
+6/15/2022 1:23:56 PM - 000.00:00:55.7	autosampler-left: AspirateSyringe(2 uL, 1 uL/s, 500 ms)
+6/15/2022 1:23:57 PM - 000.00:00:56.5	autosampler-left: LeaveObject()
+6/15/2022 1:23:58 PM - 000.00:00:57.7	autosampler-left: AspirateSyringe(0.5 uL, 1 uL/s, 500 ms)
+6/15/2022 1:24:09 PM - 000.00:01:08.5	autosampler-left: MoveToObject(Well Plate 1, 25, True, True, True)
+6/15/2022 1:24:12 PM - 000.00:01:11.6	autosampler-left: PenetrateWithBottomSense(Well Plate 1, 25, 1 mm)
+6/15/2022 1:24:16 PM - 000.00:01:15.2	autosampler-left: AspirateSyringe(3 uL, 1 uL/s, 500 ms)
+6/15/2022 1:24:17 PM - 000.00:01:16.2	autosampler-left: LeaveObject(50 mm, True, False)
+6/15/2022 1:24:24 PM - 000.00:01:23.2	pump: GetPistonPosition(A) --> 1018.20735306829
+6/15/2022 1:24:24 PM - 000.00:01:23.2	pump: GetCurrentPressure(A) --> 800.8213
+6/15/2022 1:24:24 PM - 000.00:01:23.2	--- act. pressure [bar]:                 800.8212890625
+6/15/2022 1:24:24 PM - 000.00:01:23.2	--- used volume [uL]:                    1.0985102312053
+6/15/2022 1:24:24 PM - 000.00:01:23.2	--- average flow (incl. leaks) [uL/min]: 1.91352954564654
+6/15/2022 1:24:24 PM - 000.00:01:23.2	--- act. equilibration time [min]:       0.583750000002328
+6/15/2022 1:24:24 PM - 000.00:01:23.2	--------------------------------------------------------
+6/15/2022 1:24:24 PM - 000.00:01:23.2	status: RemoveStatus(equilibrate separation-column, this finishes at about: 1.51 min.)
+6/15/2022 1:24:24 PM - 000.00:01:23.4	autosampler-left: CloseOpenDrawers(Peltier Stack 1)
+6/15/2022 1:24:26 PM - 000.00:01:25.0	autosampler-left: AspirateSyringe(1 uL, 1 uL/s, 500 ms)
+6/15/2022 1:24:29 PM - 000.00:01:28.3	autosampler-left: MoveToObject(LCMS Wash 1, 1, True, True, True)
+6/15/2022 1:24:30 PM - 000.00:01:29.6	autosampler-left: PenetrateObject(LCMS Wash 1, 1, 30 mm)
+6/15/2022 1:24:35 PM - 000.00:01:34.6	autosampler-left: Wait(5000 ms)
+6/15/2022 1:24:36 PM - 000.00:01:35.4	autosampler-left: LeaveObject()
+6/15/2022 1:24:39 PM - 000.00:01:38.6	autosampler-left: MoveToObject(LCInjector1)
+6/15/2022 1:24:40 PM - 000.00:01:39.5	autosampler-left: DispenseSyringe(0.75 uL, 1 uL/s)
+6/15/2022 1:24:43 PM - 000.00:01:42.4	autosampler-left: PenetrateWithConstForce(LCInjector1)
+6/15/2022 1:24:43 PM - 000.00:01:42.6	autosampler-left: MoveValveDrive(Valve Drive 1, 0 deg)
+6/15/2022 1:24:44 PM - 000.00:01:43.6	autosampler-left: Wait(1000 ms)
+6/15/2022 1:24:49 PM - 000.00:01:48.5	autosampler-left: DispenseSyringe(4.75 uL, 1 uL/s)
+6/15/2022 1:24:50 PM - 000.00:01:49.5	autosampler-left: Wait(1000 ms)
+6/15/2022 1:24:51 PM - 000.00:01:50.3	status: RemoveStatus(aspirate & inject)
+6/15/2022 1:24:53 PM - 000.00:01:52.3	status: SetStatus(load separation-column, this finishes at about: 7.08 min., )
+6/15/2022 1:24:53 PM - 000.00:01:52.3	--- MaxPressureLimitA: 800 bar ---
+6/15/2022 1:24:53 PM - 000.00:01:52.3	pump: GetSetManualValvePosition(A) --> 0
+6/15/2022 1:24:53 PM - 000.00:01:52.3	pump: GetCurrentPressure(A) --> 800.1508
+6/15/2022 1:24:53 PM - 000.00:01:52.3	pump: GetCurrentPressure(A) --> 800.1508
+6/15/2022 1:24:53 PM - 000.00:01:52.3	pump: GetCurrentPressure(B) --> 0.7888027
+6/15/2022 1:24:53 PM - 000.00:01:52.3	pump: GetSettings() --> PumpSettings
+6/15/2022 1:24:53 PM - 000.00:01:52.3	pump: GetSetManualValvePosition(A) --> 0
+6/15/2022 1:24:53 PM - 000.00:01:52.3	--------------------------------------------------------
+6/15/2022 1:24:53 PM - 000.00:01:52.3	--- Reduce pressure ---
+6/15/2022 1:24:53 PM - 000.00:01:52.3	--- Pressure channel A: 800.150817871094
+6/15/2022 1:24:53 PM - 000.00:01:52.3	--- Pressure channel B: 0.788802742958069
+6/15/2022 1:24:53 PM - 000.00:01:52.3	pump: GetSettings() --> PumpSettings
+6/15/2022 1:24:53 PM - 000.00:01:52.3	--------------------------------------------------------
+6/15/2022 1:24:53 PM - 000.00:01:52.3	PID settings changed:
+6/15/2022 1:24:53 PM - 000.00:01:52.3	P: 250 : True; Pmin: -32000 : True; Pmax: 32000 : True
+6/15/2022 1:24:53 PM - 000.00:01:52.3	I: 20 : True; Imin: -20000 : True; Imax: 20000 : True; IWindow: 100 : True
+6/15/2022 1:24:53 PM - 000.00:01:52.3	D: 1500 : True; Dmin: -10000 : True; Dmax: 10000 : True
+6/15/2022 1:24:53 PM - 000.00:01:52.3	Result min: -32000 : True; Result max: 32000 : True
+6/15/2022 1:24:53 PM - 000.00:01:52.3	pump: SetSettings(PumpSettings)
+6/15/2022 1:24:53 PM - 000.00:01:52.3	--------------------------------------------------------
+6/15/2022 1:24:53 PM - 000.00:01:52.4	--- Set pressure channel A:          800
+6/15/2022 1:24:53 PM - 000.00:01:52.4	--- Set pressure channel B:          800
+6/15/2022 1:24:53 PM - 000.00:01:52.4	--- Reduce pressure flow controlled: False
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--------------------------------------------------------
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- Log PID parameter called from: reducePressure
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- P: 250; Pmin: -10000; Pmax: 10000
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- I: 20; Imin: -10000; Imax: 20000; IWindow: 10
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- D: 1500; Dmin: -10000; Dmax: 10000
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- Result min: -10000; Result max: 32000
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--------------------------------------------------------
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--------------------------------------------------------
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- Log instrument settings called from: reducePressure
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- HomeSpeed: 2000; PurgeSpeed: 2000
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- PressureTrackingExcessFactor: 96
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- FlowResistanceA: 300; FlowResistanceB: 100; FlowResistanceOut: 150
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- FC_FlowFilterDepth: 5; FC_PressureFilterDepth: 0
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- PC_OutputFilterDepth: 0
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- CompressibilityFactorB: 2.29999995231628; PressurePIDNegativeResultDivisor: 1
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- ExternalZeroPressureOffsetA: 114.955764770508; ExternalZeroPressureOffsetB: 117.57063293457
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- ExternalPressureScalingFactorA: 0.0197199992835522; ExternalPressureScalingFactorB: 0.0197199992835522
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--------------------------------------------------------
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- Final pressure channel A: 799.85498046875
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--- Final pressure channel B: 799.85498046875
+6/15/2022 1:24:53 PM - 000.00:01:52.8	--------------------------------------------------------
+6/15/2022 1:24:53 PM - 000.00:01:52.8	pump: GetCurrentPressure(A) --> 799.855
+6/15/2022 1:24:54 PM - 000.00:01:52.9	pump: SetMaxPressureLimit(A, 820)
+6/15/2022 1:24:54 PM - 000.00:01:52.9	pump: GetMaxPressureLimit(A) --> 820
+6/15/2022 1:24:54 PM - 000.00:01:53.3	autosampler-none: MoveValveDrive(Valve Drive 1, 60 deg)
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--------------------------------------------------------
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Sample Loading on Separation Column:
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- ovenTemp [C]:                      45
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Separator Unity-Flow [ul/bar]:     0.00127638643751896
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Separator Volume [ul]:             0.278325474153971
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Sample Volume [ul]:                3
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Separator Load Pressure [bar]:     800
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Separator Load Flow [ul/min]:      0.969647806585014
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Separator Volume Multiplier:       1
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Separator Load Volume (+2) [ul]:   5
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Separator Load Time [min]:         5.156511432341
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- max. Volume (10*V+2ul/min*t) [ul]: 60.313022864682
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--- Separator Load Time Out [min]:     51.56511432341
+6/15/2022 1:24:55 PM - 000.00:01:54.6	--------------------------------------------------------
+6/15/2022 1:24:55 PM - 000.00:01:54.6	pump: Manualmode_Pump_constantPressure(A, 800)
+6/15/2022 1:24:55 PM - 000.00:01:54.6	pump: GetPistonPosition(A) --> 1018.74791644422
+6/15/2022 1:24:56 PM - 000.00:01:54.9	autosampler-left: EmptySyringe(5 uL/s)
+6/15/2022 1:24:59 PM - 000.00:01:58.6	pump: GetPistonPosition(A) --> 1020.40395465168
+6/15/2022 1:24:59 PM - 000.00:01:58.6	pump: GetPistonPosition(A) --> 1020.40395465168
+6/15/2022 1:24:59 PM - 000.00:01:58.6	pump: GetPistonPosition(A) --> 1020.40395465168
+6/15/2022 1:25:54 PM - 000.00:02:53.7	autosampler-left: CleanInjector(LCInjector1, LCP 1, 200 uL, 0 mm, 5 uL/s, 5000 ms, 20 mm, 40 uL/s, 1000 ms, 2, False)
+6/15/2022 1:26:55 PM - 000.00:03:54.7	autosampler-left: CleanInjector(LCInjector1, LCP 1, 200 uL, 0 mm, 5 uL/s, 5000 ms, 20 mm, 40 uL/s, 1000 ms, 1, True)
+6/15/2022 1:26:58 PM - 000.00:03:57.4	autosampler-left: MoveToHome()
+6/15/2022 1:30:09 PM - 000.00:07:08.1	pump: GetPistonPosition(A) --> 1027.19084198099
+6/15/2022 1:30:09 PM - 000.00:07:08.1	pump: GetCurrentPressure(A) --> 800.0522
+6/15/2022 1:30:09 PM - 000.00:07:08.1	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.1	--- Finished: Sample Loading on Separation Column: (const_pressure_load_and_equilibration)
+6/15/2022 1:30:09 PM - 000.00:07:08.1	--- act. pressure [bar]:                 800.052185058594
+6/15/2022 1:30:09 PM - 000.00:07:08.1	--- used volume [uL]:                    6.78688732930505
+6/15/2022 1:30:09 PM - 000.00:07:08.1	--- average flow (incl. leaks) [uL/min]: 1.31617808248005
+6/15/2022 1:30:09 PM - 000.00:07:08.1	--- act. loading time [min]:             5.15871666666741
+6/15/2022 1:30:09 PM - 000.00:07:08.1	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.5	status: RemoveStatus(load separation-column, this finishes at about: 7.08 min.)
+6/15/2022 1:30:09 PM - 000.00:07:08.5	pump: GetSettings() --> PumpSettings
+6/15/2022 1:30:09 PM - 000.00:07:08.5	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.5	PID settings changed:
+6/15/2022 1:30:09 PM - 000.00:07:08.5	P: 100 : True; Pmin: -10000 : True; Pmax: 10000 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.5	I: 100 : True; Imin: -1000 : True; Imax: 1000 : True; IWindow: 100 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.5	D: 5000 : True; Dmin: -32000 : True; Dmax: 32000 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.5	Result min: -5000 : True; Result max: 25000 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.5	pump: SetSettings(PumpSettings)
+6/15/2022 1:30:09 PM - 000.00:07:08.5	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.5	pump: GetSettings() --> PumpSettings
+6/15/2022 1:30:09 PM - 000.00:07:08.5	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.5	PID settings changed:
+6/15/2022 1:30:09 PM - 000.00:07:08.5	P: 100 : False; Pmin: -10000 : False; Pmax: 10000 : False
+6/15/2022 1:30:09 PM - 000.00:07:08.5	I: 100 : False; Imin: -1000 : False; Imax: 1000 : False; IWindow: 2 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.5	D: 5000 : False; Dmin: -32000 : False; Dmax: 32000 : False
+6/15/2022 1:30:09 PM - 000.00:07:08.5	Result min: -5000 : False; Result max: 25000 : False
+6/15/2022 1:30:09 PM - 000.00:07:08.5	pump: SetSettings(PumpSettings)
+6/15/2022 1:30:09 PM - 000.00:07:08.5	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.5	status: SetStatus(preparing gradient start, )
+6/15/2022 1:30:09 PM - 000.00:07:08.5	--- Starting conditioning paths ---
+6/15/2022 1:30:09 PM - 000.00:07:08.5	pump: GetSettings() --> PumpSettings
+6/15/2022 1:30:09 PM - 000.00:07:08.5	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.5	PID settings changed:
+6/15/2022 1:30:09 PM - 000.00:07:08.5	P: 100 : True; Pmin: -10000 : True; Pmax: 10000 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.5	I: 100 : True; Imin: -1000 : True; Imax: 1000 : True; IWindow: 100 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.5	D: 5000 : True; Dmin: -32000 : True; Dmax: 32000 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.5	Result min: -5000 : True; Result max: 25000 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.5	pump: SetSettings(PumpSettings)
+6/15/2022 1:30:09 PM - 000.00:07:08.5	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.7	pump: GetSetManualValvePosition(A) --> 0
+6/15/2022 1:30:09 PM - 000.00:07:08.7	pump: GetCurrentPressure(A) --> 799.9733
+6/15/2022 1:30:09 PM - 000.00:07:08.7	pump: GetCurrentPressure(A) --> 799.9733
+6/15/2022 1:30:09 PM - 000.00:07:08.7	pump: GetCurrentPressure(B) --> 0.7493628
+6/15/2022 1:30:09 PM - 000.00:07:08.7	pump: GetSettings() --> PumpSettings
+6/15/2022 1:30:09 PM - 000.00:07:08.7	pump: GetSetManualValvePosition(A) --> 0
+6/15/2022 1:30:09 PM - 000.00:07:08.7	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.7	--- Reduce pressure ---
+6/15/2022 1:30:09 PM - 000.00:07:08.7	--- Pressure channel A: 799.973327636719
+6/15/2022 1:30:09 PM - 000.00:07:08.7	--- Pressure channel B: 0.749362766742706
+6/15/2022 1:30:09 PM - 000.00:07:08.7	pump: GetSettings() --> PumpSettings
+6/15/2022 1:30:09 PM - 000.00:07:08.7	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.7	PID settings changed:
+6/15/2022 1:30:09 PM - 000.00:07:08.7	P: 250 : True; Pmin: -32000 : True; Pmax: 32000 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.7	I: 20 : True; Imin: -20000 : True; Imax: 20000 : True; IWindow: 100 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.7	D: 1500 : True; Dmin: -10000 : True; Dmax: 10000 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.7	Result min: -32000 : True; Result max: 32000 : True
+6/15/2022 1:30:09 PM - 000.00:07:08.7	pump: SetSettings(PumpSettings)
+6/15/2022 1:30:09 PM - 000.00:07:08.7	--------------------------------------------------------
+6/15/2022 1:30:09 PM - 000.00:07:08.8	--- Set pressure channel A:          0
+6/15/2022 1:30:09 PM - 000.00:07:08.8	--- Set pressure channel B:          0
+6/15/2022 1:30:09 PM - 000.00:07:08.8	--- Reduce pressure flow controlled: False
+6/15/2022 1:30:10 PM - 000.00:07:08.9	autosampler-none: MoveValveDrive(Valve Drive 1, 30 deg)
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--------------------------------------------------------
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- Log PID parameter called from: reducePressure
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- P: 100; Pmin: -10000; Pmax: 10000
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- I: 100; Imin: -1000; Imax: 1000; IWindow: 100
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- D: 5000; Dmin: -32000; Dmax: 32000
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- Result min: -5000; Result max: 25000
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--------------------------------------------------------
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--------------------------------------------------------
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- Log instrument settings called from: reducePressure
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- HomeSpeed: 2000; PurgeSpeed: 2000
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- PressureTrackingExcessFactor: 96
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- FlowResistanceA: 300; FlowResistanceB: 100; FlowResistanceOut: 150
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- FC_FlowFilterDepth: 5; FC_PressureFilterDepth: 0
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- PC_OutputFilterDepth: 0
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- CompressibilityFactorB: 2.29999995231628; PressurePIDNegativeResultDivisor: 1
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- ExternalZeroPressureOffsetA: 114.955764770508; ExternalZeroPressureOffsetB: 117.57063293457
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- ExternalPressureScalingFactorA: 0.0197199992835522; ExternalPressureScalingFactorB: 0.0197199992835522
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--------------------------------------------------------
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- Final pressure channel A: 4.6263108253479
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--- Final pressure channel B: 4.6263108253479
+6/15/2022 1:30:25 PM - 000.00:07:24.5	--------------------------------------------------------
+6/15/2022 1:30:25 PM - 000.00:07:24.5	pump: GetCurrentPressure(A) --> 4.626311
+6/15/2022 1:30:25 PM - 000.00:07:24.5	pump: GetSetManualValvePosition(A) --> 0
+6/15/2022 1:30:25 PM - 000.00:07:24.5	pump: SetManualValvePosition(A, 240, False)
+6/15/2022 1:30:26 PM - 000.00:07:25.1	pump: GetSetManualValvePosition(B) --> 180
+6/15/2022 1:30:26 PM - 000.00:07:25.1	pump: SetManualValvePosition(B, 240, False)
+6/15/2022 1:30:27 PM - 000.00:07:26.3	autosampler-none: MoveValveDrive(Valve Drive 2, 0 deg)
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- Set constant binary flow ---
+6/15/2022 1:30:28 PM - 000.00:07:27.5	pump: Manualmode_Pump_constantFlow_binary(1, 1)
+6/15/2022 1:30:28 PM - 000.00:07:27.5	pump: GetSetFlow(A) --> 1
+6/15/2022 1:30:28 PM - 000.00:07:27.5	pump: GetSetFlow(B) --> 1
+6/15/2022 1:30:28 PM - 000.00:07:27.5	
+
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- Starting spline flow reduction B/A ---
+6/15/2022 1:30:28 PM - 000.00:07:27.5	pump: GetSetExternalTemperature() --> 45
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- Oven temperatur: 45
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- Separator: Name: nanoElute FIFTEEN, Func: Separator, ColDia: 0.075 mm, Len: 150 mm, PartDia: 1.9 µm, Porosity: 42 %
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- Spline fitting time: 74.586544689863 s
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- Spline fitting time adapted: 10 s
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- y = 0x + 1
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p0.Time -1, p0.Flow 1
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p1.Time 0, p1.Flow 1
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p2.Time 9, p2.Flow 1
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p3.Time 10, p3.Flow 1, p3.Mix 0
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p4.Time 40, p4.Flow 1, p4.Mix 0
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- Strategy function end
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- y = 0x + 0
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p0.Time -1, p0.Flow 1
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p1.Time 0, p1.Flow 1
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p2.Time 9, p2.Flow 0
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p3.Time 10, p3.Flow 0, p3.Mix 0
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- p4.Time 40, p4.Flow 0, p4.Mix 0
+6/15/2022 1:30:28 PM - 000.00:07:27.5	--- Strategy function end
+6/15/2022 1:30:28 PM - 000.00:07:27.5	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+6/15/2022 1:30:28 PM - 000.00:07:27.5	XXXXX Time 0, Flow 2, Mix 50
+6/15/2022 1:30:28 PM - 000.00:07:27.5	XXXXX Time 1, Flow 1.94545, Mix 48.59813
+6/15/2022 1:30:28 PM - 000.00:07:27.5	XXXXX Time 2, Flow 1.84848, Mix 45.90163
+6/15/2022 1:30:28 PM - 000.00:07:27.5	XXXXX Time 3, Flow 1.72121, Mix 41.9014
+6/15/2022 1:30:28 PM - 000.00:07:27.5	XXXXX Time 4, Flow 1.57575, Mix 36.53846
+6/15/2022 1:30:28 PM - 000.00:07:27.5	XXXXX Time 5, Flow 1.42424, Mix 29.78723
+6/15/2022 1:30:28 PM - 000.00:07:27.6	XXXXX Time 6, Flow 1.27878, Mix 21.80094
+6/15/2022 1:30:28 PM - 000.00:07:27.6	XXXXX Time 7, Flow 1.15151, Mix 13.15789
+6/15/2022 1:30:28 PM - 000.00:07:27.6	XXXXX Time 8, Flow 1.05454, Mix 5.17241
+6/15/2022 1:30:28 PM - 000.00:07:27.6	XXXXX Time 9, Flow 1, Mix 0
+6/15/2022 1:30:28 PM - 000.00:07:27.6	--- LoadGradient() ---
+6/15/2022 1:30:28 PM - 000.00:07:27.6	--- Loading gradient method index: 0
+6/15/2022 1:30:28 PM - 000.00:07:27.6	pump: LoadMethod(0, ZrData.ZrPumpMethod)
+6/15/2022 1:30:29 PM - 000.00:07:28.1	pump: GetMethodState(0) --> loaded
+6/15/2022 1:30:29 PM - 000.00:07:28.1	--- Set gradient start
+6/15/2022 1:30:29 PM - 000.00:07:28.1	--- StartGradient() ---
+6/15/2022 1:30:29 PM - 000.00:07:28.1	--- Starting gradient method index: 0
+6/15/2022 1:30:29 PM - 000.00:07:28.1	pump: SetMethodSignal(0, StartTrunk)
+6/15/2022 1:30:29 PM - 000.00:07:28.3	pump: GetMethodState(0) --> runningTrunk
+6/15/2022 1:30:29 PM - 000.00:07:28.3	--- Start GradientSplineFit
+6/15/2022 1:30:29 PM - 000.00:07:28.3	pump: GetMethodState(0) --> runningTrunk
+6/15/2022 1:30:30 PM - 000.00:07:29.3	pump: GetCurrentPressure(A) --> 79.01015
+6/15/2022 1:30:30 PM - 000.00:07:29.3	pump: GetCurrentPressure(B) --> 64.74076
+6/15/2022 1:30:30 PM - 000.00:07:29.3	--- GradientSplineFit is running
+6/15/2022 1:30:38 PM - 000.00:07:37.3	--- GradientSplineFit has finished
+6/15/2022 1:30:38 PM - 000.00:07:37.3	--- End GradientSplineFit
+6/15/2022 1:30:38 PM - 000.00:07:37.3	--- Finished spline flow reduction B ---
+6/15/2022 1:30:39 PM - 000.00:07:38.3	pump: GetSetExternalTemperature() --> 45
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- Oven temperatur: 45
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- Separator: Name: nanoElute FIFTEEN, Func: Separator, ColDia: 0.075 mm, Len: 150 mm, PartDia: 1.9 µm, Porosity: 42 %
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- Spline fitting time: 74.586544689863 s
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- Spline fitting time adapted: 60 s
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- y = 0x + 0.01
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p0.Time -1, p0.Flow 1
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p1.Time 0, p1.Flow 1
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p2.Time 59, p2.Flow 0.01
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p3.Time 60, p3.Flow 0.01, p3.Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p4.Time 90, p4.Flow 0.01, p4.Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- Strategy function end
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- y = 0x + 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p0.Time -1, p0.Flow 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p1.Time 0, p1.Flow 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p2.Time 59, p2.Flow 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p3.Time 60, p3.Flow 0, p3.Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- p4.Time 90, p4.Flow 0, p4.Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	--- Strategy function end
+6/15/2022 1:30:39 PM - 000.00:07:38.3	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 0, Flow 1, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 1, Flow 0.99837, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 2, Flow 0.99518, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 3, Flow 0.99048, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 4, Flow 0.98432, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 5, Flow 0.97675, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 6, Flow 0.96784, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 7, Flow 0.95763, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 8, Flow 0.94619, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 9, Flow 0.93356, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 10, Flow 0.91981, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 11, Flow 0.90498, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 12, Flow 0.88914, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.3	XXXXX Time 13, Flow 0.87233, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 14, Flow 0.85462, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 15, Flow 0.83605, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 16, Flow 0.81668, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 17, Flow 0.79658, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 18, Flow 0.77578, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 19, Flow 0.75435, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 20, Flow 0.73235, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 21, Flow 0.70982, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 22, Flow 0.68682, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 23, Flow 0.66341, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 24, Flow 0.63964, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 25, Flow 0.61558, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 26, Flow 0.59126, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 27, Flow 0.56675, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 28, Flow 0.5421, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 29, Flow 0.51737, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 30, Flow 0.49262, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 31, Flow 0.46789, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 32, Flow 0.44324, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 33, Flow 0.41873, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 34, Flow 0.39441, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 35, Flow 0.37035, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.4	XXXXX Time 36, Flow 0.34658, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 37, Flow 0.32317, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 38, Flow 0.30017, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 39, Flow 0.27764, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 40, Flow 0.25564, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 41, Flow 0.23421, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 42, Flow 0.21341, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 43, Flow 0.19331, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 44, Flow 0.17394, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 45, Flow 0.15537, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 46, Flow 0.13766, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 47, Flow 0.12085, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 48, Flow 0.10501, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 49, Flow 0.09018, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 50, Flow 0.07643, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 51, Flow 0.0638, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 52, Flow 0.05236, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 53, Flow 0.04215, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 54, Flow 0.03324, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 55, Flow 0.02567, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 56, Flow 0.01951, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.5	XXXXX Time 57, Flow 0.01481, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.6	XXXXX Time 58, Flow 0.01162, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.6	XXXXX Time 59, Flow 0.00999, Mix 0
+6/15/2022 1:30:39 PM - 000.00:07:38.6	--- LoadGradient() ---
+6/15/2022 1:30:39 PM - 000.00:07:38.6	--- Loading gradient method index: 0
+6/15/2022 1:30:39 PM - 000.00:07:38.6	pump: LoadMethod(0, ZrData.ZrPumpMethod)
+6/15/2022 1:30:40 PM - 000.00:07:39.1	pump: GetMethodState(0) --> loaded
+6/15/2022 1:30:40 PM - 000.00:07:39.1	--- Set gradient start
+6/15/2022 1:30:40 PM - 000.00:07:39.1	--- StartGradient() ---
+6/15/2022 1:30:40 PM - 000.00:07:39.1	--- Starting gradient method index: 0
+6/15/2022 1:30:40 PM - 000.00:07:39.1	pump: SetMethodSignal(0, StartTrunk)
+6/15/2022 1:30:40 PM - 000.00:07:39.3	pump: GetMethodState(0) --> runningTrunk
+6/15/2022 1:30:40 PM - 000.00:07:39.3	--- Start GradientSplineFit
+6/15/2022 1:30:40 PM - 000.00:07:39.3	pump: GetMethodState(0) --> runningTrunk
+6/15/2022 1:30:41 PM - 000.00:07:40.3	pump: GetCurrentPressure(A) --> 92.99163
+6/15/2022 1:30:41 PM - 000.00:07:40.3	pump: GetCurrentPressure(B) --> 21.47508
+6/15/2022 1:30:41 PM - 000.00:07:40.3	--- GradientSplineFit is running
+6/15/2022 1:31:39 PM - 000.00:08:38.3	--- GradientSplineFit has finished
+6/15/2022 1:31:39 PM - 000.00:08:38.3	--- End GradientSplineFit
+6/15/2022 1:31:39 PM - 000.00:08:38.3	--- Finished spline flow reduction A ---
+
+6/15/2022 1:31:39 PM - 000.00:08:38.3	--- Finished conditioning paths ---
+6/15/2022 1:31:44 PM - 000.00:08:43.5	autosampler-none: MoveValveDrive(Valve Drive 2, 120 deg)
+6/15/2022 1:31:44 PM - 000.00:08:43.5	pump: GetSetExternalTemperature() --> 45
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- Oven temperatur: 45
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- Separator: Name: nanoElute FIFTEEN, Func: Separator, ColDia: 0.075 mm, Len: 150 mm, PartDia: 1.9 µm, Porosity: 42 %
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- Spline fitting time: 74.586544689863 s
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- Spline fitting time adapted: 55.5669757939479 s
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- Press: 443.474684103655; colPress: 393.474684103655, visco: 0.00614250857442333, flow > 0.5
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- Flow: 0.5; Mix: 0.01, calcI: 289.567721127441
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- Ki calc: 289.567721127441
+6/15/2022 1:31:44 PM - 000.00:08:43.5	pump: GetSettings() --> PumpSettings
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--------------------------------------------------------
+6/15/2022 1:31:44 PM - 000.00:08:43.5	PID settings changed:
+6/15/2022 1:31:44 PM - 000.00:08:43.5	P: 200 : True; Pmin: -32000 : True; Pmax: 32000 : True
+6/15/2022 1:31:44 PM - 000.00:08:43.5	I: 600 : True; Imin: -32000 : True; Imax: 32000 : True; IWindow: 100 : True
+6/15/2022 1:31:44 PM - 000.00:08:43.5	D: 1000 : True; Dmin: -32000 : True; Dmax: 32000 : True
+6/15/2022 1:31:44 PM - 000.00:08:43.5	Result min: -32000 : True; Result max: 32000 : True
+6/15/2022 1:31:44 PM - 000.00:08:43.5	pump: SetSettings(PumpSettings)
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--------------------------------------------------------
+6/15/2022 1:31:44 PM - 000.00:08:43.5	pump: GetSettings() --> PumpSettings
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--------------------------------------------------------
+6/15/2022 1:31:44 PM - 000.00:08:43.5	PID settings changed:
+6/15/2022 1:31:44 PM - 000.00:08:43.5	P: 200 : False; Pmin: -32000 : False; Pmax: 32000 : False
+6/15/2022 1:31:44 PM - 000.00:08:43.5	I: 289 : True; Imin: -32000 : False; Imax: 32000 : False; IWindow: 100 : False
+6/15/2022 1:31:44 PM - 000.00:08:43.5	D: 1000 : False; Dmin: -32000 : False; Dmax: 32000 : False
+6/15/2022 1:31:44 PM - 000.00:08:43.5	Result min: -32000 : False; Result max: 32000 : False
+6/15/2022 1:31:44 PM - 000.00:08:43.5	pump: SetSettings(PumpSettings)
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--------------------------------------------------------
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- y = -0.0005x + 0.522783487896974
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p0.Time -1, p0.Flow 0.01
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p1.Time 0, p1.Flow 0.01
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p2.Time 54.5669757939479, p2.Flow 0.4955
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p3.Time 55.5669757939479, p3.Flow 0.495, p3.Mix 1
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p4.Time 115.566975793948, p4.Flow 0.465, p4.Mix 7
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- Strategy function end
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- y = 0.0005x + -0.022783487896974
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p0.Time -1, p0.Flow 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p1.Time 0, p1.Flow 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p2.Time 54.5669757939479, p2.Flow 0.0045
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p3.Time 55.5669757939479, p3.Flow 0.005, p3.Mix 1
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- p4.Time 115.566975793948, p4.Flow 0.035, p4.Mix 7
+6/15/2022 1:31:44 PM - 000.00:08:43.5	--- Strategy function end
+6/15/2022 1:31:44 PM - 000.00:08:43.5	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 0, Flow 0.01, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 1, Flow 0.01094, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 2, Flow 0.01279, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 3, Flow 0.01552, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 4, Flow 0.01908, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 5, Flow 0.02345, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 6, Flow 0.02859, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 7, Flow 0.03447, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 8, Flow 0.04104, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.5	XXXXX Time 9, Flow 0.04827, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 10, Flow 0.05614, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 11, Flow 0.0646, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 12, Flow 0.07362, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 13, Flow 0.08317, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 14, Flow 0.0932, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 15, Flow 0.10369, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 16, Flow 0.1146, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 17, Flow 0.1259, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 18, Flow 0.13754, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 19, Flow 0.1495, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 20, Flow 0.16174, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 21, Flow 0.17423, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 22, Flow 0.18693, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 23, Flow 0.1998, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 24, Flow 0.21281, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 25, Flow 0.22593, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 26, Flow 0.23912, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 27, Flow 0.25234, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 28, Flow 0.26557, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 29, Flow 0.27876, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 30, Flow 0.29188, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 31, Flow 0.3049, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 32, Flow 0.31778, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.6	XXXXX Time 33, Flow 0.33049, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 34, Flow 0.34299, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 35, Flow 0.35524, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 36, Flow 0.36722, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 37, Flow 0.37888, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 38, Flow 0.39019, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 39, Flow 0.40112, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 40, Flow 0.41164, Mix 0
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 41, Flow 0.42176, Mix 0.01547
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 42, Flow 0.43153, Mix 0.06047
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 43, Flow 0.44079, Mix 0.10777
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 44, Flow 0.44951, Mix 0.15755
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 45, Flow 0.45767, Mix 0.20999
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 46, Flow 0.46521, Mix 0.2653
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 47, Flow 0.47211, Mix 0.32373
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 48, Flow 0.47834, Mix 0.38553
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 49, Flow 0.48385, Mix 0.45099
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 50, Flow 0.48862, Mix 0.52044
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 51, Flow 0.49262, Mix 0.59426
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 52, Flow 0.49579, Mix 0.67286
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 53, Flow 0.49813, Mix 0.75671
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 54, Flow 0.49958, Mix 0.84636
+6/15/2022 1:31:44 PM - 000.00:08:43.7	XXXXX Time 55, Flow 0.50011, Mix 0.94242
+6/15/2022 1:31:44 PM - 000.00:08:43.7	--- LoadGradient() ---
+6/15/2022 1:31:44 PM - 000.00:08:43.7	--- Loading gradient method index: 0
+6/15/2022 1:31:44 PM - 000.00:08:43.7	pump: LoadMethod(0, ZrData.ZrPumpMethod)
+6/15/2022 1:31:45 PM - 000.00:08:44.2	pump: GetMethodState(0) --> loaded
+6/15/2022 1:31:45 PM - 000.00:08:44.2	--- Set gradient start
+6/15/2022 1:31:45 PM - 000.00:08:44.2	--- StartGradient() ---
+6/15/2022 1:31:45 PM - 000.00:08:44.2	--- Starting gradient method index: 0
+6/15/2022 1:31:45 PM - 000.00:08:44.2	pump: SetMethodSignal(0, StartTrunk)
+6/15/2022 1:31:45 PM - 000.00:08:44.4	pump: GetMethodState(0) --> runningTrunk
+6/15/2022 1:31:45 PM - 000.00:08:44.4	--- Start GradientSplineFit
+6/15/2022 1:31:45 PM - 000.00:08:44.4	pump: GetMethodState(0) --> runningTrunk
+6/15/2022 1:31:46 PM - 000.00:08:45.4	pump: GetCurrentPressure(A) --> 0.938671
+6/15/2022 1:31:46 PM - 000.00:08:45.4	pump: GetCurrentPressure(B) --> 1.873403
+6/15/2022 1:31:46 PM - 000.00:08:45.4	--- GradientSplineFit is running
+6/15/2022 1:32:40 PM - 000.00:09:39.5	--- GradientSplineFit has finished
+6/15/2022 1:32:40 PM - 000.00:09:39.5	--- End GradientSplineFit
+6/15/2022 1:32:40 PM - 000.00:09:39.5	status: RemoveStatus(preparing gradient start)
+6/15/2022 1:32:40 PM - 000.00:09:39.5	Setting signal "lc-ready"
+6/15/2022 1:32:40 PM - 000.00:09:39.5	Waiting for signal "ms-start"...
+6/15/2022 1:32:40 PM - 000.00:09:39.5	--- LoadGradient() ---
+6/15/2022 1:32:40 PM - 000.00:09:39.5	--- Loading gradient method index: 0
+6/15/2022 1:32:40 PM - 000.00:09:39.5	pump: LoadMethod(0, ZrData.ZrPumpMethod)
+6/15/2022 1:32:41 PM - 000.00:09:40.0	pump: GetMethodState(0) --> loaded
+6/15/2022 1:32:41 PM - 000.00:09:40.0	--- Set gradient start
+6/15/2022 1:32:41 PM - 000.00:09:40.0	--- StartGradient() ---
+6/15/2022 1:32:41 PM - 000.00:09:40.0	--- Starting gradient method index: 0
+6/15/2022 1:32:41 PM - 000.00:09:40.0	pump: SetMethodSignal(0, StartTrunk)
+6/15/2022 1:32:41 PM - 000.00:09:40.2	pump: GetMethodState(0) --> runningTrunk
+6/15/2022 1:32:41 PM - 000.00:09:40.3	autosampler-none: SetSignal(Output Signal 1)
+6/15/2022 1:32:41 PM - 000.00:09:40.3	status: SetStatus(wash, )
+6/15/2022 1:32:43 PM - 000.00:09:42.3	status: SetStatus(elution, )
+6/15/2022 1:32:45 PM - 000.00:09:44.8	autosampler-left: MoveToObject(LCInjector1)
+6/15/2022 1:32:48 PM - 000.00:09:47.4	autosampler-left: PenetrateWithConstForce(LCInjector1)
+6/15/2022 1:32:48 PM - 000.00:09:47.5	autosampler-left: MoveValveDrive(Valve Drive 1, 0 deg)
+6/15/2022 1:33:18 PM - 000.00:10:17.1	autosampler-left: CleanInjector(LCInjector1, LCP 1, 100 uL, 0 mm, 5 uL/s, 5000 ms, 20 mm, 40 uL/s, 1000 ms, 2, False)
+6/15/2022 1:34:48 PM - 000.00:11:47.5	autosampler-left: CleanInjector(LCInjector1, LCP 1, 300 uL, 0 mm, 5 uL/s, 5000 ms, 20 mm, 40 uL/s, 1000 ms, 1, True)
+6/15/2022 1:34:48 PM - 000.00:11:47.6	autosampler-left: MoveValveDrive(Valve Drive 1, 60 deg)
+6/15/2022 1:34:51 PM - 000.00:11:50.7	autosampler-left: MoveToHome()
+6/15/2022 2:06:42 PM - 000.00:43:41.0	Setting signal "lc-done"
+6/15/2022 2:06:42 PM - 000.00:43:41.0	status: RemoveStatus(elution)
+6/15/2022 2:06:42 PM - 000.00:43:41.0	status: RemoveStatus(wash)
+6/15/2022 2:06:42 PM - 000.00:43:41.0	pump: GetSetManualValvePosition(A) --> 240
+6/15/2022 2:06:42 PM - 000.00:43:41.0	pump: GetCurrentPressure(A) --> 188.2787
+6/15/2022 2:06:42 PM - 000.00:43:41.0	pump: GetCurrentPressure(B) --> 202.5244
+6/15/2022 2:06:42 PM - 000.00:43:41.0	pump: GetSettings() --> PumpSettings
+6/15/2022 2:06:42 PM - 000.00:43:41.0	pump: GetSetManualValvePosition(A) --> 240
+6/15/2022 2:06:42 PM - 000.00:43:41.0	pump: GetSetManualValvePosition(B) --> 240
+6/15/2022 2:06:42 PM - 000.00:43:41.0	--------------------------------------------------------
+6/15/2022 2:06:42 PM - 000.00:43:41.0	--- Reduce pressure ---
+6/15/2022 2:06:42 PM - 000.00:43:41.0	--- Pressure channel A: 188.278671264648
+6/15/2022 2:06:42 PM - 000.00:43:41.0	--- Pressure channel B: 202.524398803711
+6/15/2022 2:06:42 PM - 000.00:43:41.0	pump: GetSettings() --> PumpSettings
+6/15/2022 2:06:42 PM - 000.00:43:41.0	--------------------------------------------------------
+6/15/2022 2:06:42 PM - 000.00:43:41.0	PID settings changed:
+6/15/2022 2:06:42 PM - 000.00:43:41.0	P: 250 : True; Pmin: -5500 : True; Pmax: 32000 : True
+6/15/2022 2:06:42 PM - 000.00:43:41.0	I: 50 : True; Imin: -20000 : True; Imax: 20000 : True; IWindow: 50 : True
+6/15/2022 2:06:42 PM - 000.00:43:41.0	D: 1500 : True; Dmin: -10000 : True; Dmax: 10000 : True
+6/15/2022 2:06:42 PM - 000.00:43:41.0	Result min: -32000 : True; Result max: 32000 : True
+6/15/2022 2:06:42 PM - 000.00:43:41.0	pump: SetSettings(PumpSettings)
+6/15/2022 2:06:42 PM - 000.00:43:41.0	--------------------------------------------------------
+6/15/2022 2:06:42 PM - 000.00:43:41.3	--- Set pressure channel A:          10
+6/15/2022 2:06:42 PM - 000.00:43:41.3	--- Set pressure channel B:          5
+6/15/2022 2:06:42 PM - 000.00:43:41.3	--- Reduce pressure flow controlled: True
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--------------------------------------------------------
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- Log PID parameter called from: reducePressure
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- P: 200; Pmin: -32000; Pmax: 32000
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- I: 289; Imin: -32000; Imax: 32000; IWindow: 100
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- D: 1000; Dmin: -32000; Dmax: 32000
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- Result min: -32000; Result max: 32000
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--------------------------------------------------------
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--------------------------------------------------------
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- Log instrument settings called from: reducePressure
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- HomeSpeed: 2000; PurgeSpeed: 2000
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- PressureTrackingExcessFactor: 96
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- FlowResistanceA: 300; FlowResistanceB: 100; FlowResistanceOut: 150
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- FC_FlowFilterDepth: 5; FC_PressureFilterDepth: 0
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- PC_OutputFilterDepth: 0
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- CompressibilityFactorB: 2.29999995231628; PressurePIDNegativeResultDivisor: 1
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- ExternalZeroPressureOffsetA: 114.955764770508; ExternalZeroPressureOffsetB: 117.57063293457
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- ExternalPressureScalingFactorA: 0.0197199992835522; ExternalPressureScalingFactorB: 0.0197199992835522
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--------------------------------------------------------
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- Final pressure channel A: 5.00099086761475
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--- Final pressure channel B: 5.95544242858887
+6/15/2022 2:06:56 PM - 000.00:43:55.1	--------------------------------------------------------
+6/15/2022 2:06:56 PM - 000.00:43:55.1	pump: IsIdle() --> False
+6/15/2022 2:06:56 PM - 000.00:43:55.2	autosampler-left: MoveValveDrive(Valve Drive 1, 60 deg)
+6/15/2022 2:06:59 PM - 000.00:43:58.1	autosampler-left: MoveToHome()
+6/15/2022 2:06:59 PM - 000.00:43:58.3	ValveA counter: 2; position: 240
+6/15/2022 2:06:59 PM - 000.00:43:58.3	ValveB counter: 2; position: 240
+6/15/2022 2:06:59 PM - 000.00:43:58.3	ValveI counter: 7; position: 60
+6/15/2022 2:06:59 PM - 000.00:43:58.3	ValveT counter: 5; position: 120
+6/15/2022 2:06:59 PM - 000.00:43:58.3	  PumpA position @ start: 954.33
+6/15/2022 2:06:59 PM - 000.00:43:58.3	  PumpB position @ start: 657.42
+6/15/2022 2:06:59 PM - 000.00:43:58.3	  PumpA position @ end:   982.10
+6/15/2022 2:06:59 PM - 000.00:43:58.3	  PumpB position @ end:   666.02
+6/15/2022 2:06:59 PM - 000.00:43:58.3	  PumpA volume used:      27.77 uL
+6/15/2022 2:06:59 PM - 000.00:43:58.3	  PumpB volume used:      8.60 uL
+6/15/2022 2:06:59 PM - 000.00:43:58.3	pump: IsIdle() --> True
+6/15/2022 2:06:59 PM - 000.00:43:58.3	COMPLETED

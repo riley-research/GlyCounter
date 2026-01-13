@@ -236,14 +236,14 @@ namespace GlyCounter
                         outputSummary.WriteLine();
 
                         //start processing file
+                        var progress = new Progress<DateTime>(_ => UpdateTimer()); //for timer updates on the UI thread
                         if (fileName.EndsWith(".d"))
                         {
-                            var progress = new Progress<DateTime>(_=>UpdateTimer()); //for timer updates on the UI thread
                             (glySettings, rawFileInfo) = await ProcessTimsTOF.processTimsTOFAsync(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputIPSA, progress);
                         }
                         else
                         {
-                            (glySettings, rawFileInfo) = ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputIPSA);
+                            (glySettings, rawFileInfo) = await ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputIPSA, progress);
                         }
 
                         //all scans have been processed, get some total stats

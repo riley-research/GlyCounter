@@ -39,7 +39,7 @@ namespace GlyCounter
         public bool firstSpectrumInFile { get; set; } = true;
         public bool likelyGlycoSpectrum { get; set; } = false;
         public double nce { get; set; } = 0.0;
-        public double halfTotalList { get; set; } = 0;
+        public double halfTotalList { get; set; }
 
         //used for ynaught
         public int numberOfMS2scansWithYions { get; set; } = 0;
