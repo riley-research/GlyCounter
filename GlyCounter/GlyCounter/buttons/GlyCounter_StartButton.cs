@@ -230,7 +230,7 @@ namespace GlyCounter
                         outputPeakDepth.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
                         outputIPSA?.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
 
-                        outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
+                        outputSummary.WriteLine("Settings:\t" + toleranceString + glySettings.tol + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
                                                 + ", TICfraction_HCD=" + glySettings.oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + glySettings.oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + glySettings.oxoTICfractionThreshold_uvpd);
                         outputSummary.WriteLine(StartTimeLabel.Text);
                         outputSummary.WriteLine();
