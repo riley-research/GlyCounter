@@ -12,10 +12,8 @@ namespace GlyCounter
 {
     public class iC_ProcessRaw_MzML
     {
-        static Form1 update = new Form1();
-
         public static (GlyCounterSettings, RawFileInfo) processRaw_MzML(string fileName, GlyCounterSettings glySettings, iCounterSettings iCsettings,
-            RawFileInfo rawFileInfo, StreamWriter outputSignal, StreamWriter outputPeakDepth, StreamWriter? outputIPSA)
+            RawFileInfo rawFileInfo, StreamWriter outputSignal, StreamWriter outputPeakDepth, StreamWriter? outputIPSA, IProgress<DateTime>? progress = null)
         {
             FileReader rawFile = new FileReader(fileName);
             FileReader typeCheck = new FileReader();
@@ -306,7 +304,7 @@ namespace GlyCounter
                     outputPeakDepth.WriteLine();
                 }
 
-                update.UpdateTimer();
+                try { progress?.Report(DateTime.Now); } catch { /* ignore */ }
             }
 
             return (glySettings, rawFileInfo);

@@ -32,8 +32,8 @@ namespace GlyCounter
             timer1.Interval = 1000;
             timer1.Tick += new EventHandler(OnTimerTick);
             timer1.Start();
-            StatusLabel.Text = "Processing...";
-            StartTimeLabel.Text = "Start Time: " + DateTime.Now.ToString("HH:mm:ss");
+            iC_statusUpdatesLabel.Text = "Processing...";
+            iC_startTimeLabel.Text = "Start Time: " + DateTime.Now.ToString("HH:mm:ss");
 
             try
             {
@@ -232,7 +232,7 @@ namespace GlyCounter
                         outputSummary.WriteLine();
 
                         //start processing file
-                        var progress = new Progress<DateTime>(_ => UpdateTimer()); //for timer updates on the UI thread
+                        var progress = new Progress<DateTime>(_ => iC_UpdateTimer()); //for timer updates on the UI thread
                         if (fileName.EndsWith(".d"))
                         {
                             (glySettings, rawFileInfo) = await iC_ProcessTimsTOF.iC_processTimsTOFAsync(fileName, glySettings, iCsettings,
@@ -241,7 +241,7 @@ namespace GlyCounter
                         else
                         {
                             (glySettings, rawFileInfo) = iC_ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, iCsettings,
-                                rawFileInfo, outputSignal, outputPeakDepth, outputIPSA);
+                                rawFileInfo, outputSignal, outputPeakDepth, outputIPSA, progress);
                         }
 
                         //all scans have been processed, get some total stats
