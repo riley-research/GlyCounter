@@ -36,7 +36,7 @@ namespace GlyCounter
 
             try
             {
-                await Task.Run(() =>
+                await Task.Run(async () =>
                 {
                     glySettings.usingda = false;
                     glySettings.using204 = false;
@@ -229,19 +229,20 @@ namespace GlyCounter
                         outputPeakDepth.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
                         outputIPSA?.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
 
-                        outputSummary.WriteLine("Settings:\t" + toleranceString + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
+                        outputSummary.WriteLine("Settings:\t" + toleranceString + glySettings.tol + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
                                                 + ", TICfraction_HCD=" + glySettings.oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + glySettings.oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + glySettings.oxoTICfractionThreshold_uvpd);
                         outputSummary.WriteLine(StartTimeLabel.Text);
                         outputSummary.WriteLine();
 
                         //start processing file
+                        var progress = new Progress<DateTime>(_ => UpdateTimer()); //for timer updates on the UI thread
                         if (fileName.EndsWith(".d"))
                         {
-                            (glySettings, rawFileInfo) = ProcessTimsTOF.processTimsTOF(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputIPSA);
+                            (glySettings, rawFileInfo) = await ProcessTimsTOF.processTimsTOFAsync(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputIPSA, progress);
                         }
                         else
                         {
-                            (glySettings, rawFileInfo) = ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputIPSA);
+                            (glySettings, rawFileInfo) = await ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputIPSA, progress);
                         }
 
                         //all scans have been processed, get some total stats

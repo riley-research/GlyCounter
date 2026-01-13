@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<method>
+    <submethods>
+        <submethod program="HyStar_LC" revision="0">
+            <name>30min_7to45B_NoOvenTemp_DirectInj_NoCal.m</name>
+            <files>
+                <file name="hystar.method"/>
+            </files>
+        </submethod>
+        <submethod program="OtofImpacTEMControl" revision="0">
+            <name>D:\timstofpro_sn00106_methods\MS_research\Glycopep_NoStepping_Opt\Optimized_v1_20220516.m</name>
+            <files>
+                <file name="microTOFQImpacTemAcquisition.method"/>
+                <file name="diaSettings.diasqlite"/>
+                <file name="prmSettings.prmsqlite"/>
+                <file name="Maldi.method"/>
+            </files>
+        </submethod>
+        <submethod program="HyStar_Autosampler" revision="0">
+            <name>Standard</name>
+            <files/>
+        </submethod>
+    </submethods>
+    <locked>false</locked>
+    <readonly>true</readonly>
+    <comment/>
+</method>

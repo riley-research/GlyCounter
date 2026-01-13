@@ -1,0 +1,46 @@
+Component: nanoElute system (SN1837934466780)
+Framework: nanoElute V2.0.63.0 (453, 2524) 
+Simulation: False 
+---------------------------------------------------------------
+Component: Gradient pump
+Driver: 0.9.9.25 
+Firmware: 183 
+Hardware: 6 
+Serial number: 217051 
+Flow offset A: 0.0001 µL/min
+Flow factor A: 1.016622 
+Flow offset B: -0.0206 µL/min
+Flow factor B: 2.23666 
+Pressure offset A: 114.9558 
+Pressure factor A: 0.01972 
+Pressure offset B: 117.5706 
+Pressure factor B: 0.01972 
+Valve shifts A: 25038 
+Rotor shifts A: 1809 
+Syringe mileage A: 201622 mm
+Seal mileage A: 116206 mm
+Valve shifts B: 17993 
+Rotor shifts B: 5200 
+Syringe mileage B: 184162 mm
+Seal mileage B: 104579 mm
+---------------------------------------------------------------
+Component: Autosampler
+Driver: 2.4.60 (2.4.20232.1040) 
+Firmware: 2.2.9 (2.2.17045.1553) 
+Valve Shifts Injector: 0 
+Valve Shifts Trap: 0 
+---------------------------------------------------------------
+Component: Journal
+--- Leak test: Mon May 16 10:30:42 2022 
+LT: Pump A head [µL/min]: 0.238761041672802 
+LT: Pump B head [µL/min]: 0.388300851983672 
+LT: Route 1 tubing [µL/min]: -0.000181265339454015 
+LT: Route 2 tubing [µL/min]: 0.141935749926964 
+--- Flow restriction test: Mon May 16 10:40:22 2022 
+FR: Route 1 [µL/min]: 0.663913311023712 
+FR: Route 2 [µL/min]: 2.28492676517488 
+FR: Route 3 with loop [µL/min]: 4.54274297709085 
+--- Preparation: Thu Jun  2 13:22:29 2022 
+Preparation A [µL]: 8.23763292883087 
+Preparation B [µL]: 14.9166170224607 
+---------------------------------------------------------------

@@ -15,6 +15,7 @@ namespace GlyCounter
         public void ClearFiles_Click(object sender, EventArgs e)
         {
             glySettings.fileList = new ObservableCollection<string>();
+            FileCounter.Text = "Total Files Uploaded: " + glySettings.fileList.Count;
             textBox1.Text = "Cleared Files";
             iC_uploadTB.Text = "Cleared Files";
         }

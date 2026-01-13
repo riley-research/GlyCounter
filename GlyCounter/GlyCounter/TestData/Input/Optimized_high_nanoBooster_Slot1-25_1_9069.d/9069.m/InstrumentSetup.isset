@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="BrukerCommon.xsd">
+<generalinfo>
+<org>Bruker Daltonik</org>
+<os/>
+<hostname/>
+<author/>
+</generalinfo>
+<fileinfo>
+<contenttype>MaldiInstrumentParameterDataFile</contenttype>
+<version>2</version>
+<date>2022-06-15 14:06:41+01:00</date>
+</fileinfo>
+<MaldiInstrumentSerNo/>
+<Laser>
+<version>1</version>
+<GlobalAttenOffset>0</GlobalAttenOffset>
+<LaserParamSetList>
+<ParmSet name="Single" version="1" Focus="84" FocusOffset="0" FocusRange="100" AttenRange="30" AttenOffset="0" enablemod="1" laserSpotDia="5" sbPosIndex="0" shapeIndex="1"/>
+<ParmSet name="M5" version="1" Focus="84" FocusOffset="0" FocusRange="100" AttenRange="30" AttenOffset="12" enablemod="1" laserSpotDia="5" sbPosIndex="1" shapeIndex="2"/>
+<ParmSet name="M5 defocus" version="1" Focus="24" FocusOffset="0" FocusRange="100" AttenRange="30" AttenOffset="40" enablemod="1" laserSpotDia="5" sbPosIndex="1" shapeIndex="3"/>
+<ParmSet name="M5 flat" version="1" Focus="6.5" FocusOffset="0" FocusRange="100" AttenRange="30" AttenOffset="40" enablemod="1" laserSpotDia="5" sbPosIndex="1" shapeIndex="4"/>
+<ParmSet name="M5 small" version="1" Focus="84" FocusOffset="0" FocusRange="100" AttenRange="30" AttenOffset="12" enablemod="1" laserSpotDia="5" sbPosIndex="2" shapeIndex="5"/>
+<ParmSet name="M5 small defocus" version="1" Focus="82" FocusOffset="0" FocusRange="100" AttenRange="30" AttenOffset="12" enablemod="1" laserSpotDia="5" sbPosIndex="2" shapeIndex="6"/>
+</LaserParamSetList>
+<LaserApplParamSetList>
+<ApplParmSet name="MS Thin Layer" version="1" setupName="M5" shapeIndex="2" powerOfsBoost="0" scanMode="1" scanSizeX="50" scanSizeY="50"/>
+<ApplParmSet name="MS Dried Droplet" version="1" setupName="M5 defocus" shapeIndex="3" powerOfsBoost="0" scanMode="1" scanSizeX="25" scanSizeY="25"/>
+<ApplParmSet name="MS/MS" version="1" setupName="M5 flat" shapeIndex="4" powerOfsBoost="0" scanMode="1" scanSizeX="25" scanSizeY="25"/>
+<ApplParmSet name="ISD" version="1" setupName="M5" shapeIndex="2" powerOfsBoost="3" scanMode="1" scanSizeX="50" scanSizeY="50"/>
+<ApplParmSet name="Imaging 20µm" version="1" setupName="Single" shapeIndex="1" powerOfsBoost="0" scanMode="1" scanSizeX="16" scanSizeY="16"/>
+<ApplParmSet name="Imaging 50µm" version="1" setupName="M5 small" shapeIndex="5" powerOfsBoost="0" scanMode="1" scanSizeX="11" scanSizeY="11"/>
+<ApplParmSet name="Imaging 100µm" version="1" setupName="M5" shapeIndex="2" powerOfsBoost="3" scanMode="1" scanSizeX="26" scanSizeY="26"/>
+</LaserApplParamSetList>
+</Laser>
+<PostIonization>
+<version>1</version>
+<PreBurstLength>0</PreBurstLength>
+</PostIonization>
+<TransitTime>0</TransitTime>
+</root>
