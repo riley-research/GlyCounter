@@ -447,8 +447,30 @@ namespace GlyCounter
                                     }
                                 }
 
-                                // Final summary columns
-                                string oxoSummary = $"{countWithin}\t{oxoCountRequirement}\t{oxoTICfraction}\t{localStats.likelyGlycoSpectrum}";
+                                bool isLikelyGlyco = false;
+
+                                if (hcdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
+                                {
+                                    isLikelyGlyco = true;
+                                    localStats.numberScansCountedLikelyGlyco_hcd++;
+                                }
+
+                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
+                                {
+                                    isLikelyGlyco = true;
+                                    localStats.numberScansCountedLikelyGlyco_etd++;
+                                }
+
+                                if (uvpdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
+                                {
+                                    isLikelyGlyco = true;
+                                    localStats.numberScansCountedLikelyGlyco_uvpd++;
+                                }
+
+                                // persist into per-worker flag (keep true if previously set)
+                                if (isLikelyGlyco) localStats.likelyGlycoSpectrum = true;
+
+                                string oxoSummary = $"{countWithin}\t{oxoCountRequirement}\t{oxoTICfraction}\t{isLikelyGlyco}";
 
                                 // Prepare lines (tab-separated) for writer
                                 var oxoLine = new StringBuilder();
@@ -486,25 +508,6 @@ namespace GlyCounter
                                 string? ipsaLine = null;
                                 if (outputIPSA != null)
                                     ipsaLine = $"{spectrum.ScanNumber}\t{peakString}\t{errorString}\t";
-
-                                // Update likely glyco counters in localStats
-                                if (hcdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
-                                {
-                                    localStats.likelyGlycoSpectrum = true;
-                                    localStats.numberScansCountedLikelyGlyco_hcd++;
-                                }
-
-                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
-                                {
-                                    localStats.likelyGlycoSpectrum = true;
-                                    localStats.numberScansCountedLikelyGlyco_etd++;
-                                }
-
-                                if (uvpdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
-                                {
-                                    localStats.likelyGlycoSpectrum = true;
-                                    localStats.numberScansCountedLikelyGlyco_uvpd++;
-                                }
 
                                 // enqueue write message
                                 await writeChannel.Writer.WriteAsync(new WriteMessage(oxoLine.ToString(), peakDepthLine.ToString(), ipsaLine), token).ConfigureAwait(false);
