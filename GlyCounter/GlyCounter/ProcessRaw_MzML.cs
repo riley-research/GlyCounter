@@ -129,10 +129,8 @@ namespace GlyCounter
                         {
                             if (spectrum.TotalIonCurrent == null || spectrum.TotalIonCurrent == 0) continue;
 
-                            localStats.numberOfMS2scans++;
                             int numberOfOxoIons = 0;
                             double totalOxoSignal = 0;
-                            localStats.likelyGlycoSpectrum = false;
                             bool test204 = false;
                             int countOxoWithinPeakDepthThreshold = 0;
                             bool hcdTrue = false;
@@ -180,17 +178,17 @@ namespace GlyCounter
                                 //using this order means ethcd will count as etd (since both show in scan filter)
                                 if (spectrum.ScanFilter.Contains("etd"))
                                 {
-                                    rawFileInfo.numberOfETDscans++;
+                                    localStats.numberOfETDscans++;
                                     etdTrue = true;
                                 }
                                 else if (spectrum.ScanFilter.Contains("hcd"))
                                 {
-                                    rawFileInfo.numberOfHCDscans++;
+                                    localStats.numberOfHCDscans++;
                                     hcdTrue = true;
                                 }
                                 else if (spectrum.ScanFilter.Contains("uvpd") || spectrum.ScanFilter.Contains("ci"))
                                 {
-                                    rawFileInfo.numberOfUVPDscans++;
+                                    localStats.numberOfUVPDscans++;
                                     uvpdTrue = true;
                                 }
                             }
@@ -232,9 +230,9 @@ namespace GlyCounter
                                     string[] hcdHeader = scanFilter.Split('@');
                                     string[] splitHCDheader = hcdHeader[1].Split('d');
                                     string[] collisionEnergyArray = splitHCDheader[1].Split('.');
-                                    rawFileInfo.nce = Convert.ToDouble(collisionEnergyArray[0]);
+                                    localStats.nce = Convert.ToDouble(collisionEnergyArray[0]);
                                 }
-                                else rawFileInfo.nce = spectrum.Precursors[0].CollisionEnergy;
+                                else localStats.nce = spectrum.Precursors[0].CollisionEnergy;
 
                                 var localOxonia = glySettings.oxoniumIonHashSet
                                     .Select(o => new
