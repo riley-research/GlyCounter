@@ -142,6 +142,8 @@ To create a new release of GlyCounter:
 
 ## Additional Information
 
+The newest version of GlyCounter can process profile mode MS2s in Thermo RAW files and does not require centroiding with MSConvert, which is different from the instructions in the manuscript.
+
 TimsTOF notes: Some information that is available in .raw and .mzml files is not available in timsTOF files. Specifically, all scans are assumed to be CID (which is reported as HCD in the output files). There are no NCE values. There is also no functionality for choosing MS levels as it will always search MS2 scans.
 
 GlyCounter utilizes multiple file parsing tools. For .raw and .mzml files, the [Nova](https://github.com/SchweppeLab/Nova) NuGet package allows for parallel logic between the two file types. For timsTOF .d files, [timsRust](https://github.com/MannLabs/timsrust) was packaged into a C-parsable dll and accessed using a function similar to the MS2 reader in [Sage](https://github.com/lazear/sage).
