@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using CSMSL;
 using System.Linq;
 using System.Runtime;
 using System.Text;
@@ -163,6 +164,14 @@ namespace GlyCounter
                         iCsettings._ionHashSet.Add(ion);
                     }
 
+                    if (iC_negativeModeCB.Checked)
+                    {
+                        foreach (Ion ion in iCsettings._ionHashSet)
+                        {
+                            ion.theoMZ -= (Constants.Hydrogen * 2);
+                        }
+                    }
+
                     if (iC_ipsaCB.Checked)
                         glySettings.ipsa = true;
 
@@ -240,7 +249,7 @@ namespace GlyCounter
                         }
                         else
                         {
-                            (glySettings, rawFileInfo) = iC_ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, iCsettings,
+                            (glySettings, rawFileInfo) = await iC_ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, iCsettings,
                                 rawFileInfo, outputSignal, outputPeakDepth, outputIPSA, progress);
                         }
 

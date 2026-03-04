@@ -189,7 +189,7 @@ namespace GlyCounter
             LoadInGlycoPepIDs_TextBox = new TextBox();
             tabPage1 = new TabPage();
             iC_NegativeModeLabel = new Label();
-            checkBox1 = new CheckBox();
+            iC_negativeModeCB = new CheckBox();
             iC_biotinCLB = new CheckedListBox();
             SelectAllBiotinButton = new Button();
             iC_biotinLabel = new Label();
@@ -1675,7 +1675,7 @@ namespace GlyCounter
             // tabPage1
             // 
             tabPage1.Controls.Add(iC_NegativeModeLabel);
-            tabPage1.Controls.Add(checkBox1);
+            tabPage1.Controls.Add(iC_negativeModeCB);
             tabPage1.Controls.Add(iC_biotinCLB);
             tabPage1.Controls.Add(SelectAllBiotinButton);
             tabPage1.Controls.Add(iC_biotinLabel);
@@ -1731,7 +1731,7 @@ namespace GlyCounter
             tabPage1.TabIndex = 2;
             tabPage1.Text = "iCounter";
             tabPage1.UseVisualStyleBackColor = true;
-            tabPage1.Click += this.iC_polarityCB_CheckedChanged;
+            tabPage1.Click += iC_polarityCB_CheckedChanged;
             // 
             // iC_NegativeModeLabel
             // 
@@ -1742,16 +1742,16 @@ namespace GlyCounter
             iC_NegativeModeLabel.TabIndex = 140;
             iC_NegativeModeLabel.Text = "Note: negative mode is on. \r\nDisplayed ion m/z values are not the \r\nones that will be searched for, instead\r\nthe M-H ions will be calculated";
             // 
-            // checkBox1
+            // iC_negativeModeCB
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(944, 528);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(201, 19);
-            checkBox1.TabIndex = 139;
-            checkBox1.Text = "Negative Mode (auto-calculated)";
-            checkBox1.UseVisualStyleBackColor = true;
-            checkBox1.CheckedChanged += this.iC_polarityCB_CheckedChanged;
+            iC_negativeModeCB.AutoSize = true;
+            iC_negativeModeCB.Location = new Point(944, 528);
+            iC_negativeModeCB.Name = "iC_negativeModeCB";
+            iC_negativeModeCB.Size = new Size(201, 19);
+            iC_negativeModeCB.TabIndex = 139;
+            iC_negativeModeCB.Text = "Negative Mode (auto-calculated)";
+            iC_negativeModeCB.UseVisualStyleBackColor = true;
+            iC_negativeModeCB.CheckedChanged += iC_polarityCB_CheckedChanged;
             // 
             // iC_biotinCLB
             // 
@@ -2472,7 +2472,7 @@ namespace GlyCounter
         private CheckedListBox iC_biotinCLB;
         private Button SelectAllBiotinButton;
         private Label iC_biotinLabel;
-        private CheckBox checkBox1;
+        private CheckBox iC_negativeModeCB;
         private Label iC_NegativeModeLabel;
     }
 }

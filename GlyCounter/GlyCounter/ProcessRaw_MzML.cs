@@ -271,15 +271,15 @@ namespace GlyCounter
                                             totalOxoSignal += intensity;
 
                                             if (Math.Abs(oxoIon.TheoMZ - 204.0867) < 0.0001 &&
-                                                sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_hcd && hcdTrue)
+                                                peakDepth <= glySettings.peakDepthThreshold_hcd && hcdTrue)
                                                 test204 = true;
 
                                             if (Math.Abs(oxoIon.TheoMZ - 204.0867) < 0.0001 &&
-                                                sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_etd && etdTrue)
+                                                peakDepth <= glySettings.peakDepthThreshold_etd && etdTrue)
                                                 test204 = true;
 
                                             if (Math.Abs(oxoIon.TheoMZ - 204.0867) < 0.0001 &&
-                                                sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_uvpd && uvpdTrue)
+                                                peakDepth <= glySettings.peakDepthThreshold_uvpd && uvpdTrue)
                                                 test204 = true;
 
                                             oxoniumIonFoundPeaks.Add(oxoIon.TheoMZ);
