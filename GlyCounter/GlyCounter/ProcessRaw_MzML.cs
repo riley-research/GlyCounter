@@ -37,7 +37,6 @@ namespace GlyCounter
             var workerStats = new List<RawFileInfo>();
             var workerTasks = new List<Task>();
 
-            // Cancellation support local to this method (optional)
             var cts = new CancellationTokenSource();
             var token = cts.Token;
 
@@ -128,10 +127,8 @@ namespace GlyCounter
                         {
                             if (spectrum.TotalIonCurrent == null || spectrum.TotalIonCurrent == 0) continue;
 
-                            localStats.numberOfMS2scans++;
                             int numberOfOxoIons = 0;
                             double totalOxoSignal = 0;
-                            localStats.likelyGlycoSpectrum = false;
                             bool test204 = false;
                             int countOxoWithinPeakDepthThreshold = 0;
                             bool hcdTrue = false;
@@ -176,46 +173,68 @@ namespace GlyCounter
                             //figure out dissociation type
                             if (thermo)
                             {
-                                //using this order means ethcd will count as etd (since both show in scan filter)
-                                if (spectrum.ScanFilter.Contains("etd"))
+                                var scanFilter = spectrum.ScanFilter ?? string.Empty;
+                                var scanFilterParts = scanFilter.Split('@', 2);
+                                if (scanFilterParts.Length > 1)
                                 {
-                                    rawFileInfo.numberOfETDscans++;
+                                    // safe parse of the part after '@'
+                                    var postAt = scanFilterParts[1];
+                                    var splitHCDheader = postAt.Split('d', 2);
+                                    if (splitHCDheader.Length > 1)
+                                    {
+                                        var collisionEnergyArray = splitHCDheader[1].Split('.', 2);
+                                        if (collisionEnergyArray.Length > 0 && double.TryParse(collisionEnergyArray[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var nceVal))
+                                        {
+                                            localStats.nce = nceVal;
+                                        }
+                                    }
+                                }
+
+                                var filterLower = scanFilter.ToLowerInvariant();
+                                if (filterLower.Contains("etd"))
+                                {
+                                    localStats.numberOfETDscans++;
                                     etdTrue = true;
                                 }
-                                else if (spectrum.ScanFilter.Contains("hcd"))
+                                else if (filterLower.Contains("hcd"))
                                 {
-                                    rawFileInfo.numberOfHCDscans++;
+                                    localStats.numberOfHCDscans++;
                                     hcdTrue = true;
                                 }
-                                else if (spectrum.ScanFilter.Contains("uvpd") || spectrum.ScanFilter.Contains("ci"))
+                                else if (filterLower.Contains("uvpd") || filterLower.Contains("ci"))
                                 {
-                                    rawFileInfo.numberOfUVPDscans++;
+                                    localStats.numberOfUVPDscans++;
                                     uvpdTrue = true;
                                 }
                             }
                             else
                             {
-                                string dt = spectrum.Precursors[0].FramentationMethod.ToString();
-
-                                if (dt.Equals("HCD"))
+                                if (spectrum.Precursors != null && spectrum.Precursors.Count > 0 && spectrum.Precursors[0] != null)
                                 {
-                                    localStats.numberOfHCDscans++;
-                                    hcdTrue = true;
-                                }
+                                    var firstPre = spectrum.Precursors[0];
+                                    string dt = firstPre.FramentationMethod.ToString() ?? string.Empty;
 
-                                if (dt.Equals("ETD"))
-                                {
-                                    localStats.numberOfETDscans++;
-                                    etdTrue = true;
-                                }
+                                    if (dt.Equals("HCD", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        localStats.numberOfHCDscans++;
+                                        hcdTrue = true;
+                                    }
+                                    if (dt.Equals("ETD", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        localStats.numberOfETDscans++;
+                                        etdTrue = true;
+                                    }
+                                    if (dt.Equals("CI", StringComparison.OrdinalIgnoreCase) || dt.Equals("UVPD", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        localStats.numberOfUVPDscans++;
+                                        uvpdTrue = true;
+                                    }
 
-                                if (dt.Equals("CI") || dt.Equals("UVPD"))
-                                {
-                                    localStats.numberOfUVPDscans++;
-                                    uvpdTrue = true;
+                                    if (firstPre.CollisionEnergy != 0)
+                                        localStats.nce = firstPre.CollisionEnergy;
                                 }
-
                             }
+                            
                             localStats.numberOfMS2scans++; // count per-worker scans
 
                             double basePeak = spectrum.BasePeakIntensity;
@@ -224,16 +243,6 @@ namespace GlyCounter
                             if (basePeak > 0)
                             {
                                 PeakProcessing.RankOrderPeaks(sortedPeakDepths, spectrum);
-
-                                if (thermo)
-                                {
-                                    string scanFilter = spectrum.ScanFilter;
-                                    string[] hcdHeader = scanFilter.Split('@');
-                                    string[] splitHCDheader = hcdHeader[1].Split('d');
-                                    string[] collisionEnergyArray = splitHCDheader[1].Split('.');
-                                    rawFileInfo.nce = Convert.ToDouble(collisionEnergyArray[0]);
-                                }
-                                else rawFileInfo.nce = spectrum.Precursors[0].CollisionEnergy;
 
                                 var localOxonia = glySettings.oxoniumIonHashSet
                                     .Select(o => new
@@ -375,6 +384,11 @@ namespace GlyCounter
                                 }
 
                                 double parentScan = spectrum.PrecursorMasterScanNumber;
+                                double precursormz = 0;
+                                if (spectrum.Precursors != null && spectrum.Precursors.Count > 0 && spectrum.Precursors[0] != null)
+                                {
+                                    precursormz = spectrum.Precursors[0].IsolationMz;
+                                }
                                 double scanTIC = spectrum.TotalIonCurrent;
                                 double scanInjTime = spectrum.IonInjectionTime;
                                 string fragmentationType = "";
@@ -382,7 +396,6 @@ namespace GlyCounter
                                 if (etdTrue) fragmentationType = "ETD";
                                 if (uvpdTrue) fragmentationType = "UVPD";
                                 double retentionTime = spectrum.RetentionTime;
-                                double precursormz = spectrum.Precursors[0].IsolationMz;
                                 List<double> oxoRanks = new List<double>();
                                 string peakString = "";
                                 foreach (double theoMZ in oxoniumIonFoundPeaks)
@@ -446,8 +459,30 @@ namespace GlyCounter
                                     }
                                 }
 
-                                // Final summary columns
-                                string oxoSummary = $"{countWithin}\t{oxoCountRequirement}\t{oxoTICfraction}\t{localStats.likelyGlycoSpectrum}";
+                                bool isLikelyGlyco = false;
+
+                                if (hcdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
+                                {
+                                    isLikelyGlyco = true;
+                                    localStats.numberScansCountedLikelyGlyco_hcd++;
+                                }
+
+                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
+                                {
+                                    isLikelyGlyco = true;
+                                    localStats.numberScansCountedLikelyGlyco_etd++;
+                                }
+
+                                if (uvpdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
+                                {
+                                    isLikelyGlyco = true;
+                                    localStats.numberScansCountedLikelyGlyco_uvpd++;
+                                }
+
+                                // persist into per-worker flag (keep true if previously set)
+                                if (isLikelyGlyco) localStats.likelyGlycoSpectrum = true;
+
+                                string oxoSummary = $"{countWithin}\t{oxoCountRequirement}\t{oxoTICfraction}\t{isLikelyGlyco}";
 
                                 // Prepare lines (tab-separated) for writer
                                 var oxoLine = new StringBuilder();
@@ -485,25 +520,6 @@ namespace GlyCounter
                                 string? ipsaLine = null;
                                 if (outputIPSA != null)
                                     ipsaLine = $"{spectrum.ScanNumber}\t{peakString}\t{errorString}\t";
-
-                                // Update likely glyco counters in localStats
-                                if (hcdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
-                                {
-                                    localStats.likelyGlycoSpectrum = true;
-                                    localStats.numberScansCountedLikelyGlyco_hcd++;
-                                }
-
-                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
-                                {
-                                    localStats.likelyGlycoSpectrum = true;
-                                    localStats.numberScansCountedLikelyGlyco_etd++;
-                                }
-
-                                if (uvpdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
-                                {
-                                    localStats.likelyGlycoSpectrum = true;
-                                    localStats.numberScansCountedLikelyGlyco_uvpd++;
-                                }
 
                                 // enqueue write message
                                 await writeChannel.Writer.WriteAsync(new WriteMessage(oxoLine.ToString(), peakDepthLine.ToString(), ipsaLine), token).ConfigureAwait(false);

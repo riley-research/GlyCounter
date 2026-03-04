@@ -146,7 +146,7 @@ namespace GlyCounter
                             // per-spectrum processing (mirrors original logic, using localStats)
                             int numberOfOxoIons = 0;
                             double totalOxoSignal = 0;
-                            bool test204 = false;
+                            bool test366 = false;
                             int countOxoWithinPeakDepthThreshold = 0;
                             bool hcdTrue = false;
                             bool etdTrue = false;
@@ -190,17 +190,17 @@ namespace GlyCounter
                                         numberOfOxoIons++;
                                         totalOxoSignal += intensity;
 
-                                        if (Math.Abs(local.TheoMZ - 204.0867) < 0.0001 &&
+                                        if (Math.Abs(local.TheoMZ - 366.1395) < 0.0001 &&
                                             sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_hcd && hcdTrue)
-                                            test204 = true;
+                                            test366 = true;
 
-                                        if (Math.Abs(local.TheoMZ - 204.0867) < 0.0001 &&
+                                        if (Math.Abs(local.TheoMZ - 366.1395) < 0.0001 &&
                                             sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_etd && etdTrue)
-                                            test204 = true;
+                                            test366 = true;
 
-                                        if (Math.Abs(local.TheoMZ - 204.0867) < 0.0001 &&
+                                        if (Math.Abs(local.TheoMZ - 366.1395) < 0.0001 &&
                                             sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_uvpd && uvpdTrue)
-                                            test204 = true;
+                                            test366 = true;
 
                                         oxoniumIonFoundPeaks.Add(local.TheoMZ);
                                         var massError = measuredMz - local.TheoMZ;
@@ -272,6 +272,16 @@ namespace GlyCounter
                                 string peakString = string.Join("; ", oxoniumIonFoundPeaks);
                                 string errorString = string.Join("; ", oxoniumIonFoundMassErrors.Select(e => e.ToString("F6")));
 
+                                if (glySettings.oxoniumIonHashSet.Count < 6)
+                                {
+                                    localStats.halfTotalList = 4;
+                                }
+
+                                if (glySettings.oxoniumIonHashSet.Count > 15)
+                                {
+                                    localStats.halfTotalList = 8;
+                                }
+
                                 double oxoTICfraction = totalOxoSignal / scanTIC;
 
                                 double oxoCountRequirement = 0;
@@ -289,7 +299,7 @@ namespace GlyCounter
                                         : localStats.halfTotalList;
 
                                 if (!glySettings.using204)
-                                    test204 = true;
+                                    test366 = true;
 
                                 // Determine peak depths and countWithin (re-checking peaks like original)
                                 int countWithin = 0;
@@ -316,6 +326,29 @@ namespace GlyCounter
                                         if (uvpdTrue && pd <= glySettings.peakDepthThreshold_uvpd) countWithin++;
                                     }
                                 }
+
+                                bool isLikelyGlyco = false;
+
+                                if (hcdTrue && countWithin >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
+                                {
+                                    isLikelyGlyco = true;
+                                    localStats.numberScansCountedLikelyGlyco_hcd++;
+                                }
+
+                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
+                                {
+                                    isLikelyGlyco = true;
+                                    localStats.numberScansCountedLikelyGlyco_etd++;
+                                }
+
+                                if (uvpdTrue && countWithin >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
+                                {
+                                    isLikelyGlyco = true;
+                                    localStats.numberScansCountedLikelyGlyco_uvpd++;
+                                }
+
+                                // persist into per-worker flag (keep true if previously set)
+                                if (isLikelyGlyco) localStats.likelyGlycoSpectrum = true;
 
                                 // Final summary columns
                                 string oxoSummary = $"{countWithin}\t{oxoCountRequirement}\t{oxoTICfraction}\t{localStats.likelyGlycoSpectrum}";
@@ -356,25 +389,6 @@ namespace GlyCounter
                                 string? ipsaLine = null;
                                 if (outputIPSA != null)
                                     ipsaLine = $"{spectrum.id}\t{peakString}\t{errorString}\t";
-
-                                // Update likely glyco counters in localStats
-                                if (hcdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
-                                {
-                                    localStats.likelyGlycoSpectrum = true;
-                                    localStats.numberScansCountedLikelyGlyco_hcd++;
-                                }
-
-                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
-                                {
-                                    localStats.likelyGlycoSpectrum = true;
-                                    localStats.numberScansCountedLikelyGlyco_etd++;
-                                }
-
-                                if (uvpdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
-                                {
-                                    localStats.likelyGlycoSpectrum = true;
-                                    localStats.numberScansCountedLikelyGlyco_uvpd++;
-                                }
 
                                 // enqueue write message
                                 await writeChannel.Writer.WriteAsync(new WriteMessage(oxoLine.ToString(), peakDepthLine.ToString(), ipsaLine), token).ConfigureAwait(false);
