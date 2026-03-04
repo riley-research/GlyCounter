@@ -65,8 +65,10 @@ These defaults are halved for ETD spectra. The Check Common Ions button checks 1
 ### LikelyGlycoSpectrum
 
 A spectrum is considered likely to be a glycopeptide if it meets the requirements set by the user before the run. This is based on the Oxonium Count Requirement (minimum amount of oxonium ions needed to be observed in the N most intense peaks set by the Peak Depth option) and the chosen TIC fraction (minimum percentage of TIC that needs to be oxonium ions).
-If the HexNAc (204.0867 m/z) oxonium ion is selected, it must show up in the set peak depth for a spectrum to be considered LikelyGlyco.
+If the HexNAc (204.0867 m/z)* oxonium ion is selected, it must show up in the set peak depth for a spectrum to be considered LikelyGlyco.
 If the settings are not changed by the user or an unrecognizable input is entered, the default values will be used.
+
+*Note: for timsTOF files the required ion is HexNAc-Hex (366.1395 m/z) due to different expected fragmentation
 
 ### Output Files
 
