@@ -146,7 +146,7 @@ namespace GlyCounter
                             // per-spectrum processing (mirrors original logic, using localStats)
                             int numberOfOxoIons = 0;
                             double totalOxoSignal = 0;
-                            bool test204 = false;
+                            bool test366 = false;
                             int countOxoWithinPeakDepthThreshold = 0;
                             bool hcdTrue = false;
                             bool etdTrue = false;
@@ -190,17 +190,17 @@ namespace GlyCounter
                                         numberOfOxoIons++;
                                         totalOxoSignal += intensity;
 
-                                        if (Math.Abs(local.TheoMZ - 204.0867) < 0.0001 &&
+                                        if (Math.Abs(local.TheoMZ - 366.1395) < 0.0001 &&
                                             sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_hcd && hcdTrue)
-                                            test204 = true;
+                                            test366 = true;
 
-                                        if (Math.Abs(local.TheoMZ - 204.0867) < 0.0001 &&
+                                        if (Math.Abs(local.TheoMZ - 366.1395) < 0.0001 &&
                                             sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_etd && etdTrue)
-                                            test204 = true;
+                                            test366 = true;
 
-                                        if (Math.Abs(local.TheoMZ - 204.0867) < 0.0001 &&
+                                        if (Math.Abs(local.TheoMZ - 366.1395) < 0.0001 &&
                                             sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_uvpd && uvpdTrue)
-                                            test204 = true;
+                                            test366 = true;
 
                                         oxoniumIonFoundPeaks.Add(local.TheoMZ);
                                         var massError = measuredMz - local.TheoMZ;
@@ -299,7 +299,7 @@ namespace GlyCounter
                                         : localStats.halfTotalList;
 
                                 if (!glySettings.using204)
-                                    test204 = true;
+                                    test366 = true;
 
                                 // Determine peak depths and countWithin (re-checking peaks like original)
                                 int countWithin = 0;
@@ -329,19 +329,19 @@ namespace GlyCounter
 
                                 bool isLikelyGlyco = false;
 
-                                if (hcdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
+                                if (hcdTrue && countWithin >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
                                 {
                                     isLikelyGlyco = true;
                                     localStats.numberScansCountedLikelyGlyco_hcd++;
                                 }
 
-                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
+                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
                                 {
                                     isLikelyGlyco = true;
                                     localStats.numberScansCountedLikelyGlyco_etd++;
                                 }
 
-                                if (uvpdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
+                                if (uvpdTrue && countWithin >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
                                 {
                                     isLikelyGlyco = true;
                                     localStats.numberScansCountedLikelyGlyco_uvpd++;
