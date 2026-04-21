@@ -101,6 +101,9 @@ namespace GlyCounter
                     if (CanConvertDouble(Ynaught_SNthresholdTextBox.Text, yNsettings.SNthreshold))
                         yNsettings.SNthreshold = Convert.ToDouble(Ynaught_SNthresholdTextBox.Text, CultureInfo.InvariantCulture);
 
+                    if (CanConvertDouble(Ynaught_intTextBox.Text, yNsettings.intensityThreshold))
+                        yNsettings.intensityThreshold = Convert.ToDouble(Ynaught_intTextBox.Text, CultureInfo.InvariantCulture);
+
                     if (YNaught_IPSAcheckbox.Checked) yNsettings.ipsa = true;
 
                     //add checked items to yIonHashSet to use for creating ions to look for
