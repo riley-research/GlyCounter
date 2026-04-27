@@ -31,7 +31,7 @@ namespace GlyCounter
         public double intensityThreshold { get; set; } = 1000;
         public double tol { get; set; } = 0;
         public bool using204 { get; set; } = false;
-        public bool ipsa { get; set; } = false;
+        public bool periscope { get; set; } = false;
         public bool usingda { get; set; } = false;
         public decimal msLevelLB { get; set; } = 2;
         public decimal msLevelUB { get; set; } = 2;
@@ -52,7 +52,7 @@ namespace GlyCounter
         public string csvCustomAdditions { get; set; } = "empty";
         public string csvCustomSubtractions { get; set; } = "empty";
         public bool condenseChargeStates { get; set; } = true;
-        public bool ipsa { get; set; } = false;
+        public bool periscope { get; set; } = false;
         public bool usingda { get; set; } = false;
         public bool firstIsotope { get; set; } = false;
         public bool secondIsotope { get; set; } = false;

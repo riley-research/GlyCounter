@@ -173,8 +173,8 @@ namespace GlyCounter
                         }
                     }
 
-                    if (ipsaCheckBox.Checked)
-                        glySettings.ipsa = true;
+                    if (periscopeCheckBox.Checked)
+                        glySettings.periscope = true;
 
                     foreach (var fileName in glySettings.fileList)
                     {
@@ -217,19 +217,16 @@ namespace GlyCounter
                         string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
                         StreamWriter outputOxo = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoSignal.txt"));
                         StreamWriter outputPeakDepth = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoPeakDepth.txt"));
-                        StreamWriter outputIPSA = null;
+                        StreamWriter outputPeriscope = null;
 
-                        if (ipsaCheckBox.Checked)
+                        if (periscopeCheckBox.Checked)
                         {
-                            outputIPSA = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_Glycounter_IPSA.txt"));
+                            outputPeriscope = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_Glycounter_Periscope.txt"));
                         }
                         StreamWriter outputSummary = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt"));
 
                         //write headers
-                        outputOxo.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
-                        outputPeakDepth.Write("ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tNCE\tScanTIC\tTotalOxoSignal\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t");
-                        outputIPSA?.WriteLine("ScanNumber\tOxoniumIons\tMassError\t");
-
+                        outputPeriscope?.WriteLine(FileHeaders.PeriscopeHeader);
                         outputSummary.WriteLine("Settings:\t" + toleranceString + glySettings.tol + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
                                                 + ", TICfraction_HCD=" + glySettings.oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + glySettings.oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + glySettings.oxoTICfractionThreshold_uvpd);
                         outputSummary.WriteLine(StartTimeLabel.Text);
@@ -239,11 +236,15 @@ namespace GlyCounter
                         var progress = new Progress<DateTime>(_ => UpdateTimer()); //for timer updates on the UI thread
                         if (fileName.EndsWith(".d"))
                         {
-                            (glySettings, rawFileInfo) = await ProcessTimsTOF.processTimsTOFAsync(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputIPSA, progress);
+                            (glySettings, rawFileInfo) = await ProcessTimsTOF.processTimsTOFAsync(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, progress);
+                            outputOxo.Write(FileHeaders.OxoSignalHeader_tims);
+                            outputPeakDepth.Write(FileHeaders.OxoSignalHeader_tims);
                         }
                         else
                         {
-                            (glySettings, rawFileInfo) = await ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputIPSA, progress);
+                            (glySettings, rawFileInfo) = await ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, progress);
+                            outputOxo.Write(FileHeaders.OxoSignalHeader);
+                            outputPeakDepth.Write(FileHeaders.OxoSignalHeader);
                         }
 
                         //all scans have been processed, get some total stats
@@ -253,7 +254,7 @@ namespace GlyCounter
                         cRawFileInfo.numberofETDscansWithOxo = Math.Max(0, cRawFileInfo.numberofETDscansWithOxo);
                         cRawFileInfo.numberofUVPDscansWithOxo = Math.Max(0, cRawFileInfo.numberofUVPDscansWithOxo);
 
-                        outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
+                        outputSummary.WriteLine(FileHeaders.SummaryDissociationHeader);
                         outputSummary.WriteLine("MS/MS Scans\t" + rawFileInfo.numberOfMS2scans + "\t" + rawFileInfo.numberOfHCDscans + "\t" + rawFileInfo.numberOfETDscans + "\t" + rawFileInfo.numberOfUVPDscans
                             + "\t" + 100 + "\t" + cRawFileInfo.percentageHCD + "\t" + cRawFileInfo.percentageETD + "\t" + cRawFileInfo.percentageUVPD);
                         outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + cRawFileInfo.numberofMS2scansWithOxo + "\t" + cRawFileInfo.numberofHCDscansWithOxo + "\t" + cRawFileInfo.numberofETDscansWithOxo + "\t" + cRawFileInfo.numberofUVPDscansWithOxo
@@ -271,8 +272,8 @@ namespace GlyCounter
                         outputSummary.WriteLine("OxoCount_5+\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_uvpd
                             + "\t" + cRawFileInfo.percentage5plusox + "\t" + cRawFileInfo.percentage5plusox_hcd + "\t" + cRawFileInfo.percentage5plusox_etd + "\t" + cRawFileInfo.percentage5plusox_uvpd);
 
-                        outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
-                        outputSummary.WriteLine("\tTotal\tHCD\tETD\tUVPD\t%Total\t%HCD\t%ETD\t%UVPD");
+                        outputSummary.WriteLine(FileHeaders.SummarySeparator1);
+                        outputSummary.WriteLine(FileHeaders.SummaryDissociationHeader);
 
                         string currentGlycanSource = "";
 
@@ -287,14 +288,14 @@ namespace GlyCounter
 
                             if (!currentGlycanSource.Equals(oxoIon.glycanSource))
                             {
-                                outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\ " + oxoIon.glycanSource + @" \\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
+                                outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\ " + oxoIon.glycanSource + FileHeaders.SummarySeparator2);
                                 currentGlycanSource = oxoIon.glycanSource;
                             }
 
                             outputSummary.WriteLine(oxoIon.description + "\t" + total + "\t" + oxoIon.hcdCount + "\t" + oxoIon.etdCount + "\t" + oxoIon.uvpdCount
                                 + "\t" + percentTotal + "\t" + percentHCD + "\t" + percentETD + "\t" + percentUVPD);
                         }
-                        outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\" + "\t" + @"\\\\\\\\\\");
+                        outputSummary.WriteLine(FileHeaders.SummarySeparator3);
                         //output elapsed time
                         stopwatch.Stop();
                         TimeSpan ts = stopwatch.Elapsed;
@@ -307,8 +308,8 @@ namespace GlyCounter
                         outputSummary.Close();
                         outputOxo.Close();
                         outputPeakDepth.Close();
-                        if (outputIPSA != null)
-                            outputIPSA.Close();
+                        if (outputPeriscope != null)
+                            outputPeriscope.Close();
                     }
                 });
             }

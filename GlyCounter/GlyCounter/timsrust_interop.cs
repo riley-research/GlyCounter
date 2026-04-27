@@ -129,7 +129,7 @@ namespace GlyCounter
         public byte? charge { get; set; }
         public float? intensity { get; set; }
         public string spectrum_ref { get; set; }
-        public float? inverse_ion_mobility { get; set; }
+        public float? ion_mobility { get; set; }
         public float[] isolation_window { get; set; }
     }
 
@@ -143,6 +143,7 @@ namespace GlyCounter
         public byte ms_level { get; set; }
         public string id { get; set; }
         public float[] intensity { get; set; }
+        public float? collision_energy { get; set; }
         public List<SpecDataPointEx> peaks { get; set; } = new List<SpecDataPointEx>();
     }
 }

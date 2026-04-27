@@ -15,7 +15,7 @@ namespace GlyCounter
     public class ProcessTimsTOF
     {
         // Message for writer task
-        private readonly record struct WriteMessage(string OxoLine, string PeakDepthLine, string? IpsaLine);
+        private readonly record struct WriteMessage(string OxoLine, string PeakDepthLine, string? periscopeLine);
 
         public static async Task<(GlyCounterSettings, RawFileInfo)> processTimsTOFAsync(
             string fileName,
@@ -23,7 +23,7 @@ namespace GlyCounter
             RawFileInfo rawFileInfo,
             StreamWriter outputOxo,
             StreamWriter outputPeakDepth,
-            StreamWriter? outputIPSA,
+            StreamWriter? outputPeriscope,
             IProgress<DateTime>? progress = null)
         {
             // Configure parallelism and bounded memory
@@ -63,11 +63,11 @@ namespace GlyCounter
             {
                 try
                 {
-                    // write header once (mirror original behavior)
+                    // write header once
                     string oxoHeader = string.Concat(glySettings.oxoniumIonHashSet.Select(o => o.description + "\t")) +
-                                       "OxoInPeakDepthThresh\tOxoRequired\tOxoTICfraction\tLikelyGlycoSpectrum";
+                                       FileHeaders.LikelyGlycoHeader;
                     string peakDepthHeader = string.Concat(glySettings.oxoniumIonHashSet.Select(o => o.description + "\t")) +
-                                             "OxoInPeakDepthThresh\tOxoRequired\tOxoTICfraction\tLikelyGlycoSpectrum";
+                                             FileHeaders.LikelyGlycoHeader;
 
                     await outputOxo.WriteLineAsync(oxoHeader).ConfigureAwait(false);
                     await outputPeakDepth.WriteLineAsync(peakDepthHeader).ConfigureAwait(false);
@@ -78,12 +78,12 @@ namespace GlyCounter
                             await outputOxo.WriteLineAsync(msg.OxoLine).ConfigureAwait(false);
                         if (msg.PeakDepthLine is not null)
                             await outputPeakDepth.WriteLineAsync(msg.PeakDepthLine).ConfigureAwait(false);
-                        if (msg.IpsaLine is not null && outputIPSA != null)
-                            await outputIPSA.WriteLineAsync(msg.IpsaLine).ConfigureAwait(false);
+                        if (msg.periscopeLine is not null && outputPeriscope != null)
+                            await outputPeriscope.WriteLineAsync(msg.periscopeLine).ConfigureAwait(false);
                     }
                     await outputOxo.FlushAsync().ConfigureAwait(false);
                     await outputPeakDepth.FlushAsync().ConfigureAwait(false);
-                    if (outputIPSA != null) await outputIPSA.FlushAsync().ConfigureAwait(false);
+                    if (outputPeriscope != null) await outputPeriscope.FlushAsync().ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -264,6 +264,7 @@ namespace GlyCounter
                                 }
 
                                 string parentScan = spectrum.precursors[0].spectrum_ref;
+                                localStats.nce = Convert.ToDouble(spectrum.collision_energy);
                                 double scanTIC = spectrum.intensity.Sum();
                                 float? scanInjTime = spectrum.ion_injection_time;
                                 string fragmentationType = hcdTrue ? "HCD" : (etdTrue ? "ETD" : (uvpdTrue ? "UVPD" : ""));
@@ -386,12 +387,12 @@ namespace GlyCounter
                                              .Append(sbPeakDepth.ToString())
                                              .Append(oxoSummary);
 
-                                string? ipsaLine = null;
-                                if (outputIPSA != null)
-                                    ipsaLine = $"{spectrum.id}\t{peakString}\t{errorString}\t";
+                                string? periscopeLine = null;
+                                if (outputPeriscope != null)
+                                    periscopeLine = $"{spectrum.id}\t{peakString}\t{errorString}\t";
 
                                 // enqueue write message
-                                await writeChannel.Writer.WriteAsync(new WriteMessage(oxoLine.ToString(), peakDepthLine.ToString(), ipsaLine), token).ConfigureAwait(false);
+                                await writeChannel.Writer.WriteAsync(new WriteMessage(oxoLine.ToString(), peakDepthLine.ToString(), periscopeLine), token).ConfigureAwait(false);
                             }
                             try { progress?.Report(DateTime.Now); } catch { /* ignore */ }
 

@@ -16,7 +16,7 @@ namespace GlyCounter
     public class YN_ProcessRaw_MzML
     {
         static Form1 update = new Form1();
-        public static (YnaughtSettings, RawFileInfo) yNprocessRawMzML(YnaughtSettings yNsettings, GlyCounterSettings glySettings, RawFileInfo rawFileInfo, StreamWriter outputYion, StreamWriter? outputIPSA)
+        public static (YnaughtSettings, RawFileInfo) yNprocessRawMzML(YnaughtSettings yNsettings, GlyCounterSettings glySettings, RawFileInfo rawFileInfo, StreamWriter outputYion, StreamWriter? outputPeriscope)
         {
             //set the rawfile path and open it
             FileReader rawFile = new FileReader(yNsettings.rawFilePath);
@@ -484,8 +484,8 @@ namespace GlyCounter
                         outputYion.Write($"{intensity}\t");
                     }
 
-                    //ipsa output stuff
-                    if (outputIPSA != null)
+                    //periscope output stuff
+                    if (outputPeriscope != null)
                     {
                         var seen = new HashSet<string>();
                         foreach (Yion yion in finalYionList)
@@ -511,7 +511,7 @@ namespace GlyCounter
                                 string key = $"{psm.spectrumNumber}|{yionName}|{mz:F6}|{massDiff:F6}";
                                 if (seen.Add(key))
                                 {
-                                    outputIPSA.WriteLine($"{psm.spectrumNumber}\t{yionName}\t{mz}\t{massDiff}");
+                                    outputPeriscope.WriteLine($"{psm.spectrumNumber}\t{yionName}\t{mz}\t{massDiff}");
                                 }
                             }
                         }

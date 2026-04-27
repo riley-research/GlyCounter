@@ -13,9 +13,9 @@ namespace GlyCounter
 {
     public class ProcessRaw_MzML
     {
-        private readonly record struct WriteMessage(string OxoLine, string PeakDepthLine, string? IpsaLine);
+        private readonly record struct WriteMessage(string OxoLine, string PeakDepthLine, string? PeriscopeLine);
 
-        public static async Task<(GlyCounterSettings, RawFileInfo)> processRaw_MzML(string fileName, GlyCounterSettings glySettings, RawFileInfo rawFileInfo, StreamWriter outputOxo, StreamWriter outputPeakDepth, StreamWriter? outputIPSA, IProgress<DateTime>? progress = null)
+        public static async Task<(GlyCounterSettings, RawFileInfo)> processRaw_MzML(string fileName, GlyCounterSettings glySettings, RawFileInfo rawFileInfo, StreamWriter outputOxo, StreamWriter outputPeakDepth, StreamWriter? outputPeriscope, IProgress<DateTime>? progress = null)
         {
             // Configure parallelism and bounded memory
             int workerCount = Math.Max(1, Environment.ProcessorCount - 1);
@@ -54,9 +54,9 @@ namespace GlyCounter
                 try
                 {
                     string oxoHeader = string.Concat(glySettings.oxoniumIonHashSet.Select(o => o.description + "\t")) +
-                                       "OxoInPeakDepthThresh\tOxoRequired\tOxoTICfraction\tLikelyGlycoSpectrum";
+                                       FileHeaders.LikelyGlycoHeader;
                     string peakDepthHeader = string.Concat(glySettings.oxoniumIonHashSet.Select(o => o.description + "\t")) +
-                                             "OxoInPeakDepthThresh\tOxoRequired\tOxoTICfraction\tLikelyGlycoSpectrum";
+                                             FileHeaders.LikelyGlycoHeader;
 
                     await outputOxo.WriteLineAsync(oxoHeader).ConfigureAwait(false);
                     await outputPeakDepth.WriteLineAsync(peakDepthHeader).ConfigureAwait(false);
@@ -67,12 +67,12 @@ namespace GlyCounter
                             await outputOxo.WriteLineAsync(msg.OxoLine).ConfigureAwait(false);
                         if (msg.PeakDepthLine is not null)
                             await outputPeakDepth.WriteLineAsync(msg.PeakDepthLine).ConfigureAwait(false);
-                        if (msg.IpsaLine is not null && outputIPSA != null)
-                            await outputIPSA.WriteLineAsync(msg.IpsaLine).ConfigureAwait(false);
+                        if (msg.PeriscopeLine is not null && outputPeriscope != null)
+                            await outputPeriscope.WriteLineAsync(msg.PeriscopeLine).ConfigureAwait(false);
                     }
                     await outputOxo.FlushAsync().ConfigureAwait(false);
                     await outputPeakDepth.FlushAsync().ConfigureAwait(false);
-                    if (outputIPSA != null) await outputIPSA.FlushAsync().ConfigureAwait(false);
+                    if (outputPeriscope != null) await outputPeriscope.FlushAsync().ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -518,12 +518,12 @@ namespace GlyCounter
                                              .Append(sbPeakDepth.ToString())
                                              .Append(oxoSummary);
 
-                                string? ipsaLine = null;
-                                if (outputIPSA != null)
-                                    ipsaLine = $"{spectrum.ScanNumber}\t{peakString}\t{errorString}\t";
+                                string? periscopeLine = null;
+                                if (outputPeriscope != null)
+                                    periscopeLine = $"{spectrum.ScanNumber}\t{peakString}\t{errorString}\t";
 
                                 // enqueue write message
-                                await writeChannel.Writer.WriteAsync(new WriteMessage(oxoLine.ToString(), peakDepthLine.ToString(), ipsaLine), token).ConfigureAwait(false);
+                                await writeChannel.Writer.WriteAsync(new WriteMessage(oxoLine.ToString(), peakDepthLine.ToString(), periscopeLine), token).ConfigureAwait(false);
                             }
                             try { progress?.Report(DateTime.Now); } catch { /* ignore */ }
 

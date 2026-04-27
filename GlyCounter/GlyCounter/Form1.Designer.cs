@@ -120,7 +120,7 @@ namespace GlyCounter
             polarityCB = new CheckBox();
             Gly_outputButton = new Button();
             Gly_outputTextBox = new TextBox();
-            ipsaCheckBox = new CheckBox();
+            periscopeCheckBox = new CheckBox();
             DaltonCheckBox = new CheckBox();
             OxoCountThreshold_uvpd_label = new Label();
             uvpdTICfraction_Label = new Label();
@@ -138,7 +138,7 @@ namespace GlyCounter
             Ynaught_intTextBox = new TextBox();
             Ynaught_outputButton = new Button();
             Ynaught_outputTextBox = new TextBox();
-            YNaught_IPSAcheckbox = new CheckBox();
+            YNaught_Periscopecheckbox = new CheckBox();
             ChargeExplanationLabel = new Label();
             UpperBoundLabel = new Label();
             LowerBoundLabel = new Label();
@@ -723,7 +723,7 @@ namespace GlyCounter
             GlyCounter_Tab.Controls.Add(polarityCB);
             GlyCounter_Tab.Controls.Add(Gly_outputButton);
             GlyCounter_Tab.Controls.Add(Gly_outputTextBox);
-            GlyCounter_Tab.Controls.Add(ipsaCheckBox);
+            GlyCounter_Tab.Controls.Add(periscopeCheckBox);
             GlyCounter_Tab.Controls.Add(DaltonCheckBox);
             GlyCounter_Tab.Controls.Add(OxoCountThreshold_uvpd_label);
             GlyCounter_Tab.Controls.Add(uvpdTICfraction_Label);
@@ -912,16 +912,16 @@ namespace GlyCounter
             Gly_outputTextBox.TabIndex = 55;
             Gly_outputTextBox.Text = "Select output directory";
             // 
-            // ipsaCheckBox
+            // periscopeCheckBox
             // 
-            ipsaCheckBox.AutoSize = true;
-            ipsaCheckBox.Location = new Point(618, 612);
-            ipsaCheckBox.Name = "ipsaCheckBox";
-            ipsaCheckBox.Size = new Size(159, 19);
-            ipsaCheckBox.TabIndex = 68;
-            ipsaCheckBox.Text = "Output IPSA Annotations";
-            ipsaCheckBox.UseVisualStyleBackColor = true;
-            ipsaCheckBox.CheckedChanged += ipsaCheckBox_CheckedChanged;
+            periscopeCheckBox.AutoSize = true;
+            periscopeCheckBox.Location = new Point(591, 612);
+            periscopeCheckBox.Name = "periscopeCheckBox";
+            periscopeCheckBox.Size = new Size(186, 19);
+            periscopeCheckBox.TabIndex = 68;
+            periscopeCheckBox.Text = "Output Periscope Annotations";
+            periscopeCheckBox.UseVisualStyleBackColor = true;
+            periscopeCheckBox.CheckedChanged += ipsaCheckBox_CheckedChanged;
             // 
             // DaltonCheckBox
             // 
@@ -1036,7 +1036,7 @@ namespace GlyCounter
             YnaughtTab.Controls.Add(Ynaught_intTextBox);
             YnaughtTab.Controls.Add(Ynaught_outputButton);
             YnaughtTab.Controls.Add(Ynaught_outputTextBox);
-            YnaughtTab.Controls.Add(YNaught_IPSAcheckbox);
+            YnaughtTab.Controls.Add(YNaught_Periscopecheckbox);
             YnaughtTab.Controls.Add(ChargeExplanationLabel);
             YnaughtTab.Controls.Add(UpperBoundLabel);
             YnaughtTab.Controls.Add(LowerBoundLabel);
@@ -1137,15 +1137,15 @@ namespace GlyCounter
             Ynaught_outputTextBox.TabIndex = 79;
             Ynaught_outputTextBox.Text = "Select output directory";
             // 
-            // YNaught_IPSAcheckbox
+            // YNaught_Periscopecheckbox
             // 
-            YNaught_IPSAcheckbox.AutoSize = true;
-            YNaught_IPSAcheckbox.Location = new Point(320, 601);
-            YNaught_IPSAcheckbox.Name = "YNaught_IPSAcheckbox";
-            YNaught_IPSAcheckbox.Size = new Size(159, 19);
-            YNaught_IPSAcheckbox.TabIndex = 78;
-            YNaught_IPSAcheckbox.Text = "Output IPSA Annotations";
-            YNaught_IPSAcheckbox.UseVisualStyleBackColor = true;
+            YNaught_Periscopecheckbox.AutoSize = true;
+            YNaught_Periscopecheckbox.Location = new Point(320, 601);
+            YNaught_Periscopecheckbox.Name = "YNaught_Periscopecheckbox";
+            YNaught_Periscopecheckbox.Size = new Size(186, 19);
+            YNaught_Periscopecheckbox.TabIndex = 78;
+            YNaught_Periscopecheckbox.Text = "Output Periscope Annotations";
+            YNaught_Periscopecheckbox.UseVisualStyleBackColor = true;
             // 
             // ChargeExplanationLabel
             // 
@@ -1758,7 +1758,7 @@ namespace GlyCounter
         private Label PeakDepth_label_UVPD;
         private CheckBox DaltonCheckBox;
         private CheckBox Ynaught_DaCheckBox;
-        private CheckBox ipsaCheckBox;
+        private CheckBox periscopeCheckBox;
         private RadioButton SeparateChargeStates;
         private RadioButton GroupChargeStates;
         private Panel panel1;
@@ -1768,7 +1768,7 @@ namespace GlyCounter
         private Label LowerBoundLabel;
         private Label ChargeExplanationLabel;
         private Label UpperBoundLabel;
-        private CheckBox YNaught_IPSAcheckbox;
+        private CheckBox YNaught_Periscopecheckbox;
         private TextBox Ynaught_outputTextBox;
         private Button Ynaught_outputButton;
         private Label Ynaught_intLabel;

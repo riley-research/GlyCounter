@@ -104,7 +104,7 @@ namespace GlyCounter
                     if (CanConvertDouble(Ynaught_intTextBox.Text, yNsettings.intensityThreshold))
                         yNsettings.intensityThreshold = Convert.ToDouble(Ynaught_intTextBox.Text, CultureInfo.InvariantCulture);
 
-                    if (YNaught_IPSAcheckbox.Checked) yNsettings.ipsa = true;
+                    if (YNaught_Periscopecheckbox.Checked) yNsettings.periscope = true;
 
                     //add checked items to yIonHashSet to use for creating ions to look for
                     //note that subtraction is its own "Source"
@@ -254,12 +254,12 @@ namespace GlyCounter
                     string fileNameShort = Path.GetFileNameWithoutExtension(yNsettings.rawFilePath);
                     StreamWriter outputYion = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_YionSignal.txt"));
                     StreamWriter outputSummary = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_YionSummary.txt"));
-                    StreamWriter outputIPSA = null;
+                    StreamWriter outputPeriscope = null;
 
-                    if (yNsettings.ipsa)
+                    if (yNsettings.periscope)
                     {
-                        outputIPSA = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_Glycounter_YionIPSA.txt"));
-                        outputIPSA.WriteLine("ScanNumber" + '\t' + "Yion" + '\t' + "m/z" + '\t' + "MassError");
+                        outputPeriscope = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_Glycounter_YionIPSA.txt"));
+                        outputPeriscope.WriteLine("ScanNumber" + '\t' + "Yion" + '\t' + "m/z" + '\t' + "MassError");
                     }
 
                     string toleranceString = "ppmTol= ";
@@ -287,7 +287,7 @@ namespace GlyCounter
                     else
                     {
                         
-                        (yNsettings, rawFileInfo) = YN_ProcessRaw_MzML.yNprocessRawMzML(yNsettings, glySettings, rawFileInfo, outputYion, outputIPSA);
+                        (yNsettings, rawFileInfo) = YN_ProcessRaw_MzML.yNprocessRawMzML(yNsettings, glySettings, rawFileInfo, outputYion, outputPeriscope);
                     }
 
 
@@ -367,8 +367,8 @@ namespace GlyCounter
 
                     outputSummary.Close();
                     outputYion.Close();
-                    if (outputIPSA != null)
-                        outputIPSA.Close();
+                    if (outputPeriscope != null)
+                        outputPeriscope.Close();
                 });
             }
 
