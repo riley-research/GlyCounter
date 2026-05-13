@@ -15,7 +15,9 @@ namespace GlyCounter
     {
         private readonly record struct WriteMessage(string OxoLine, string PeakDepthLine, string? PeriscopeLine);
 
-        public static async Task<(GlyCounterSettings, RawFileInfo)> processRaw_MzML(string fileName, GlyCounterSettings glySettings, RawFileInfo rawFileInfo, StreamWriter outputOxo, StreamWriter outputPeakDepth, StreamWriter? outputPeriscope, IProgress<DateTime>? progress = null)
+        public static async Task<(GlyCounterSettings, RawFileInfo)> processRaw_MzML(string fileName,
+            GlyCounterSettings glySettings, RawFileInfo rawFileInfo, StreamWriter outputOxo,
+            StreamWriter outputPeakDepth, StreamWriter? outputPeriscope, IProgress<DateTime>? progress = null)
         {
             // Configure parallelism and bounded memory
             int workerCount = Math.Max(1, Environment.ProcessorCount - 1);
@@ -23,15 +25,12 @@ namespace GlyCounter
 
             var spectraChannel = Channel.CreateBounded<SpectrumEx>(new BoundedChannelOptions(boundedCapacity)
             {
-                SingleWriter = true,
-                SingleReader = false,
-                FullMode = BoundedChannelFullMode.Wait
+                SingleWriter = true, SingleReader = false, FullMode = BoundedChannelFullMode.Wait
             });
 
             var writeChannel = Channel.CreateUnbounded<WriteMessage>(new UnboundedChannelOptions
             {
-                SingleReader = true,
-                SingleWriter = false
+                SingleReader = true, SingleWriter = false
             });
 
             // Per-worker accumulators to avoid frequent locking
@@ -55,8 +54,9 @@ namespace GlyCounter
                 {
                     string oxoHeader = string.Concat(glySettings.oxoniumIonHashSet.Select(o => o.description + "\t")) +
                                        FileHeaders.LikelyGlycoHeader;
-                    string peakDepthHeader = string.Concat(glySettings.oxoniumIonHashSet.Select(o => o.description + "\t")) +
-                                             FileHeaders.LikelyGlycoHeader;
+                    string peakDepthHeader =
+                        string.Concat(glySettings.oxoniumIonHashSet.Select(o => o.description + "\t")) +
+                        FileHeaders.LikelyGlycoHeader;
 
                     await outputOxo.WriteLineAsync(oxoHeader).ConfigureAwait(false);
                     await outputPeakDepth.WriteLineAsync(peakDepthHeader).ConfigureAwait(false);
@@ -70,6 +70,7 @@ namespace GlyCounter
                         if (msg.PeriscopeLine is not null && outputPeriscope != null)
                             await outputPeriscope.WriteLineAsync(msg.PeriscopeLine).ConfigureAwait(false);
                     }
+
                     await outputOxo.FlushAsync().ConfigureAwait(false);
                     await outputPeakDepth.FlushAsync().ConfigureAwait(false);
                     if (outputPeriscope != null) await outputPeriscope.FlushAsync().ConfigureAwait(false);
@@ -103,6 +104,7 @@ namespace GlyCounter
                         SpectrumEx spectrum = rawFile.ReadSpectrumEx(scanNumber: i);
                         await writer.WriteAsync(spectrum, token).ConfigureAwait(false);
                     }
+
                     writer.Complete();
                 }
                 catch (Exception ex)
@@ -124,7 +126,8 @@ namespace GlyCounter
                 {
                     try
                     {
-                        await foreach (var spectrum in spectraChannel.Reader.ReadAllAsync(token).ConfigureAwait(false))
+                        await foreach (var spectrum in spectraChannel.Reader.ReadAllAsync(token)
+                                           .ConfigureAwait(false))
                         {
                             if (spectrum.TotalIonCurrent == null || spectrum.TotalIonCurrent == 0) continue;
 
@@ -184,7 +187,10 @@ namespace GlyCounter
                                     if (splitHCDheader.Length > 1)
                                     {
                                         var collisionEnergyArray = splitHCDheader[1].Split('.', 2);
-                                        if (collisionEnergyArray.Length > 0 && double.TryParse(collisionEnergyArray[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var nceVal))
+                                        if (collisionEnergyArray.Length > 0 &&
+                                            double.TryParse(collisionEnergyArray[0],
+                                                System.Globalization.NumberStyles.Any,
+                                                System.Globalization.CultureInfo.InvariantCulture, out var nceVal))
                                         {
                                             localStats.nce = nceVal;
                                         }
@@ -210,7 +216,8 @@ namespace GlyCounter
                             }
                             else
                             {
-                                if (spectrum.Precursors != null && spectrum.Precursors.Count > 0 && spectrum.Precursors[0] != null)
+                                if (spectrum.Precursors != null && spectrum.Precursors.Count > 0 &&
+                                    spectrum.Precursors[0] != null)
                                 {
                                     var firstPre = spectrum.Precursors[0];
                                     string dt = firstPre.FramentationMethod.ToString() ?? string.Empty;
@@ -220,12 +227,15 @@ namespace GlyCounter
                                         localStats.numberOfHCDscans++;
                                         hcdTrue = true;
                                     }
+
                                     if (dt.Equals("ETD", StringComparison.OrdinalIgnoreCase))
                                     {
                                         localStats.numberOfETDscans++;
                                         etdTrue = true;
                                     }
-                                    if (dt.Equals("CI", StringComparison.OrdinalIgnoreCase) || dt.Equals("UVPD", StringComparison.OrdinalIgnoreCase))
+
+                                    if (dt.Equals("CI", StringComparison.OrdinalIgnoreCase) ||
+                                        dt.Equals("UVPD", StringComparison.OrdinalIgnoreCase))
                                     {
                                         localStats.numberOfUVPDscans++;
                                         uvpdTrue = true;
@@ -235,7 +245,7 @@ namespace GlyCounter
                                         localStats.nce = firstPre.CollisionEnergy;
                                 }
                             }
-                            
+
                             localStats.numberOfMS2scans++; // count per-worker scans
 
                             double basePeak = spectrum.BasePeakIntensity;
@@ -246,18 +256,15 @@ namespace GlyCounter
                                 PeakProcessing.RankOrderPeaks(sortedPeakDepths, spectrum);
 
                                 var localOxonia = glySettings.oxoniumIonHashSet
-                                    .Select(o => new
-                                    {
-                                        TheoMZ = o.theoMZ,
-                                        Description = o.description
-                                    })
+                                    .Select(o => new { TheoMZ = o.theoMZ, Description = o.description })
                                     .ToList();
 
                                 string oxoIonHeader = "";
                                 foreach (var oxoIon in localOxonia)
                                 {
 
-                                    SpecDataPointEx peak = PeakProcessing.GetPeak(spectrum, oxoIon.TheoMZ, glySettings.usingda, glySettings.tol, IT);
+                                    SpecDataPointEx peak = PeakProcessing.GetPeak(spectrum, oxoIon.TheoMZ,
+                                        glySettings.usingda, glySettings.tol, IT);
 
                                     if (!IT && thermo)
                                     {
@@ -272,15 +279,18 @@ namespace GlyCounter
                                             totalOxoSignal += intensity;
 
                                             if (Math.Abs(oxoIon.TheoMZ - 204.0867) < 0.0001 &&
-                                                sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_hcd && hcdTrue)
+                                                sortedPeakDepths[peak.Intensity] <=
+                                                glySettings.peakDepthThreshold_hcd && hcdTrue)
                                                 test204 = true;
 
                                             if (Math.Abs(oxoIon.TheoMZ - 204.0867) < 0.0001 &&
-                                                sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_etd && etdTrue)
+                                                sortedPeakDepths[peak.Intensity] <=
+                                                glySettings.peakDepthThreshold_etd && etdTrue)
                                                 test204 = true;
 
                                             if (Math.Abs(oxoIon.TheoMZ - 204.0867) < 0.0001 &&
-                                                sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_uvpd && uvpdTrue)
+                                                sortedPeakDepths[peak.Intensity] <=
+                                                glySettings.peakDepthThreshold_uvpd && uvpdTrue)
                                                 test204 = true;
 
                                             oxoniumIonFoundPeaks.Add(oxoIon.TheoMZ);
@@ -292,7 +302,8 @@ namespace GlyCounter
                                             lock (ionCountsLock)
                                             {
                                                 // find the matching OxoniumIon instance in the shared set
-                                                var sharedIon = glySettings.oxoniumIonHashSet.FirstOrDefault(i => Math.Abs(i.theoMZ - oxoIon.TheoMZ) < 1e-6);
+                                                var sharedIon = glySettings.oxoniumIonHashSet.FirstOrDefault(i =>
+                                                    Math.Abs(i.theoMZ - oxoIon.TheoMZ) < 1e-6);
                                                 if (sharedIon != null)
                                                 {
                                                     if (hcdTrue) sharedIon.hcdCount++;
@@ -304,7 +315,8 @@ namespace GlyCounter
                                     }
                                     else
                                     {
-                                        if (!peak.Equals(new SpecDataPointEx()) && peak.Intensity > glySettings.intensityThreshold)
+                                        if (!peak.Equals(new SpecDataPointEx()) &&
+                                            peak.Intensity > glySettings.intensityThreshold)
                                         {
                                             double measuredMz = peak.Mz;
                                             double intensity = peak.Intensity;
@@ -314,15 +326,18 @@ namespace GlyCounter
                                             totalOxoSignal += intensity;
 
                                             if (Math.Abs(oxoIon.TheoMZ - 204.0867) < 0.0001 &&
-                                                sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_hcd && hcdTrue)
+                                                sortedPeakDepths[peak.Intensity] <=
+                                                glySettings.peakDepthThreshold_hcd && hcdTrue)
                                                 test204 = true;
 
                                             if (Math.Abs(oxoIon.TheoMZ - 204.0867) < 0.0001 &&
-                                                sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_etd && etdTrue)
+                                                sortedPeakDepths[peak.Intensity] <=
+                                                glySettings.peakDepthThreshold_etd && etdTrue)
                                                 test204 = true;
 
                                             if (Math.Abs(oxoIon.TheoMZ - 204.0867) < 0.0001 &&
-                                                sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_uvpd && uvpdTrue)
+                                                sortedPeakDepths[peak.Intensity] <=
+                                                glySettings.peakDepthThreshold_uvpd && uvpdTrue)
                                                 test204 = true;
 
                                             oxoniumIonFoundPeaks.Add(oxoIon.TheoMZ);
@@ -331,7 +346,8 @@ namespace GlyCounter
 
                                             lock (ionCountsLock)
                                             {
-                                                var sharedIon = glySettings.oxoniumIonHashSet.FirstOrDefault(i => Math.Abs(i.theoMZ - oxoIon.TheoMZ) < 1e-6);
+                                                var sharedIon = glySettings.oxoniumIonHashSet.FirstOrDefault(i =>
+                                                    Math.Abs(i.theoMZ - oxoIon.TheoMZ) < 1e-6);
                                                 if (sharedIon != null)
                                                 {
                                                     if (hcdTrue) sharedIon.hcdCount++;
@@ -386,10 +402,12 @@ namespace GlyCounter
 
                                 double parentScan = spectrum.PrecursorMasterScanNumber;
                                 double precursormz = 0;
-                                if (spectrum.Precursors != null && spectrum.Precursors.Count > 0 && spectrum.Precursors[0] != null)
+                                if (spectrum.Precursors != null && spectrum.Precursors.Count > 0 &&
+                                    spectrum.Precursors[0] != null)
                                 {
                                     precursormz = spectrum.Precursors[0].IsolationMz;
                                 }
+
                                 double scanTIC = spectrum.TotalIonCurrent;
                                 double scanInjTime = spectrum.IonInjectionTime;
                                 string fragmentationType = "";
@@ -441,17 +459,38 @@ namespace GlyCounter
 
                                 foreach (var oxoIon in glySettings.oxoniumIonHashSet)
                                 {
-                                    SpecDataPointEx peak = PeakProcessing.GetPeak(spectrum, oxoIon.theoMZ, glySettings.usingda, glySettings.tol, thermo, IT);
-                                    double intensity = (!peak.Equals(new SpecDataPointEx()) && peak.Intensity > glySettings.intensityThreshold) ? peak.Intensity : 0;
+                                    SpecDataPointEx peak = PeakProcessing.GetPeak(spectrum, oxoIon.theoMZ,
+                                        glySettings.usingda, glySettings.tol, thermo, IT);
+                                    double intensity = 0;
+
+                                    if (!IT && thermo)
+                                    {
+                                        if (!peak.Equals(new SpecDataPointEx()) && peak.Intensity > 0 &&
+                                            (peak.Intensity / peak.Noise) > glySettings.SNthreshold)
+                                        {
+                                            intensity = peak.Intensity;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (!peak.Equals(new SpecDataPointEx()) &&
+                                            peak.Intensity > glySettings.intensityThreshold)
+                                        {
+                                            intensity = peak.Intensity;
+                                        }
+                                    }
+
                                     sbOxo.Append(intensity).Append('\t');
 
-                                    if (peak.Equals(new SpecDataPointEx()) || peak.Intensity <= glySettings.intensityThreshold)
+                                    if (intensity == 0)
                                     {
                                         sbPeakDepth.Append("NotFound\t");
                                     }
                                     else
                                     {
-                                        int pd = sortedPeakDepths.ContainsKey(peak.Intensity) ? sortedPeakDepths[peak.Intensity] : glySettings.arbitraryPeakDepthIfNotFound;
+                                        int pd = sortedPeakDepths.ContainsKey(peak.Intensity)
+                                            ? sortedPeakDepths[peak.Intensity]
+                                            : glySettings.arbitraryPeakDepthIfNotFound;
                                         sbPeakDepth.Append(pd).Append('\t');
 
                                         if (hcdTrue && pd <= glySettings.peakDepthThreshold_hcd) countWithin++;
@@ -460,21 +499,25 @@ namespace GlyCounter
                                     }
                                 }
 
+
                                 bool isLikelyGlyco = false;
 
-                                if (hcdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
+                                if (hcdTrue && countWithin >= oxoCountRequirement && test204 &&
+                                    oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
                                 {
                                     isLikelyGlyco = true;
                                     localStats.numberScansCountedLikelyGlyco_hcd++;
                                 }
 
-                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
+                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test204 &&
+                                    oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
                                 {
                                     isLikelyGlyco = true;
                                     localStats.numberScansCountedLikelyGlyco_etd++;
                                 }
 
-                                if (uvpdTrue && countWithin >= oxoCountRequirement && test204 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
+                                if (uvpdTrue && countWithin >= oxoCountRequirement && test204 &&
+                                    oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
                                 {
                                     isLikelyGlyco = true;
                                     localStats.numberScansCountedLikelyGlyco_uvpd++;
@@ -483,54 +526,64 @@ namespace GlyCounter
                                 // persist into per-worker flag (keep true if previously set)
                                 if (isLikelyGlyco) localStats.likelyGlycoSpectrum = true;
 
-                                string oxoSummary = $"{countWithin}\t{oxoCountRequirement}\t{oxoTICfraction}\t{isLikelyGlyco}";
+                                string oxoSummary =
+                                    $"{countWithin}\t{oxoCountRequirement}\t{oxoTICfraction}\t{isLikelyGlyco}";
 
                                 // Prepare lines (tab-separated) for writer
                                 var oxoLine = new StringBuilder();
                                 oxoLine.Append(spectrum.ScanNumber).Append('\t')
-                                       .Append(retentionTime).Append('\t')
-                                       .Append(spectrum.MsLevel).Append('\t')
-                                       .Append(precursormz).Append('\t')
-                                       .Append(spectrum.Precursors[0].Charge).Append('\t')
-                                       .Append(localStats.nce).Append('\t')
-                                       .Append(scanTIC).Append('\t')
-                                       .Append(totalOxoSignal).Append('\t')
-                                       .Append(scanInjTime).Append('\t')
-                                       .Append(fragmentationType).Append('\t')
-                                       .Append(parentScan).Append('\t')
-                                       .Append(numberOfOxoIons).Append('\t')
-                                       .Append(totalOxoSignal).Append('\t')
-                                       .Append(sbOxo.ToString())
-                                       .Append(oxoSummary);
+                                    .Append(retentionTime).Append('\t')
+                                    .Append(spectrum.MsLevel).Append('\t')
+                                    .Append(precursormz).Append('\t')
+                                    .Append(spectrum.Precursors[0].Charge).Append('\t')
+                                    .Append(localStats.nce).Append('\t')
+                                    .Append(scanTIC).Append('\t')
+                                    .Append(totalOxoSignal).Append('\t')
+                                    .Append(scanInjTime).Append('\t')
+                                    .Append(fragmentationType).Append('\t')
+                                    .Append(parentScan).Append('\t')
+                                    .Append(numberOfOxoIons).Append('\t')
+                                    .Append(totalOxoSignal).Append('\t')
+                                    .Append(sbOxo.ToString())
+                                    .Append(oxoSummary);
 
                                 var peakDepthLine = new StringBuilder();
                                 peakDepthLine.Append(spectrum.ScanNumber).Append('\t')
-                                             .Append(retentionTime).Append('\t')
-                                             .Append(spectrum.MsLevel).Append('\t')
-                                             .Append(precursormz).Append('\t')
-                                             .Append(spectrum.Precursors[0].Charge).Append('\t')
-                                             .Append(localStats.nce).Append('\t')
-                                             .Append(scanTIC).Append('\t')
-                                             .Append(totalOxoSignal).Append('\t')
-                                             .Append(scanInjTime).Append('\t')
-                                             .Append(fragmentationType).Append('\t')
-                                             .Append(parentScan).Append('\t')
-                                             .Append(numberOfOxoIons).Append('\t')
-                                             .Append(totalOxoSignal).Append('\t')
-                                             .Append(sbPeakDepth.ToString())
-                                             .Append(oxoSummary);
+                                    .Append(retentionTime).Append('\t')
+                                    .Append(spectrum.MsLevel).Append('\t')
+                                    .Append(precursormz).Append('\t')
+                                    .Append(spectrum.Precursors[0].Charge).Append('\t')
+                                    .Append(localStats.nce).Append('\t')
+                                    .Append(scanTIC).Append('\t')
+                                    .Append(totalOxoSignal).Append('\t')
+                                    .Append(scanInjTime).Append('\t')
+                                    .Append(fragmentationType).Append('\t')
+                                    .Append(parentScan).Append('\t')
+                                    .Append(numberOfOxoIons).Append('\t')
+                                    .Append(totalOxoSignal).Append('\t')
+                                    .Append(sbPeakDepth.ToString())
+                                    .Append(oxoSummary);
 
                                 string? periscopeLine = null;
                                 if (outputPeriscope != null)
                                     periscopeLine = $"{spectrum.ScanNumber}\t{peakString}\t{errorString}\t";
 
                                 // enqueue write message
-                                await writeChannel.Writer.WriteAsync(new WriteMessage(oxoLine.ToString(), peakDepthLine.ToString(), periscopeLine), token).ConfigureAwait(false);
+                                await writeChannel.Writer
+                                    .WriteAsync(
+                                        new WriteMessage(oxoLine.ToString(), peakDepthLine.ToString(),
+                                            periscopeLine),
+                                        token).ConfigureAwait(false);
                             }
-                            try { progress?.Report(DateTime.Now); } catch { /* ignore */ }
 
+                            try { progress?.Report(DateTime.Now); }
+                            catch
+                            {
+                                /* ignore */
+                            }
                         }
                     }
+
                     catch (Exception ex)
                     {
                         workerException = ex;

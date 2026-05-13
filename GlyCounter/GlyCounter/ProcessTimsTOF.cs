@@ -266,7 +266,7 @@ namespace GlyCounter
                                 string parentScan = spectrum.precursors[0].spectrum_ref;
                                 localStats.nce = Convert.ToDouble(spectrum.collision_energy);
                                 double scanTIC = spectrum.intensity.Sum();
-                                float? scanInjTime = spectrum.ion_injection_time;
+                                float? scanInjTime = 0;
                                 string fragmentationType = hcdTrue ? "HCD" : (etdTrue ? "ETD" : (uvpdTrue ? "UVPD" : ""));
                                 float? retentionTime = spectrum.scan_start_time;
                                 double precursormz = spectrum.precursors[0].mz;
@@ -353,6 +353,8 @@ namespace GlyCounter
 
                                 // Final summary columns
                                 string oxoSummary = $"{countWithin}\t{oxoCountRequirement}\t{oxoTICfraction}\t{localStats.likelyGlycoSpectrum}";
+
+                                float? im = spectrum.precursors[0].ion_mobility;
 
                                 // Prepare lines (tab-separated) for writer
                                 var oxoLine = new StringBuilder();

@@ -1,8 +1,8 @@
-﻿using Nova.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
+using Nova.Data;
 using System.Diagnostics;
 
 namespace GlyCounter
@@ -125,25 +125,49 @@ namespace GlyCounter
 
     public class Precursor
     {
+        [JsonProperty("mz")]
         public float mz { get; set; }
+
+        [JsonProperty("charge")]
         public byte? charge { get; set; }
+
+        [JsonProperty("intensity")]
         public float? intensity { get; set; }
+
+        [JsonProperty("spectrum_ref")]
         public string spectrum_ref { get; set; }
+
+        [JsonProperty("inverse_ion_mobility")]
         public float? ion_mobility { get; set; }
+
+        [JsonProperty("isolation_window")]
         public float[] isolation_window { get; set; }
     }
 
     public class RawSpectrum
     {
+        [JsonProperty("precursors")]
         public Precursor[] precursors { get; set; }
+
+        [JsonProperty("scan_start_time")]
         public float? scan_start_time { get; set; }
-        public float? ion_injection_time { get; set; }
-        public float total_ion_current { get; set; }
+
+        [JsonProperty("mz")]
         public float[] mz { get; set; }
+
+        [JsonProperty("ms_level")]
         public byte ms_level { get; set; }
+
+        [JsonProperty("id")]
         public string id { get; set; }
+
+        [JsonProperty("intensity")]
         public float[] intensity { get; set; }
+
+        [JsonProperty("collision_energy")]
         public float? collision_energy { get; set; }
+
+        [JsonIgnore]
         public List<SpecDataPointEx> peaks { get; set; } = new List<SpecDataPointEx>();
     }
 }

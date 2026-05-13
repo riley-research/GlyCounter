@@ -236,15 +236,15 @@ namespace GlyCounter
                         var progress = new Progress<DateTime>(_ => UpdateTimer()); //for timer updates on the UI thread
                         if (fileName.EndsWith(".d"))
                         {
-                            (glySettings, rawFileInfo) = await ProcessTimsTOF.processTimsTOFAsync(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, progress);
                             outputOxo.Write(FileHeaders.OxoSignalHeader_tims);
                             outputPeakDepth.Write(FileHeaders.OxoSignalHeader_tims);
+                            (glySettings, rawFileInfo) = await ProcessTimsTOF.processTimsTOFAsync(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, progress);
                         }
                         else
                         {
-                            (glySettings, rawFileInfo) = await ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, progress);
                             outputOxo.Write(FileHeaders.OxoSignalHeader);
                             outputPeakDepth.Write(FileHeaders.OxoSignalHeader);
+                            (glySettings, rawFileInfo) = await ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, progress);
                         }
 
                         //all scans have been processed, get some total stats
