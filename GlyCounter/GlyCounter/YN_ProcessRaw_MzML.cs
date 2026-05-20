@@ -58,14 +58,25 @@ namespace GlyCounter
 
                     foreach (string item in assignedMods.Split(','))
                     {
+                        if (item == "") continue;
                         string trimmed = item.Trim();
-                        string modLocation = trimmed.Split('(')[0]; //format: AA##
-                        char AA = modLocation[0];
-                        int position = int.Parse(modLocation.Substring(1));
-                        double modMass = double.Parse(trimmed.Split('(')[1].Split(')')[0]);
-                        IMass mass = new Mass(modMass);
-                        //assume any mod on N, S, or T is a glycan. Right now we have no way to verify this, would need to add more columns to the input.
-                        if (AA != 'N' && AA != 'S' && AA != 'T') peptideNoGlycanMods.AddModification(mass, position);
+                        string modLocation = trimmed.Split('(')[0]; //format: ##AA
+                        if (modLocation == "N-term")
+                        {
+                            double modMass_nterm = double.Parse(trimmed.Split('(')[1].Split(')')[0]);
+                            IMass mass_nterm = new Mass(modMass_nterm);
+                            peptideNoGlycanMods.AddModification(mass_nterm, 1);
+                        }
+                        else
+                        {
+                            char AA = modLocation[1];
+                            int position = int.Parse(modLocation.Where(char.IsDigit).ToArray());
+                            double modMass = double.Parse(trimmed.Split('(')[1].Split(')')[0]);
+                            IMass mass = new Mass(modMass);
+                            //assume any mod on N, S, or T is a glycan. Right now we have no way to verify this, would need to add more columns to the input.
+                            if (AA != 'N' && AA != 'S' && AA != 'T') peptideNoGlycanMods.AddModification(mass, position);
+                        }
+                            
                     }
 
                     //only process if it's a glycopeptide
