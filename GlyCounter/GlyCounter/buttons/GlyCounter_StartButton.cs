@@ -18,7 +18,6 @@ namespace GlyCounter
             string userOutput = Gly_outputTextBox.Text?.Trim();
 
             GlyCounterSettings? getOutput = DefaultOutput.getDefaultOutput(userOutput, glySettings);
-            //TODO check if message box shows up if you don't select a folder
             if (getOutput != null)
             {
                 glySettings = getOutput;
@@ -122,10 +121,10 @@ namespace GlyCounter
 
 
                     foreach (var item in HexNAcCheckedListBox.CheckedItems)
-                        glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "HexNAc", glySettings, true));
+                        glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "HexNAc", glySettings, check204:true));
 
                     foreach (var item in HexCheckedListBox.CheckedItems)
-                        glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "Hex", glySettings));
+                        glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "Hex", glySettings, check163:true));
 
                     foreach (var item in SialicAcidCheckedListBox.CheckedItems)
                         glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "Sialic", glySettings));
@@ -170,6 +169,8 @@ namespace GlyCounter
 
                             if (oxoIon.theoMZ == 204.0867 || oxoIon.description == "HexNAc")
                                 glySettings.using204 = true;
+                            if (oxoIon.theoMZ == 163.0601 || oxoIon.description == "Hex")
+                                glySettings.using163 = true;
                         }
                     }
 
@@ -208,10 +209,7 @@ namespace GlyCounter
                             FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
                         }
 
-                        RawFileInfo rawFileInfo = new RawFileInfo
-                        {
-                            halfTotalList = (double)glySettings.oxoniumIonHashSet.Count / 2.0
-                        };
+                        RawFileInfo rawFileInfo = new();
 
                         //initialize streamwriter output files
                         string fileNameShort = Path.GetFileNameWithoutExtension(fileName);

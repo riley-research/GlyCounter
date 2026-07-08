@@ -38,7 +38,7 @@ namespace GlyCounter
             return theoMZ.GetHashCode() * 397 ^ (description?.GetHashCode() ?? 0);
         }
 
-        public static OxoniumIon ProcessOxoIon(object item, string glycanSource, GlyCounterSettings glySettings, bool check204 = false)
+        public static OxoniumIon ProcessOxoIon(object item, string glycanSource, GlyCounterSettings glySettings, bool check163 = false, bool check204 = false)
         {
             string[] oxoniumIonArray = item.ToString().Split(',');
             OxoniumIon oxoIon = new OxoniumIon();
@@ -53,6 +53,10 @@ namespace GlyCounter
             if (check204)
                 if (Convert.ToDouble(oxoniumIonArray[0], CultureInfo.InvariantCulture) == 204.0867)
                     glySettings.using204 = true;
+            //only need to check for 163 in hex ions and custom ions
+            if (check163)
+                if (Convert.ToDouble(oxoniumIonArray[0], CultureInfo.InvariantCulture) == 163.0601)
+                    glySettings.using163 = true;
             return oxoIon;
         }
     }

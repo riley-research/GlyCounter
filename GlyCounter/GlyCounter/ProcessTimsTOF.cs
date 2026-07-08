@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CSMSL.Proteomics;
+using Microsoft.Net.Http.Headers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -148,16 +150,14 @@ namespace GlyCounter
                             double totalOxoSignal = 0;
                             bool test366 = false;
                             int countOxoWithinPeakDepthThreshold = 0;
-                            bool hcdTrue = false;
-                            bool etdTrue = false;
-                            bool uvpdTrue = false;
                             List<double> oxoniumIonFoundPeaks = new List<double>();
                             List<double> oxoniumIonFoundMassErrors = new List<double>();
 
-                            // treat as HCD as original
+                            // treat as HCD, assuming PASEF
+                            var dissociationType = Fragmentation.Type.HCD;
                             localStats.numberOfHCDscans++;
-                            hcdTrue = true;
                             localStats.numberOfMS2scans++; // count per-worker scans
+                            var peakDepthThreshold = glySettings.peakDepthThreshold_hcd;
 
                             spectrum.peaks = PeakProcessing.ListsToPeaks(spectrum.mz.ToList(), spectrum.intensity.ToList());
 
@@ -191,15 +191,7 @@ namespace GlyCounter
                                         totalOxoSignal += intensity;
 
                                         if (Math.Abs(local.TheoMZ - 366.1395) < 0.0001 &&
-                                            sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_hcd && hcdTrue)
-                                            test366 = true;
-
-                                        if (Math.Abs(local.TheoMZ - 366.1395) < 0.0001 &&
-                                            sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_etd && etdTrue)
-                                            test366 = true;
-
-                                        if (Math.Abs(local.TheoMZ - 366.1395) < 0.0001 &&
-                                            sortedPeakDepths[peak.Intensity] <= glySettings.peakDepthThreshold_uvpd && uvpdTrue)
+                                            sortedPeakDepths[peak.Intensity] <= peakDepthThreshold)
                                             test366 = true;
 
                                         oxoniumIonFoundPeaks.Add(local.TheoMZ);
@@ -214,9 +206,12 @@ namespace GlyCounter
                                             var sharedIon = glySettings.oxoniumIonHashSet.FirstOrDefault(i => Math.Abs(i.theoMZ - local.TheoMZ) < 1e-6);
                                             if (sharedIon != null)
                                             {
-                                                if (hcdTrue) sharedIon.hcdCount++;
-                                                if (etdTrue) sharedIon.etdCount++;
-                                                if (uvpdTrue) sharedIon.uvpdCount++;
+                                                switch (dissociationType)
+                                                {
+                                                    case Fragmentation.Type.HCD:
+                                                        sharedIon.hcdCount++;
+                                                        break;
+                                                }
                                             }
                                         }
                                     }
@@ -226,79 +221,104 @@ namespace GlyCounter
                             // only produce output if oxonium ions found (same as original)
                             if (numberOfOxoIons > 0)
                             {
-                                // update per-worker counters (mirrors original increments)
-                                if (numberOfOxoIons == 1)
+                                switch (numberOfOxoIons)
                                 {
-                                    localStats.numberOfMS2scansWithOxo_1++;
-                                    if (hcdTrue) localStats.numberOfMS2scansWithOxo_1_hcd++;
-                                    if (etdTrue) localStats.numberOfMS2scansWithOxo_1_etd++;
-                                    if (uvpdTrue) localStats.numberOfMS2scansWithOxo_1_uvpd++;
-                                }
-                                else if (numberOfOxoIons == 2)
-                                {
-                                    localStats.numberOfMS2scansWithOxo_2++;
-                                    if (hcdTrue) localStats.numberOfMS2scansWithOxo_2_hcd++;
-                                    if (etdTrue) localStats.numberOfMS2scansWithOxo_2_etd++;
-                                    if (uvpdTrue) localStats.numberOfMS2scansWithOxo_2_uvpd++;
-                                }
-                                else if (numberOfOxoIons == 3)
-                                {
-                                    localStats.numberOfMS2scansWithOxo_3++;
-                                    if (hcdTrue) localStats.numberOfMS2scansWithOxo_3_hcd++;
-                                    if (etdTrue) localStats.numberOfMS2scansWithOxo_3_etd++;
-                                    if (uvpdTrue) localStats.numberOfMS2scansWithOxo_3_uvpd++;
-                                }
-                                else if (numberOfOxoIons == 4)
-                                {
-                                    localStats.numberOfMS2scansWithOxo_4++;
-                                    if (hcdTrue) localStats.numberOfMS2scansWithOxo_4_hcd++;
-                                    if (etdTrue) localStats.numberOfMS2scansWithOxo_4_etd++;
-                                    if (uvpdTrue) localStats.numberOfMS2scansWithOxo_4_uvpd++;
-                                }
-                                else // >4
-                                {
-                                    localStats.numberOfMS2scansWithOxo_5plus++;
-                                    if (hcdTrue) localStats.numberOfMS2scansWithOxo_5plus_hcd++;
-                                    if (etdTrue) localStats.numberOfMS2scansWithOxo_5plus_etd++;
-                                    if (uvpdTrue) localStats.numberOfMS2scansWithOxo_5plus_uvpd++;
+                                    // update per-worker counters (mirrors original increments)
+                                    case 1:
+                                        {
+                                            localStats.numberOfMS2scansWithOxo_1++;
+                                            switch (dissociationType)
+                                            {
+                                                case Fragmentation.Type.HCD:
+                                                    localStats.numberOfMS2scansWithOxo_1_hcd++;
+                                                    break;
+                                            }
+
+                                            break;
+                                        }
+                                    case 2:
+                                        {
+                                            localStats.numberOfMS2scansWithOxo_2++;
+                                            switch (dissociationType)
+                                            {
+                                                case Fragmentation.Type.HCD:
+                                                    localStats.numberOfMS2scansWithOxo_2_hcd++;
+                                                    break;
+                                            }
+
+                                            break;
+                                        }
+                                    case 3:
+                                        {
+                                            localStats.numberOfMS2scansWithOxo_3++;
+                                            switch (dissociationType)
+                                            {
+                                                case Fragmentation.Type.HCD:
+                                                    localStats.numberOfMS2scansWithOxo_3_hcd++;
+                                                    break;
+                                            }
+
+                                            break;
+                                        }
+                                    case 4:
+                                        {
+                                            localStats.numberOfMS2scansWithOxo_4++;
+                                            switch (dissociationType)
+                                            {
+                                                case Fragmentation.Type.HCD:
+                                                    localStats.numberOfMS2scansWithOxo_4_hcd++;
+                                                    break;
+                                            }
+
+                                            break;
+                                        }
+                                    // >4
+                                    default:
+                                        {
+                                            localStats.numberOfMS2scansWithOxo_5plus++;
+                                            switch (dissociationType)
+                                            {
+                                                case Fragmentation.Type.HCD:
+                                                    localStats.numberOfMS2scansWithOxo_5plus_hcd++;
+                                                    break;
+                                            }
+
+                                            break;
+                                        }
                                 }
 
                                 string parentScan = spectrum.precursors[0].spectrum_ref;
                                 localStats.nce = Convert.ToDouble(spectrum.collision_energy);
                                 double scanTIC = spectrum.intensity.Sum();
                                 float? scanInjTime = 0;
-                                string fragmentationType = hcdTrue ? "HCD" : (etdTrue ? "ETD" : (uvpdTrue ? "UVPD" : ""));
+                                string fragmentationType = dissociationType.ToString();
                                 float? retentionTime = spectrum.scan_start_time;
                                 double precursormz = spectrum.precursors[0].mz;
                                 string peakString = string.Join("; ", oxoniumIonFoundPeaks);
                                 string errorString = string.Join("; ", oxoniumIonFoundMassErrors.Select(e => e.ToString("F6")));
 
-                                if (glySettings.oxoniumIonHashSet.Count < 6)
-                                {
-                                    localStats.halfTotalList = 4;
-                                }
+                                var halfTotal = glySettings.oxoniumIonHashSet.Count / 2;
 
-                                if (glySettings.oxoniumIonHashSet.Count > 15)
+                                localStats.numRequiredIons = glySettings.oxoniumIonHashSet.Count switch
                                 {
-                                    localStats.halfTotalList = 8;
-                                }
+                                    < 6 => 4,
+                                    >= 6 and <= 15 => halfTotal,
+                                    > 15 => 8,
+                                };
 
                                 double oxoTICfraction = totalOxoSignal / scanTIC;
 
                                 double oxoCountRequirement = 0;
-                                if (hcdTrue)
-                                    oxoCountRequirement = glySettings.oxoCountRequirement_hcd_user > 0
-                                        ? glySettings.oxoCountRequirement_hcd_user
-                                        : localStats.halfTotalList;
-                                if (etdTrue)
-                                    oxoCountRequirement = glySettings.oxoCountRequirement_etd_user > 0
-                                        ? glySettings.oxoCountRequirement_etd_user
-                                        : localStats.halfTotalList / 2;
-                                if (uvpdTrue)
-                                    oxoCountRequirement = glySettings.oxoCountRequirement_uvpd_user > 0
-                                        ? glySettings.oxoCountRequirement_uvpd_user
-                                        : localStats.halfTotalList;
 
+                                switch (dissociationType)
+                                {
+                                    case Fragmentation.Type.HCD:
+                                        oxoCountRequirement = glySettings.oxoCountRequirement_hcd_user > 0
+                                            ? glySettings.oxoCountRequirement_hcd_user
+                                            : localStats.numRequiredIons;
+                                        break;
+                                }
+                                
                                 if (!glySettings.using204)
                                     test366 = true;
 
@@ -322,30 +342,30 @@ namespace GlyCounter
                                         int pd = sortedPeakDepths.ContainsKey(peak.Intensity) ? sortedPeakDepths[peak.Intensity] : glySettings.arbitraryPeakDepthIfNotFound;
                                         sbPeakDepth.Append(pd).Append('\t');
 
-                                        if (hcdTrue && pd <= glySettings.peakDepthThreshold_hcd) countWithin++;
-                                        if (etdTrue && pd <= glySettings.peakDepthThreshold_etd) countWithin++;
-                                        if (uvpdTrue && pd <= glySettings.peakDepthThreshold_uvpd) countWithin++;
+                                        switch (dissociationType)
+                                        {
+                                            case Fragmentation.Type.HCD when pd <= glySettings.peakDepthThreshold_hcd:
+                                                countWithin++;
+                                                break;
+                                        }
                                     }
                                 }
 
                                 bool isLikelyGlyco = false;
-
-                                if (hcdTrue && countWithin >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd)
+                                var requiredTICFraction = 0.0;
+                                switch (dissociationType)
                                 {
-                                    isLikelyGlyco = true;
-                                    localStats.numberScansCountedLikelyGlyco_hcd++;
+                                    case Fragmentation.Type.HCD:
+                                        requiredTICFraction = glySettings.oxoTICfractionThreshold_hcd;
+                                        break;
                                 }
 
-                                if (etdTrue && numberOfOxoIons >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_etd)
+                                switch (dissociationType)
                                 {
-                                    isLikelyGlyco = true;
-                                    localStats.numberScansCountedLikelyGlyco_etd++;
-                                }
-
-                                if (uvpdTrue && countWithin >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_uvpd)
-                                {
-                                    isLikelyGlyco = true;
-                                    localStats.numberScansCountedLikelyGlyco_uvpd++;
+                                    case Fragmentation.Type.HCD when countWithin >= oxoCountRequirement && test366 && oxoTICfraction >= glySettings.oxoTICfractionThreshold_hcd:
+                                        isLikelyGlyco = true;
+                                        localStats.numberScansCountedLikelyGlyco_hcd++;
+                                        break;
                                 }
 
                                 // persist into per-worker flag (keep true if previously set)
