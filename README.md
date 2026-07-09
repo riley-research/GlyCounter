@@ -52,20 +52,23 @@ GlyCounter accepts .raw or .mzML files as individual file uploads or timsTOF .d 
 
 **Scan Settings - Oxonium Count Requirement**: Number of oxonium ions that need to be in the peak depth for LikelyGlycoSpectrum. When this is set to 0 the default amount is used. The default depends on the number of oxonium ions checked. For HCD and UVPD the defaults are:
 
-| Number of Oxonium Ions Checked | Default Oxonium Count Requirement |
-| :----------------------------: | :-------------------------------: |
-|          less than 6           |                 4                 |
-|        between 6 and 15        |  half of number of checked ions   |
-|        greater than 15         |                 8                 |
+| Number of Oxonium Ions Checked | Contains 163 (high mannose)       | Default Oxonium Count Requirement |
+| :----------------------------: | :-------------------------------: | :-------------------------------: |
+|          less than 6           |                No                 |                 4                 |
+|        between 6 and 15        |                No                 |  half of number of checked ions   |
+|        between 6 and 15        |                Yes                |half number of checked ions or 5, whichever is smaller|
+|        greater than 15         |                No                 |                 8                 |
+|        greater than 15         |                Yes                |                 5                 |
+
 
 These defaults are halved for ETD spectra. The Check Common Ions button checks 17 ions, so if used with the default setting the count requirement would be 8 for HCD/UVPD and 4 for ETD.
 
-**Ouput IPSA Annotations**: Check if you want to output annotations compatable with IPSA 2.0. This creates a text file with the found oxonium ions per scan and their mass errors.
+**Ouput Periscope Annotations**: Check if you want to output annotations compatable with Periscope. This creates a text file with the found oxonium ions per scan and their mass errors.
 
 ### LikelyGlycoSpectrum
 
 A spectrum is considered likely to be a glycopeptide if it meets the requirements set by the user before the run. This is based on the Oxonium Count Requirement (minimum amount of oxonium ions needed to be observed in the N most intense peaks set by the Peak Depth option) and the chosen TIC fraction (minimum percentage of TIC that needs to be oxonium ions).
-If the HexNAc (204.0867 m/z)* oxonium ion is selected, it must show up in the set peak depth for a spectrum to be considered LikelyGlyco.
+If the HexNAc (204.0867 m/z)* oxonium ion is selected, it must show up in the set peak depth for a spectrum to be considered LikelyGlyco. If the Hex (163.0601 m/z) oxonium ion is selected, if it shows up the number of required oxonium ions is reduced to account for high mannose glycans not typically having all oxonium ions.
 If the settings are not changed by the user or an unrecognizable input is entered, the default values will be used.
 
 *Note: for timsTOF files the required ion is HexNAc-Hex (366.1395 m/z) due to different expected fragmentation
@@ -107,7 +110,7 @@ Shows the settings used and a summary of the results per scan type
 
 **Isotope Options**: Choose if you want to look for C13 isotopes
 
-**Ouput IPSA Annotations**: Check if you want to output annotations compatable with IPSA 2.0. This creates a text file with the found oxonium ions per scan, their m/z values, and their mass errors.
+**Ouput Periscope Annotations**: Check if you want to output annotations compatable with Periscope. This creates a text file with the found oxonium ions per scan, their m/z values, and their mass errors.
 
 **Charge State Options**: Larger glycopeptide fragments have the potential to be at any charge state between +1 and the precursor charge state. The charge state limits are determined based on the precursor charge "P".
 For example: if the precursor charge is 4 and I want to consider anything with a charge +2 to +4, I would enter either P-2 or 2 in the lower bound (depending on if I wanted to always be two charge states below my precursor charge or if I wanted to always start at charge state 2) and P or 4 in the upper bound.
