@@ -150,7 +150,6 @@ namespace GlyCounter
 
                             double scanTIC = spectrum.TotalIonCurrent;
                             double scanInjTime = spectrum.IonInjectionTime;
-                            string fragmentationType = dissociationMethod.ToString();
                             double retentionTime = spectrum.RetentionTime;
                             string peakString = "";
 
@@ -166,6 +165,8 @@ namespace GlyCounter
 
                             //figure out dissociation type
                             (dissociationMethod, localStats.nce) = Fragmentation.GetFragmentationType(thermo, spectrum);
+                            string fragmentationType = dissociationMethod.ToString();
+
 
                             switch (dissociationMethod)
                             {
@@ -404,6 +405,7 @@ namespace GlyCounter
                                     if (peak.Equals(new SpecDataPointEx()) || peak.Intensity <= 0)
                                     {
                                         sbPeakDepth.Append("NotFound\t");
+                                        sbOxo.Append("0\t");
                                         continue;
                                     }
 
