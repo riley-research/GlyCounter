@@ -133,7 +133,7 @@ namespace GlyCounter
                         glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "M6P", glySettings));
 
                     foreach (var item in OligosaccharideCheckedListBox.CheckedItems)
-                        glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "Oligo", glySettings));
+                        glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "Oligo", glySettings, check366:true));
 
                     foreach (var item in FucoseCheckedListBox.CheckedItems)
                         glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "Fucose", glySettings));
@@ -167,6 +167,8 @@ namespace GlyCounter
 
                             glySettings.oxoniumIonHashSet.Add(oxoIon);
 
+                            if (oxoIon.theoMZ == 366.1395 || oxoIon.description == "HexNAc-Hex")
+                                glySettings.using366 = true;
                             if (oxoIon.theoMZ == 204.0867 || oxoIon.description == "HexNAc")
                                 glySettings.using204 = true;
                             if (oxoIon.theoMZ == 163.0601 || oxoIon.description == "Hex")
@@ -213,103 +215,123 @@ namespace GlyCounter
 
                         //initialize streamwriter output files
                         string fileNameShort = Path.GetFileNameWithoutExtension(fileName);
-                        StreamWriter outputOxo = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoSignal.txt"));
-                        StreamWriter outputPeakDepth = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoPeakDepth.txt"));
-                        StreamWriter outputPeriscope = null;
-
-                        if (periscopeCheckBox.Checked)
+                        using (StreamWriter outputOxo = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoSignal.txt")))
+                        using (StreamWriter outputPeakDepth = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_OxoPeakDepth.txt")))
+                        using (StreamWriter outputPeriscope = periscopeCheckBox.Checked ? new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_Glycounter_Periscope.txt")) : null)
+                        using (StreamWriter outputSummary = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt")))
                         {
-                            outputPeriscope = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_Glycounter_Periscope.txt"));
-                        }
-                        StreamWriter outputSummary = new StreamWriter(Path.Combine(glySettings.outputPath + @"\" + fileNameShort + "_GlyCounter_Summary.txt"));
+                            //write headers
+                            outputPeriscope?.WriteLine(FileHeaders.PeriscopeHeader);
+                            outputSummary.WriteLine("Settings:\t" + toleranceString + glySettings.tol + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
+                                                    + ", TICfraction_HCD=" + glySettings.oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + glySettings.oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + glySettings.oxoTICfractionThreshold_uvpd);
+                            outputSummary.WriteLine(StartTimeLabel.Text);
+                            outputSummary.WriteLine();
 
-                        //write headers
-                        outputPeriscope?.WriteLine(FileHeaders.PeriscopeHeader);
-                        outputSummary.WriteLine("Settings:\t" + toleranceString + glySettings.tol + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
-                                                + ", TICfraction_HCD=" + glySettings.oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + glySettings.oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + glySettings.oxoTICfractionThreshold_uvpd);
-                        outputSummary.WriteLine(StartTimeLabel.Text);
-                        outputSummary.WriteLine();
-
-                        //start processing file
-                        var progress = new Progress<DateTime>(_ => UpdateTimer()); //for timer updates on the UI thread
-                        if (fileName.EndsWith(".d"))
-                        {
-                            outputOxo.Write(FileHeaders.OxoSignalHeader_tims);
-                            outputPeakDepth.Write(FileHeaders.OxoSignalHeader_tims);
-                            (glySettings, rawFileInfo) = await ProcessTimsTOF.processTimsTOFAsync(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, progress);
-                        }
-                        else
-                        {
-                            outputOxo.Write(FileHeaders.OxoSignalHeader);
-                            outputPeakDepth.Write(FileHeaders.OxoSignalHeader);
-                            (glySettings, rawFileInfo) = await ProcessRaw_MzML.processRaw_MzML(fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, progress);
-                        }
-
-                        //all scans have been processed, get some total stats
-                        CalculatedRawFileInfo cRawFileInfo = new CalculatedRawFileInfo(rawFileInfo);
-                        cRawFileInfo.numberofMS2scansWithOxo = Math.Max(0, cRawFileInfo.numberofMS2scansWithOxo);
-                        cRawFileInfo.numberofHCDscansWithOxo = Math.Max(0, cRawFileInfo.numberofHCDscansWithOxo);
-                        cRawFileInfo.numberofETDscansWithOxo = Math.Max(0, cRawFileInfo.numberofETDscansWithOxo);
-                        cRawFileInfo.numberofUVPDscansWithOxo = Math.Max(0, cRawFileInfo.numberofUVPDscansWithOxo);
-
-                        outputSummary.WriteLine(FileHeaders.SummaryDissociationHeader);
-                        outputSummary.WriteLine("MS/MS Scans\t" + rawFileInfo.numberOfMS2scans + "\t" + rawFileInfo.numberOfHCDscans + "\t" + rawFileInfo.numberOfETDscans + "\t" + rawFileInfo.numberOfUVPDscans
-                            + "\t" + 100 + "\t" + cRawFileInfo.percentageHCD + "\t" + cRawFileInfo.percentageETD + "\t" + cRawFileInfo.percentageUVPD);
-                        outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + cRawFileInfo.numberofMS2scansWithOxo + "\t" + cRawFileInfo.numberofHCDscansWithOxo + "\t" + cRawFileInfo.numberofETDscansWithOxo + "\t" + cRawFileInfo.numberofUVPDscansWithOxo
-                            + "\t" + cRawFileInfo.percentageSum + "\t" + cRawFileInfo.percentageSum_hcd + "\t" + cRawFileInfo.percentageSum_etd + "\t" + cRawFileInfo.percentageSum_uvpd);
-                        outputSummary.WriteLine("Likely Glyco\t" + cRawFileInfo.numberScansCountedLikelyGlyco_total + "\t" + rawFileInfo.numberScansCountedLikelyGlyco_hcd + "\t" + rawFileInfo.numberScansCountedLikelyGlyco_etd + "\t" + rawFileInfo.numberScansCountedLikelyGlyco_uvpd
-                            + "\t" + cRawFileInfo.percentageLikelyGlyco_total + "\t" + cRawFileInfo.percentageLikelyGlyco_hcd + "\t" + cRawFileInfo.percentageLikelyGlyco_etd + "\t" + cRawFileInfo.percentageLikelyGlyco_uvpd);
-                        outputSummary.WriteLine("OxoCount_1\t" + rawFileInfo.numberOfMS2scansWithOxo_1 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_1_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_1_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_1_uvpd
-                            + "\t" + cRawFileInfo.percentage1ox + "\t" + cRawFileInfo.percentage1ox_hcd + "\t" + cRawFileInfo.percentage1ox_etd + "\t" + cRawFileInfo.percentage1ox_uvpd);
-                        outputSummary.WriteLine("OxoCount_2\t" + rawFileInfo.numberOfMS2scansWithOxo_2 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_2_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_2_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_2_uvpd
-                            + "\t" + cRawFileInfo.percentage2ox + "\t" + cRawFileInfo.percentage2ox_hcd + "\t" + cRawFileInfo.percentage2ox_etd + "\t" + cRawFileInfo.percentage2ox_uvpd);
-                        outputSummary.WriteLine("OxoCount_3\t" + rawFileInfo.numberOfMS2scansWithOxo_3 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_3_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_3_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_3_uvpd
-                            + "\t" + cRawFileInfo.percentage3ox + "\t" + cRawFileInfo.percentage3ox_hcd + "\t" + cRawFileInfo.percentage3ox_etd + "\t" + cRawFileInfo.percentage3ox_uvpd);
-                        outputSummary.WriteLine("OxoCount_4\t" + rawFileInfo.numberOfMS2scansWithOxo_4 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_4_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_4_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_4_uvpd
-                            + "\t" + cRawFileInfo.percentage4ox + "\t" + cRawFileInfo.percentage4ox_hcd + "\t" + cRawFileInfo.percentage4ox_etd + "\t" + cRawFileInfo.percentage4ox_uvpd);
-                        outputSummary.WriteLine("OxoCount_5+\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_uvpd
-                            + "\t" + cRawFileInfo.percentage5plusox + "\t" + cRawFileInfo.percentage5plusox_hcd + "\t" + cRawFileInfo.percentage5plusox_etd + "\t" + cRawFileInfo.percentage5plusox_uvpd);
-
-                        outputSummary.WriteLine(FileHeaders.SummarySeparator1);
-                        outputSummary.WriteLine(FileHeaders.SummaryDissociationHeader);
-
-                        string currentGlycanSource = "";
-
-                        foreach (OxoniumIon oxoIon in glySettings.oxoniumIonHashSet)
-                        {
-                            int total = oxoIon.hcdCount + oxoIon.etdCount + oxoIon.uvpdCount;
-
-                            double percentTotal = (double)total / (double)rawFileInfo.numberOfMS2scans * 100;
-                            double percentHCD = (double)oxoIon.hcdCount / (double)rawFileInfo.numberOfHCDscans * 100;
-                            double percentETD = (double)oxoIon.etdCount / (double)rawFileInfo.numberOfETDscans * 100;
-                            double percentUVPD = (double)oxoIon.uvpdCount / (double)rawFileInfo.numberOfUVPDscans * 100;
-
-                            if (!currentGlycanSource.Equals(oxoIon.glycanSource))
+                            //start processing file
+                            //TODO add progress reporting
+                            var progress = new Progress<DateTime>(_ => UpdateTimer()); //for timer updates on the UI thread
+                            if (fileName.EndsWith(".d"))
                             {
-                                outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\ " + oxoIon.glycanSource + FileHeaders.SummarySeparator2);
-                                currentGlycanSource = oxoIon.glycanSource;
+                                var timsProcessor = new SpectrumProcessor<SpectrumInfo.TimsSpectrumInfo>(new TimsFileReader());
+                                foreach (string headerval in TimsFileReader.GetOutputHeaders())
+                                {
+                                    outputOxo.Write(headerval + '\t');
+                                    outputPeakDepth.Write(headerval + '\t');
+
+                                }
+
+                                var timsSource = new TimsFileReader();
+                                var processor = new SpectrumProcessor<SpectrumInfo.TimsSpectrumInfo>(timsSource);
+                                var (settings, info) = await processor.ProcessRawFileAsync(
+                                    fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope);
+                            }
+                            else
+                            {
+                                foreach (string headerval in RawMzMLReader.GetOutputHeaders())
+                                {
+                                    outputOxo.Write(headerval + '\t');
+                                    outputPeakDepth.Write(headerval + '\t');
+
+                                }
+
+                                var rawSource = new RawMzMLReader();
+                                var processor = new SpectrumProcessor<SpectrumInfo.RawMzmlSpectrumInfo>(rawSource);
+                                var (settings, info) = await processor.ProcessRawFileAsync(
+                                    fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope);
                             }
 
-                            outputSummary.WriteLine(oxoIon.description + "\t" + total + "\t" + oxoIon.hcdCount + "\t" + oxoIon.etdCount + "\t" + oxoIon.uvpdCount
-                                + "\t" + percentTotal + "\t" + percentHCD + "\t" + percentETD + "\t" + percentUVPD);
+                            //all scans have been processed, get some total stats
+                            CalculatedRawFileInfo cRawFileInfo = new CalculatedRawFileInfo(rawFileInfo);
+                            cRawFileInfo.numberofMS2scansWithOxo = Math.Max(0, cRawFileInfo.numberofMS2scansWithOxo);
+                            cRawFileInfo.numberofHCDscansWithOxo = Math.Max(0, cRawFileInfo.numberofHCDscansWithOxo);
+                            cRawFileInfo.numberofETDscansWithOxo = Math.Max(0, cRawFileInfo.numberofETDscansWithOxo);
+                            cRawFileInfo.numberofUVPDscansWithOxo = Math.Max(0, cRawFileInfo.numberofUVPDscansWithOxo);
+
+                            outputSummary.WriteLine(FileHeaders.SummaryDissociationHeader);
+                            outputSummary.WriteLine("MS/MS Scans\t" + rawFileInfo.numberOfMS2scans + "\t" + rawFileInfo.numberOfHCDscans + "\t" + rawFileInfo.numberOfETDscans + "\t" + rawFileInfo.numberOfUVPDscans
+                                + "\t" + 100 + "\t" + cRawFileInfo.percentageHCD + "\t" + cRawFileInfo.percentageETD + "\t" + cRawFileInfo.percentageUVPD);
+                            outputSummary.WriteLine("MS/MS Scans with OxoIons\t" + cRawFileInfo.numberofMS2scansWithOxo + "\t" + cRawFileInfo.numberofHCDscansWithOxo + "\t" + cRawFileInfo.numberofETDscansWithOxo + "\t" + cRawFileInfo.numberofUVPDscansWithOxo
+                                + "\t" + cRawFileInfo.percentageSum + "\t" + cRawFileInfo.percentageSum_hcd + "\t" + cRawFileInfo.percentageSum_etd + "\t" + cRawFileInfo.percentageSum_uvpd);
+                            outputSummary.WriteLine("Likely Glyco\t" + cRawFileInfo.numberScansCountedLikelyGlyco_total + "\t" + rawFileInfo.numberScansCountedLikelyGlyco_hcd + "\t" + rawFileInfo.numberScansCountedLikelyGlyco_etd + "\t" + rawFileInfo.numberScansCountedLikelyGlyco_uvpd
+                                + "\t" + cRawFileInfo.percentageLikelyGlyco_total + "\t" + cRawFileInfo.percentageLikelyGlyco_hcd + "\t" + cRawFileInfo.percentageLikelyGlyco_etd + "\t" + cRawFileInfo.percentageLikelyGlyco_uvpd);
+                            outputSummary.WriteLine("OxoCount_1\t" + rawFileInfo.numberOfMS2scansWithOxo_1 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_1_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_1_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_1_uvpd
+                                + "\t" + cRawFileInfo.percentage1ox + "\t" + cRawFileInfo.percentage1ox_hcd + "\t" + cRawFileInfo.percentage1ox_etd + "\t" + cRawFileInfo.percentage1ox_uvpd);
+                            outputSummary.WriteLine("OxoCount_2\t" + rawFileInfo.numberOfMS2scansWithOxo_2 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_2_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_2_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_2_uvpd
+                                + "\t" + cRawFileInfo.percentage2ox + "\t" + cRawFileInfo.percentage2ox_hcd + "\t" + cRawFileInfo.percentage2ox_etd + "\t" + cRawFileInfo.percentage2ox_uvpd);
+                            outputSummary.WriteLine("OxoCount_3\t" + rawFileInfo.numberOfMS2scansWithOxo_3 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_3_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_3_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_3_uvpd
+                                + "\t" + cRawFileInfo.percentage3ox + "\t" + cRawFileInfo.percentage3ox_hcd + "\t" + cRawFileInfo.percentage3ox_etd + "\t" + cRawFileInfo.percentage3ox_uvpd);
+                            outputSummary.WriteLine("OxoCount_4\t" + rawFileInfo.numberOfMS2scansWithOxo_4 + "\t" + rawFileInfo.numberOfMS2scansWithOxo_4_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_4_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_4_uvpd
+                                + "\t" + cRawFileInfo.percentage4ox + "\t" + cRawFileInfo.percentage4ox_hcd + "\t" + cRawFileInfo.percentage4ox_etd + "\t" + cRawFileInfo.percentage4ox_uvpd);
+                            outputSummary.WriteLine("OxoCount_5+\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_hcd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_etd + "\t" + rawFileInfo.numberOfMS2scansWithOxo_5plus_uvpd
+                                + "\t" + cRawFileInfo.percentage5plusox + "\t" + cRawFileInfo.percentage5plusox_hcd + "\t" + cRawFileInfo.percentage5plusox_etd + "\t" + cRawFileInfo.percentage5plusox_uvpd);
+
+                            outputSummary.WriteLine(FileHeaders.SummarySeparator1);
+                            outputSummary.WriteLine(FileHeaders.SummaryDissociationHeader);
+
+                            string currentGlycanSource = "";
+
+                            foreach (OxoniumIon oxoIon in glySettings.oxoniumIonHashSet)
+                            {
+                                int total = oxoIon.hcdCount + oxoIon.etdCount + oxoIon.uvpdCount;
+
+                                double percentTotal = (double)total / (double)rawFileInfo.numberOfMS2scans * 100;
+                                double percentHCD = (double)oxoIon.hcdCount / (double)rawFileInfo.numberOfHCDscans * 100;
+                                double percentETD = (double)oxoIon.etdCount / (double)rawFileInfo.numberOfETDscans * 100;
+                                double percentUVPD = (double)oxoIon.uvpdCount / (double)rawFileInfo.numberOfUVPDscans * 100;
+
+                                if (!currentGlycanSource.Equals(oxoIon.glycanSource))
+                                {
+                                    outputSummary.WriteLine(@"\\\\\\\\\\\\\\\\\\\\\\ " + oxoIon.glycanSource + FileHeaders.SummarySeparator2);
+                                    currentGlycanSource = oxoIon.glycanSource;
+                                }
+
+                                outputSummary.WriteLine(oxoIon.description + "\t" + total + "\t" + oxoIon.hcdCount + "\t" + oxoIon.etdCount + "\t" + oxoIon.uvpdCount
+                                    + "\t" + percentTotal + "\t" + percentHCD + "\t" + percentETD + "\t" + percentUVPD);
+                            }
+                            outputSummary.WriteLine(FileHeaders.SummarySeparator3);
+                            //output elapsed time
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+
+                            string elapsedTime = String.Format("{0:00}:{1:00}.{2:00}",
+                                ts.Minutes, ts.Seconds,
+                                ts.Milliseconds / 10);
+                            outputSummary.WriteLine("Total search time: " + elapsedTime);
                         }
-                        outputSummary.WriteLine(FileHeaders.SummarySeparator3);
-                        //output elapsed time
-                        stopwatch.Stop();
-                        TimeSpan ts = stopwatch.Elapsed;
-
-                        string elapsedTime = String.Format("{0:00}:{1:00}.{2:00}",
-                            ts.Minutes, ts.Seconds,
-                            ts.Milliseconds / 10);
-                        outputSummary.WriteLine("Total search time: " + elapsedTime);
-
-                        outputSummary.Close();
-                        outputOxo.Close();
-                        outputPeakDepth.Close();
-                        if (outputPeriscope != null)
-                            outputPeriscope.Close();
                     }
                 });
+            }
+            catch (Exception ex)
+            {
+                timer1.Stop();
+                StatusLabel.Text = "Error during processing";
+                FinishTimeLabel.Text = "Error occurred at: " + DateTime.Now.ToString("HH:mm:ss");
+
+                string errorMessage = ex.InnerException?.Message ?? ex.Message;
+                MessageBox.Show("An error occurred during processing:\r\n\r\n" + errorMessage, "Processing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                glySettings.oxoniumIonHashSet.Clear();
+                return;
             }
             finally
             {

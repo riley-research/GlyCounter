@@ -10,15 +10,7 @@ namespace GlyCounter
     {
         public const string PeriscopeHeader = "ScanNumber\tOxoniumIons\tMassError\t";
 
-        //Raw and MzML
-        public const string OxoSignalHeader =
-            "ScanNumber\tRetentionTime\tMSLevel\tPrecursorMZ\tCharge\tNCE\tScanTIC\tBasePeak\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t";
         public const string LikelyGlycoHeader = "OxoInPeakDepthThresh\tOxoRequired\tOxoTICfraction\tLikelyGlycoSpectrum";
-
-        //tims
-        public const string OxoSignalHeader_tims =
-            "ScanNumber\tRetentionTime\tIonMobility\tMSLevel\tPrecursorMZ\tCharge\tNCE\tScanTIC\tBasePeak\tScanInjTime\tDissociationType\tPrecursorScan\tNumOxonium\tTotalOxoSignal\t";
-        public const string LikelyGlycoHeader_tims = "OxoInPeakDepthThresh\tOxoRequired\tOxoTICfraction\tLikelyGlycoSpectrum";
 
 
         //Summary

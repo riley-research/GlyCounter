@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +34,7 @@ namespace GlyCounter
         public double tol { get; set; } = 0;
         public bool using204 { get; set; } = false;
         public bool using163 { get; set; } = false;
+        public bool using366 { get; set; } = false;
         public bool periscope { get; set; } = false;
         public bool usingda { get; set; } = false;
         public decimal msLevelLB { get; set; } = 2;
