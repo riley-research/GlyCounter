@@ -102,9 +102,6 @@ namespace GlyCounter
             uploadCustomTextBox = new TextBox();
             UploadCustomBrowseButton = new Button();
             timer1 = new System.Windows.Forms.Timer(components);
-            StatusLabel = new Label();
-            FinishTimeLabel = new Label();
-            StartTimeLabel = new Label();
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
@@ -188,6 +185,7 @@ namespace GlyCounter
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
             timer2 = new System.Windows.Forms.Timer(components);
+            statusTB = new RichTextBox();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
@@ -235,7 +233,7 @@ namespace GlyCounter
             // 
             HexCheckedListBox.CheckOnClick = true;
             HexCheckedListBox.FormattingEnabled = true;
-            HexCheckedListBox.Location = new Point(16, 367);
+            HexCheckedListBox.Location = new Point(19, 342);
             HexCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             HexCheckedListBox.Name = "HexCheckedListBox";
             HexCheckedListBox.Size = new Size(276, 94);
@@ -260,7 +258,7 @@ namespace GlyCounter
             OligosaccharideCheckedListBox.Location = new Point(619, 158);
             OligosaccharideCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             OligosaccharideCheckedListBox.Name = "OligosaccharideCheckedListBox";
-            OligosaccharideCheckedListBox.Size = new Size(278, 346);
+            OligosaccharideCheckedListBox.Size = new Size(278, 292);
             OligosaccharideCheckedListBox.TabIndex = 3;
             OligosaccharideCheckedListBox.SelectedIndexChanged += OligosaccharideCheckedListBox_SelectedIndexChanged;
             // 
@@ -279,7 +277,7 @@ namespace GlyCounter
             // 
             Hex_ions.AutoSize = true;
             Hex_ions.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            Hex_ions.Location = new Point(16, 335);
+            Hex_ions.Location = new Point(19, 310);
             Hex_ions.Margin = new Padding(4, 0, 4, 0);
             Hex_ions.Name = "Hex_ions";
             Hex_ions.Size = new Size(62, 17);
@@ -312,7 +310,7 @@ namespace GlyCounter
             // 
             M6PCheckedListBox.CheckOnClick = true;
             M6PCheckedListBox.FormattingEnabled = true;
-            M6PCheckedListBox.Location = new Point(16, 551);
+            M6PCheckedListBox.Location = new Point(19, 498);
             M6PCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             M6PCheckedListBox.Name = "M6PCheckedListBox";
             M6PCheckedListBox.Size = new Size(276, 40);
@@ -323,7 +321,7 @@ namespace GlyCounter
             // 
             M6P_ions.AutoSize = true;
             M6P_ions.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            M6P_ions.Location = new Point(16, 520);
+            M6P_ions.Location = new Point(19, 467);
             M6P_ions.Margin = new Padding(4, 0, 4, 0);
             M6P_ions.Name = "M6P_ions";
             M6P_ions.Size = new Size(65, 17);
@@ -333,7 +331,7 @@ namespace GlyCounter
             // StartButton
             // 
             StartButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            StartButton.Location = new Point(619, 542);
+            StartButton.Location = new Point(621, 518);
             StartButton.Margin = new Padding(4, 3, 4, 3);
             StartButton.Name = "StartButton";
             StartButton.Size = new Size(276, 62);
@@ -385,7 +383,7 @@ namespace GlyCounter
             // 
             // CheckAll_Hex_Button
             // 
-            CheckAll_Hex_Button.Location = new Point(136, 325);
+            CheckAll_Hex_Button.Location = new Point(139, 300);
             CheckAll_Hex_Button.Margin = new Padding(2);
             CheckAll_Hex_Button.Name = "CheckAll_Hex_Button";
             CheckAll_Hex_Button.Size = new Size(156, 36);
@@ -418,7 +416,7 @@ namespace GlyCounter
             // 
             // CheckAll_M6P_Button
             // 
-            CheckAll_M6P_Button.Location = new Point(136, 509);
+            CheckAll_M6P_Button.Location = new Point(139, 456);
             CheckAll_M6P_Button.Margin = new Padding(2);
             CheckAll_M6P_Button.Name = "CheckAll_M6P_Button";
             CheckAll_M6P_Button.Size = new Size(156, 36);
@@ -570,10 +568,10 @@ namespace GlyCounter
             // 
             FucoseCheckedListBox.CheckOnClick = true;
             FucoseCheckedListBox.FormattingEnabled = true;
-            FucoseCheckedListBox.Location = new Point(314, 367);
+            FucoseCheckedListBox.Location = new Point(315, 348);
             FucoseCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             FucoseCheckedListBox.Name = "FucoseCheckedListBox";
-            FucoseCheckedListBox.Size = new Size(278, 94);
+            FucoseCheckedListBox.Size = new Size(278, 148);
             FucoseCheckedListBox.TabIndex = 41;
             FucoseCheckedListBox.SelectedIndexChanged += FucoseCheckedListBox_SelectedIndexChanged;
             // 
@@ -581,7 +579,7 @@ namespace GlyCounter
             // 
             Fucose_ions_label.AutoSize = true;
             Fucose_ions_label.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            Fucose_ions_label.Location = new Point(314, 334);
+            Fucose_ions_label.Location = new Point(315, 315);
             Fucose_ions_label.Margin = new Padding(4, 0, 4, 0);
             Fucose_ions_label.Name = "Fucose_ions_label";
             Fucose_ions_label.Size = new Size(131, 17);
@@ -590,7 +588,7 @@ namespace GlyCounter
             // 
             // CheckAll_Fucose_Button
             // 
-            CheckAll_Fucose_Button.Location = new Point(453, 325);
+            CheckAll_Fucose_Button.Location = new Point(454, 306);
             CheckAll_Fucose_Button.Margin = new Padding(4, 3, 4, 3);
             CheckAll_Fucose_Button.Name = "CheckAll_Fucose_Button";
             CheckAll_Fucose_Button.Size = new Size(140, 36);
@@ -658,38 +656,6 @@ namespace GlyCounter
             UploadCustomBrowseButton.UseVisualStyleBackColor = true;
             UploadCustomBrowseButton.Click += UploadCustomBrowseButton_Click;
             // 
-            // StatusLabel
-            // 
-            StatusLabel.AutoSize = true;
-            StatusLabel.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            StatusLabel.Location = new Point(16, 637);
-            StatusLabel.Margin = new Padding(4, 0, 4, 0);
-            StatusLabel.Name = "StatusLabel";
-            StatusLabel.Size = new Size(225, 16);
-            StatusLabel.TabIndex = 50;
-            StatusLabel.Text = "Status updates will appear here";
-            // 
-            // FinishTimeLabel
-            // 
-            FinishTimeLabel.AutoSize = true;
-            FinishTimeLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            FinishTimeLabel.Location = new Point(316, 607);
-            FinishTimeLabel.Margin = new Padding(4, 0, 4, 0);
-            FinishTimeLabel.Name = "FinishTimeLabel";
-            FinishTimeLabel.Size = new Size(148, 17);
-            FinishTimeLabel.TabIndex = 51;
-            FinishTimeLabel.Text = "Finish Time: Not Yet Run";
-            // 
-            // StartTimeLabel
-            // 
-            StartTimeLabel.AutoSize = true;
-            StartTimeLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            StartTimeLabel.Location = new Point(316, 587);
-            StartTimeLabel.Name = "StartTimeLabel";
-            StartTimeLabel.Size = new Size(143, 17);
-            StartTimeLabel.TabIndex = 52;
-            StartTimeLabel.Text = "Start Time: Not Yet Run";
-            // 
             // GlyCounterLogo
             // 
             GlyCounterLogo.Image = (Image)resources.GetObject("GlyCounterLogo.Image");
@@ -711,6 +677,7 @@ namespace GlyCounter
             // 
             // GlyCounter_Tab
             // 
+            GlyCounter_Tab.Controls.Add(statusTB);
             GlyCounter_Tab.Controls.Add(FileCounter);
             GlyCounter_Tab.Controls.Add(ClearFilesButton);
             GlyCounter_Tab.Controls.Add(Gly_AddFolderButton);
@@ -749,13 +716,10 @@ namespace GlyCounter
             GlyCounter_Tab.Controls.Add(PeakDepth_Box_HCD);
             GlyCounter_Tab.Controls.Add(FucoseCheckedListBox);
             GlyCounter_Tab.Controls.Add(UploadCustomBrowseButton);
-            GlyCounter_Tab.Controls.Add(StatusLabel);
             GlyCounter_Tab.Controls.Add(SN_label);
             GlyCounter_Tab.Controls.Add(uploadCustomTextBox);
             GlyCounter_Tab.Controls.Add(SN_textBox);
-            GlyCounter_Tab.Controls.Add(FinishTimeLabel);
             GlyCounter_Tab.Controls.Add(ppmTol_label);
-            GlyCounter_Tab.Controls.Add(StartTimeLabel);
             GlyCounter_Tab.Controls.Add(ppmTol_textBox);
             GlyCounter_Tab.Controls.Add(GlyCounterLogo);
             GlyCounter_Tab.Controls.Add(browseButton);
@@ -886,7 +850,7 @@ namespace GlyCounter
             // polarityCB
             // 
             polarityCB.AutoSize = true;
-            polarityCB.Location = new Point(783, 612);
+            polarityCB.Location = new Point(621, 464);
             polarityCB.Name = "polarityCB";
             polarityCB.Size = new Size(146, 19);
             polarityCB.TabIndex = 70;
@@ -915,7 +879,7 @@ namespace GlyCounter
             // periscopeCheckBox
             // 
             periscopeCheckBox.AutoSize = true;
-            periscopeCheckBox.Location = new Point(591, 612);
+            periscopeCheckBox.Location = new Point(621, 489);
             periscopeCheckBox.Name = "periscopeCheckBox";
             periscopeCheckBox.Size = new Size(186, 19);
             periscopeCheckBox.TabIndex = 68;
@@ -1615,6 +1579,14 @@ namespace GlyCounter
             LoadInGlycoPepIDs_TextBox.TabIndex = 0;
             LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Charge\", and \"Total Glycan Composition\"";
             // 
+            // statusTB
+            // 
+            statusTB.Location = new Point(314, 585);
+            statusTB.Name = "statusTB";
+            statusTB.Size = new Size(583, 65);
+            statusTB.TabIndex = 80;
+            statusTB.Text = "";
+            // 
             // Form1
             // 
             AllowDrop = true;
@@ -1702,8 +1674,6 @@ namespace GlyCounter
         private System.Windows.Forms.TextBox uploadCustomTextBox;
         private System.Windows.Forms.Button UploadCustomBrowseButton;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Label StatusLabel;
-        private Label StartTimeLabel;
         private PictureBox GlyCounterLogo;
         private TabControl GlyCounter_AllTabs;
         private TabPage GlyCounter_Tab;
@@ -1783,10 +1753,10 @@ namespace GlyCounter
         private CheckBox ignoreMSLevelCB;
         private Button Gly_Reset;
         private Button Yn_reset;
-        private Label FinishTimeLabel;
         private Label Ynaught_FinishTimeLabel;
         private Button Gly_AddFolderButton;
         private Button ClearFilesButton;
         private Label FileCounter;
+        private RichTextBox statusTB;
     }
 }

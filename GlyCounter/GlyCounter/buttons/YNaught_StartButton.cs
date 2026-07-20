@@ -30,9 +30,6 @@ namespace GlyCounter
             }
             else return;
 
-            timer2.Interval = 1000;
-            timer2.Tick += new EventHandler(OnTimerTick);
-            timer2.Start();
             Ynaught_startTimeLabel.Text = "Start Time: " + DateTime.Now.ToString("HH:mm:ss");
 
             try

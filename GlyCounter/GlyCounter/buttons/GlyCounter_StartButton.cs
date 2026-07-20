@@ -28,11 +28,8 @@ namespace GlyCounter
             }
             else return;
 
-            timer1.Interval = 1000;
-            timer1.Tick += new EventHandler(OnTimerTick);
-            timer1.Start();
-            StatusLabel.Text = "Processing...";
-            StartTimeLabel.Text = "Start Time: " + DateTime.Now.ToString("HH:mm:ss");
+            string startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            LogMessage($"Processing {glySettings.fileList.Count} files");
 
             try
             {
@@ -193,23 +190,7 @@ namespace GlyCounter
                             oxoIon.measuredMZ = 0;
                         }
 
-                        if (StatusLabel.InvokeRequired)
-                        {
-                            StatusLabel.Invoke(new Action(() => StatusLabel.Text = "Current file: " + fileName));
-                        }
-                        else
-                        {
-                            StatusLabel.Text = "Current file: " + fileName;
-                        }
-
-                        if (FinishTimeLabel.InvokeRequired)
-                        {
-                            FinishTimeLabel.Invoke(new Action(() => FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss")));
-                        }
-                        else
-                        {
-                            FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
-                        }
+                        LogMessage($"Current file: {fileName}");
 
                         RawFileInfo rawFileInfo = new();
 
@@ -224,12 +205,10 @@ namespace GlyCounter
                             outputPeriscope?.WriteLine(FileHeaders.PeriscopeHeader);
                             outputSummary.WriteLine("Settings:\t" + toleranceString + glySettings.tol + ", SNthreshold=" + glySettings.SNthreshold + ", IntensityThreshold=" + glySettings.intensityThreshold + ", PeakDepthThreshold_HCD=" + glySettings.peakDepthThreshold_hcd + ", PeakDepthThreshold_ETD=" + glySettings.peakDepthThreshold_etd + ", PeakDepthThreshold_UVPD=" + glySettings.peakDepthThreshold_uvpd
                                                     + ", TICfraction_HCD=" + glySettings.oxoTICfractionThreshold_hcd + ", TICfraction_ETD=" + glySettings.oxoTICfractionThreshold_etd + ", TICfraction_UVPD=" + glySettings.oxoTICfractionThreshold_uvpd);
-                            outputSummary.WriteLine(StartTimeLabel.Text);
+                            outputSummary.WriteLine(startTime);
                             outputSummary.WriteLine();
 
                             //start processing file
-                            //TODO add progress reporting
-                            var progress = new Progress<DateTime>(_ => UpdateTimer()); //for timer updates on the UI thread
                             if (fileName.EndsWith(".d"))
                             {
                                 var timsProcessor = new SpectrumProcessor<SpectrumInfo.TimsSpectrumInfo>(new TimsFileReader());
@@ -324,8 +303,7 @@ namespace GlyCounter
             catch (Exception ex)
             {
                 timer1.Stop();
-                StatusLabel.Text = "Error during processing";
-                FinishTimeLabel.Text = "Error occurred at: " + DateTime.Now.ToString("HH:mm:ss");
+                LogMessage("Error during processing");
 
                 string errorMessage = ex.InnerException?.Message ?? ex.Message;
                 MessageBox.Show("An error occurred during processing:\r\n\r\n" + errorMessage, "Processing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -336,26 +314,12 @@ namespace GlyCounter
             finally
             {
                 timer1.Stop();
-                StatusLabel.Text = "Output to: " + glySettings.outputPath;
-                FinishTimeLabel.Text = "Finished at: " + DateTime.Now.ToString("HH:mm:ss");
+                LogMessage("Output to: " + glySettings.outputPath);
+                LogMessage("Finished Processing");
                 MessageBox.Show("Finished.");
                 glySettings.oxoniumIonHashSet.Clear();
             }
 
-        }
-
-        public void UpdateTimer()
-        {
-            if (FinishTimeLabel.InvokeRequired)
-            {
-                FinishTimeLabel.Invoke(new Action(() =>
-                    FinishTimeLabel.Text =
-                        "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss")));
-            }
-            else
-            {
-                FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
-            }
         }
     }
 }

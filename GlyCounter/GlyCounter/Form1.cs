@@ -82,12 +82,6 @@ namespace GlyCounter
             return converter.IsValid(input);
         }
 
-        //set up timer
-        private void OnTimerTick(object sender, EventArgs e)
-        {
-            FinishTimeLabel.Text = "Finish time: still running as of " + DateTime.Now.ToString("HH:mm:ss");
-        }
-
         public static HashSet<Yion> CombineDuplicateYions(HashSet<Yion> yIonHashSet)
         {
             var combined = yIonHashSet
