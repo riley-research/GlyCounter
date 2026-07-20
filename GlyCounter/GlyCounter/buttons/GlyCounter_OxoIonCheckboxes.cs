@@ -25,6 +25,7 @@ namespace GlyCounter
             SelectAllItems_CheckedBox(M6PCheckedListBox);
             SelectAllItems_CheckedBox(OligosaccharideCheckedListBox);
             SelectAllItems_CheckedBox(FucoseCheckedListBox);
+            SelectAllItems_CheckedBox(ImmoniumCheckedListBox);
         }
 
         //set up check common buttom
@@ -150,13 +151,16 @@ namespace GlyCounter
             while (FucoseCheckedListBox.CheckedIndices.Count > 0)
                 FucoseCheckedListBox.SetItemChecked(FucoseCheckedListBox.CheckedIndices[0], false);
 
+            while (ImmoniumCheckedListBox.CheckedIndices.Count > 0)
+                ImmoniumCheckedListBox.SetItemChecked(ImmoniumCheckedListBox.CheckedIndices[0], false);
+
             HexNAcCheckedListBox.ClearSelected();
             HexCheckedListBox.ClearSelected();
             SialicAcidCheckedListBox.ClearSelected();
             M6PCheckedListBox.ClearSelected();
             OligosaccharideCheckedListBox.ClearSelected();
             FucoseCheckedListBox.ClearSelected();
-
+            ImmoniumCheckedListBox.ClearSelected();
         }
 
         //uncheck specific boxes
@@ -190,6 +194,11 @@ namespace GlyCounter
             FucoseCheckedListBox.ClearSelected();
         }
 
+        private void ImmoniumCheckedListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ImmoniumCheckedListBox.ClearSelected();
+        }
+
         //set up check all buttons for specific types
         private void CheckAll_HexNAc_Button_Click(object sender, EventArgs e)
         {
@@ -221,6 +230,11 @@ namespace GlyCounter
             SelectAllItems_CheckedBox(FucoseCheckedListBox);
         }
 
+        private void CheckAll_Immonium_Button_Click(object sender, EventArgs e)
+        {
+            SelectAllItems_CheckedBox(ImmoniumCheckedListBox);
+        }
+
         private void SetNegativeMode()
         {
             HexNAcCheckedListBox.BackColor = alternateBackColor;
@@ -229,6 +243,7 @@ namespace GlyCounter
             FucoseCheckedListBox.BackColor = alternateBackColor;
             SialicAcidCheckedListBox.BackColor = alternateBackColor;
             OligosaccharideCheckedListBox.BackColor = alternateBackColor;
+            ImmoniumCheckedListBox.BackColor = alternateBackColor;
 
             HexNAcCheckedListBox.Items.Clear();
             HexCheckedListBox.Items.Clear();
@@ -236,6 +251,7 @@ namespace GlyCounter
             FucoseCheckedListBox.Items.Clear();
             SialicAcidCheckedListBox.Items.Clear();
             OligosaccharideCheckedListBox.Items.Clear();
+            ImmoniumCheckedListBox.Items.Clear();
 
             HexNAcCheckedListBox.Items.AddRange(HexNAcNeg);
             HexCheckedListBox.Items.AddRange(HexNeg);
@@ -243,6 +259,7 @@ namespace GlyCounter
             FucoseCheckedListBox.Items.AddRange(FucoseNeg);
             SialicAcidCheckedListBox.Items.AddRange(SialicNeg);
             OligosaccharideCheckedListBox.Items.AddRange(OligoNeg);
+            ImmoniumCheckedListBox.Items.AddRange(ImmoniumNeg);
         }
 
         private void SetPositiveMode()
@@ -253,6 +270,7 @@ namespace GlyCounter
             FucoseCheckedListBox.BackColor = normalBackColor;
             SialicAcidCheckedListBox.BackColor = normalBackColor;
             OligosaccharideCheckedListBox.BackColor = normalBackColor;
+            ImmoniumCheckedListBox.BackColor = normalBackColor;
 
             HexNAcCheckedListBox.Items.Clear();
             HexCheckedListBox.Items.Clear();
@@ -260,6 +278,7 @@ namespace GlyCounter
             FucoseCheckedListBox.Items.Clear();
             SialicAcidCheckedListBox.Items.Clear();
             OligosaccharideCheckedListBox.Items.Clear();
+            ImmoniumCheckedListBox.Items.Clear();
 
             HexNAcCheckedListBox.Items.AddRange(HexNAcPos);
             HexCheckedListBox.Items.AddRange(HexPos);
@@ -267,6 +286,7 @@ namespace GlyCounter
             FucoseCheckedListBox.Items.AddRange(FucosePos);
             SialicAcidCheckedListBox.Items.AddRange(SialicPos);
             OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
+            ImmoniumCheckedListBox.Items.AddRange(ImmoniumPos);
         }
 
         private void polarityCB_CheckedChanged(object sender, EventArgs e)

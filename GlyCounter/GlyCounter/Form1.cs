@@ -44,6 +44,7 @@ namespace GlyCounter
             OligosaccharideCheckedListBox.Items.AddRange(OligoPos);
             M6PCheckedListBox.Items.AddRange(ManPos);
             FucoseCheckedListBox.Items.AddRange(FucosePos);
+            ImmoniumCheckedListBox.Items.AddRange(ImmoniumPos);
 
             if (Properties.Settings1.Default.RestoreTabOnReset)
             {

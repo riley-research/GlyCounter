@@ -135,6 +135,9 @@ namespace GlyCounter
                     foreach (var item in FucoseCheckedListBox.CheckedItems)
                         glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "Fucose", glySettings));
 
+                    foreach (var item in ImmoniumCheckedListBox.CheckedItems)
+                        glySettings.oxoniumIonHashSet.Add(OxoniumIon.ProcessOxoIon(item, glycanSource: "Immonium", glySettings));
+
                     if (!glySettings.csvCustomFile.Equals("empty"))
                     {
                         using StreamReader csvFile = new StreamReader(glySettings.csvCustomFile);

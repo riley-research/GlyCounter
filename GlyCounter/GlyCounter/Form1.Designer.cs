@@ -22,31 +22,6 @@ namespace GlyCounter
             base.Dispose(disposing);
         }
 
-        private string[] HexNAcPos = { "84.0444, HexNAc - C2H8O4", "126.055, HexNAc - C2H6O3", "138.055, HexNAc - CH6O3", "144.0655, HexNAc - C2H4O2", "168.0655, HexNAc - 2H2O", "186.0761, HexNAc - H2O", "204.0867, HexNAc" };
-        private string[] HexNAcNeg = { "154.0510, HexNAc - CH2O (B,Z)", "160.0610, HexNAc - C2H2O (Z)", "162.0767, HexNAc - C2H4O2", "166.0511, HexNAc - H2O", "178.0710, HexNAc - C2H2O (Y)", "184.0616, HexNAc (B,Z)", "202.0716, HexNAc, (B)", "204.0878, HexNAc (Z)", "220.0816, HexNAc (C)", "222.0978, HexNAc, (Y)" };
-
-        private string[] HexPos = { "85.0284, Hex - C2H6O3", "97.0284, Hex - CH6O3", "127.0390, Hex - 2H2O", "145.0495, Hex - H2O", "163.0601, Hex" };
-        private string[] HexNeg = { "161.0450, Hex (B)", "179.0550, Hex (C)" };
-
-        private string[] ManPos = { "243.0264, Man-P", "405.0798, Man2-P" };
-        private string[] ManNeg = { "241.0113, Man-P", "403.0647, Man2-P" };
-
-        private string[] SialicPos = { "274.0921, NeuAc-H2O", "292.1027, NeuAc", "316.103, NeuAc[Ac] - H2O", "334.113, NeuAc[Ac]", "290.0870, NeuGc - H2O", "308.0976, NeuGc", "332.098, NeuGc[Ac] - H2O", "350.1081, NeuGc[Ac]" };
-        private string[] SialicNeg = { "290.0876, NeuAc (B)", "308.0976, NeuAc (C)" };
-
-        private string[] FucosePos = { "350.1446, HexNAc-dHex", "512.1974, HexNAc-Hex-dHex (LeX/A)", "674.2502, HexNAc-Hex2-dHex", "803.2928, HexNAc-Hex-dHex-NeuAc (sLeX/A)", "819.2908, HexNAc-Hex-dHex-NeuGc", "877.3296, HexNAc2-Hex2-dHex (diLacNAc-Fuc)" };
-        private string[] FucoseNeg = { "163.0601, dHex (C)", "165.0762, dHex (Y)", "350.1457, HexNAc-dHex (Z)", "368.1557, HexNAc-dHex (Y)", "307.1029, Hex-dHex (B)", "325.1129, Hex-dHex (C)", "488.1979, HexNAc-Hex-dHex", "510.1823, HexNAc-Hex-dHex (B)", 
-            "553.2251, HexNAc2-dHex (Y,Z)", "697.2678, HexNAc2-Hex-dHex (Z,Z)", "715.2778, HexNAc2-Hex-dHex (Z)", "733.2879, HexNAc2-Hex-dHex (Y)", "895.3407, HexNAc2-Hex2-dHex (Y,Y)", "1057.3935, HexNAc2-Hex3 (Y,Y)", "1080.4101, HexNAc3-Hex2-dHex (Z)", "1098.4201, HexNAc3-Hex2-dHex (Y)" };
-
-        private string[] OligoPos = { "325.1129, Hex2", "366.1395, HexNAc-Hex", "407.1660, HexNAc2", "454.1555, Hex-NeuAc", "470.1503, Hex-NeuGc", "495.1821, HexNAc-NeuAc", "511.1769, HexNAc-NeuGc", "528.1923, HexNAc-Hex2", 
-            "537.1927, HexNAc-NeuAc[Ac]", "553.1875, HexNAc-NeuGc[Ac]", "569.2188, HexNAc2-Hex", "657.2349, HexNAc-Hex-NeuAc", "673.2297, HexNAc-Hex-NeuGc", "690.2451, HexNAc-Hex3", "731.2717, HexNAc2-Hex2 (diLacNAc)", 
-            "819.2877, HexNAc-Hex2-NeuAc", "835.2825, HexNAc-Hex2-NeuGc", "860.3143, HexNAc2-Hex-NeuAc", "876.3091, HexNAc2-Hex-NeuGc", "893.3245, HexNAc2-Hex3", "948.3303, HexNAc-Hex-NeuAc2", "964.3251, HexNAc-Hex-NeuGc2", 
-            "1022.3671, HexNAc2-Hex2-NeuAc1", "1038.3619, HexNAc2-Hex2-NeuGc1", "1313.4625, HexNAc2-Hex2-NeuAc2", "1329.4573, HexNAc2-Hex2-NeuGc2" };
-        private string[] OligoNeg = { "364.1244, HexNAc-Hex (B)", "366.1406, HexNAc-Hex (Z)", "382.1344, HexNAc-Hex (C)", "384.1506, HexNAc-Hex (Y)", "389.1572, HexNAc2 (Z,Z)", "407.1672, HexNAc2 (Z)",
-            "425.1772, HexNAc2 (Y)", "544.4, HexNAc-Hex2 (C,Y)", "551.2100, HexNAc2-Hex (Z,Z)", "569.2200, HexNAc2-Hex (Z)", "587.2300, HexNAc2-Hex (Y)", "675.2460, HexNAc-Hex-NeuAc (Y)", "731.2728, HexNAc2-Hex2 (Z)",
-            "749.2828, HexNAc2-Hex2 (Y)", "829.2396, HexNAc2-Hex2 (Y)", "873.2994, HexNAc2-Hex3 (B,Z)", "934.3522, HexNAc3-Hex2 (Y,Z)", "952.3622, HexNAc3-Hex2 (Y,Y)", "1096.4050, HexNAc3-Hex3 (Y,Z)", "1114.415, HexNAc3-Hex3 (Y)",
-            "1120.3350, HexNAc2-Hex2-NeuAc (Y)", "1299.4844, HexNAc3-Hex3 (Z)" };
-
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -105,6 +80,10 @@ namespace GlyCounter
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
+            ImmoniumCheckedListBox = new CheckedListBox();
+            CheckAll_Immonium_Button = new Button();
+            Immonium_ions = new Label();
+            statusTB = new RichTextBox();
             FileCounter = new Label();
             ClearFilesButton = new Button();
             Gly_AddFolderButton = new Button();
@@ -185,7 +164,6 @@ namespace GlyCounter
             BrowseGlycoPepIDs = new Button();
             LoadInGlycoPepIDs_TextBox = new TextBox();
             timer2 = new System.Windows.Forms.Timer(components);
-            statusTB = new RichTextBox();
             ((System.ComponentModel.ISupportInitialize)GlyCounterLogo).BeginInit();
             GlyCounter_AllTabs.SuspendLayout();
             GlyCounter_Tab.SuspendLayout();
@@ -247,7 +225,7 @@ namespace GlyCounter
             SialicAcidCheckedListBox.Location = new Point(315, 158);
             SialicAcidCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             SialicAcidCheckedListBox.Name = "SialicAcidCheckedListBox";
-            SialicAcidCheckedListBox.Size = new Size(278, 130);
+            SialicAcidCheckedListBox.Size = new Size(278, 166);
             SialicAcidCheckedListBox.TabIndex = 2;
             SialicAcidCheckedListBox.SelectedIndexChanged += SialicAcidCheckedListBox_SelectedIndexChanged;
             // 
@@ -310,7 +288,7 @@ namespace GlyCounter
             // 
             M6PCheckedListBox.CheckOnClick = true;
             M6PCheckedListBox.FormattingEnabled = true;
-            M6PCheckedListBox.Location = new Point(19, 498);
+            M6PCheckedListBox.Location = new Point(19, 493);
             M6PCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             M6PCheckedListBox.Name = "M6PCheckedListBox";
             M6PCheckedListBox.Size = new Size(276, 40);
@@ -321,7 +299,7 @@ namespace GlyCounter
             // 
             M6P_ions.AutoSize = true;
             M6P_ions.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            M6P_ions.Location = new Point(19, 467);
+            M6P_ions.Location = new Point(19, 462);
             M6P_ions.Margin = new Padding(4, 0, 4, 0);
             M6P_ions.Name = "M6P_ions";
             M6P_ions.Size = new Size(65, 17);
@@ -416,7 +394,7 @@ namespace GlyCounter
             // 
             // CheckAll_M6P_Button
             // 
-            CheckAll_M6P_Button.Location = new Point(139, 456);
+            CheckAll_M6P_Button.Location = new Point(139, 451);
             CheckAll_M6P_Button.Margin = new Padding(2);
             CheckAll_M6P_Button.Name = "CheckAll_M6P_Button";
             CheckAll_M6P_Button.Size = new Size(156, 36);
@@ -568,10 +546,10 @@ namespace GlyCounter
             // 
             FucoseCheckedListBox.CheckOnClick = true;
             FucoseCheckedListBox.FormattingEnabled = true;
-            FucoseCheckedListBox.Location = new Point(315, 348);
+            FucoseCheckedListBox.Location = new Point(315, 384);
             FucoseCheckedListBox.Margin = new Padding(4, 3, 4, 3);
             FucoseCheckedListBox.Name = "FucoseCheckedListBox";
-            FucoseCheckedListBox.Size = new Size(278, 148);
+            FucoseCheckedListBox.Size = new Size(278, 112);
             FucoseCheckedListBox.TabIndex = 41;
             FucoseCheckedListBox.SelectedIndexChanged += FucoseCheckedListBox_SelectedIndexChanged;
             // 
@@ -579,7 +557,7 @@ namespace GlyCounter
             // 
             Fucose_ions_label.AutoSize = true;
             Fucose_ions_label.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            Fucose_ions_label.Location = new Point(315, 315);
+            Fucose_ions_label.Location = new Point(314, 346);
             Fucose_ions_label.Margin = new Padding(4, 0, 4, 0);
             Fucose_ions_label.Name = "Fucose_ions_label";
             Fucose_ions_label.Size = new Size(131, 17);
@@ -588,7 +566,7 @@ namespace GlyCounter
             // 
             // CheckAll_Fucose_Button
             // 
-            CheckAll_Fucose_Button.Location = new Point(454, 306);
+            CheckAll_Fucose_Button.Location = new Point(453, 337);
             CheckAll_Fucose_Button.Margin = new Padding(4, 3, 4, 3);
             CheckAll_Fucose_Button.Name = "CheckAll_Fucose_Button";
             CheckAll_Fucose_Button.Size = new Size(140, 36);
@@ -659,7 +637,7 @@ namespace GlyCounter
             // GlyCounterLogo
             // 
             GlyCounterLogo.Image = (Image)resources.GetObject("GlyCounterLogo.Image");
-            GlyCounterLogo.Location = new Point(314, 509);
+            GlyCounterLogo.Location = new Point(317, 501);
             GlyCounterLogo.Name = "GlyCounterLogo";
             GlyCounterLogo.Size = new Size(276, 71);
             GlyCounterLogo.TabIndex = 53;
@@ -677,6 +655,9 @@ namespace GlyCounter
             // 
             // GlyCounter_Tab
             // 
+            GlyCounter_Tab.Controls.Add(ImmoniumCheckedListBox);
+            GlyCounter_Tab.Controls.Add(CheckAll_Immonium_Button);
+            GlyCounter_Tab.Controls.Add(Immonium_ions);
             GlyCounter_Tab.Controls.Add(statusTB);
             GlyCounter_Tab.Controls.Add(FileCounter);
             GlyCounter_Tab.Controls.Add(ClearFilesButton);
@@ -754,6 +735,47 @@ namespace GlyCounter
             GlyCounter_Tab.TabIndex = 0;
             GlyCounter_Tab.Text = "Pre-ID";
             GlyCounter_Tab.UseVisualStyleBackColor = true;
+            // 
+            // ImmoniumCheckedListBox
+            // 
+            ImmoniumCheckedListBox.CheckOnClick = true;
+            ImmoniumCheckedListBox.FormattingEnabled = true;
+            ImmoniumCheckedListBox.Location = new Point(19, 597);
+            ImmoniumCheckedListBox.Margin = new Padding(4, 3, 4, 3);
+            ImmoniumCheckedListBox.Name = "ImmoniumCheckedListBox";
+            ImmoniumCheckedListBox.Size = new Size(276, 40);
+            ImmoniumCheckedListBox.TabIndex = 81;
+            ImmoniumCheckedListBox.SelectedIndexChanged += ImmoniumCheckedListBox_SelectedIndexChanged;
+            // 
+            // CheckAll_Immonium_Button
+            // 
+            CheckAll_Immonium_Button.Location = new Point(139, 555);
+            CheckAll_Immonium_Button.Margin = new Padding(2);
+            CheckAll_Immonium_Button.Name = "CheckAll_Immonium_Button";
+            CheckAll_Immonium_Button.Size = new Size(156, 36);
+            CheckAll_Immonium_Button.TabIndex = 83;
+            CheckAll_Immonium_Button.Text = "Check all Immonium ions";
+            CheckAll_Immonium_Button.UseVisualStyleBackColor = true;
+            CheckAll_Immonium_Button.Click += CheckAll_Immonium_Button_Click;
+            // 
+            // Immonium_ions
+            // 
+            Immonium_ions.AutoSize = true;
+            Immonium_ions.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            Immonium_ions.Location = new Point(19, 566);
+            Immonium_ions.Margin = new Padding(4, 0, 4, 0);
+            Immonium_ions.Name = "Immonium_ions";
+            Immonium_ions.Size = new Size(106, 17);
+            Immonium_ions.TabIndex = 82;
+            Immonium_ions.Text = "Immonium ions";
+            // 
+            // statusTB
+            // 
+            statusTB.Location = new Point(314, 585);
+            statusTB.Name = "statusTB";
+            statusTB.Size = new Size(583, 65);
+            statusTB.TabIndex = 80;
+            statusTB.Text = "";
             // 
             // FileCounter
             // 
@@ -885,7 +907,6 @@ namespace GlyCounter
             periscopeCheckBox.TabIndex = 68;
             periscopeCheckBox.Text = "Output Periscope Annotations";
             periscopeCheckBox.UseVisualStyleBackColor = true;
-            periscopeCheckBox.CheckedChanged += ipsaCheckBox_CheckedChanged;
             // 
             // DaltonCheckBox
             // 
@@ -896,7 +917,6 @@ namespace GlyCounter
             DaltonCheckBox.TabIndex = 67;
             DaltonCheckBox.Text = "Da";
             DaltonCheckBox.UseVisualStyleBackColor = true;
-            DaltonCheckBox.CheckedChanged += DaltonCheckBox_CheckedChanged;
             // 
             // OxoCountThreshold_uvpd_label
             // 
@@ -1209,7 +1229,6 @@ namespace GlyCounter
             Ynaught_DaCheckBox.TabIndex = 68;
             Ynaught_DaCheckBox.Text = "Da";
             Ynaught_DaCheckBox.UseVisualStyleBackColor = true;
-            Ynaught_DaCheckBox.CheckedChanged += Ynaught_DaCheckBox_CheckedChanged;
             // 
             // Ynaught_GlyCounterLogo
             // 
@@ -1579,14 +1598,6 @@ namespace GlyCounter
             LoadInGlycoPepIDs_TextBox.TabIndex = 0;
             LoadInGlycoPepIDs_TextBox.Text = "Upload glycopeptide IDs (e.g., PSMs file) here: tab-delimited .txt with headers \"Spectrum\", \"Peptide\", \"Charge\", and \"Total Glycan Composition\"";
             // 
-            // statusTB
-            // 
-            statusTB.Location = new Point(314, 585);
-            statusTB.Name = "statusTB";
-            statusTB.Size = new Size(583, 65);
-            statusTB.TabIndex = 80;
-            statusTB.Text = "";
-            // 
             // Form1
             // 
             AllowDrop = true;
@@ -1613,18 +1624,6 @@ namespace GlyCounter
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)Ynaught_GlyCounterLogo).EndInit();
             ResumeLayout(false);
-        }
-
-        private void ipsaCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void DaltonCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void Ynaught_DaCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
         }
 
         #endregion
@@ -1758,5 +1757,8 @@ namespace GlyCounter
         private Button ClearFilesButton;
         private Label FileCounter;
         private RichTextBox statusTB;
+        private CheckedListBox ImmoniumCheckedListBox;
+        private Button CheckAll_Immonium_Button;
+        private Label Immonium_ions;
     }
 }
