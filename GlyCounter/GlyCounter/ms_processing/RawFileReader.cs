@@ -46,6 +46,7 @@ namespace GlyCounter
                 var precursorScanNumber = 0;
                 var precursorMz = 0.0;
                 var charge = 0;
+                var intensity = 0.0;
 
                 switch (scan.MsLevel)
                 {
@@ -53,6 +54,7 @@ namespace GlyCounter
                         precursorScanNumber = scan.PrecursorMasterScanNumber;
                         precursorMz = scan.Precursors[0].IsolationMz;
                         charge = scan.Precursors[0].Charge;
+                        intensity = scan.Precursors[0].Intensity;
                         break;
                 }
 
@@ -64,6 +66,7 @@ namespace GlyCounter
                     MsLevel = scan.MsLevel,
                     PrecursorScanNumber = precursorScanNumber,
                     PrecursorMz = precursorMz,
+                    PrecursorIntensity = intensity,
                     Charge = charge,
                     DissociationMethod = dissociationMethod,
                     CollisionEnergy = nce,
@@ -120,9 +123,11 @@ namespace GlyCounter
                 var precursorMz = 0.0;
                 var charge = 0;
                 var ionMobility = 0.0;
+                var precursorIntensity = 0.0;
 
                 precursorScanNumber = Convert.ToInt32(rawSpectrum.precursors[0].spectrum_ref);
                 precursorMz = rawSpectrum.precursors[0].mz;
+                precursorIntensity = rawSpectrum.precursors[0].intensity ?? 0;
                 charge = rawSpectrum.precursors[0].charge ?? 0;
                 ionMobility = rawSpectrum.precursors[0].ion_mobility ?? 0;
                 var spectrum = new SpectrumInfo.TimsSpectrumInfo();
@@ -135,6 +140,7 @@ namespace GlyCounter
                         MsLevel = rawSpectrum.ms_level,
                         PrecursorScanNumber = precursorScanNumber,
                         PrecursorMz = precursorMz,
+                        PrecursorIntensity = precursorIntensity,
                         Charge = charge,
                         DissociationMethod = Fragmentation.Type.HCD, // TIMS assumes HCD/PASEF
                         CollisionEnergy = Convert.ToDouble(rawSpectrum.collision_energy ?? 0),
