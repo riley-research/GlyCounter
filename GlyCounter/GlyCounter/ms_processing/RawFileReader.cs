@@ -114,7 +114,6 @@ namespace GlyCounter
                 var precursorMz = 0.0;
                 var charge = 0;
                 var ionMobility = 0.0;
-<<<<<<< HEAD
                 var precursorIntensity = 0.0;
                 var retentionTime = 0.0;
 
@@ -129,13 +128,6 @@ namespace GlyCounter
                     retentionTime = rawSpectrum.precursor.retention_time ?? 0;
                 }
 
-=======
-
-                precursorScanNumber = Convert.ToInt32(rawSpectrum.precursors[0].spectrum_ref);
-                precursorMz = rawSpectrum.precursors[0].mz;
-                charge = rawSpectrum.precursors[0].charge ?? 0;
-                ionMobility = rawSpectrum.precursors[0].ion_mobility ?? 0;
->>>>>>> parent of 1a2ea04 (add precursor intensity header to signal and peak depth outputs)
                 var spectrum = new SpectrumInfo.TimsSpectrumInfo();
                 try
                 {
