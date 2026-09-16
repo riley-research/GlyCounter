@@ -33,6 +33,11 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
+#make sure dll is included
+!timsrust_ffi/target/
+!timsrust_ffi/target/release/
+!timsrust_ffi/target/release/timsrust_ffi.dll
+
 # Visual Studio 2015/2017 cache/options directory
 .vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
