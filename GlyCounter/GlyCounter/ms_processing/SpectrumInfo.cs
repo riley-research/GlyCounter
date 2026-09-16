@@ -13,7 +13,6 @@ namespace GlyCounter
         public int MsLevel { get; set; }
         public int PrecursorScanNumber { get; set; }
         public double PrecursorMz { get; set; }
-        public double PrecursorIntensity { get; set; }
         public int Charge { get; set; }
         public Fragmentation.Type DissociationMethod { get; set; }
         public double CollisionEnergy { get; set; }
@@ -34,7 +33,6 @@ namespace GlyCounter
             yield return "MSLevel";
             yield return "PrecursorScanNumber";
             yield return "PrecursorMz";
-            yield return "PrecursorIntensity";
             yield return "Charge";
             yield return "DissociationMethod";
             yield return "NCE";

@@ -47,7 +47,6 @@ namespace GlyCounter
                 var precursorScanNumber = 0;
                 var precursorMz = 0.0;
                 var charge = 0;
-                var intensity = 0.0;
 
                 switch (scan.MsLevel)
                 {
@@ -55,7 +54,6 @@ namespace GlyCounter
                         precursorScanNumber = scan.PrecursorMasterScanNumber;
                         precursorMz = scan.Precursors[0].IsolationMz;
                         charge = scan.Precursors[0].Charge;
-                        intensity = scan.Precursors[0].Intensity;
                         break;
                 }
 
@@ -67,7 +65,6 @@ namespace GlyCounter
                     MsLevel = scan.MsLevel,
                     PrecursorScanNumber = precursorScanNumber,
                     PrecursorMz = precursorMz,
-                    PrecursorIntensity = intensity,
                     Charge = charge,
                     DissociationMethod = dissociationMethod,
                     CollisionEnergy = nce,
@@ -117,6 +114,7 @@ namespace GlyCounter
                 var precursorMz = 0.0;
                 var charge = 0;
                 var ionMobility = 0.0;
+<<<<<<< HEAD
                 var precursorIntensity = 0.0;
                 var retentionTime = 0.0;
 
@@ -131,6 +129,13 @@ namespace GlyCounter
                     retentionTime = rawSpectrum.precursor.retention_time ?? 0;
                 }
 
+=======
+
+                precursorScanNumber = Convert.ToInt32(rawSpectrum.precursors[0].spectrum_ref);
+                precursorMz = rawSpectrum.precursors[0].mz;
+                charge = rawSpectrum.precursors[0].charge ?? 0;
+                ionMobility = rawSpectrum.precursors[0].ion_mobility ?? 0;
+>>>>>>> parent of 1a2ea04 (add precursor intensity header to signal and peak depth outputs)
                 var spectrum = new SpectrumInfo.TimsSpectrumInfo();
                 try
                 {
@@ -141,7 +146,6 @@ namespace GlyCounter
                         MsLevel = 2,
                         PrecursorScanNumber = precursorScanNumber,
                         PrecursorMz = precursorMz,
-                        PrecursorIntensity = precursorIntensity,
                         Charge = charge,
                         DissociationMethod = Fragmentation.Type.HCD, // TIMS assumes HCD/PASEF
                         CollisionEnergy = Convert.ToDouble(rawSpectrum.collision_energy ?? 0),

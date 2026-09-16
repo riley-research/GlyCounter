@@ -214,6 +214,7 @@ namespace GlyCounter
                             //start processing file
                             if (fileName.EndsWith(".d"))
                             {
+                                var timsProcessor = new SpectrumProcessor<SpectrumInfo.TimsSpectrumInfo>(new TimsFileReader());
                                 foreach (string headerval in TimsFileReader.GetOutputHeaders())
                                 {
                                     outputOxo.Write(headerval + '\t');
