@@ -28,7 +28,7 @@
 	<ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RepoRoot Condition="'$(GITHUB_WORKSPACE)' != ''">$(GITHUB_WORKSPACE)</RepoRoot>
-    <RepoRoot Condition="'$(GITHUB_WORKSPACE)' == ''">$(MSBuildProjectDirectory)\..</RepoRoot>
+    <RepoRoot Condition="'$(GITHUB_WORKSPACE)' == ''">$(MSBuildProjectDirectory)</RepoRoot>
   </PropertyGroup>
   
 
@@ -81,7 +81,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
     </None>
-	<None Include="$(RepoRoot)\timsrust_ffi\target\release\timsrust_ffi.dll">
+	<None Include="$(RepoRoot)\..\timsrust_ffi\target\release\timsrust_ffi.dll">
       <Link>timsrust_ffi.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
