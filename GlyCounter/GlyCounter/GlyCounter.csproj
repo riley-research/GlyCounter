@@ -79,7 +79,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
     </None>
-    <None Include="..\..\timsrust_ffi\target\release\timsrust_ffi.dll">
+    <None Include="..\timsrust_ffi\target\release\timsrust_ffi.dll">
         <Link>timsrust_ffi.dll</Link>
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
