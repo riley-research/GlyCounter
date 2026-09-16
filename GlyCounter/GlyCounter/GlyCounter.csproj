@@ -8,7 +8,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
-    <TargetFramework>net8.0-windows</TargetFramework> <Nullable>enable</Nullable>
+    <TargetFramework>net9.0-windows</TargetFramework> <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>0.0.15</Version>
@@ -26,6 +26,7 @@
     <AssemblyName>GlyCounter</AssemblyName>
     <RootNamespace>GlyCounter</RootNamespace>
 	<ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   
 
@@ -50,7 +51,6 @@
     </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CSMSL_dotNetCore\CSMSL_dotNetCore\CSMSL.csproj" />
     <ProjectReference Include="..\CSMSL_dotNetCore\CSMSL_dotNetCore\CSMSL.csproj" />
   </ItemGroup>
 
@@ -79,8 +79,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
     </None>
-    <None Include="timsrust.dll">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="..\..\timsrust_ffi\target\release\timsrust_ffi.dll">
+        <Link>timsrust_ffi.dll</Link>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

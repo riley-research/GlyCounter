@@ -1,0 +1,17 @@
+[package]
+name = "timsrust_ffi"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+csbindgen = "1.9.8"
+lazy_static = "1.5.0"
+serde = "1.0.229"
+serde_json = "1.0.151"
+timsrust = "0.6.5"
+
+[build-dependencies]
+csbindgen = "1.9.8"
