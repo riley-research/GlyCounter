@@ -1,4 +1,5 @@
 ﻿using CSMSL.Spectral;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Newtonsoft.Json.Linq;
 using Nova.Data;
 using Nova.Io.Read;
@@ -96,19 +97,12 @@ namespace GlyCounter
         public async IAsyncEnumerable<SpectrumInfo.TimsSpectrumInfo> ReadSpectraAsync(
             string filePath, CancellationToken cancellationToken = default)
         {
-            foreach (RawSpectrum rawSpectrum in Native.ReadMsnSpectraLazy(filePath))
+            foreach (RawSpectrum rawSpectrum in NativeMethods.ReadMsnSpectraLazy(filePath))
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                // Skip MS1 spectra - they have no precursors and shouldn't be processed
-                if (rawSpectrum.ms_level <= 1)
-                {
-                    continue;
-                }
-
                 if (rawSpectrum.intensity == null || rawSpectrum.intensity.Length == 0 ||
-                    rawSpectrum.mz == null || rawSpectrum.mz.Length == 0 ||
-                    rawSpectrum.precursors == null || rawSpectrum.precursors.Length == 0)
+                    rawSpectrum.mz == null || rawSpectrum.mz.Length == 0)
                 {
                     try
                     {
@@ -124,20 +118,27 @@ namespace GlyCounter
                 var charge = 0;
                 var ionMobility = 0.0;
                 var precursorIntensity = 0.0;
+                var retentionTime = 0.0;
 
-                precursorScanNumber = Convert.ToInt32(rawSpectrum.precursors[0].spectrum_ref);
-                precursorMz = rawSpectrum.precursors[0].mz;
-                precursorIntensity = rawSpectrum.precursors[0].intensity ?? 0;
-                charge = rawSpectrum.precursors[0].charge ?? 0;
-                ionMobility = rawSpectrum.precursors[0].ion_mobility ?? 0;
+                // tsf files do not have precursor info
+                if (rawSpectrum.precursor != null)
+                {
+                    precursorScanNumber = Convert.ToInt32(rawSpectrum.precursor.spectrum_ref);
+                    precursorMz = rawSpectrum.precursor.mz;
+                    precursorIntensity = rawSpectrum.precursor.intensity ?? 0;
+                    charge = rawSpectrum.precursor.charge ?? 0;
+                    ionMobility = rawSpectrum.precursor.ion_mobility ?? 0;
+                    retentionTime = rawSpectrum.precursor.retention_time ?? 0;
+                }
+
                 var spectrum = new SpectrumInfo.TimsSpectrumInfo();
                 try
                 {
                     spectrum = new SpectrumInfo.TimsSpectrumInfo
                     {
                         ScanNumber = int.TryParse(rawSpectrum.id, out var scanNum) ? scanNum : 0,
-                        RetentionTime = rawSpectrum.scan_start_time ?? 0,
-                        MsLevel = rawSpectrum.ms_level,
+                        RetentionTime = retentionTime,
+                        MsLevel = 2,
                         PrecursorScanNumber = precursorScanNumber,
                         PrecursorMz = precursorMz,
                         PrecursorIntensity = precursorIntensity,
