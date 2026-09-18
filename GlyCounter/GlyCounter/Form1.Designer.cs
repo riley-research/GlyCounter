@@ -80,6 +80,7 @@ namespace GlyCounter
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
+            gcProgressBar = new GlyCounter.design.ShapeProgressBar();
             ImmoniumCheckedListBox = new CheckedListBox();
             CheckAll_Immonium_Button = new Button();
             Immonium_ions = new Label();
@@ -108,6 +109,7 @@ namespace GlyCounter
             label1 = new Label();
             intensityThresholdLabel = new Label();
             intensityThresholdTextBox = new TextBox();
+            gcPercentLabel = new Label();
             YnaughtTab = new TabPage();
             Yn_reset = new Button();
             Ynaught_intLabel = new Label();
@@ -655,6 +657,7 @@ namespace GlyCounter
             // 
             // GlyCounter_Tab
             // 
+            GlyCounter_Tab.Controls.Add(gcProgressBar);
             GlyCounter_Tab.Controls.Add(ImmoniumCheckedListBox);
             GlyCounter_Tab.Controls.Add(CheckAll_Immonium_Button);
             GlyCounter_Tab.Controls.Add(Immonium_ions);
@@ -728,6 +731,7 @@ namespace GlyCounter
             GlyCounter_Tab.Controls.Add(Oligosaccharide_ions);
             GlyCounter_Tab.Controls.Add(StartButton);
             GlyCounter_Tab.Controls.Add(HexNAcCheckedListBox);
+            GlyCounter_Tab.Controls.Add(gcPercentLabel);
             GlyCounter_Tab.Location = new Point(4, 24);
             GlyCounter_Tab.Name = "GlyCounter_Tab";
             GlyCounter_Tab.Padding = new Padding(3);
@@ -735,6 +739,13 @@ namespace GlyCounter
             GlyCounter_Tab.TabIndex = 0;
             GlyCounter_Tab.Text = "Pre-ID";
             GlyCounter_Tab.UseVisualStyleBackColor = true;
+            // 
+            // gcProgressBar
+            // 
+            gcProgressBar.Location = new Point(960, 610);
+            gcProgressBar.Name = "gcProgressBar";
+            gcProgressBar.Size = new Size(228, 32);
+            gcProgressBar.TabIndex = 84;
             // 
             // ImmoniumCheckedListBox
             // 
@@ -822,17 +833,17 @@ namespace GlyCounter
             // ignoreMSLevelCB
             // 
             ignoreMSLevelCB.AutoSize = true;
-            ignoreMSLevelCB.Location = new Point(962, 629);
+            ignoreMSLevelCB.Location = new Point(1047, 566);
             ignoreMSLevelCB.Name = "ignoreMSLevelCB";
-            ignoreMSLevelCB.Size = new Size(221, 19);
+            ignoreMSLevelCB.Size = new Size(136, 34);
             ignoreMSLevelCB.TabIndex = 75;
-            ignoreMSLevelCB.Text = "Ignore MS Level and Search All Scans";
+            ignoreMSLevelCB.Text = "Ignore MS Level and \r\nSearch All Scans";
             ignoreMSLevelCB.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(1012, 602);
+            label3.Location = new Point(967, 583);
             label3.Name = "label3";
             label3.Size = new Size(18, 15);
             label3.TabIndex = 74;
@@ -841,7 +852,7 @@ namespace GlyCounter
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(962, 576);
+            label2.Location = new Point(917, 557);
             label2.Name = "label2";
             label2.Size = new Size(111, 15);
             label2.TabIndex = 73;
@@ -849,7 +860,7 @@ namespace GlyCounter
             // 
             // MSLevelUB
             // 
-            MSLevelUB.Location = new Point(1036, 600);
+            MSLevelUB.Location = new Point(991, 581);
             MSLevelUB.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             MSLevelUB.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             MSLevelUB.Name = "MSLevelUB";
@@ -860,7 +871,7 @@ namespace GlyCounter
             // 
             // MSLevelLB
             // 
-            MSLevelLB.Location = new Point(962, 600);
+            MSLevelLB.Location = new Point(917, 581);
             MSLevelLB.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             MSLevelLB.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             MSLevelLB.Name = "MSLevelLB";
@@ -1012,6 +1023,18 @@ namespace GlyCounter
             intensityThresholdTextBox.Size = new Size(61, 23);
             intensityThresholdTextBox.TabIndex = 55;
             intensityThresholdTextBox.Text = "1000";
+            // 
+            // gcPercentLabel
+            // 
+            gcPercentLabel.BackColor = Color.Transparent;
+            gcPercentLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            gcPercentLabel.ForeColor = SystemColors.ControlText;
+            gcPercentLabel.Location = new Point(911, 617);
+            gcPercentLabel.Name = "gcPercentLabel";
+            gcPercentLabel.Size = new Size(51, 20);
+            gcPercentLabel.TabIndex = 85;
+            gcPercentLabel.Text = "0%";
+            gcPercentLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // YnaughtTab
             // 
@@ -1760,5 +1783,7 @@ namespace GlyCounter
         private CheckedListBox ImmoniumCheckedListBox;
         private Button CheckAll_Immonium_Button;
         private Label Immonium_ions;
+        private design.ShapeProgressBar gcProgressBar;
+        private Label gcPercentLabel;
     }
 }

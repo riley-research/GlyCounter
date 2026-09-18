@@ -179,6 +179,11 @@ namespace GlyCounter
                     if (periscopeCheckBox.Checked)
                         glySettings.periscope = true;
 
+                    //set up progress bar
+                    var totalFiles = glySettings.fileList.Count;
+                    var progressPerFile = 100 / totalFiles;
+                    gcProgressBar.Value = 0;
+
                     foreach (var fileName in glySettings.fileList)
                     {
                         //reset oxonium ions
@@ -242,6 +247,8 @@ namespace GlyCounter
                                     fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope);
                             }
 
+                            gcProgressBar.Value += progressPerFile / 2;
+                            
                             //all scans have been processed, get some total stats
                             CalculatedRawFileInfo cRawFileInfo = new CalculatedRawFileInfo(rawFileInfo);
                             cRawFileInfo.numberofMS2scansWithOxo = Math.Max(0, cRawFileInfo.numberofMS2scansWithOxo);
@@ -299,6 +306,15 @@ namespace GlyCounter
                                 ts.Minutes, ts.Seconds,
                                 ts.Milliseconds / 10);
                             outputSummary.WriteLine("Total search time: " + elapsedTime);
+                        }
+                        gcProgressBar.Value += progressPerFile / 2;
+                        if (InvokeRequired)
+                        {
+                            Invoke(new Action(() => gcPercentLabel.Text = $"{gcProgressBar.Value}%"));
+                        }
+                        else
+                        {
+                            gcPercentLabel.Text = $"{gcProgressBar.Value}%";
                         }
                     }
                 });
