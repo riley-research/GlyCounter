@@ -179,10 +179,10 @@ namespace GlyCounter
                     if (periscopeCheckBox.Checked)
                         glySettings.periscope = true;
 
-                    //set up progress bar
                     var totalFiles = glySettings.fileList.Count;
-                    var progressPerFile = 100 / totalFiles;
-                    gcProgressBar.Value = 0;
+                    double progressPerFile = 100.0 / totalFiles;
+                    double currentProgress = 0;
+                    SetProgress(0);
 
                     foreach (var fileName in glySettings.fileList)
                     {
@@ -247,8 +247,9 @@ namespace GlyCounter
                                     fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope);
                             }
 
-                            gcProgressBar.Value += progressPerFile / 2;
-                            
+                            currentProgress += progressPerFile / 2.0;
+                            SetProgress((int)Math.Round(currentProgress));
+
                             //all scans have been processed, get some total stats
                             CalculatedRawFileInfo cRawFileInfo = new CalculatedRawFileInfo(rawFileInfo);
                             cRawFileInfo.numberofMS2scansWithOxo = Math.Max(0, cRawFileInfo.numberofMS2scansWithOxo);
@@ -307,7 +308,8 @@ namespace GlyCounter
                                 ts.Milliseconds / 10);
                             outputSummary.WriteLine("Total search time: " + elapsedTime);
                         }
-                        gcProgressBar.Value += progressPerFile / 2;
+                        currentProgress += progressPerFile / 2.0;
+                        SetProgress((int)Math.Round(currentProgress));
                         if (InvokeRequired)
                         {
                             Invoke(new Action(() => gcPercentLabel.Text = $"{gcProgressBar.Value}%"));
@@ -332,13 +334,32 @@ namespace GlyCounter
             }
             finally
             {
+                SetProgress(100);
                 timer1.Stop();
                 LogMessage("Output to: " + glySettings.outputPath);
                 LogMessage("Finished Processing");
                 MessageBox.Show("Finished.");
+                SetProgress(0);
                 glySettings.oxoniumIonHashSet.Clear();
             }
 
+        }
+
+        private void SetProgress(int value)
+        {
+            if (gcProgressBar.InvokeRequired)
+            {
+                gcProgressBar.Invoke(new Action(() =>
+                {
+                    gcProgressBar.Value = value;
+                    gcPercentLabel.Text = $"{value}%";
+                }));
+            }
+            else
+            {
+                gcProgressBar.Value = value;
+                gcPercentLabel.Text = $"{value}%";
+            }
         }
     }
 }
