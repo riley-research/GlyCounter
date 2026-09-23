@@ -80,6 +80,7 @@ namespace GlyCounter
             GlyCounterLogo = new PictureBox();
             GlyCounter_AllTabs = new TabControl();
             GlyCounter_Tab = new TabPage();
+            gc_cancelButton = new Button();
             gcProgressBar = new GlyCounter.design.ShapeProgressBar();
             ImmoniumCheckedListBox = new CheckedListBox();
             CheckAll_Immonium_Button = new Button();
@@ -657,6 +658,7 @@ namespace GlyCounter
             // 
             // GlyCounter_Tab
             // 
+            GlyCounter_Tab.Controls.Add(gc_cancelButton);
             GlyCounter_Tab.Controls.Add(gcProgressBar);
             GlyCounter_Tab.Controls.Add(ImmoniumCheckedListBox);
             GlyCounter_Tab.Controls.Add(CheckAll_Immonium_Button);
@@ -739,6 +741,18 @@ namespace GlyCounter
             GlyCounter_Tab.TabIndex = 0;
             GlyCounter_Tab.Text = "Pre-ID";
             GlyCounter_Tab.UseVisualStyleBackColor = true;
+            // 
+            // gc_cancelButton
+            // 
+            gc_cancelButton.Enabled = false;
+            gc_cancelButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            gc_cancelButton.Location = new Point(120, 685);
+            gc_cancelButton.Name = "gc_cancelButton";
+            gc_cancelButton.Size = new Size(114, 23);
+            gc_cancelButton.TabIndex = 86;
+            gc_cancelButton.Text = "Stop";
+            gc_cancelButton.UseVisualStyleBackColor = true;
+            gc_cancelButton.Click += gc_cancelButton_Click;
             // 
             // gcProgressBar
             // 
@@ -1785,5 +1799,6 @@ namespace GlyCounter
         private Label Immonium_ions;
         private design.ShapeProgressBar gcProgressBar;
         private Label gcPercentLabel;
+        private Button gc_cancelButton;
     }
 }

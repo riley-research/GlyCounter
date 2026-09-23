@@ -14,6 +14,12 @@ namespace GlyCounter
     {
         private async void StartButton_Click(object sender, EventArgs e)
         {
+            _cts = new CancellationTokenSource();
+            var token = _cts.Token;
+
+            StartButton.Enabled = false;
+            gc_cancelButton.Enabled = true;
+
             // If the user didn't enter an output path, default to the folder of the first uploaded raw file (no prompt).
             string userOutput = Gly_outputTextBox.Text?.Trim();
 
@@ -186,6 +192,8 @@ namespace GlyCounter
 
                     foreach (var fileName in glySettings.fileList)
                     {
+                        token.ThrowIfCancellationRequested();
+
                         //reset oxonium ions
                         foreach (OxoniumIon oxoIon in glySettings.oxoniumIonHashSet)
                         {
@@ -230,7 +238,7 @@ namespace GlyCounter
                                 var timsSource = new TimsFileReader();
                                 var processor = new SpectrumProcessor<SpectrumInfo.TimsSpectrumInfo>(timsSource);
                                 var (settings, info) = await processor.ProcessRawFileAsync(
-                                    fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope);
+                                    fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, cancellationToken: token);
                             }
                             else
                             {
@@ -244,7 +252,7 @@ namespace GlyCounter
                                 var rawSource = new RawMzMLReader();
                                 var processor = new SpectrumProcessor<SpectrumInfo.RawMzmlSpectrumInfo>(rawSource);
                                 var (settings, info) = await processor.ProcessRawFileAsync(
-                                    fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope);
+                                    fileName, glySettings, rawFileInfo, outputOxo, outputPeakDepth, outputPeriscope, cancellationToken: token);
                             }
 
                             currentProgress += progressPerFile / 2.0;
@@ -321,6 +329,10 @@ namespace GlyCounter
                     }
                 });
             }
+            catch (OperationCanceledException)
+            {
+                MessageBox.Show("Process cancelled.");
+            }
             catch (Exception ex)
             {
                 timer1.Stop();
@@ -341,6 +353,10 @@ namespace GlyCounter
                 MessageBox.Show("Finished.");
                 SetProgress(0);
                 glySettings.oxoniumIonHashSet.Clear();
+                StartButton.Enabled = true;
+                gc_cancelButton.Enabled = false;
+                _cts.Dispose();
+                _cts = null;
             }
 
         }
