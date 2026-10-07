@@ -52,7 +52,7 @@ GlyCounter accepts .raw or .mzML files as individual file uploads or timsTOF .d 
 
 **Scan Settings - Oxonium Count Requirement**: Number of oxonium ions that need to be in the peak depth for LikelyGlycoSpectrum. When this is set to 0 the default amount is used. The default depends on the number of oxonium ions checked. For HCD and UVPD the defaults are:
 
-| Number of Oxonium Ions Checked | Contains 163 (high mannose)       | Default Oxonium Count Requirement |
+| Number of Oxonium Ions Checked | Contains 163 within the peak depth threshold (oligomannose)       | Default Oxonium Count Requirement |
 | :----------------------------: | :-------------------------------: | :-------------------------------: |
 |          less than 6           |                No                 |                 4                 |
 |        between 6 and 15        |                No                 |  half of number of checked ions   |
