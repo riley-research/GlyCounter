@@ -31,15 +31,6 @@ namespace GlyCounter
             var result = new OxoniumProcessResult();
             if (spectrum.TotalIonCurrent == 0.0) return result;
 
-            int numberOfOxoIons = 0;
-            double totalOxoSignal = 0;
-            bool test204 = false;
-            bool test163 = false;
-            int countOxoWithinPeakDepthThreshold = 0;
-            List<double> oxoniumIonFoundPeaks = new List<double>();
-            List<double> oxoniumIonFoundMassErrors = new List<double>();
-            string peakString = "";
-
             //custom ms levels
             if (!glySettings.ignoreMSLevel) //if ignore then no need to check ms level
             {
@@ -76,7 +67,7 @@ namespace GlyCounter
 
             // Reprocess peaks to build output strings
             BuildOutputLines(spectrum, glySettings, result, sortedPeakDepths, peakDepthThreshold,
-                oxoTICfraction, oxoCountRequirement, localStats, _204, _366);
+                oxoTICfraction, oxoCountRequirement, localStats, _163, _204, _366);
 
             return result;
         }
@@ -175,23 +166,22 @@ namespace GlyCounter
             }
 
             // Determine if spectrum is likely glycopeptide based on test ions
-            var test163 = testIons.GetValueOrDefault(163.0601, false);
-            var test204 = testIons.GetValueOrDefault(204.0867, true);
-            var test366 = testIons.GetValueOrDefault(366.1395, true);
-
-            if (!glySettings.using366)
-                test366 = true;
-            if (!glySettings.using204)
-                test204 = true;
-            if (!glySettings.using163)
-                test163 = false;
+            var test163 = false;
+            if (glySettings.using163)
+                test163 = testIons.GetValueOrDefault(163.0601, false);
+            var test204 = true;
+            if (glySettings.using204) 
+                test204 = testIons.GetValueOrDefault(204.0867, true);
+            var test366 = true;
+            if (glySettings.using366)
+                test366 = testIons.GetValueOrDefault(366.1395, true);
 
             return (test163, test204, test366);
         }
 
         private static void TrackTestIon(double mz, bool withinThreshold, Dictionary<double, bool> testIons)
         {
-            // Track 163.0601, 204.0867, and 366.1396
+            // Track 163.0601, 204.0867, and 366.1395
             if (Math.Abs(mz - 163.0601) < 0.0001)
                 testIons[163.0601] = withinThreshold || testIons.GetValueOrDefault(163.0601, false);
             if (Math.Abs(mz - 204.0867) < 0.0001)
@@ -287,7 +277,7 @@ namespace GlyCounter
         private static void BuildOutputLines(SpectrumInfo spectrum, GlyCounterSettings glySettings,
             OxoniumProcessResult result, Dictionary<double, int> sortedPeakDepths,
             double peakDepthThreshold, double oxoTICfraction, double oxoCountRequirement,
-            RawFileInfo localStats, bool _204, bool _366)
+            RawFileInfo localStats, bool _163, bool _204, bool _366)
         {
             var sbOxo = new StringBuilder();
             var sbPeakDepth = new StringBuilder();
@@ -331,9 +321,12 @@ namespace GlyCounter
             if (spectrum.Tims)
                 hasDiagnosticIon = _366;
             else hasDiagnosticIon = _204;
-            
-            bool isLikelyGlyco = countWithin >= oxoCountRequirement && oxoTICfraction >= GetTICThreshold(
-                spectrum.DissociationMethod, glySettings) && hasDiagnosticIon;
+
+            bool isLikelyGlyco = false;
+            if (_163) //oxo tic tends to be lower for oligomannose, so allow for lower threshold if 163 is present
+                isLikelyGlyco = countWithin >= oxoCountRequirement && oxoTICfraction + 0.05 >= GetTICThreshold(spectrum.DissociationMethod, glySettings) && hasDiagnosticIon;
+            else
+                isLikelyGlyco = countWithin >= oxoCountRequirement && oxoTICfraction >= GetTICThreshold(spectrum.DissociationMethod, glySettings) && hasDiagnosticIon;
 
             if (isLikelyGlyco)
             {
