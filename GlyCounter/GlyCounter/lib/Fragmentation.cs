@@ -49,7 +49,7 @@ namespace GlyCounter
                 var filterLower = scanFilter.ToLowerInvariant();
                 if (filterLower.Contains("etd"))
                     dissociationMethod = Fragmentation.Type.ETD;
-                else if (filterLower.Contains("hcd"))
+                else if (filterLower.Contains("hcd") || filterLower.Contains("cid"))
                     dissociationMethod = Fragmentation.Type.HCD;
                 else if (filterLower.Contains("uvpd") || filterLower.Contains("ci"))
                     dissociationMethod = Fragmentation.Type.UVPD;
