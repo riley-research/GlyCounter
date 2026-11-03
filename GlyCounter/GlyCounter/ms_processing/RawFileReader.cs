@@ -57,6 +57,7 @@ namespace GlyCounter
                         break;
                 }
 
+                if (scan.BasePeakIntensity == 0) continue;
 
                 var spectrum = new SpectrumInfo.RawMzmlSpectrumInfo()
                 {
